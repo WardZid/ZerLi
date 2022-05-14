@@ -22,7 +22,7 @@ public class ClientView extends Application {
 	private static double centerH;
 
 	public static Parent connect = null;
-	public static Parent client = null;
+//	public static Parent client = null;
 
 	private static Stage primaryStage;
 	public static Scene primaryScene;
@@ -64,25 +64,26 @@ public class ClientView extends Application {
 	}
 
 	private void setUpScenes() throws IOException {
-		connect = FXMLLoader.load(getClass().getResource("fxmls/ConnectFXML.fxml"));
+		connect = FXMLLoader.load(getClass().getResource("fxmls/connect-view.fxml"));
 		primaryScene = new Scene(connect);
 	}
 
-	public static void setUpClient() {
-		try {
-			client = FXMLLoader.load((ClientView.class).getResource("fxmls/ClientFXML.fxml"));
-		} catch (IOException e) {
-			MainController.print(ClientView.class, "Could not fetch client FXML");
-		}
-		primaryScene.setRoot(client);
-		primaryStage.sizeToScene();
-
-	}
+	/*NOT IN USE, JUST FOR REFERENCE*/
+//	public static void setUpClient() {
+//		try {
+//			client = FXMLLoader.load((ClientView.class).getResource("fxmls/ClientFXML.fxml"));
+//		} catch (IOException e) {
+//			MainController.print(ClientView.class, "Could not fetch client FXML");
+//		}
+//		primaryScene.setRoot(client);
+//		primaryStage.sizeToScene();
+//
+//	}
 
 	public static void setUpConnect() {
 		if (connect == null)
 			try {
-				connect = FXMLLoader.load((ClientView.class).getResource("fxmls/ConnectFXML.fxml"));
+				connect = FXMLLoader.load((ClientView.class).getResource("fxmls/connect-view.fxml"));
 			} catch (IOException e) {
 				MainController.printErr(ClientView.class, "Could not fetch connect FXML");
 			}

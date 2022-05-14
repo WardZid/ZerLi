@@ -16,7 +16,7 @@ public class MainController {
 			ipAddress = "10.10.8.135";
 			e.printStackTrace();
 		}
-		myClient = new ClientController(ipAddress, ClientController.DEFAULT_PORT);
+		myClient = ClientController.getInstance(ipAddress, ClientController.DEFAULT_PORT);
 		ClientView.launchApplication(args);
 	}
 
@@ -31,14 +31,6 @@ public class MainController {
 	public static String getIpAddress() {
 		return ipAddress;
 	}
-	
-	/**
-	 * request all orders
-	 */
-	public static void reqOrders() {
-		myClient.send(MessageType.GET,"/all_orders",null);
-	}
-
 	
 	// Helpful Generic Methods
 	public static void print(Class<?> from, String msg) {

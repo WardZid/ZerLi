@@ -8,6 +8,8 @@ import entity.MyMessage.MessageType;
 import ocsf.client.ObservableClient;
 
 public class ClientController extends ObservableClient {
+	
+	private static ClientController singletonInstance;
 
 	/**
 	 * The default port to connect on.
@@ -20,8 +22,18 @@ public class ClientController extends ObservableClient {
 
 	private boolean awaitResponse = false;
 
-	public ClientController(String host, int port) {
+	private ClientController(String host, int port) {
 		super(host, port);
+	}
+
+	public static ClientController getInstance(String host,int port) {
+		if(singletonInstance==null)
+			singletonInstance=new ClientController(host, port);
+		return singletonInstance;
+	}
+
+	public static ClientController getInstance() {
+		return singletonInstance;
 	}
 
 	/**
@@ -186,7 +198,7 @@ public class ClientController extends ObservableClient {
 			MainController.print(getClass(), "Unhandled Get:" + svMsg.getInfo());
 		}
 	}
-	
+
 	private void handleUpdateReply(MyMessage svMsg) {
 		if (svMsg.getInfo().startsWith("/order"))
 			return;
