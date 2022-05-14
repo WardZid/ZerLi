@@ -1,0 +1,90 @@
+/*
+white background: #ffffff ;
+grey:  #e5e5e5;
+darker grey: #dee2e6;
+Dark blue:  #14213d;
+orange: #fca311;
+black: #000000 ;
+nicee white #F4F4ED;
+
+good green:
+-fx-background-color: #1de9b6;
+good text:  
+-fx-text-fill: #000021;
+
+bad red: 
+-fx-background-color: #ff5000 ;
+bad text: 
+-fx-text-fill: #FFFFFF;
+
+
+Text {
+    -fx-font-smoothing-type: lcd;
+    -fx-fill: white;
+    -fx-font-size: 20pt;
+}
+
+*/
+
+.root{
+    -fx-background-color: #FFFFFF;
+    -fx-font-family: "Poor Richard";
+    -fx-font-weight:  bold;
+    -fx-border-radius: 0 0 10 10;
+    -fx-background-radius: 0 0 10 10;
+
+  /* top-left, top-right, bottom-right, and bottom-left corners, in that order. */
+}
+
+.label{
+    -fx-font-size:  18px;
+    -fx-font-weight: bold;
+}
+
+.button{
+    -fx-border-color: transparent;
+    -fx-border-width: 1,1;
+    -fx-background-color: #e5e5e5;
+    -fx-font-size:  16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #000000;
+    -fx-effect: dropshadow( three-pass-box, rgba(0,0,0,0.8), 3, 0, 2, 2);
+}
+
+/*focused is sus*/
+.button:focused {
+    -fx-border-color: transparent, transparent;
+    -fx-border-width: 1, 1;
+    -fx-border-style: solid;
+    -fx-border-radius: 0, 0;
+}
+.button:pressed {
+    -fx-background-color: #dee2e6;
+}
+
+.text-field {
+    -fx-background-color: #e5e5e5,#FFFFFF ;
+    -fx-background-insets: 0, 0 0 1 0 ;
+    -fx-background-radius: 0 ;
+
+    -fx-font-size:  12px;
+}
+.text-field:focused {
+    -fx-background-color: #dee2e6,#FFFFFF ;
+}
+.table-view{
+    -fx-background-color: FFFFFF ;
+    -fx-border-width: 0px;
+    -fx-background-radius: 0px ;
+    -fx-background-size: 0 ;
+
+}
+.scroll-pane{
+    -fx-effect: dropshadow( three-pass-box, rgba(0,0,0,0.8), 3, 0, 2, 2);
+    -fx-font-size:  12px;
+}
+.color-picker{
+    -fx-font-size:  12px;
+    -fx-background-color: #ffffff ;
+
+}
