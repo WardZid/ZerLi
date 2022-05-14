@@ -28,7 +28,7 @@ Text {
 
 .root{
     -fx-background-color: #FFFFFF;
-    -fx-font-family: "Poor Richard";
+    -fx-font-family: "Segoe UI";
     -fx-font-weight:  bold;
     -fx-border-radius: 0 0 10 10;
     -fx-background-radius: 0 0 10 10;
