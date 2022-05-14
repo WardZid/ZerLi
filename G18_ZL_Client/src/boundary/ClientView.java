@@ -15,11 +15,11 @@ import javafx.stage.Stage;
 public class ClientView extends Application {
 
 	// Screen size properties
-	private static double width;
-	private static double height;
-
-	private static double centerW;
-	private static double centerH;
+//	private static double width;
+//	private static double height;
+//
+//	private static double centerW;
+//	private static double centerH;
 
 	public static Parent connect = null;
 //	public static Parent client = null;
@@ -35,12 +35,12 @@ public class ClientView extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		try {
-
-			Rectangle2D screenBounds = Screen.getPrimary().getBounds();
-			width = screenBounds.getWidth();
-			height = screenBounds.getHeight();
-			centerW = width / 2;
-			centerH = height / 2;
+//
+//			Rectangle2D screenBounds = Screen.getPrimary().getBounds();
+//			width = screenBounds.getWidth();
+//			height = screenBounds.getHeight();
+//			centerW = width / 2;
+//			centerH = height / 2;
 
 			ClientView.primaryStage = primaryStage;
 
@@ -96,7 +96,7 @@ public class ClientView extends Application {
 		primaryStage.setTitle("Client Console"); // window title
 		primaryStage.getIcons().add(new Image("/boundary/media/client_icon.png"));
 		primaryStage.setScene(scene);
-		// primaryStage.setResizable(false);
+		primaryStage.setResizable(false);
 		primaryStage.sizeToScene();
 		primaryStage.show();
 	}

@@ -3,10 +3,8 @@ package boundary.fxmlControllers;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import boundary.ClientView;
 import control.ClientController;
 import control.MainController;
-import entity.MyMessage.MessageType;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
