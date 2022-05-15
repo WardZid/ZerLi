@@ -20,6 +20,7 @@ public class ServerView extends Application {
 		ServerView.launch(args);
 	}
 	
+	
 	public void start(Stage primaryStage) throws Exception {
 		try {
 			// fetch pre-made fxml file that details the gui's appearance
