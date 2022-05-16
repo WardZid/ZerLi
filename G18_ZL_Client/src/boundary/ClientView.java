@@ -20,7 +20,8 @@ public class ClientView extends Application {
 //	private static double centerH;
 
 	public static Parent connect = null;
-//	public static Parent client = null;
+	public static Parent logIn = null;
+	public static Parent client = null;
 
 	private static Stage primaryStage;
 	public static Scene primaryScene;
@@ -66,6 +67,17 @@ public class ClientView extends Application {
 		primaryScene = new Scene(connect);
 	}
 
+	public static void setUpLogIn() {
+		try {
+			client = FXMLLoader.load((ClientView.class).getResource("fxmls/log-in-view.fxml"));
+		} catch (IOException e) {
+			MainController.print(ClientView.class, "Could not fetch log in FXML");
+		}
+		primaryScene.setRoot(client);
+		primaryStage.sizeToScene();
+
+	}
+	
 	/*NOT IN USE, JUST FOR REFERENCE*/
 //	public static void setUpClient() {
 //		try {

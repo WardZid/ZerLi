@@ -3,6 +3,7 @@ package boundary.fxmlControllers;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import boundary.ClientView;
 import control.ClientController;
 import control.MainController;
 import javafx.event.ActionEvent;
@@ -12,7 +13,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.TextField;
 
-public class ConnectViewController implements Initializable {
+public class ConnectController implements Initializable {
 
     @FXML
     private TextField txtIP;
@@ -26,7 +27,8 @@ public class ConnectViewController implements Initializable {
 	void onConnect(ActionEvent event) {
 		if (ClientController.getInstance().connectToServer(txtIP.getText())) {
 //			ClientController.getInstance().send(MessageType.GET,"/all_orders",null);
-//			ClientView.setUpClient();
+			//ClientView.setUpClient();
+			ClientView.setUpLogIn();
 		}
 		else {
 			Alert errorAlert = new Alert(AlertType.ERROR);
