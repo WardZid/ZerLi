@@ -78,6 +78,17 @@ public class ClientView extends Application {
 
 	}
 	
+	public static void setUpClient() {
+		try {
+		client = FXMLLoader.load((ClientView.class).getResource("fxmls/ClientFXML.fxml"));
+	} catch (IOException e) {
+		MainController.print(ClientView.class, "Could not fetch client FXML");
+	}
+	primaryScene.setRoot(client);
+	primaryStage.sizeToScene();
+
+}
+	
 	/*NOT IN USE, JUST FOR REFERENCE*/
 //	public static void setUpClient() {
 //		try {
