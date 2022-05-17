@@ -4,7 +4,6 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import boundary.ClientView;
-import control.ClientController;
 import control.MainController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -26,8 +25,6 @@ public class ConnectController implements Initializable {
 	@FXML
 	void onConnect(ActionEvent event) {
 		if (MainController.getMyClient().connectToServer(txtIP.getText())) {
-//			ClientController.getInstance().send(MessageType.GET,"/all_orders",null);
-			//ClientView.setUpClient();
 			ClientView.setUpLogIn();
 		}
 		else {
