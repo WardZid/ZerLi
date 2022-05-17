@@ -31,8 +31,11 @@ public class LogInController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		logInBackgroundIV.setImage(new Image("boundary/media/log-in-flowers.png"));
+		System.out.println("hello");
+		logInBackgroundIV.setImage(new Image("boundary/media/log-in-flowers.jpg"));
 		welcomeIV.setImage(new Image("boundary/media/zli-welcome.png"));
+
+		System.out.println("hi");
 	}
 
 }
