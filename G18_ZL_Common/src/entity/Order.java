@@ -10,30 +10,83 @@ public class Order implements Serializable, Cloneable {
 	 */
 	private static final long serialVersionUID = 1L;
 	// Class variables
-	private int orderNum;
+	private int idOrder;
+	private int idCustomer;
+	private int idStore;
+	private int idOrderStatus;
 	private double price;
-	private String branch;
 	private String orderDate;
 	private String deliveryDate;
-	private String color;
+	private String address;
 	private String description;
 	private String greetingCard;
-
+	
+	
 	// main Constructor
-	public Order(int orderNum, double price, String branch, String orderDate, String deliveryDate, String color,
-			String description, String greetingCard) {
-		this.orderNum = orderNum;
+	public Order(int idOrder, int idCustomer, int idStore, int idOrderStatus, double price, String orderDate,
+			String deliveryDate, String address, String description, String greetingCard) {
+		super();
+		this.idOrder = idOrder;
+		this.idCustomer = idCustomer;
+		this.idStore = idStore;
+		this.idOrderStatus = idOrderStatus;
 		this.price = price;
-		this.branch = branch;
 		this.orderDate = orderDate;
 		this.deliveryDate = deliveryDate;
-		this.color = color;
+		this.address = address;
 		this.description = description;
 		this.greetingCard = greetingCard;
 	}
 
+	
 	// Getters and Setters
-	// only the color delivery date (date) can be changed
+	public int getIdOrder() {
+		return idOrder;
+	}
+
+	public void setIdOrder(int idOrder) {
+		this.idOrder = idOrder;
+	}
+
+	public int getIdCustomer() {
+		return idCustomer;
+	}
+
+	public void setIdCustomer(int idCustomer) {
+		this.idCustomer = idCustomer;
+	}
+
+	public int getIdStore() {
+		return idStore;
+	}
+
+	public void setIdStore(int idStore) {
+		this.idStore = idStore;
+	}
+
+	public int getIdOrderStatus() {
+		return idOrderStatus;
+	}
+
+	public void setIdOrderStatus(int idOrderStatus) {
+		this.idOrderStatus = idOrderStatus;
+	}
+
+	public double getPrice() {
+		return price;
+	}
+
+	public void setPrice(double price) {
+		this.price = price;
+	}
+
+	public String getOrderDate() {
+		return orderDate;
+	}
+
+	public void setOrderDate(String orderDate) {
+		this.orderDate = orderDate;
+	}
 
 	public String getDeliveryDate() {
 		return deliveryDate;
@@ -43,99 +96,45 @@ public class Order implements Serializable, Cloneable {
 		this.deliveryDate = deliveryDate;
 	}
 
-	public String getColor() {
-		return color;
+	public String getAddress() {
+		return address;
 	}
 
-	public void setColor(String color) {
-		this.color = color;
-	}
-
-	public int getOrderNum() {
-		return orderNum;
-	}
-
-	public double getPrice() {
-		return price;
-	}
-
-	public String getBranch() {
-		return branch;
-	}
-
-	public String getOrderDate() {
-		return orderDate;
+	public void setAddress(String address) {
+		this.address = address;
 	}
 
 	public String getDescription() {
 		return description;
 	}
 
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
 	public String getGreetingCard() {
 		return greetingCard;
 	}
-	
-	
-	//Delivery date getters and setters (divided)
-	//YYYY-MM-DD HH:MM:SS
-	public String getDeliveryDateDate() {
-		return deliveryDate.substring(0,10);
-	}
-	
-	public void setDeliveryDateDate(String date) {
-		deliveryDate=date+deliveryDate.substring(10);
-	}
-	
-	public String getDeliveryDateHour() {
-		return deliveryDate.substring(11,13);
-	}
-	
-	public void setDeliveryDateHour(String hour) {
-		deliveryDate=deliveryDate.substring(0,11)+hour+deliveryDate.substring(13);
-	}
-	
-	public String getDeliveryDateMinute() {
-		return deliveryDate.substring(14,16);
-	}
-	
-	public void setDeliveryDateMinute(String minute) {
-		deliveryDate=deliveryDate.substring(0,14)+minute+deliveryDate.substring(16);
-	}
-	
-	//Overridden Methods
 
-	@Override
-	// hash function only hashes order num
-	public int hashCode() {
-		return Objects.hash(orderNum);
+	public void setGreetingCard(String greetingCard) {
+		this.greetingCard = greetingCard;
 	}
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Order other = (Order) obj;
-		return Objects.equals(color, other.color) && Objects.equals(deliveryDate, other.deliveryDate)
-				&& Objects.equals(description, other.description) && Objects.equals(greetingCard, other.greetingCard)
-				&& Objects.equals(orderDate, other.orderDate) && orderNum == other.orderNum
-				&& Double.doubleToLongBits(price) == Double.doubleToLongBits(other.price)
-				&& Objects.equals(branch, other.branch);
+	public static long getSerialversionuid() {
+		return serialVersionUID;
 	}
+	
+	
 
-	@Override
-	public Order clone() {
-		return new Order(orderNum, price, branch, orderDate, deliveryDate, color, description, greetingCard);
-	}
+ 
 
-	@Override
-	public String toString() {
-		return "Order [orderNum=" + orderNum + ", price=" + price + ", branch=" + branch + ", orderDate=" + orderDate
-				+ ", deliveryDate=" + deliveryDate + ", color=" + color + ", description=" + description
-				+ ", greetingCard=" + greetingCard + "]";
-	}
+	
+	 
 
+
+	
+	
+	// only the color delivery date (date) can be changed
+
+	
 }
