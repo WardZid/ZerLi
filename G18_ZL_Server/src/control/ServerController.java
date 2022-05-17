@@ -200,11 +200,18 @@ public class ServerController extends ObservableServer {
 	 * 
 	 * @param MyMessage Contains GET request
 	 */
+	
 	private void handleGetRequest(MyMessage clMsg) {
+		if(clMsg.getInfo().startsWith("/all_orders"))
+			 
+		sendToAllClients(clMsg);
+		/*
 		if (clMsg.getInfo().startsWith("/all_orders")) {
 			clMsg.setContent(DBController.getAllOrders());
 			sendToAllClients(clMsg);
-		} else {
+			}
+		*/	
+		 else {
 			MainController.printErr(getClass(), "Unhandled Get request: " + clMsg.getInfo());
 		}
 	}
@@ -222,10 +229,10 @@ public class ServerController extends ObservableServer {
 			
 			switch (clMsg.getInfo()) {
 			case "/order/color":
-				list.add(DBController.updateOrder(order, "color",order.getColor()));
+				//list.add(DBController.updateOrder(order, "color",order.getColor()));
 				break;
 			case "/order/delivery_date":
-				list.add(DBController.updateOrder(order, "date",order.getDeliveryDate()));
+				//list.add(DBController.updateOrder(order, "date",order.getDeliveryDate()));
 				break;
 
 			default:

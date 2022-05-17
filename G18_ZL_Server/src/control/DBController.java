@@ -91,7 +91,7 @@ public class DBController {
 	}
 
 	// SQL Query Methods ******************************
-
+/*
 	public static ArrayList<Order> getAllOrders() {
 		ArrayList<Order> orders = new ArrayList<>();
 
@@ -147,5 +147,5 @@ public class DBController {
 		}
 		return getOrder(order.getOrderNum());
 	}
-
+*/
 }
