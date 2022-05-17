@@ -184,7 +184,11 @@ public class ServerController extends ObservableServer {
 
 		} else if (clMsg.getInfo().startsWith("/connect")) {
 			MainController.print(getClass(), "Client Connected: " + client.toString());
-			sendToAllClients(clMsg);
+			try {
+				client.sendToClient(clMsg);
+			} catch (IOException e) {
+				MainController.printErr(getClass(), "Could not send to client: "+client.getInetAddress().getHostName());
+			}
 
 		} else {
 			MainController.printErr(getClass(), "Unhandled info Message: " + clMsg.getInfo());
