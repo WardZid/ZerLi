@@ -3,58 +3,5 @@
 <?import javafx.scene.layout.StackPane?>
 
 <StackPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="boundary.fxmlControllers.CustomerSupportController">
-   <children>
-      <VBox alignment="CENTER" StackPane.alignment="CENTER">
-         <children>
-            <Label fx:id="pathLbl" maxWidth="1.7976931348623157E308" text="Console">
-               <padding>
-                  <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
-               </padding></Label>
-            <HBox alignment="CENTER" VBox.vgrow="ALWAYS">
-               <children>
-                  <VBox>
-                     <children>
-                        <ImageView fx:id="logoIV" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" />
-                        <Label fx:id="consoleLbl" alignment="CENTER" maxWidth="1.7976931348623157E308" text="Console Label">
-                           <font>
-                              <Font name="System Bold Italic" size="12.0" />
-                           </font>
-                        </Label>
-                        <VBox alignment="CENTER" stylesheets="@../../../../../../OneDrive/Desktop/ממשק/Prototype/GUI%20Prototype/menubutton.css" VBox.vgrow="ALWAYS">
-                           <children>
-                              <Button layoutX="160.0" layoutY="170.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="30.0" text="Sample Button">
-                                 <cursor>
-                                    <Cursor fx:constant="HAND" />
-                                 </cursor>
-                                 <font>
-                                    <Font name="System Bold Italic" size="12.0" />
-                                 </font>
-                              </Button>
-                           </children>
-                           <VBox.margin>
-                              <Insets />
-                           </VBox.margin>
-                           <padding>
-                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                           </padding>
-                        </VBox>
-                     </children>
-                  </VBox>
-                  <StackPane HBox.hgrow="ALWAYS" />
-               </children></HBox>
-            <ButtonBar prefHeight="40.0">
-              <buttons>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Signed in as:" />
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Name" />
-                <Button mnemonicParsing="false" text="Log Out" />
-              </buttons>
-               <padding>
-                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-               </padding>
-            </ButtonBar>
-         </children>
-      </VBox>
-   </children>
+   
 </StackPane>
-
-
