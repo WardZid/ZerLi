@@ -23,8 +23,8 @@ public class DBController {
 	/**
 	 * URL with the DB's IP address and schema name
 	 */
-	public static String DBURL = "localhost/ass2";
-	final public static String DATABASE_URL="localhost/ass2";
+	public static String DBURL = "localhost/assignment3";
+	final public static String DATABASE_URL="localhost/assignment3";
 
 	/**
 	 * DB username and pass with permissions to allow for data manipulation and
