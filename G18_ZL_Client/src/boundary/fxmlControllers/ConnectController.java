@@ -25,7 +25,7 @@ public class ConnectController implements Initializable {
 	
 	@FXML
 	void onConnect(ActionEvent event) {
-		if (ClientController.getInstance().connectToServer(txtIP.getText())) {
+		if (MainController.getMyClient().connectToServer(txtIP.getText())) {
 //			ClientController.getInstance().send(MessageType.GET,"/all_orders",null);
 			//ClientView.setUpClient();
 			ClientView.setUpLogIn();

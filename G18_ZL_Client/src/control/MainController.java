@@ -9,7 +9,7 @@ public class MainController {
 
 	// main
 	public static void main(String[] args) {
-		myClient = ClientController.getInstance(getIpAddress(), ClientController.DEFAULT_PORT);
+		myClient =new ClientController(getIpAddress(), ClientController.DEFAULT_PORT);
 		ClientView.launchApplication(args);
 	}
 
@@ -18,7 +18,7 @@ public class MainController {
 	/**
 	 * instance of the client
 	 */
-	public static ClientController myClient;
+	private static ClientController myClient;
 
 	/**
 	 * default ip address to be added to the connect page's textfield
@@ -31,6 +31,13 @@ public class MainController {
 	private static int printCnt = 1;
 
 	//Getters
+	/**
+	 * 
+	 * @return instance of my client
+	 */
+	public static ClientController getMyClient() {
+		return myClient;
+	}
 	/**
 	 * pulls the ip of its own pc to be used as the server's ip to connect to
 	 * @return <String> ip address of the this pc

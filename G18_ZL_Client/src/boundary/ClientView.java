@@ -59,7 +59,7 @@ public class ClientView extends Application {
 	 * 
 	 */
 	public void stop() {
-		MainController.myClient.disconnectFromServer();
+		MainController.getMyClient().disconnectFromServer();
 	}
 
 	private void setUpScenes() throws IOException {

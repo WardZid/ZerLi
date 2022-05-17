@@ -9,8 +9,6 @@ import ocsf.client.ObservableClient;
 
 public class ClientController extends ObservableClient {
 	
-	private static ClientController singletonInstance;
-
 	/**
 	 * The default port to connect on.
 	 */
@@ -22,18 +20,8 @@ public class ClientController extends ObservableClient {
 
 	private boolean awaitResponse = false;
 
-	private ClientController(String host, int port) {
+	public ClientController(String host, int port) {
 		super(host, port);
-	}
-
-	public static ClientController getInstance(String host,int port) {
-		if(singletonInstance==null)
-			singletonInstance=new ClientController(host, port);
-		return singletonInstance;
-	}
-
-	public static ClientController getInstance() {
-		return singletonInstance;
 	}
 
 	/**
