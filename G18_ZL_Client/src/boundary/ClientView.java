@@ -70,26 +70,26 @@ public class ClientView extends Application {
 	public static void setUpLogIn() {
 		try {
 			client = FXMLLoader.load((ClientView.class).getResource("fxmls/log-in-view.fxml"));
+			primaryScene.setRoot(client);
+			primaryStage.sizeToScene();
 		} catch (IOException e) {
 			MainController.print(ClientView.class, "Could not fetch log in FXML");
+		}
+
+	}
+
+	public static void setUpClient() {
+		try {
+			client = FXMLLoader.load((ClientView.class).getResource("fxmls/ClientFXML.fxml"));
+		} catch (IOException e) {
+			MainController.print(ClientView.class, "Could not fetch client FXML");
 		}
 		primaryScene.setRoot(client);
 		primaryStage.sizeToScene();
 
 	}
-	
-	public static void setUpClient() {
-		try {
-		client = FXMLLoader.load((ClientView.class).getResource("fxmls/ClientFXML.fxml"));
-	} catch (IOException e) {
-		MainController.print(ClientView.class, "Could not fetch client FXML");
-	}
-	primaryScene.setRoot(client);
-	primaryStage.sizeToScene();
 
-}
-	
-	/*NOT IN USE, JUST FOR REFERENCE*/
+	/* NOT IN USE, JUST FOR REFERENCE */
 //	public static void setUpClient() {
 //		try {
 //			client = FXMLLoader.load((ClientView.class).getResource("fxmls/ClientFXML.fxml"));
@@ -122,5 +122,4 @@ public class ClientView extends Application {
 		primaryStage.show();
 	}
 
-	
 }

@@ -18,6 +18,9 @@ public class LogInController implements Initializable {
     private ImageView logInBackgroundIV;
 
     @FXML
+    private ImageView welcomeIV;
+    
+    @FXML
     private Button logInBtn;
 
     @FXML
@@ -26,13 +29,13 @@ public class LogInController implements Initializable {
     @FXML
     private TextField usernameTF;
 
-    @FXML
-    private ImageView welcomeIV;
-	
-	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		logInBackgroundIV.setImage(new Image("boundary/media/flowers-login.jpg"));
+		System.out.println("hello");
+		logInBackgroundIV.setImage(new Image("boundary/media/log-in-flowers.jpg"));
+		welcomeIV.setImage(new Image("boundary/media/zli-welcome.png"));
+
+		System.out.println("hi");
 	}
 
 }
