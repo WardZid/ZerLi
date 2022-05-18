@@ -50,13 +50,13 @@
                         </VBox>
                      </children>
                   </VBox>
-                  <StackPane HBox.hgrow="ALWAYS" />
+                  <StackPane fx:id="mainSP" HBox.hgrow="ALWAYS" />
                </children></HBox>
             <ButtonBar prefHeight="40.0">
               <buttons>
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Signed in as:" />
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Name" />
-                <Button mnemonicParsing="false" text="Log Out" />
+                <Button fx:id="logOutBtn" mnemonicParsing="false" style="-fx-background-color: #ff5000;" text="Log Out" />
               </buttons>
                <padding>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
