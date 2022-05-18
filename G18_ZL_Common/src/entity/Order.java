@@ -1,14 +1,28 @@
 package entity;
 
 import java.io.Serializable;
-import java.util.Objects;
 
 public class Order implements Serializable, Cloneable {
-
-	/**
-	 * 
-	 */
+	
 	private static final long serialVersionUID = 1L;
+	
+	public enum OrderStatus{
+		WAITING_APPROVAL,
+		PROCESSING,
+		DELIVERED,
+		CANCELLED,
+		UNAPPROVED;
+		
+		public static OrderStatus getById(int id) {
+			
+			for (OrderStatus status : values()) {
+				if(status.ordinal()==id)
+					return status;
+			}
+			return null;
+		}
+	}
+	
 	// Class variables
 	private int idOrder;
 	private int idCustomer;
@@ -25,7 +39,6 @@ public class Order implements Serializable, Cloneable {
 	// main Constructor
 	public Order(int idOrder, int idCustomer, int idStore, int idOrderStatus, double price, String orderDate,
 			String deliveryDate, String address, String description, String greetingCard) {
-		super();
 		this.idOrder = idOrder;
 		this.idCustomer = idCustomer;
 		this.idStore = idStore;
@@ -62,6 +75,15 @@ public class Order implements Serializable, Cloneable {
 
 	public void setIdStore(int idStore) {
 		this.idStore = idStore;
+	}
+	
+	//handling store id as enum
+	public Store getStore() {
+		return Store.getById(idStore);
+	}
+	
+	public void setStore(Store store) {
+		idStore=store.ordinal();
 	}
 
 	public int getIdOrderStatus() {
@@ -120,21 +142,4 @@ public class Order implements Serializable, Cloneable {
 		this.greetingCard = greetingCard;
 	}
 
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
-	
-	
-
- 
-
-	
-	 
-
-
-	
-	
-	// only the color delivery date (date) can be changed
-
-	
 }
