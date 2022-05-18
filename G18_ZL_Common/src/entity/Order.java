@@ -1,28 +1,25 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class Order implements Serializable, Cloneable {
-	
-	private static final long serialVersionUID = 1L;
-	
-	public enum OrderStatus{
-		WAITING_APPROVAL,
-		PROCESSING,
-		DELIVERED,
-		CANCELLED,
-		UNAPPROVED;
-		
+
+	private static final long serialVersionUID = -3217273749865937459L;
+
+	public enum OrderStatus {
+		WAITING_APPROVAL, PROCESSING, DELIVERED, CANCELLED, UNAPPROVED;
+
 		public static OrderStatus getById(int id) {
-			
+
 			for (OrderStatus status : values()) {
-				if(status.ordinal()==id)
+				if (status.ordinal() == id)
 					return status;
 			}
 			return null;
 		}
 	}
-	
+
 	// Class variables
 	private int idOrder;
 	private int idCustomer;
@@ -34,8 +31,12 @@ public class Order implements Serializable, Cloneable {
 	private String address;
 	private String description;
 	private String greetingCard;
-	
-	
+
+	// Products in the order are enetered on request only as to minimize load to the
+	// server
+	ArrayList<BuildItem> buildItems;
+	ArrayList<Item> items;
+
 	// main Constructor
 	public Order(int idOrder, int idCustomer, int idStore, int idOrderStatus, double price, String orderDate,
 			String deliveryDate, String address, String description, String greetingCard) {
@@ -51,7 +52,6 @@ public class Order implements Serializable, Cloneable {
 		this.greetingCard = greetingCard;
 	}
 
-	
 	// Getters and Setters
 	public int getIdOrder() {
 		return idOrder;
@@ -75,15 +75,6 @@ public class Order implements Serializable, Cloneable {
 
 	public void setIdStore(int idStore) {
 		this.idStore = idStore;
-	}
-	
-	//handling store id as enum
-	public Store getStore() {
-		return Store.getById(idStore);
-	}
-	
-	public void setStore(Store store) {
-		idStore=store.ordinal();
 	}
 
 	public int getIdOrderStatus() {
@@ -140,6 +131,31 @@ public class Order implements Serializable, Cloneable {
 
 	public void setGreetingCard(String greetingCard) {
 		this.greetingCard = greetingCard;
+	}
+
+	// handling id as enum
+	public Store getStore() {
+		return Store.getById(idStore);
+	}
+
+	public void setStore(Store store) {
+		idStore = store.ordinal();
+	}
+
+	public OrderStatus getOrderStatus() {
+		return OrderStatus.getById(idOrderStatus);
+	}
+
+	public void setOrderStatus(OrderStatus status) {
+		idOrderStatus = status.ordinal();
+	}
+
+	@Override
+	public String toString() {
+		return "Order [idOrder=" + idOrder + ", idCustomer=" + idCustomer + ", Store=(" + idStore + ") " + getStore()
+				+ ", Order Status=(" + idOrderStatus + ") " + getOrderStatus() + ", price=" + price + ", orderDate="
+				+ orderDate + ", deliveryDate=" + deliveryDate + ", address=" + address + ", description=" + description
+				+ ", greetingCard=" + greetingCard + "]";
 	}
 
 }

@@ -1,7 +1,21 @@
 package entity;
 
-public class Customer {
+import java.io.Serializable;
 
+public class Customer implements Serializable {
+	private static final long serialVersionUID = -4182417182449829997L;
+	
+	public enum CustomerStatus{
+		UNAPPROVED,APPROVED,FROZEN;
+		
+		public static CustomerStatus getById(int id) {
+			for(CustomerStatus status: values())
+				if(status.ordinal()==id)
+					return status;
+			return null;
+		}
+	}
+	
 	private int idCustomer;
 	private int idCustomerStatus;
 	private int idUser;

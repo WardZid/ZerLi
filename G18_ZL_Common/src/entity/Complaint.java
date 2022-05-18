@@ -1,6 +1,10 @@
 package entity;
 
-public class Complaint {
+import java.io.Serializable;
+
+public class Complaint implements Serializable{
+	private static final long serialVersionUID = -4849768615516941203L;
+	
 	public int idComplaint;
 	public String idCustomer;
 	public String status;
@@ -11,7 +15,6 @@ public class Complaint {
 	
 	public Complaint(int idComplaint, String idCustomer, String status, String date, double refund, String complaint,
 			String response) {
-		super();
 		this.idComplaint = idComplaint;
 		this.idCustomer = idCustomer;
 		this.status = status;

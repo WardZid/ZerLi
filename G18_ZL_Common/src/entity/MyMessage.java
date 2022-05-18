@@ -3,11 +3,8 @@ package entity;
 import java.io.Serializable;
 
 public class MyMessage implements Serializable {
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+
+	private static final long serialVersionUID = -2988915464822652207L;
 
 	public enum MessageType{
 		INFO,
