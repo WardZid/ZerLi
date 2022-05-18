@@ -2,14 +2,14 @@ package entity;
 
 public class Complaint {
 	public int idComplaint;
-	public int idCustomer;
+	public String idCustomer;
 	public String status;
 	public String date;
 	public double refund;
 	public String complaint;
 	public String response;
 	
-	public Complaint(int idComplaint, int idCustomer, String status, String date, double refund, String complaint,
+	public Complaint(int idComplaint, String idCustomer, String status, String date, double refund, String complaint,
 			String response) {
 		super();
 		this.idComplaint = idComplaint;
@@ -26,10 +26,10 @@ public class Complaint {
 	public void setIdComplaint(int idComplaint) {
 		this.idComplaint = idComplaint;
 	}
-	public int getIdCustomer() {
+	public String getIdCustomer() {
 		return idCustomer;
 	}
-	public void setIdCustomer(int idCustomer) {
+	public void setIdCustomer(String idCustomer) {
 		this.idCustomer = idCustomer;
 	}
 	public String getStatus() {
