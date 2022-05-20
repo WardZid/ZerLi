@@ -106,6 +106,7 @@ public class ClientView extends Application {
 			MainController.print(ClientView.class, "Could not fetch 'client' FXML");
 		}
 		primaryScene.setRoot(clientConsole);
+		primaryStage.sizeToScene();
 
 	}
 
