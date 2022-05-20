@@ -9,6 +9,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
 <StackPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="boundary.fxmlControllers.LogInController">
    <children>
@@ -45,6 +46,11 @@
                            </children>
                         </HBox>
                         <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onMousePressed="#onLogInPressed" style="-fx-background-color: #1de9b6;" text="Log in" />
+                        <Label fx:id="errorLbl" alignment="CENTER" maxWidth="1.7976931348623157E308" text="Error Message" textFill="RED">
+                           <font>
+                              <Font name="System Italic" size="12.0" />
+                           </font>
+                        </Label>
                      </children>
                   </VBox>
                </children>
