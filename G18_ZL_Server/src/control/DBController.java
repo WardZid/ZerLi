@@ -35,11 +35,11 @@ public class DBController {
 	 * DB username and pass with permissions to allow for data manipulation and
 	 * retrieval
 	 */
-	public static String userDB = "root";
-	public static String passDB = "0000";
+	public static String userDB = DBConfig.DBUSER;
+	public static String passDB = DBConfig.DBPASS;
 	
-	final public static String DATABASE_USER="root";
-	final public static String DATABASE_PASSWORD="0000";
+	final public static String DATABASE_USER=DBConfig.DBUSER;
+	final public static String DATABASE_PASSWORD=DBConfig.DBUSER;
 
 	public static void setDBInfo(String url,String user,String pass) {
 		DBURL=url;
