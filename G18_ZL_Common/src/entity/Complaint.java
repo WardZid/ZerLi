@@ -6,14 +6,14 @@ public class Complaint implements Serializable{
 	private static final long serialVersionUID = -4849768615516941203L;
 	
 	public int idComplaint;
-	public String idCustomer;
+	public int idCustomer;
 	public String status;
 	public String date;
 	public double refund;
 	public String complaint;
 	public String response;
 	
-	public Complaint(int idComplaint, String idCustomer, String status, String date, double refund, String complaint,
+	public Complaint(int idComplaint, int idCustomer, String status, String date, double refund, String complaint,
 			String response) {
 		this.idComplaint = idComplaint;
 		this.idCustomer = idCustomer;
@@ -29,10 +29,10 @@ public class Complaint implements Serializable{
 	public void setIdComplaint(int idComplaint) {
 		this.idComplaint = idComplaint;
 	}
-	public String getIdCustomer() {
+	public int getIdCustomer() {
 		return idCustomer;
 	}
-	public void setIdCustomer(String idCustomer) {
+	public void setIdCustomer(int idCustomer) {
 		this.idCustomer = idCustomer;
 	}
 	public String getStatus() {
