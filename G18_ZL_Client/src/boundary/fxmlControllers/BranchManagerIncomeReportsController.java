@@ -1,8 +1,11 @@
 package boundary.fxmlControllers;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
+import control.MainController;
+import entity.MyMessage.MessageType;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.LineChart;
@@ -14,6 +17,11 @@ import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 
 public class BranchManagerIncomeReportsController implements Initializable {
+	private static ArrayList<String> monthsYears;
+	
+	public static void setMonthsYears(ArrayList<String> years) {
+		monthsYears=years;
+	}
 
 	@FXML
     private TableColumn<?, ?> dateTableCol;
@@ -22,7 +30,7 @@ public class BranchManagerIncomeReportsController implements Initializable {
     private TableColumn<?, ?> incomeTableCol;
 
     @FXML
-    private ListView<?> monthsListView;
+    private ListView<String> monthsListView;
 
     @FXML
     private TableColumn<?, ?> nameTableCol;
@@ -44,7 +52,9 @@ public class BranchManagerIncomeReportsController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		// TODO Auto-generated method stub
+		MainController.getMyClient().send(MessageType.GET, "order/report/sale/months/"+2, null);
+		
+		monthsListView.getItems().addAll(monthsYears);
 		
 	}
 	

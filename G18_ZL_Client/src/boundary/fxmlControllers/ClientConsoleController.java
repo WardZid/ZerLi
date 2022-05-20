@@ -9,10 +9,13 @@ import control.MainController;
 import entity.Customer;
 import entity.MyMessage.MessageType;
 import entity.User;
+import javafx.event.ActionEvent;
+import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -112,6 +115,7 @@ public class ClientConsoleController implements Initializable {
 		MainController.getMyClient().send(MessageType.GET, "login/customer", user);
 		try {
 			Node node =FXMLLoader.load(ClientView.class.getResource("fxmls/catalog-view.fxml"));
+			mainSP.getChildren().clear();
 			mainSP.getChildren().add(node);
 			
 		} catch (IOException e) {
@@ -120,6 +124,15 @@ public class ClientConsoleController implements Initializable {
 		}
 	}
 	private void loadBranchManagerConsole() {
-		
+		try {
+			Node node =FXMLLoader.load(ClientView.class.getResource("fxmls/branch-manager-income-reports-view.fxml"));
+			mainSP.getChildren().clear();
+			mainSP.getChildren().add(node);
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+//		Button ordersBtn=new Button("Orders").setOnAction(ActionEvent);
 	}
 }

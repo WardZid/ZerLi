@@ -207,9 +207,8 @@ public class ServerController extends ObservableServer {
 	private void handleGetRequest(MyMessage clMsg, ConnectionToClient client) {
 
 		String[] request = clMsg.getInfo().split("/");
-		for (String string : request) {
-			System.out.println(string);
-		}
+		
+		
 		if (request[0].equals("login")) {
 			User user = (User) clMsg.getContent();
 			if (request[1].equals("user")) {
