@@ -21,21 +21,30 @@ public class LogInController implements Initializable {
     private ImageView welcomeIV;
     
     @FXML
-    private Button logInBtn;
+    private ImageView userIconIv;
+    
+    @FXML
+    private ImageView passIconIV;
 
     @FXML
     private PasswordField passwordPF;
-
+    
     @FXML
     private TextField usernameTF;
+
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		System.out.println("hello");
-		logInBackgroundIV.setImage(new Image("boundary/media/log-in-flowers.jpg"));
 		welcomeIV.setImage(new Image("boundary/media/zli-welcome.png"));
+		userIconIv.setImage(new Image("boundary/media/user-icon.png"));
+		passIconIV.setImage(new Image("boundary/media/pass-icon.png"));
 
 		System.out.println("hi");
+	}
+	
+	public void onLogInPressed() {
+		
 	}
 
 }

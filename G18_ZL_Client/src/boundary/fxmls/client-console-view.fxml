@@ -12,7 +12,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<StackPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="boundary.fxmlControllers.ClientConsoleController">
+<StackPane prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="boundary.fxmlControllers.ClientConsoleController">
    <children>
       <VBox alignment="CENTER" StackPane.alignment="CENTER">
          <children>
@@ -24,13 +24,13 @@
                <children>
                   <VBox>
                      <children>
-                        <ImageView fx:id="logoIV" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="logoIV" fitHeight="62.8" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" />
                         <Label fx:id="consoleLbl" alignment="CENTER" maxWidth="1.7976931348623157E308" text="Console Label">
                            <font>
                               <Font name="System Bold Italic" size="12.0" />
                            </font>
                         </Label>
-                        <VBox alignment="CENTER" stylesheets="@../../../../../../OneDrive/Desktop/ממשק/Prototype/GUI%20Prototype/menubutton.css" VBox.vgrow="ALWAYS">
+                        <VBox alignment="CENTER" VBox.vgrow="ALWAYS">
                            <children>
                               <Button layoutX="160.0" layoutY="170.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="30.0" text="Sample Button">
                                  <cursor>
@@ -55,8 +55,8 @@
             <ButtonBar prefHeight="40.0">
               <buttons>
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Signed in as:" />
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Name" />
-                <Button fx:id="logOutBtn" mnemonicParsing="false" style="-fx-background-color: #ff5000;" text="Log Out" />
+                  <Text fx:id="nameText" strokeType="OUTSIDE" strokeWidth="0.0" text="Name" />
+                <Button mnemonicParsing="false" onMousePressed="#onLogOutPressed" style="-fx-background-color: #ff5000;" text="Log Out" />
               </buttons>
                <padding>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />

@@ -21,7 +21,7 @@ public class ClientView extends Application {
 
 	public static Parent connect = null;
 	public static Parent logIn = null;
-	public static Parent client = null;
+	public static Parent clientConsole = null;
 
 	private static Stage primaryStage;
 	public static Scene primaryScene;
@@ -67,51 +67,6 @@ public class ClientView extends Application {
 		primaryScene = new Scene(connect);
 	}
 
-	public static void setUpLogIn() {
-		try {
-			client = FXMLLoader.load((ClientView.class).getResource("fxmls/log-in-view.fxml"));
-			primaryScene.setRoot(client);
-			primaryStage.sizeToScene();
-		} catch (IOException e) {
-			MainController.print(ClientView.class, "Could not fetch log in FXML");
-		}
-
-	}
-
-	public static void setUpClient() {
-		try {
-			client = FXMLLoader.load((ClientView.class).getResource("fxmls/ClientFXML.fxml"));
-		} catch (IOException e) {
-			MainController.print(ClientView.class, "Could not fetch client FXML");
-		}
-		primaryScene.setRoot(client);
-		primaryStage.sizeToScene();
-
-	}
-
-	/* NOT IN USE, JUST FOR REFERENCE */
-//	public static void setUpClient() {
-//		try {
-//			client = FXMLLoader.load((ClientView.class).getResource("fxmls/ClientFXML.fxml"));
-//		} catch (IOException e) {
-//			MainController.print(ClientView.class, "Could not fetch client FXML");
-//		}
-//		primaryScene.setRoot(client);
-//		primaryStage.sizeToScene();
-//
-//	}
-
-	public static void setUpConnect() {
-		if (connect == null)
-			try {
-				connect = FXMLLoader.load((ClientView.class).getResource("fxmls/connect-view.fxml"));
-			} catch (IOException e) {
-				MainController.printErr(ClientView.class, "Could not fetch connect FXML");
-			}
-		primaryScene.setRoot(connect);
-		primaryStage.sizeToScene();
-	}
-
 	private void setUpStage(Scene scene) {
 		scene.getStylesheets().add("/boundary/fxmlControllers/client.css");
 		primaryStage.setTitle("Client Console"); // window title
@@ -120,6 +75,38 @@ public class ClientView extends Application {
 		primaryStage.setResizable(false);
 		primaryStage.sizeToScene();
 		primaryStage.show();
+	}
+
+	public static void setUpConnect() {
+		if (connect == null)
+			try {
+				connect = FXMLLoader.load((ClientView.class).getResource("fxmls/connect-view.fxml"));
+			} catch (IOException e) {
+				MainController.printErr(ClientView.class, "Could not fetch 'connect' FXML");
+			}
+		primaryScene.setRoot(connect);
+		primaryStage.sizeToScene();
+	}
+
+	public static void setUpLogIn() {
+
+		try {
+			logIn = FXMLLoader.load((ClientView.class).getResource("fxmls/log-in-view.fxml"));
+		} catch (IOException e) {
+			MainController.printErr(ClientView.class, "Could not fetch 'log in' FXML");
+		}
+		primaryScene.setRoot(logIn);
+		primaryStage.sizeToScene();
+	}
+
+	public static void setUpClientConsole() {
+		try {
+			clientConsole = FXMLLoader.load((ClientView.class).getResource("fxmls/client-console-view.fxml"));
+		} catch (IOException e) {
+			MainController.print(ClientView.class, "Could not fetch 'client' FXML");
+		}
+		primaryScene.setRoot(clientConsole);
+
 	}
 
 }
