@@ -1,16 +1,19 @@
 package control;
 
+import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-import javax.swing.table.TableStringConverter;
-
+import entity.BuildItem;
+import entity.Complaint;
+import entity.Item;
 import entity.Order;
+import entity.User;
+import javafx.scene.image.Image;
 
 public class DBController {
 
@@ -91,14 +94,55 @@ public class DBController {
 			MainController.printErr(DBController.class, "Error in DB Disconnection");
 		}
 	}
+	
+	//helper methods
+	
+	private static int resultSetSize(ResultSet rs) throws SQLException {
+		int size =0;
+		if (rs != null) 
+		{
+		  rs.last();    // moves cursor to the last row
+		  size = rs.getRow(); // get row id 
+		}
+		return size;
+	}
+	private static Image blobToImage(Blob blob) {
+		try {
+			return new Image(blob.getBinaryStream());
+		} catch (SQLException e) {
+			MainController.printErr(DBController.class, "Could not load blob to image from mysql");
+		}
+		return null;
+		
+	}
 
 	// SQL Query Methods ******************************
+	
+	public static User getUser(String username,String password) throws Exception{
+		ResultSet rs;
+		try {
+			rs = statement.executeQuery("SELECT * FROM user WHERE usernme="+username+" AND password="+password);
+			if(resultSetSize(rs)==0)
+				throw new Exception("No such user!");
+			rs.beforeFirst(); // ---move back to first row
+			while (rs.next()) {
+				return new User(
+						rs.getInt("id_user"),
+						rs.getInt("id_user_type"),
+						rs.getString("username"),
+						rs.getString("password"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 	
 	public static ArrayList<Order> getOrdersAll(){
 		ArrayList<Order> orders = new ArrayList<>();
 		ResultSet rs;
 		try {
-			rs = statement.executeQuery("SELECT * FROM orders"); // ---get all orders
+			rs = statement.executeQuery("SELECT * FROM order"); // ---get all orders
 			rs.beforeFirst(); // ---move back to first row
 			while (rs.next()) {
 				orders.add(new Order(
@@ -124,7 +168,7 @@ public class DBController {
 		ArrayList<Order> orders = new ArrayList<>();
 		ResultSet rs;
 		try {
-			rs = statement.executeQuery("SELECT * FROM orders WHERE "+column+"="+value); // ---get all orders
+			rs = statement.executeQuery("SELECT * FROM order WHERE "+column+"="+value);
 			rs.beforeFirst(); // ---move back to first row
 			while (rs.next()) {
 				orders.add(new Order(
@@ -144,6 +188,139 @@ public class DBController {
 			e.printStackTrace();
 		}
 		return orders;
+	}
+	
+	public static ArrayList<Item> getItemsAll(){
+		ArrayList<Item> items = new ArrayList<>();
+		ResultSet rs;
+		try {
+			rs = statement.executeQuery("SELECT * FROM item");
+			rs.beforeFirst(); // ---move back to first row
+			while (rs.next()) {
+				items.add(new Item(
+						rs.getInt("id_item"),
+						rs.getInt("id_category"),
+						rs.getString("name"),
+						rs.getDouble("price"),
+						rs.getInt("sale"),
+						rs.getString("color"),
+						rs.getString("description"),
+						blobToImage(rs.getBlob("image"))));
+			return items;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return items;
+	}
+	
+	public static ArrayList<Item> getItemsBy(String column,String value){
+		ArrayList<Item> items = new ArrayList<>();
+		ResultSet rs;
+		try {
+			rs = statement.executeQuery("SELECT * FROM item WHERE "+column+"="+value);
+			rs.beforeFirst(); // ---move back to first row
+			while (rs.next()) {
+				items.add(new Item(
+						rs.getInt("id_item"),
+						rs.getInt("id_category"),
+						rs.getString("name"),
+						rs.getDouble("price"),
+						rs.getInt("sale"),
+						rs.getString("color"),
+						rs.getString("description"),
+						blobToImage(rs.getBlob("image"))));
+			return items;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return items;
+	}
+	
+	public static ArrayList<BuildItem> getBuildItemsBy(String column,String value){
+		ArrayList<BuildItem> buildItems = new ArrayList<>();
+		ResultSet rs;
+		try {
+			rs = statement.executeQuery("SELECT * FROM build_item WHERE "+column+"="+value);
+			rs.beforeFirst(); // ---move back to first row
+			while (rs.next()) {
+				buildItems.add(new BuildItem(
+						rs.getInt("id_build_item"),
+						rs.getInt("id_order"),
+						rs.getInt("amount")));
+			return buildItems;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return buildItems;
+	}
+	
+//	public static ArrayList<ItemInBuild> getBuildItemInBuildAll(int idBuildItem,int idOrder){
+//		ArrayList<ItemInBuild> itemsInBuild = new ArrayList<>();
+//		ResultSet rs;
+//		try {
+//			rs = statement.executeQuery("SELECT * FROM build_item WHERE "+column+"="+value);
+//			rs.beforeFirst(); // ---move back to first row
+//			while (rs.next()) {
+//				itemsInBuild.add();
+//			return itemsInBuild;
+//			}
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//		}
+//		return itemsInBuild;
+//	} 
+	
+	
+	
+	public static ArrayList<Complaint> getComplaintsAll() {
+		ArrayList<Complaint> complaints = new ArrayList<>();
+		ResultSet rs;
+		try {
+			rs = statement.executeQuery("SELECT * FROM complaint");
+			rs.beforeFirst(); // ---move back to first row
+			while (rs.next()) {
+				complaints.add(new Complaint(
+						rs.getInt("id_complaint"),
+						rs.getInt("id_customer"),
+						rs.getString("status_complaint"),
+						rs.getString("date_complaint"),
+						rs.getDouble("refund_amount"),
+						rs.getString("complaint"),
+						rs.getString("response")));
+			}
+			return complaints;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return complaints;
+		
+	}
+	
+	public static ArrayList<Complaint> getComplaintsBy(String column, String value) {
+		ArrayList<Complaint> complaints = new ArrayList<>();
+		ResultSet rs;
+		try {
+			rs = statement.executeQuery("SELECT * FROM complaint WHERE "+column+"="+value);
+			rs.beforeFirst(); // ---move back to first row
+			while (rs.next()) {
+				complaints.add(new Complaint(
+						rs.getInt("id_complaint"),
+						rs.getInt("id_customer"),
+						rs.getString("status_complaint"),
+						rs.getString("date_complaint"),
+						rs.getDouble("refund_amount"),
+						rs.getString("complaint"),
+						rs.getString("response")));
+			}
+			return complaints;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return complaints;
+		
 	}
 /*
 	public static ArrayList<Order> getAllOrders() {
