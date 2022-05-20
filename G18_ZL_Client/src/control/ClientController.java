@@ -98,7 +98,7 @@ public class ClientController extends ObservableClient {
 
 	public void send(MessageType type, String info, Object content) {
 		try {
-			openConnection();// in order to send more than one message
+			//openConnection();// in order to send more than one message
 			awaitResponse = true;
 			MyMessage msg = new MyMessage(getHost(), msgCnt++, type, info, content);
 			sendToServer(msg);
@@ -200,12 +200,12 @@ public class ClientController extends ObservableClient {
 	}
 
 	private void handleGetReply(MyMessage svMsg) {
-		if(svMsg.getInfo().startsWith("/login")) {
-			if(svMsg.getInfo().startsWith("/login/user")) {
+		if(svMsg.getInfo().startsWith("login")) {
+			if(svMsg.getInfo().startsWith("login/user")) {
 				ClientConsoleController.setUser((User)svMsg.getContent());
 				
 			}
-			if(svMsg.getInfo().startsWith("/login/customer")) {
+			if(svMsg.getInfo().startsWith("login/customer")) {
 				ClientConsoleController.setCustomer((Customer)svMsg.getContent());
 			}
 		}

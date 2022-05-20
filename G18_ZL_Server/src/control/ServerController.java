@@ -160,7 +160,7 @@ public class ServerController extends ObservableServer {
 			handleInfoMessage(clMsg, client);
 			break;
 		case GET:
-			handleGetRequest(clMsg,client);
+			handleGetRequest(clMsg, client);
 			break;
 		case POST:
 
@@ -204,27 +204,68 @@ public class ServerController extends ObservableServer {
 	 * @param MyMessage Contains GET request
 	 */
 
-	private void handleGetRequest(MyMessage clMsg,ConnectionToClient client) {
-		if(clMsg.getInfo().startsWith("/login")) {
-			User user=(User)clMsg.getContent();
-			if(clMsg.getInfo().startsWith("/login/user")) {
-				clMsg.setContent(DBController.getUser(user.getUsername(),user.getPassword()));
-				
+	private void handleGetRequest(MyMessage clMsg, ConnectionToClient client) {
+
+		String[] request = clMsg.getInfo().split("/");
+		for (String string : request) {
+			System.out.println(string);
+		}
+		if (request[0].equals("login")) {
+			User user = (User) clMsg.getContent();
+			if (request[1].equals("user")) {
+				clMsg.setContent(DBController.getUser(user.getUsername(), user.getPassword()));
+
 			}
-			if(clMsg.getInfo().startsWith("/login/customer")) {
+			if (request[1].equals("customer")) {
 				clMsg.setContent(DBController.getCustomer(user));
 			}
-		}
-		else if (clMsg.getInfo().startsWith("/order")) {
-			if(clMsg.getInfo().startsWith("/order/all")) {
+		} 
+		
+		
+		else if (request[0].equals("order")) {
+			
+			
+			if (request[1].equals("all")) {
 				clMsg.setContent(DBController.getOrdersAll());
+			} 
+			
+			else if (request[1].equals("by")) {
+				clMsg.setContent(DBController.getOrdersBy(request[2], request[3]));
+			} 
+			
+			
+			else if(request[1].equals("report")) { 
+
 				
+				if(request[2].equals("sale")) {
+					
+					
+					if(request[3].equals("months")) {
+						
+						
+						clMsg.setContent(DBController.getOrderReportMonths(request[4]));
+					}
+				}
 			}
+		}
+		
+		
+		else if (request[0].equals("item")) {
+			if (request[1].equals("all")) {
+				clMsg.setContent(DBController.getItemsAll());
+			} else if (request[1].equals("by")) {
+				clMsg.setContent(DBController.getItemsBy(request[2], request[3]));
+			}
+		} else if(request[0].equals("build_item")) {
+			/**********************************************************************************************/
+		} else if(request[0].equals("item_in_build")) {
+			/**********************************************************************************************/
+			
 		}
 		else {
 			MainController.printErr(getClass(), "Unhandled Get request: " + clMsg.getInfo());
 		}
-		
+
 		try {
 			client.sendToClient(clMsg);
 		} catch (IOException e) {

@@ -279,21 +279,29 @@ public class DBController {
 		return buildItems;
 	}
 	
-//	public static ArrayList<ItemInBuild> getBuildItemInBuildAll(int idBuildItem,int idOrder){
-//		ArrayList<ItemInBuild> itemsInBuild = new ArrayList<>();
-//		ResultSet rs;
-//		try {
-//			rs = statement.executeQuery("SELECT * FROM build_item WHERE "+column+"="+value);
-//			rs.beforeFirst(); // ---move back to first row
-//			while (rs.next()) {
-//				itemsInBuild.add();
-//			return itemsInBuild;
-//			}
-//		} catch (SQLException e) {
-//			e.printStackTrace();
-//		}
-//		return itemsInBuild;
-//	} 
+	public static BuildItem getBuildItemInBuildAll(BuildItem build){
+		ResultSet rs;
+		try {
+			rs = statement.executeQuery("SELECT I.*,IB.amount_in_build FROM item I,item_in_build IB WHERE IB.id_build_item="+build.getIdBuildItem()+" AND IB.id_item=I.id_item");
+			rs.beforeFirst(); // ---move back to first row
+			while (rs.next()) {
+				build.addItem(new Item(
+						rs.getInt("id_item"),
+						rs.getInt("id_category"),
+						rs.getString("name"),
+						rs.getDouble("price"),
+						rs.getInt("sale"),
+						rs.getString("color"),
+						rs.getString("description"),
+						blobToImage(rs.getBlob("image"))),
+						rs.getInt("amount_in_build"));
+			return build;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return build;
+	} 
 	
 	
 	
@@ -344,61 +352,20 @@ public class DBController {
 		return complaints;
 		
 	}
-/*
-	public static ArrayList<Order> getAllOrders() {
-		ArrayList<Order> orders = new ArrayList<>();
-
-		ResultSet rs;
-
+	
+	public static ArrayList<String> getOrderReportMonths(String idStore){
+		ArrayList<String> monthsYears = new ArrayList<>();
 		try {
-			rs = statement.executeQuery("SELECT * FROM orders"); // ---get all orders
+			ResultSet rs = statement.executeQuery("SELECT distinct(Month(O.date_order)) as month,year(O.date_order) as year FROM assignment3.order O WHERE O.id_store="+idStore);
 			rs.beforeFirst(); // ---move back to first row
 			while (rs.next()) {
-				orders.add(new Order(
-						rs.getInt("order_number"), 
-						rs.getDouble("price"), 
-						rs.getString("branch"),
-						rs.getString("order_date"), 
-						rs.getString("date"), 
-						rs.getString("color"),
-						rs.getString("order_desc"), 
-						rs.getString("greeting_card")));
+				monthsYears.add(rs.getString("month")+"/"+rs.getString("year"));
 			}
-			return orders;
+			return monthsYears;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
-		return orders;
+		return monthsYears;
 	}
-
-	public static Order getOrder(int orderNum) {
-		Order order=null;
-		try {
-			ResultSet rs = statement.executeQuery("SELECT * FROM orders WHERE order_number=" + orderNum); // ---get all orders
-			rs.next();
-			order=new Order(rs.getInt("order_number"), rs.getDouble("price"), rs.getString("branch"),
-					rs.getString("order_date"), rs.getString("date"), rs.getString("color"), rs.getString("order_desc"),
-					rs.getString("greeting_card"));
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return order;
-	}
-
 	
-	public static Order updateOrder(Order order, String col, String newVal) {
-
-		try {
-			PreparedStatement ps = conn.prepareStatement("UPDATE orders SET " + col + " = ? WHERE order_number = ?");
-			ps.setString(1, newVal);
-			ps.setInt(2, order.getOrderNum());
-			ps.executeUpdate();
-		} catch (SQLException e) {
-			MainController.printErr(DBController.class, "Error updating Order");
-			e.printStackTrace();
-		}
-		return getOrder(order.getOrderNum());
-	}
-*/
 }

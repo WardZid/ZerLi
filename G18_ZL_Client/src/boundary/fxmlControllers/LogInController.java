@@ -42,6 +42,7 @@ public class LogInController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		errorLbl.setVisible(false);
 		welcomeIV.setImage(new Image("boundary/media/zli-welcome.png"));
 		userIconIv.setImage(new Image("boundary/media/user-icon.png"));
 		passIconIV.setImage(new Image("boundary/media/pass-icon.png"));
@@ -50,13 +51,15 @@ public class LogInController implements Initializable {
 	
 	public void onLogInPressed() {
 		if(usernameTF.getText().isEmpty() || passwordPF.getText().isEmpty()) {
+			errorLbl.setVisible(true);
 			errorLbl.setText("*Please fill the missing fields");
 			return;
 		}
-		MainController.getMyClient().send(MessageType.GET, "/login/user", new User(usernameTF.getText(),passwordPF.getText()));
+		MainController.getMyClient().send(MessageType.GET, "login/user", new User(usernameTF.getText(),passwordPF.getText()));
 		
 		if(ClientConsoleController.getUser()==null) {
-			errorLbl.setText("*Incorrect user or pass.");
+			errorLbl.setVisible(true);
+			errorLbl.setText("*Incorrect user or password");
 			return;
 		}
 		

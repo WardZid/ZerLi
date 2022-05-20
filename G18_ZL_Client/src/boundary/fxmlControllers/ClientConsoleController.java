@@ -74,7 +74,7 @@ public class ClientConsoleController implements Initializable {
 			loadCustomerConsole();
 			break;
 		case BRANCH_MANAGER:
-
+			loadBranchManagerConsole();
 			break;
 		case CEO:
 
@@ -109,7 +109,7 @@ public class ClientConsoleController implements Initializable {
 
 	
 	private void loadCustomerConsole() {
-		MainController.getMyClient().send(MessageType.GET, "/login/customer", user);
+		MainController.getMyClient().send(MessageType.GET, "login/customer", user);
 		try {
 			Node node =FXMLLoader.load(ClientView.class.getResource("fxmls/catalog-view.fxml"));
 			mainSP.getChildren().add(node);
@@ -118,5 +118,8 @@ public class ClientConsoleController implements Initializable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	private void loadBranchManagerConsole() {
+		
 	}
 }

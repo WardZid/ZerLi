@@ -94,6 +94,22 @@ public class BuildItem implements Serializable {
 			itemsInBuild.put(itemToAdd.getIdItem(), itemToAdd);
 		return true;
 	}
+	
+	/**
+	 * 
+	 * @param item
+	 * @return true if successfully added
+	 */
+	public boolean addItem(Item item, int amountInBuild) {
+		if(item instanceof OrderItem)
+			return false;
+		ItemInBuild itemToAdd=item.new ItemInBuild(item,amountInBuild);//************************************SUS
+		if(itemsInBuild.containsKey(itemToAdd.getIdItem()))
+			itemsInBuild.get(itemToAdd.getIdItem()).addAmount(itemToAdd.getAmount());
+		else 
+			itemsInBuild.put(itemToAdd.getIdItem(), itemToAdd);
+		return true;
+	}
 
 	/**
 	 * For each item in the given collection, it checks if it exists in the HashMap,
