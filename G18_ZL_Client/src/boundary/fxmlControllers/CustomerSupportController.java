@@ -108,9 +108,9 @@ public class CustomerSupportController implements Initializable {
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		//send to server
-		ComplaintMap.put(1, new Complaint(1,"123456","OnTreatment","1/5/2022",40,"Not good",null));
-		ComplaintMap.put(2, new Complaint(2,"543216","OnTreatment","2/5/2022",50,"Not good flower",null));
-		ComplaintMap.put(3, new Complaint(3,"645321","OnTreatment","3/5/2022",60,"Not good workers",null));
+		ComplaintMap.put(1, new Complaint(1,111,"OnTreatment","1/5/2022",40,"Not good",null));
+		ComplaintMap.put(2, new Complaint(2,222,"OnTreatment","2/5/2022",50,"Not good flower",null));
+		ComplaintMap.put(3, new Complaint(3,333,"OnTreatment","3/5/2022",60,"Not good workers",null));
 		ComplaintL.getItems().addAll(ComplaintMap.keySet());
 		CustomerIdT.setDisable(true);
 		ComplaintIdT.setDisable(true);
@@ -127,7 +127,7 @@ public class CustomerSupportController implements Initializable {
 				selectedComplaintId = ComplaintL.getSelectionModel().getSelectedItem();
 				selectedComplaint = ComplaintMap.get(selectedComplaintId);
 				ComplaintIdT.setText(Integer.toString(selectedComplaintId));
-				CustomerIdT.setText(selectedComplaint.getIdCustomer());
+				CustomerIdT.setText(Integer.toString(selectedComplaint.getIdCustomer()));
 				statusT.setText(selectedComplaint.getStatus());
 				dateT.setText(selectedComplaint.getDate());
 				refundT.setText(Double.toString(selectedComplaint.getRefund()));
