@@ -34,8 +34,8 @@ public class Order implements Serializable, Cloneable {
 
 	// Products in the order are enetered on request only as to minimize load to the
 	// server
-	ArrayList<BuildItem> buildItems;
-	ArrayList<Item> items;
+	private ArrayList<BuildItem> buildItems;
+	private ArrayList<Item> items;
 
 	// main Constructor
 	public Order(int idOrder, int idCustomer, int idStore, int idOrderStatus, double price, String orderDate,
@@ -131,6 +131,22 @@ public class Order implements Serializable, Cloneable {
 
 	public void setGreetingCard(String greetingCard) {
 		this.greetingCard = greetingCard;
+	}
+
+	public ArrayList<BuildItem> getBuildItems() {
+		return buildItems;
+	}
+
+	public void setBuildItems(ArrayList<BuildItem> buildItems) {
+		this.buildItems = buildItems;
+	}
+
+	public ArrayList<Item> getItems() {
+		return items;
+	}
+
+	public void setItems(ArrayList<Item> items) {
+		this.items = items;
 	}
 
 	// handling id as enum

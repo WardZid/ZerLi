@@ -57,9 +57,6 @@ public class ClientConsoleController implements Initializable {
     @FXML
     private VBox navVB;
 
-    @FXML
-    private Label pathLbl;
-
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {

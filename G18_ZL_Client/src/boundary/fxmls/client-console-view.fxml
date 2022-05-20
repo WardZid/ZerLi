@@ -16,10 +16,6 @@
    <children>
       <VBox alignment="CENTER" StackPane.alignment="CENTER">
          <children>
-            <Label fx:id="pathLbl" maxWidth="1.7976931348623157E308" text="Console">
-               <padding>
-                  <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
-               </padding></Label>
             <HBox alignment="CENTER" VBox.vgrow="ALWAYS">
                <children>
                   <VBox>
@@ -50,7 +46,7 @@
                         </VBox>
                      </children>
                   </VBox>
-                  <StackPane fx:id="mainSP" prefHeight="550.0" prefWidth="850.0" HBox.hgrow="ALWAYS" />
+                  <StackPane fx:id="mainSP" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="550.0" prefWidth="850.0" HBox.hgrow="ALWAYS" />
                </children></HBox>
             <ButtonBar prefHeight="40.0">
               <buttons>
