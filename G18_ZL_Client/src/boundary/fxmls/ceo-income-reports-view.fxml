@@ -7,6 +7,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
@@ -20,9 +21,9 @@
    <children>
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" StackPane.alignment="CENTER">
          <children>
-            <VBox alignment="CENTER" prefHeight="550.0" prefWidth="153.0" style="-fx-border-color: black;">
+            <VBox alignment="CENTER" prefHeight="550.0" prefWidth="153.0">
                <children>
-                  <ChoiceBox prefWidth="150.0" VBox.vgrow="ALWAYS">
+                  <ChoiceBox fx:id="branchsChoiceBox" prefWidth="150.0" VBox.vgrow="ALWAYS">
                      <opaqueInsets>
                         <Insets />
                      </opaqueInsets>
@@ -38,12 +39,12 @@
                         <Font size="18.0" />
                      </font>
                   </Text>
-                  <ListView VBox.vgrow="ALWAYS">
+                  <ListView fx:id="monthsListView" VBox.vgrow="ALWAYS">
                      <VBox.margin>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </VBox.margin>
                   </ListView>
-                  <Button disable="true" mnemonicParsing="false" text="View Report" VBox.vgrow="ALWAYS">
+                  <Button fx:id="viewReportButton" disable="true" mnemonicParsing="false" text="View Report" VBox.vgrow="ALWAYS">
                      <VBox.margin>
                         <Insets bottom="10.0" left="10.0" right="10.0" />
                      </VBox.margin>
@@ -52,14 +53,15 @@
                      </font>
                   </Button>
                </children></VBox>
-            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" style="-fx-border-color: black;" HBox.hgrow="ALWAYS">
+            <Separator orientation="VERTICAL" prefHeight="200.0" />
+            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
                <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Report" VBox.vgrow="ALWAYS">
+                  <Text fx:id="reportMonthText" strokeType="OUTSIDE" strokeWidth="0.0" text="Report" VBox.vgrow="ALWAYS">
                      <font>
                         <Font size="18.0" />
                      </font>
                   </Text>
-                  <LineChart VBox.vgrow="ALWAYS">
+                  <LineChart fx:id="reportLineChart" VBox.vgrow="ALWAYS">
                     <xAxis>
                       <CategoryAxis animated="false" side="BOTTOM" />
                     </xAxis>
@@ -72,11 +74,11 @@
                   </LineChart>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
                      <children>
-                        <TableView prefHeight="101.0" prefWidth="278.0" HBox.hgrow="ALWAYS">
+                        <TableView fx:id="reportTableView" prefHeight="101.0" prefWidth="278.0" HBox.hgrow="ALWAYS">
                           <columns>
-                            <TableColumn editable="false" minWidth="94.0" prefWidth="94.0" resizable="false" sortable="false" text="Name" />
-                            <TableColumn editable="false" minWidth="92.0" prefWidth="92.0" resizable="false" sortable="false" text="Date" />
-                              <TableColumn editable="false" minWidth="94.0" prefWidth="92.0" resizable="false" sortable="false" text="Income" />
+                            <TableColumn fx:id="nameTableCol" editable="false" minWidth="94.0" prefWidth="94.0" resizable="false" sortable="false" text="Name" />
+                            <TableColumn fx:id="dateTableCol" editable="false" minWidth="92.0" prefWidth="92.0" resizable="false" sortable="false" text="Date" />
+                              <TableColumn fx:id="incomeTableCol" editable="false" minWidth="94.0" prefWidth="92.0" resizable="false" sortable="false" text="Income" />
                           </columns>
                            <HBox.margin>
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -92,7 +94,7 @@
                                     <Font size="24.0" />
                                  </font>
                               </Text>
-                              <TextField VBox.vgrow="ALWAYS">
+                              <TextField fx:id="totalIncomeTextField" editable="false" VBox.vgrow="ALWAYS">
                                  <VBox.margin>
                                     <Insets bottom="10.0" right="10.0" top="10.0" />
                                  </VBox.margin>
