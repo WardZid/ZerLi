@@ -81,32 +81,35 @@ public class ClientView extends Application {
 		if (connect == null)
 			try {
 				connect = FXMLLoader.load((ClientView.class).getResource("fxmls/connect-view.fxml"));
+				
+				primaryScene.setRoot(connect);
+				primaryStage.sizeToScene();
 			} catch (IOException e) {
 				MainController.printErr(ClientView.class, "Could not fetch 'connect' FXML");
 			}
-		primaryScene.setRoot(connect);
-		primaryStage.sizeToScene();
 	}
 
 	public static void setUpLogIn() {
 
 		try {
 			logIn = FXMLLoader.load((ClientView.class).getResource("fxmls/log-in-view.fxml"));
+
+			primaryScene.setRoot(logIn);
+			primaryStage.sizeToScene();
 		} catch (IOException e) {
 			MainController.printErr(ClientView.class, "Could not fetch 'log in' FXML");
 		}
-		primaryScene.setRoot(logIn);
-		primaryStage.sizeToScene();
 	}
 
 	public static void setUpClientConsole() {
 		try {
 			clientConsole = FXMLLoader.load((ClientView.class).getResource("fxmls/client-console-view.fxml"));
+
+			primaryScene.setRoot(clientConsole);
+			primaryStage.sizeToScene();
 		} catch (IOException e) {
-			MainController.print(ClientView.class, "Could not fetch 'client' FXML");
+			MainController.print(ClientView.class, "Could not fetch 'client console' FXML");
 		}
-		primaryScene.setRoot(clientConsole);
-		primaryStage.sizeToScene();
 
 	}
 
