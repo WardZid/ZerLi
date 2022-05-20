@@ -50,7 +50,7 @@
                         </VBox>
                      </children>
                   </VBox>
-                  <StackPane fx:id="mainSP" HBox.hgrow="ALWAYS" />
+                  <StackPane fx:id="mainSP" prefHeight="550.0" prefWidth="850.0" HBox.hgrow="ALWAYS" />
                </children></HBox>
             <ButtonBar prefHeight="40.0">
               <buttons>
