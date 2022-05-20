@@ -10,6 +10,7 @@ import java.util.ArrayList;
 
 import entity.BuildItem;
 import entity.Complaint;
+import entity.Customer;
 import entity.Item;
 import entity.Order;
 import entity.User;
@@ -118,12 +119,12 @@ public class DBController {
 
 	// SQL Query Methods ******************************
 	
-	public static User getUser(String username,String password) throws Exception{
+	public static User getUser(String username,String password) {
 		ResultSet rs;
 		try {
-			rs = statement.executeQuery("SELECT * FROM user WHERE usernme="+username+" AND password="+password);
+			rs = statement.executeQuery("SELECT * FROM user WHERE username='"+username+"' AND password='"+password+"'");
 			if(resultSetSize(rs)==0)
-				throw new Exception("No such user!");
+				return null;
 			rs.beforeFirst(); // ---move back to first row
 			while (rs.next()) {
 				return new User(
@@ -131,6 +132,27 @@ public class DBController {
 						rs.getInt("id_user_type"),
 						rs.getString("username"),
 						rs.getString("password"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public static Customer getCustomer(User user){
+		ResultSet rs;
+		try {
+			rs = statement.executeQuery("SELECT * FROM customer WHERE id_user="+user.getIdUser());
+			rs.beforeFirst(); // ---move back to first row
+			while (rs.next()) {
+				return new Customer(rs.getInt("id_customer"),
+						rs.getInt("id_customer_status"),
+						rs.getInt("id_user"),
+						rs.getString("name_customer"),
+						rs.getString("email_customer"),
+						rs.getString("phone_customer"),
+						rs.getString("status_customer"),
+						rs.getString("card_number"));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

@@ -12,6 +12,7 @@ import boundary.fxmlControllers.ServerViewController;
 import entity.MyMessage;
 import entity.MyMessage.MessageType;
 import entity.Order;
+import entity.User;
 
 public class ServerController extends ObservableServer {
 	// Class variables *************************************************
@@ -65,7 +66,8 @@ public class ServerController extends ObservableServer {
 	/**
 	 * This method is responsible for the creation of the server instance (there is
 	 * no UI in this phase).
-	 * @throws Exception 
+	 * 
+	 * @throws Exception
 	 */
 	public void startServer() throws Exception {
 		try {
@@ -127,7 +129,7 @@ public class ServerController extends ObservableServer {
 	protected synchronized void clientDisconnected(ConnectionToClient client) {
 		super.clientDisconnected(client);
 	}
-	
+
 	@Override
 	public void sendToAllClients(Object msg) {
 		MainController.print(getClass(), "-> " + msg);
@@ -158,7 +160,7 @@ public class ServerController extends ObservableServer {
 			handleInfoMessage(clMsg, client);
 			break;
 		case GET:
-			handleGetRequest(clMsg);
+			handleGetRequest(clMsg,client);
 			break;
 		case POST:
 
@@ -187,7 +189,8 @@ public class ServerController extends ObservableServer {
 			try {
 				client.sendToClient(clMsg);
 			} catch (IOException e) {
-				MainController.printErr(getClass(), "Could not send to client: "+client.getInetAddress().getHostName());
+				MainController.printErr(getClass(),
+						"Could not send to client: " + client.getInetAddress().getHostName());
 			}
 
 		} else {
@@ -200,19 +203,32 @@ public class ServerController extends ObservableServer {
 	 * 
 	 * @param MyMessage Contains GET request
 	 */
-	
-	private void handleGetRequest(MyMessage clMsg) {
-		if(clMsg.getInfo().startsWith("/all_orders"))
-			 
-		sendToAllClients(clMsg);
-		/*
-		if (clMsg.getInfo().startsWith("/all_orders")) {
-			clMsg.setContent(DBController.getAllOrders());
-			sendToAllClients(clMsg);
+
+	private void handleGetRequest(MyMessage clMsg,ConnectionToClient client) {
+		if(clMsg.getInfo().startsWith("/login")) {
+			User user=(User)clMsg.getContent();
+			if(clMsg.getInfo().startsWith("/login/user")) {
+				clMsg.setContent(DBController.getUser(user.getUsername(),user.getPassword()));
+				
 			}
-		*/	
-		 else {
+			if(clMsg.getInfo().startsWith("/login/customer")) {
+				clMsg.setContent(DBController.getCustomer(user));
+			}
+		}
+		else if (clMsg.getInfo().startsWith("/order")) {
+			if(clMsg.getInfo().startsWith("/order/all")) {
+				clMsg.setContent(DBController.getOrdersAll());
+				
+			}
+		}
+		else {
 			MainController.printErr(getClass(), "Unhandled Get request: " + clMsg.getInfo());
+		}
+		
+		try {
+			client.sendToClient(clMsg);
+		} catch (IOException e) {
+			sendToAllClients(clMsg);
 		}
 	}
 
@@ -223,27 +239,27 @@ public class ServerController extends ObservableServer {
 	 */
 	private void handleUpdateRequest(MyMessage clMsg) {
 		if (clMsg.getInfo().startsWith("/order")) {
-			Order order=(Order)clMsg.getContent();
-			
-			ArrayList<Order> list=new ArrayList<>();
-			
+			Order order = (Order) clMsg.getContent();
+
+			ArrayList<Order> list = new ArrayList<>();
+
 			switch (clMsg.getInfo()) {
 			case "/order/color":
-				//list.add(DBController.updateOrder(order, "color",order.getColor()));
+				// list.add(DBController.updateOrder(order, "color",order.getColor()));
 				break;
 			case "/order/delivery_date":
-				//list.add(DBController.updateOrder(order, "date",order.getDeliveryDate()));
+				// list.add(DBController.updateOrder(order, "date",order.getDeliveryDate()));
 				break;
 
 			default:
-				MainController.printErr(getClass(), "Unhandled Order Update Parameter: "+ clMsg.getInfo());
+				MainController.printErr(getClass(), "Unhandled Order Update Parameter: " + clMsg.getInfo());
 				break;
 			}
 			clMsg.setContent(list);
 		} else {
 			MainController.printErr(getClass(), "Unhandled Update request: " + clMsg.getInfo());
 		}
-		
+
 		sendToAllClients(clMsg);
 	}
 }

@@ -3,8 +3,13 @@ package control;
 import java.io.IOException;
 
 import boundary.ClientView;
+import boundary.fxmlControllers.ClientConsoleController;
+import entity.Customer;
 import entity.MyMessage;
+import entity.User;
 import entity.MyMessage.MessageType;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import ocsf.client.ObservableClient;
 
 public class ClientController extends ObservableClient {
@@ -64,6 +69,7 @@ public class ClientController extends ObservableClient {
 			if (isConnected) {
 				closeConnection();
 				isConnected = false;
+				ClientView.setUpConnect();
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -99,8 +105,14 @@ public class ClientController extends ObservableClient {
 			MainController.print(getClass(), "-> " + msg.toString());
 
 			// wait for response
+			int timeoutCounter=0;
 			while (awaitResponse) {
 				try {
+					if(timeoutCounter>=200) {
+						timeOut();
+					}
+						
+					timeoutCounter++;
 					Thread.sleep(100);
 					MainController.print(getClass(),
 							"Awaiting Response -> [" + msg.getMsgID() + "] info=" + msg.getInfo());
@@ -114,6 +126,16 @@ public class ClientController extends ObservableClient {
 			e.printStackTrace();
 			MainController.print(getClass(), "Could not send message to server: Terminating client." + e);
 		}
+	}
+	
+	private void timeOut() {
+		MainController.printErr(getClass(),"Client timed out. Server Unreachable.");
+		disconnectNoMessage();
+		
+		Alert errorAlert = new Alert(AlertType.ERROR);
+		errorAlert.setHeaderText(null);
+		errorAlert.setContentText("Timed out, server Unreachable.");
+		errorAlert.showAndWait();
 	}
 
 	@Override
@@ -164,11 +186,10 @@ public class ClientController extends ObservableClient {
 
 	private void handleInfoMessage(MyMessage svMsg) {
 		if (svMsg.getInfo().startsWith("/global/stop")) {
-			disconnectNoMessage();
 			/*
 			 * any action that needs to be done before closing
 			 */
-			ClientView.setUpConnect();
+			disconnectNoMessage();
 
 		} else if (svMsg.getInfo().startsWith("/disconnect"))
 			isConnected = false;
@@ -179,9 +200,15 @@ public class ClientController extends ObservableClient {
 	}
 
 	private void handleGetReply(MyMessage svMsg) {
-		if (svMsg.getInfo().startsWith("/all_orders"))
-			return;
-//			ClientFXMLController.putOrders((ArrayList<Order>) svMsg.getContent());
+		if(svMsg.getInfo().startsWith("/login")) {
+			if(svMsg.getInfo().startsWith("/login/user")) {
+				ClientConsoleController.setUser((User)svMsg.getContent());
+				
+			}
+			if(svMsg.getInfo().startsWith("/login/customer")) {
+				ClientConsoleController.setCustomer((Customer)svMsg.getContent());
+			}
+		}
 		else {
 			MainController.print(getClass(), "Unhandled Get:" + svMsg.getInfo());
 		}

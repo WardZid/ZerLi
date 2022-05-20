@@ -30,7 +30,7 @@
                               <Font name="System Bold Italic" size="12.0" />
                            </font>
                         </Label>
-                        <VBox alignment="CENTER" VBox.vgrow="ALWAYS">
+                        <VBox fx:id="navVB" alignment="CENTER" VBox.vgrow="ALWAYS">
                            <children>
                               <Button layoutX="160.0" layoutY="170.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="30.0" text="Sample Button">
                                  <cursor>
