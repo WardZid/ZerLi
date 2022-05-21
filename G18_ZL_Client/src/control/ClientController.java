@@ -260,7 +260,6 @@ public class ClientController extends ObservableClient {
 					
 					
 					if(reply[3].equals("months")) {
-						
 						BranchManagerIncomeReportsController.setMonthsYears((ArrayList<String>)svMsg.getContent());
 //						clMsg.setContent(DBController.getOrderReportMonths(request[4]));
 					}
