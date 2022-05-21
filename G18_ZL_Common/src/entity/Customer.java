@@ -4,36 +4,34 @@ import java.io.Serializable;
 
 public class Customer implements Serializable {
 	private static final long serialVersionUID = -4182417182449829997L;
-	
-	public enum CustomerStatus{
-		UNAPPROVED,APPROVED,FROZEN;
-		
+
+	public enum CustomerStatus {
+		UNAPPROVED, APPROVED, FROZEN;
+
 		public static CustomerStatus getById(int id) {
-			for(CustomerStatus status: values())
-				if(status.ordinal()==id)
+			for (CustomerStatus status : values())
+				if (status.ordinal() == id)
 					return status;
 			return null;
 		}
 	}
-	
+
 	private int idCustomer;
 	private int idCustomerStatus;
 	private int idUser;
 	private String name;
 	private String email;
 	private String phone;
-	private String status;
 	private String card;
-	
+
 	public Customer(int idCustomer, int idCustomerStatus, int idUser, String name, String email, String phone,
-			String status, String card) {
+			String card) {
 		this.idCustomer = idCustomer;
 		this.idCustomerStatus = idCustomerStatus;
 		this.idUser = idUser;
 		this.name = name;
 		this.email = email;
 		this.phone = phone;
-		this.status = status;
 		this.card = card;
 	}
 
@@ -85,14 +83,6 @@ public class Customer implements Serializable {
 		this.phone = phone;
 	}
 
-	public String getStatus() {
-		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
-	}
-
 	public String getCard() {
 		return card;
 	}
@@ -100,6 +90,12 @@ public class Customer implements Serializable {
 	public void setCard(String card) {
 		this.card = card;
 	}
-	
-	
+
+	@Override
+	public String toString() {
+		return "Customer [idCustomer=" + idCustomer + ", CustomerStatus=(" + idCustomerStatus + ") "
+				+ CustomerStatus.getById(idCustomerStatus) + ", idUser=" + idUser + ", name=" + name + ", email="
+				+ email + ", phone=" + phone + ", card=" + card + "]";
+	}
+
 }

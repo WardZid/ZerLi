@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import entity.BuildItem;
 import entity.Complaint;
 import entity.Customer;
+import entity.Customer.CustomerStatus;
 import entity.Item;
 import entity.Order;
 import entity.Store;
@@ -141,27 +142,6 @@ public class DBController {
 		return null;
 	}
 	
-	public static Customer getCustomer(User user){
-		ResultSet rs;
-		try {
-			rs = statement.executeQuery("SELECT * FROM customer WHERE id_user="+user.getIdUser());
-			rs.beforeFirst(); // ---move back to first row
-			while (rs.next()) {
-				return new Customer(rs.getInt("id_customer"),
-						rs.getInt("id_customer_status"),
-						rs.getInt("id_user"),
-						rs.getString("name_customer"),
-						rs.getString("email_customer"),
-						rs.getString("phone_customer"),
-						rs.getString("status_customer"),
-						rs.getString("card_number"));
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-	
 	public static ArrayList<Order> getOrdersAll(){
 		ArrayList<Order> orders = new ArrayList<>();
 		ResultSet rs;
@@ -192,7 +172,7 @@ public class DBController {
 		ArrayList<Order> orders = new ArrayList<>();
 		ResultSet rs;
 		try {
-			rs = statement.executeQuery("SELECT * FROM order WHERE "+column+"="+value);
+			rs = statement.executeQuery("SELECT * FROM order WHERE "+column+"='"+value+"'");
 			rs.beforeFirst(); // ---move back to first row
 			while (rs.next()) {
 				orders.add(new Order(
@@ -242,7 +222,7 @@ public class DBController {
 		ArrayList<Item> items = new ArrayList<>();
 		ResultSet rs;
 		try {
-			rs = statement.executeQuery("SELECT * FROM item WHERE "+column+"="+value);
+			rs = statement.executeQuery("SELECT * FROM item WHERE "+column+"='"+value+"'");
 			rs.beforeFirst(); // ---move back to first row
 			while (rs.next()) {
 				items.add(new Item(
@@ -266,7 +246,7 @@ public class DBController {
 		ArrayList<BuildItem> buildItems = new ArrayList<>();
 		ResultSet rs;
 		try {
-			rs = statement.executeQuery("SELECT * FROM build_item WHERE "+column+"="+value);
+			rs = statement.executeQuery("SELECT * FROM build_item WHERE "+column+"='"+value+"'");
 			rs.beforeFirst(); // ---move back to first row
 			while (rs.next()) {
 				buildItems.add(new BuildItem(
@@ -304,7 +284,47 @@ public class DBController {
 		return buildItem;
 	} 
 	
+	public static ArrayList<Customer> getCustomerAll(){
+		ArrayList<Customer> customers = new ArrayList<>();
+		ResultSet rs;
+		try {
+			rs = statement.executeQuery("SELECT * FROM customer");
+			rs.beforeFirst(); // ---move back to first row
+			while (rs.next()) {
+				customers.add(new Customer(rs.getInt("id_customer"),
+						rs.getInt("id_customer_status"),
+						rs.getInt("id_user"),
+						rs.getString("name_customer"),
+						rs.getString("email_customer"),
+						rs.getString("phone_customer"),
+						rs.getString("card_number")));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return customers;
+	}
 	
+	public static ArrayList<Customer> getCustomerBy(String column,String value){
+		ArrayList<Customer> customers = new ArrayList<>();
+		ResultSet rs;
+		try {
+			rs = statement.executeQuery("SELECT * FROM customer WHERE "+column+"='"+value+"'");
+			rs.beforeFirst(); // ---move back to first row
+			while (rs.next()) {
+				customers.add(new Customer(rs.getInt("id_customer"),
+						rs.getInt("id_customer_status"),
+						rs.getInt("id_user"),
+						rs.getString("name_customer"),
+						rs.getString("email_customer"),
+						rs.getString("phone_customer"),
+						rs.getString("card_number")));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return customers;
+	}
 	
 	public static ArrayList<Complaint> getComplaintsAll() {
 		ArrayList<Complaint> complaints = new ArrayList<>();
@@ -334,7 +354,7 @@ public class DBController {
 		ArrayList<Complaint> complaints = new ArrayList<>();
 		ResultSet rs;
 		try {
-			rs = statement.executeQuery("SELECT * FROM complaint WHERE "+column+"="+value);
+			rs = statement.executeQuery("SELECT * FROM complaint WHERE "+column+"='"+value+"'");
 			rs.beforeFirst(); // ---move back to first row
 			while (rs.next()) {
 				complaints.add(new Complaint(
@@ -373,7 +393,7 @@ public class DBController {
 		ArrayList<Store> stores = new ArrayList<>();
 		ResultSet rs;
 		try {
-			rs = statement.executeQuery("SELECT * FROM store WHERE "+column+"="+value);
+			rs = statement.executeQuery("SELECT * FROM store WHERE "+column+"='"+value+"'");
 			rs.beforeFirst(); // ---move back to first row
 			while (rs.next()) {
 				stores.add(Store.valueOf(rs.getString("name_store")));
@@ -383,6 +403,21 @@ public class DBController {
 			e.printStackTrace();
 		}
 		return stores;
+	}
+	
+	
+	
+	//UPDATE QUERIES******************************************************************************************888
+	
+	
+	public static ArrayList<Customer> updateCustomerStatusOne(Customer c,CustomerStatus status){
+		
+		try {
+			statement.executeUpdate("UPDATE customer SET id_customer_status="+status.ordinal()+" WHERE id_customer="+c.getIdCustomer());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return getCustomerBy("id_customer", c.getIdCustomer()+"");
 	}
 	
 }

@@ -1,14 +1,9 @@
 package control;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 import boundary.ClientView;
-import boundary.fxmlControllers.BranchManagerIncomeReportsController;
-import boundary.fxmlControllers.ClientConsoleController;
-import entity.Customer;
 import entity.MyMessage;
-import entity.User;
 import entity.MyMessage.MessageType;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;

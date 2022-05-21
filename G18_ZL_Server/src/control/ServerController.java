@@ -1,19 +1,19 @@
 package control;
 
-import ocsf.server.*;
-
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.sql.SQLException;
-import java.util.ArrayList;
 
 import boundary.fxmlControllers.ServerViewController;
 import entity.BuildItem;
+import entity.Customer;
+import entity.Customer.CustomerStatus;
 import entity.MyMessage;
 import entity.MyMessage.MessageType;
-import entity.Order;
 import entity.User;
+import ocsf.server.ConnectionToClient;
+import ocsf.server.ObservableServer;
 
 public class ServerController extends ObservableServer {
 	// Class variables *************************************************
@@ -176,6 +176,14 @@ public class ServerController extends ObservableServer {
 			MainController.printErr(getClass(), "Unhandled Client Request: " + clMsg.toString());
 			break;
 		}
+		// finally reply to client
+		try {
+			client.sendToClient(clMsg);
+		} catch (IOException e) {
+			sendToAllClients(clMsg);
+		}finally {
+			MainController.print(getClass(), "-> " + clMsg + " to " + client);
+		}
 
 	}
 
@@ -183,16 +191,9 @@ public class ServerController extends ObservableServer {
 		if (clMsg.getInfo().startsWith("/disconnect")) {
 			MainController.print(getClass(), "Client Disconnected: " + client.toString());
 			ServerViewController.removeClient(client);
-			sendToAllClients(clMsg);
 
 		} else if (clMsg.getInfo().startsWith("/connect")) {
 			MainController.print(getClass(), "Client Connected: " + client.toString());
-			try {
-				client.sendToClient(clMsg);
-			} catch (IOException e) {
-				MainController.printErr(getClass(),
-						"Could not send to client: " + client.getInetAddress().getHostName());
-			}
 
 		} else {
 			MainController.printErr(getClass(), "Unhandled info Message: " + clMsg.getInfo());
@@ -216,7 +217,7 @@ public class ServerController extends ObservableServer {
 
 			}
 			if (request[1].equals("customer")) {
-				clMsg.setContent(DBController.getCustomer(user));
+				clMsg.setContent(DBController.getCustomerBy("id_user", user.getIdUser() + ""));
 			}
 		}
 
@@ -252,10 +253,16 @@ public class ServerController extends ObservableServer {
 				clMsg.setContent(DBController.getBuildItemsBy(request[2], request[3]));
 			}
 		} else if (request[0].equals("item_in_build")) {
-			clMsg.setContent(DBController.getItemInBuildAll((BuildItem)clMsg.getContent()));
+			clMsg.setContent(DBController.getItemInBuildAll((BuildItem) clMsg.getContent()));
 		} else if (request[0].equals("store")) {
 			if (request[1].equals("by")) {
 				clMsg.setContent(DBController.getStoreBy(request[2], request[3]));
+			}
+		} else if (request[0].equals("customer")) {
+			if (request[1].equals("all")) {
+				clMsg.setContent(DBController.getCustomerAll());
+			} else if (request[1].equals("by")) {
+				clMsg.setContent(DBController.getCustomerBy(request[2], request[3]));
 			}
 		} else if (request[0].equals("complaint")) {
 			if (request[1].equals("all")) {
@@ -267,12 +274,6 @@ public class ServerController extends ObservableServer {
 			MainController.printErr(getClass(), "Unhandled Get request: " + clMsg.getInfo());
 		}
 
-		// finally reply to client
-		try {
-			client.sendToClient(clMsg);
-		} catch (IOException e) {
-			sendToAllClients(clMsg);
-		}
 	}
 
 	/**
@@ -281,28 +282,14 @@ public class ServerController extends ObservableServer {
 	 * @param MyMessage Contains Update request and updated object
 	 */
 	private void handleUpdateRequest(MyMessage clMsg) {
-//		if (clMsg.getInfo().startsWith("/order")) {
-//			Order order = (Order) clMsg.getContent();
-//
-//			ArrayList<Order> list = new ArrayList<>();
-//
-//			switch (clMsg.getInfo()) {
-//			case "/order/color":
-//				// list.add(DBController.updateOrder(order, "color",order.getColor()));
-//				break;
-//			case "/order/delivery_date":
-//				// list.add(DBController.updateOrder(order, "date",order.getDeliveryDate()));
-//				break;
-//
-//			default:
-//				MainController.printErr(getClass(), "Unhandled Order Update Parameter: " + clMsg.getInfo());
-//				break;
-//			}
-//			clMsg.setContent(list);
-//		} else {
-//			MainController.printErr(getClass(), "Unhandled Update request: " + clMsg.getInfo());
-//		}
-//
-//		sendToAllClients(clMsg);
+
+		String[] request = clMsg.getInfo().split("/");
+
+		if (request[0].equals("customer")) {
+			Customer c = (Customer) clMsg.getContent();
+			if (request[1].equals("status")) {
+				clMsg.setContent(DBController.updateCustomerStatusOne(c, CustomerStatus.valueOf(request[2])));
+			}
+		}
 	}
 }

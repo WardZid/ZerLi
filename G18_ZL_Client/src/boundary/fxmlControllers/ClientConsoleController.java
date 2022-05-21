@@ -2,6 +2,7 @@ package boundary.fxmlControllers;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import boundary.ClientView;
@@ -97,10 +98,12 @@ public class ClientConsoleController implements Initializable {
 	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
+
 		logoIV.setImage(new Image("boundary/media/zli-logo.png"));
 		menuVB.getStylesheets().add("boundary/fxmlControllers/menu.css");
 		if (user == null)
 			return;
+
 		
 		consoleLbl.setText(user.getUserType().toString().replace('_', ' ') + " CONSOLE");
 		nameText.setText(user.getUsername());
@@ -159,8 +162,8 @@ public class ClientConsoleController implements Initializable {
 	}
 	
 	private void loadCustomerConsole() {
-		customer = (Customer) MainController.getMyClient().send(MessageType.GET, "login/customer", user);
-		
+		ArrayList<Customer>  c=  (ArrayList<Customer>) MainController.getMyClient().send(MessageType.GET, "login/customer", user);
+		customer=c.get(0);
 		
 		cusCatalogBtn=menuButton("Catalog", "catalog-view.fxml");
 		cusCartBtn=menuButton("Cart", "cart-view.fxml");   
