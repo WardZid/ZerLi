@@ -7,6 +7,7 @@ import java.util.ResourceBundle;
 import boundary.ClientView;
 import control.MainController;
 import entity.Customer;
+import entity.Store;
 import entity.MyMessage.MessageType;
 import entity.User;
 import javafx.event.ActionEvent;
@@ -45,33 +46,65 @@ public class ClientConsoleController implements Initializable {
 		ClientConsoleController.customer = customer;
 	}
 
-    @FXML
-    private Label consoleLbl;
+	@FXML
+	private Label consoleLbl;
 
-    @FXML
-    private ImageView logoIV;
+	@FXML
+	private ImageView logoIV;
 
-    @FXML
-    private StackPane mainSP;
+	@FXML
+	private StackPane mainSP;
 
-    @FXML
-    private Text nameText;
+	@FXML
+	private Text nameText;
 
-    @FXML
-    private VBox navVB;
+	@FXML
+	private VBox menuVB;
+	
+	//Current page
+	private Node currentNode;
+	private static Button pressedBtn;
 
+	// MENU BUTTONS**************
 
+	// Customer menu
+	private Button cusCatalogBtn;
+	private Button cusCartBtn;
+	private Button cusOrdersBtn;
+	private Button cusComplaintsBtn;
+
+	// BM MENU
+
+	private Button bmCustomersBtn;
+	private Button bmIReportsBtn;
+	private Button bmOReportsBtn;
+	private Button bmOrdersBtn;
+
+	// CEO MENU
+	
+	//Customer support
+	
+	private Button csComplaintsBtn;
+	private Button csReportsBtn;
+
+	
+	@FXML
+	void onLogOutPressed(MouseEvent event) {
+		user = null;
+		customer = null;
+		ClientView.setUpLogIn();
+	}
+	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		System.out.println(user.toString());
 		logoIV.setImage(new Image("boundary/media/zli-logo.png"));
-		System.out.println("222");
-		if (user != null) {
-			consoleLbl.setText(user.getUserType().toString().replace('_', ' ') + " CONSOLE");
-			nameText.setText(user.getUsername());
-		}
-		System.out.println("333");
+		menuVB.getStylesheets().add("boundary/fxmlControllers/menu.css");
+		if (user == null)
+			return;
 		
+		consoleLbl.setText(user.getUserType().toString().replace('_', ' ') + " CONSOLE");
+		nameText.setText(user.getUsername());
+
 		switch (user.getUserType()) {
 		case CUSTOMER:
 			loadCustomerConsole();
@@ -80,22 +113,22 @@ public class ClientConsoleController implements Initializable {
 			loadBranchManagerConsole();
 			break;
 		case CEO:
-
+			loadCEOConsole();
 			break;
 		case STORE_WORKER:
-
+			loadStoreWorkerConsole();
 			break;
 		case DELIVERY_WORKER:
-
+			loadDeliveryWorkerConsole();
 			break;
 		case CUSTOMER_SUPPORT:
-
+			loadCustomerSupportConsole();
 			break;
 		case SUPPORT_SPECIALIST:
-
+			loadSupportSpecialistConsole();
 			break;
 		case CATALOG_MANAGER:
-
+			loadCatalogManagerConsole();
 			break;
 
 		default:
@@ -103,36 +136,103 @@ public class ClientConsoleController implements Initializable {
 			break;
 		}
 	}
-	@FXML
-    void onLogOutPressed(MouseEvent event) {
-		user = null;
-		customer = null;
-		ClientView.setUpLogIn();
-    }
 
+	private Button menuButton(String btnName,String fxml) {
+		Button btn=new Button(btnName);
+		btn.setMaxWidth(Double.MAX_VALUE);
+		btn.setOnAction((ActionEvent e) -> {
+			if(pressedBtn.equals(btn))
+				return;
+			pressedBtn.setStyle("-fx-background-color: #e5e5e5");
+			pressedBtn=btn;
+			btn.setStyle("-fx-background-color: #3AAED8");
+			try {
+				currentNode = FXMLLoader.load(ClientView.class.getResource("fxmls/"+fxml));
+				mainSP.getChildren().clear();
+				mainSP.getChildren().add(currentNode);
+			} catch (IOException ex) {
+				ex.printStackTrace();
+			}
+		});
+		menuVB.getChildren().add(btn);
+		return btn;
+	}
 	
 	private void loadCustomerConsole() {
-		MainController.getMyClient().send(MessageType.GET, "login/customer", user);
+		customer = (Customer) MainController.getMyClient().send(MessageType.GET, "login/customer", user);
+		
+		
+		cusCatalogBtn=menuButton("Catalog", "catalog-view.fxml");
+		cusCartBtn=menuButton("Cart", "cart-view.fxml");   
+		cusOrdersBtn=menuButton("Orders", "customer-orders-view.fxml");  
+		cusComplaintsBtn=menuButton("Complaints", "customer-complaints-view.fxml");
+		
+		cusCatalogBtn.setStyle("-fx-background-color: #3AAED8");
+		pressedBtn=cusCatalogBtn;
+		
 		try {
-			Node node =FXMLLoader.load(ClientView.class.getResource("fxmls/catalog-view.fxml"));
+			currentNode = FXMLLoader.load(ClientView.class.getResource("fxmls/catalog-view.fxml"));
 			mainSP.getChildren().clear();
-			mainSP.getChildren().add(node);
-			
+			mainSP.getChildren().add(currentNode);
+
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 	}
+
 	private void loadBranchManagerConsole() {
+		bmOrdersBtn=menuButton("Orders", "branch-manager-orders-view.fxml"); 
+		bmCustomersBtn=menuButton("Customers", "branch-manager-customers-view.fxml");
+		bmIReportsBtn=menuButton("Income Reports", "branch-manager-income-reports-view.fxml");
+		bmOReportsBtn=menuButton("Order Reports", "branch-manager-order-reports-view.fxml");
+		
+		bmOrdersBtn.setStyle("-fx-background-color: #3AAED8");
+		pressedBtn=bmOrdersBtn;
 		try {
-			Node node =FXMLLoader.load(ClientView.class.getResource("fxmls/branch-manager-income-reports-view.fxml"));
+			currentNode = FXMLLoader.load(ClientView.class.getResource("fxmls/branch-manager-orders-view.fxml"));
 			mainSP.getChildren().clear();
-			mainSP.getChildren().add(node);
-			
+			mainSP.getChildren().add(currentNode);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-//		Button ordersBtn=new Button("Orders").setOnAction(ActionEvent);
 	}
+	
+	private void loadCEOConsole() {
+		
+	}
+	
+	private void loadStoreWorkerConsole() {
+		
+	}
+	
+	private void loadDeliveryWorkerConsole() {
+		
+	}
+	
+	private void loadCustomerSupportConsole() {
+		csComplaintsBtn=menuButton("Complaints","customer-support-view.fxml");
+		//csReportsBtn=new Button("Reports");
+		
+		csComplaintsBtn.setStyle("-fx-background-color: #3AAED8");
+		pressedBtn=csComplaintsBtn;
+		
+		try {
+			currentNode = FXMLLoader.load(ClientView.class.getResource("fxmls/customer-support-view.fxml"));
+			mainSP.getChildren().clear();
+			mainSP.getChildren().add(currentNode);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void loadSupportSpecialistConsole() {
+		
+	}
+	
+	private void loadCatalogManagerConsole() {
+		
+	}
+	
 }

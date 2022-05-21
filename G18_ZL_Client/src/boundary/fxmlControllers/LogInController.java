@@ -55,9 +55,11 @@ public class LogInController implements Initializable {
 			errorLbl.setText("*Please fill the missing fields");
 			return;
 		}
-		MainController.getMyClient().send(MessageType.GET, "login/user", new User(usernameTF.getText(),passwordPF.getText()));
 		
-		if(ClientConsoleController.getUser()==null) {
+		User user=(User)MainController.getMyClient().send(MessageType.GET, "login/user", new User(usernameTF.getText(),passwordPF.getText()));
+		ClientConsoleController.setUser(user);
+		
+		if(user==null) {
 			errorLbl.setVisible(true);
 			errorLbl.setText("*Incorrect user or password");
 			return;
