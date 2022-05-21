@@ -280,13 +280,13 @@ public class DBController {
 		return buildItems;
 	}
 	
-	public static BuildItem getBuildItemInBuildAll(BuildItem build){
+	public static BuildItem getItemInBuildAll(BuildItem buildItem){
 		ResultSet rs;
 		try {
-			rs = statement.executeQuery("SELECT I.*,IB.amount_in_build FROM item I,item_in_build IB WHERE IB.id_build_item="+build.getIdBuildItem()+" AND IB.id_item=I.id_item");
+			rs = statement.executeQuery("SELECT I.*,IB.amount_in_build FROM item I,item_in_build IB WHERE IB.id_build_item="+buildItem.getIdBuildItem()+" AND IB.id_item=I.id_item");
 			rs.beforeFirst(); // ---move back to first row
 			while (rs.next()) {
-				build.addItem(new Item(
+				buildItem.addItem(new Item(
 						rs.getInt("id_item"),
 						rs.getInt("id_category"),
 						rs.getString("name"),
@@ -296,12 +296,11 @@ public class DBController {
 						rs.getString("description"),
 						blobToImage(rs.getBlob("image"))),
 						rs.getInt("amount_in_build"));
-			return build;
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return build;
+		return buildItem;
 	} 
 	
 	

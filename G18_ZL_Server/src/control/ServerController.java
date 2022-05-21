@@ -207,8 +207,7 @@ public class ServerController extends ObservableServer {
 	private void handleGetRequest(MyMessage clMsg, ConnectionToClient client) {
 
 		String[] request = clMsg.getInfo().split("/");
-		
-		
+
 		if (request[0].equals("login")) {
 			User user = (User) clMsg.getContent();
 			if (request[1].equals("user")) {
@@ -218,56 +217,57 @@ public class ServerController extends ObservableServer {
 			if (request[1].equals("customer")) {
 				clMsg.setContent(DBController.getCustomer(user));
 			}
-		} 
-		
-		
+		}
+
 		else if (request[0].equals("order")) {
-			
-			
+
 			if (request[1].equals("all")) {
 				clMsg.setContent(DBController.getOrdersAll());
-			} 
-			
+			}
+
 			else if (request[1].equals("by")) {
 				clMsg.setContent(DBController.getOrdersBy(request[2], request[3]));
-			} 
-			
-			
-			else if(request[1].equals("report")) { 
+			}
 
-				
-				if(request[2].equals("sale")) {
-					
-					
-					if(request[3].equals("months")) {
+			else if (request[1].equals("report")) {
+
+				if (request[2].equals("sale")) {
+
+					if (request[3].equals("months")) {
 						clMsg.setContent(DBController.getMonthsInBranch(request[4]));
 					}
 				}
 			}
 		}
-		
-		
+
 		else if (request[0].equals("item")) {
 			if (request[1].equals("all")) {
 				clMsg.setContent(DBController.getItemsAll());
 			} else if (request[1].equals("by")) {
 				clMsg.setContent(DBController.getItemsBy(request[2], request[3]));
 			}
-		} else if(request[0].equals("build_item")) {
-			/**********************************************************************************************/
-		} else if(request[0].equals("item_in_build")) {
-			/**********************************************************************************************/
-			
-		} else if(request[0].equals("store")) {
+		} else if (request[0].equals("build_item")) {
 			if(request[1].equals("by")) {
-				clMsg.setContent(DBController.getStoreBy(request[2],request[3]));
+				clMsg.setContent(DBController.getBuildItemsBy(request[2], request[3]));
 			}
-		}
-		else {
+		} else if (request[0].equals("item_in_build")) {
+			
+
+		} else if (request[0].equals("store")) {
+			if (request[1].equals("by")) {
+				clMsg.setContent(DBController.getStoreBy(request[2], request[3]));
+			}
+		} else if (request[0].equals("complaint")) {
+			if (request[1].equals("all")) {
+				clMsg.setContent(DBController.getComplaintsAll());
+			} else if(request[1].equals("by")) {
+				clMsg.setContent(DBController.getComplaintsBy(request[2], request[3]));
+			}
+		} else {
 			MainController.printErr(getClass(), "Unhandled Get request: " + clMsg.getInfo());
 		}
 
-		//finally reply to client
+		// finally reply to client
 		try {
 			client.sendToClient(clMsg);
 		} catch (IOException e) {
