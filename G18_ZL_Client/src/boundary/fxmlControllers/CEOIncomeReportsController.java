@@ -64,17 +64,21 @@ public class CEOIncomeReportsController implements Initializable {
     private static ArrayList<String> branchsNames;
     
     /* an ArrayList to fill the list view of the months (monthsListView) */
-    private  static ArrayList<String> monthsInListView;
+    private  static ArrayList<String> monthsYears;
     
     /* the selected branch's ID */
     private static int branchID;
+    
+    /* ------------------------------------------------ */
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		setBranchNamesInArrayList();
 		this.branchsChoiceBox.getItems().addAll(branchsNames);
 		this.branchsChoiceBox.setOnAction(this::afterBranchSelected);
-		monthsListView.getItems().addAll(monthsInListView);
+		monthsListView.getItems().addAll(monthsYears);
+		
+		
 		
 		monthsListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
 			@Override
@@ -113,9 +117,11 @@ public class CEOIncomeReportsController implements Initializable {
 	 * 
 	 * Function to do after we select a branch from branchsChoiceBox.
 	 */
+	@SuppressWarnings("unchecked")
 	public void afterBranchSelected(ActionEvent event) {
 		setBranchID(Store.valueOf(branchsChoiceBox.getValue()).ordinal());
-		MainController.getMyClient().send(MessageType.GET, "order/report/sale/months/"+branchID, null);
+		monthsYears = (ArrayList<String>)MainController.getMyClient().send(MessageType.GET, "order/report/sale/months/"+branchID, null);
+		monthsListView.getItems().addAll(monthsYears);
 	}
 	
 	/**
@@ -132,7 +138,7 @@ public class CEOIncomeReportsController implements Initializable {
 	 * So we can show them in ListView.
 	 */
 	public static void setMonthsYears(ArrayList<String> monthsYearsArrayList) {
-		monthsInListView = monthsYearsArrayList;
+		monthsYears = monthsYearsArrayList;
 	}
 
 }

@@ -62,7 +62,7 @@ public class BranchManagerIncomeReportsController implements Initializable {
     private static User user = ClientConsoleController.getUser();
     
     /* the current branch manager's branch(store) ID */
-    private static int idStore;
+    private static int branchID;
     
     
     /* ------------------------------------------------------------------- */
@@ -70,9 +70,9 @@ public class BranchManagerIncomeReportsController implements Initializable {
     @SuppressWarnings("unchecked")
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		ArrayList<Store> stores=(ArrayList<Store>)MainController.getMyClient().send(MessageType.GET, "store/by/id_user/"+user.getIdUser(), null);
-		idStore=stores.get(0).ordinal();
-		monthsYears=(ArrayList<String>) MainController.getMyClient().send(MessageType.GET, "order/report/sale/months/"+idStore, null);
+		ArrayList<Store> stores = (ArrayList<Store>)MainController.getMyClient().send(MessageType.GET, "store/by/id_user/"+user.getIdUser(), null);
+		branchID = stores.get(0).ordinal();
+		monthsYears = (ArrayList<String>) MainController.getMyClient().send(MessageType.GET, "order/report/sale/months/"+branchID , null);
 		monthsListView.getItems().addAll(monthsYears);
 		
 		monthsListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
@@ -87,7 +87,7 @@ public class BranchManagerIncomeReportsController implements Initializable {
     
     /* ------------------------------------------------------------------- */
     
-    
+        
 	/**
 	 * Function to set the monthsYearsArrayList into monthsYears,
 	 * So we can show them in ListView.
@@ -100,7 +100,7 @@ public class BranchManagerIncomeReportsController implements Initializable {
 	 * Function to set the current branch manager branchID.
 	 */
 	public void setBranchID(int idStore) {
-		idStore = idStore;
+		branchID  = idStore;
 	}
 	
 	/**
