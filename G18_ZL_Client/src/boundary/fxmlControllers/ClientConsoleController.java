@@ -143,7 +143,7 @@ public class ClientConsoleController implements Initializable {
 		btn.setOnAction((ActionEvent e) -> {
 			if(pressedBtn.equals(btn))
 				return;
-			pressedBtn.setStyle("-fx-background-color: #e5e5e5");
+			pressedBtn.setStyle("-fx-background-color: white");
 			pressedBtn=btn;
 			btn.setStyle("-fx-background-color: #3AAED8");
 			try {

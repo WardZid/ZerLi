@@ -1,16 +1,16 @@
 .button{
     -fx-border-color: transparent;
     -fx-border-width: 0;
-    -fx-background-color: #ff5000;
+    -fx-background-color: transparent;
     -fx-background-radius:  0;
-    -fx-font-size:  20px;
-    -fx-font-weight: bold;
+    -fx-font-size:  16px;
+    -fx-font-weight: none;
     -fx-text-fill: #000000;
     -fx-effect: none ;
 }
-/*focused is sus*/
+
 .button:focused {
-}
-.button:pressed {
-    -fx-background-color: #dee2e6;
+    -fx-border-color: transparent, transparent;
+    -fx-border-width: 0;
+    -fx-border-style: none;
 }

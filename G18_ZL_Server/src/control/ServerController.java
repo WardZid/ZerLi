@@ -258,11 +258,16 @@ public class ServerController extends ObservableServer {
 		} else if(request[0].equals("item_in_build")) {
 			/**********************************************************************************************/
 			
+		} else if(request[0].equals("store")) {
+			if(request[1].equals("by")) {
+				clMsg.setContent(DBController.getStoreBy(request[2],request[3]));
+			}
 		}
 		else {
 			MainController.printErr(getClass(), "Unhandled Get request: " + clMsg.getInfo());
 		}
 
+		//finally reply to client
 		try {
 			client.sendToClient(clMsg);
 		} catch (IOException e) {
@@ -276,28 +281,28 @@ public class ServerController extends ObservableServer {
 	 * @param MyMessage Contains Update request and updated object
 	 */
 	private void handleUpdateRequest(MyMessage clMsg) {
-		if (clMsg.getInfo().startsWith("/order")) {
-			Order order = (Order) clMsg.getContent();
-
-			ArrayList<Order> list = new ArrayList<>();
-
-			switch (clMsg.getInfo()) {
-			case "/order/color":
-				// list.add(DBController.updateOrder(order, "color",order.getColor()));
-				break;
-			case "/order/delivery_date":
-				// list.add(DBController.updateOrder(order, "date",order.getDeliveryDate()));
-				break;
-
-			default:
-				MainController.printErr(getClass(), "Unhandled Order Update Parameter: " + clMsg.getInfo());
-				break;
-			}
-			clMsg.setContent(list);
-		} else {
-			MainController.printErr(getClass(), "Unhandled Update request: " + clMsg.getInfo());
-		}
-
-		sendToAllClients(clMsg);
+//		if (clMsg.getInfo().startsWith("/order")) {
+//			Order order = (Order) clMsg.getContent();
+//
+//			ArrayList<Order> list = new ArrayList<>();
+//
+//			switch (clMsg.getInfo()) {
+//			case "/order/color":
+//				// list.add(DBController.updateOrder(order, "color",order.getColor()));
+//				break;
+//			case "/order/delivery_date":
+//				// list.add(DBController.updateOrder(order, "date",order.getDeliveryDate()));
+//				break;
+//
+//			default:
+//				MainController.printErr(getClass(), "Unhandled Order Update Parameter: " + clMsg.getInfo());
+//				break;
+//			}
+//			clMsg.setContent(list);
+//		} else {
+//			MainController.printErr(getClass(), "Unhandled Update request: " + clMsg.getInfo());
+//		}
+//
+//		sendToAllClients(clMsg);
 	}
 }

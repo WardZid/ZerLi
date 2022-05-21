@@ -13,6 +13,7 @@ import entity.Complaint;
 import entity.Customer;
 import entity.Item;
 import entity.Order;
+import entity.Store;
 import entity.User;
 import javafx.scene.image.Image;
 
@@ -366,6 +367,22 @@ public class DBController {
 			e.printStackTrace();
 		}
 		return monthsYears;
+	}
+	
+	public static ArrayList<Store> getStoreBy(String column,String value){
+		ArrayList<Store> stores = new ArrayList<>();
+		ResultSet rs;
+		try {
+			rs = statement.executeQuery("SELECT * FROM store WHERE "+column+"="+value);
+			rs.beforeFirst(); // ---move back to first row
+			while (rs.next()) {
+				stores.add(Store.valueOf(rs.getString("name_store")));
+			}
+			return stores;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return stores;
 	}
 	
 }
