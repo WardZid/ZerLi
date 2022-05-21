@@ -1,10 +1,12 @@
 package boundary.fxmlControllers;
 
 import java.net.URL;
-import java.util.List;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
+import control.MainController;
 import entity.Store;
+import entity.MyMessage.MessageType;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -17,10 +19,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 
-/**
- * @author hamza
- *
- */
+
 /**
  * @author hamza
  *
@@ -60,81 +59,66 @@ public class CEOIncomeReportsController implements Initializable {
     /*-------------------------------------------------*/
     
     /* array of the names of the branches */
-    private String[] branchsNames = { "NORTH", "WEST" , "EAST" , "SOUTH" };
+    private static ArrayList<String> branchsNames;
     
     /* an ArrayList to fill the list view of the months (monthsListView) */
-    private List<String> monthsInListView = null;
+    private  static ArrayList<String> monthsInListView = null;
+    
+    /* the selected branch's ID */
+    private static int branchID;
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		
+		setBranchNamesInArrayList();
 		this.branchsChoiceBox.getItems().addAll(branchsNames);
-		this.branchsChoiceBox.setOnAction(this::monthSelectedFromListView);
+		this.branchsChoiceBox.setOnAction(this::afterBranchSelected);
 		
+	}
+	
+	/**
+	 * Function to set the branch names in an ArrayList,
+	 * so we can show them in the ChoiceBox.
+	 */
+	private void setBranchNamesInArrayList() {
+		for(Store s : Store.values()) {
+			branchsNames.add(s.toString());
+		}
+	}
+	
+	/**
+	 * @param branchId		the ID we want to set
+	 * 
+	 *  Function to set the branchID according to the selected branch.
+	 */
+	public void setBranchID(int branchId) {
+		branchID = branchId;
 	}
 	
 	/**
 	 * @param event
 	 * 
-	 * When a line is selected in the monthsListView,
-	 * the viewReportButton will be functional. 
+	 * Function to do after we select a branch from branchsChoiceBox.
 	 */
-	public void monthSelectedFromListView(ActionEvent event) {
-		this.viewReportButton.setDisable(false);
-	}
-    
-	/**
-	 * A function to fill the monthsListView according
-	 * to the choice selected by the user in the branchChoiceBox.
-	 */
-    private void fillMonthsListView(Store store) {
-    	
-    	switch(store) {
-    	
-    	case NORTH:
-    		fillListViewIf_NORTH();
-    		break;
-    	case WEST:
-    		fillListViewIf_WEST();
-    		break;
-    	case EAST:
-    		fillListViewIf_EAST();
-    		break;
-    	case SOUTH:
-    		fillListViewIf_SOUTH();
-    		break;
-    	default:
-    		System.out.println("Store doesn't exist!");
-    		break;
-    	}
-    }
-    
-    /*
-     * fill the monthsListView if "NORTH" is selected
-     */
-    private void fillListViewIf_NORTH() {
-    	
-    }
-    
-    /*
-     * fill the monthsListView if "WEST" is selected
-     */
-    private void fillListViewIf_WEST() {
-    	
-    }
-    
-    /*
-     * fill the monthsListView if "EAST" is selected
-     */
-	private void fillListViewIf_EAST() {
-	    	
+	public void afterBranchSelected(ActionEvent event) {
+		setBranchID(Store.valueOf(branchsChoiceBox.getValue()).ordinal());
+		MainController.getMyClient().send(MessageType.GET, "order/report/sale/months/"+branchID, null);
 	}
 	
-	/*
-     * fill the monthsListView if "SOUTH" is selected
-     */
-	private void fillListViewIf_SOUTH() {
-		
+	/**
+	 * @param event
+	 * 
+	 * Action when a line is selected in the monthsListView. 
+	 */
+	public void monthSelectedFromListView() {
+		this.viewReportButton.setDisable(false);
+	}
+	
+	/**
+	 * Function to set the monthsYearsArrayList into monthsYears,
+	 * So we can show them in ListView.
+	 */
+	public static void setMonthsYears(ArrayList<String> monthsYearsArrayList) {
+		monthsInListView = monthsYearsArrayList;
 	}
 
 }

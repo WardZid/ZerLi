@@ -1,8 +1,12 @@
 package boundary.fxmlControllers;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
+import control.MainController;
+import entity.MyMessage.MessageType;
+import entity.User;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.BarChart;
@@ -14,6 +18,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 
 
+/**
+ * @author hamza
+ *
+ */
 public class BranchManagerOrderReportsController implements Initializable {
 
 	@FXML
@@ -23,7 +31,7 @@ public class BranchManagerOrderReportsController implements Initializable {
     private TableColumn<?, ?> itemNameTableCol;
 
     @FXML
-    private ListView<?> monthsListView;
+    private ListView<String> monthsListView;
 
     @FXML
     private BarChart<?, ?> reportBarChart;
@@ -39,13 +47,40 @@ public class BranchManagerOrderReportsController implements Initializable {
 
     @FXML
     private Button viewReportButton;
+    
+    /* ------------------------------------------------------------------- */
+    
+    /* ArrayList to save in the ListView */
+    private static ArrayList<String> monthsYears;
+    
+    /* to save the user info */
+    private static User user = ClientConsoleController.getUser();
+    
+    /* the current branch manager's branch ID */
+    private static int branchID;
+    
+    /* ------------------------------------------------------------------- */
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		// TODO Auto-generated method stub
+		MainController.getMyClient().send(MessageType.GET, "", null);
+		MainController.getMyClient().send(MessageType.GET, "order/report/sale/months/"+branchID, null);
+		monthsListView.getItems().addAll(monthsYears);
 		
 	}
     
-    
+	/**
+	 * Function to set the monthsYearsArrayList into monthsYears,
+	 * So we can show them in ListView.
+	 */
+	public static void setMonthsYears(ArrayList<String> monthsYearsArrayList) {
+		monthsYears = monthsYearsArrayList;
+	}
 	
+	/**
+	 * Function to set the current branch manager branchID.
+	 */
+	public void setBranchID(int branchId) {
+		branchID = branchId;
+	}
 }

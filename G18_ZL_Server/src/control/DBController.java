@@ -353,7 +353,7 @@ public class DBController {
 		
 	}
 	
-	public static ArrayList<String> getOrderReportMonths(String idStore){
+	public static ArrayList<String> getMonthsInBranch(String idStore){
 		ArrayList<String> monthsYears = new ArrayList<>();
 		try {
 			ResultSet rs = statement.executeQuery("SELECT distinct(Month(O.date_order)) as month,year(O.date_order) as year FROM assignment3.order O WHERE O.id_store="+idStore);

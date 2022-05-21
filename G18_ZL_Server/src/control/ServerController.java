@@ -240,9 +240,7 @@ public class ServerController extends ObservableServer {
 					
 					
 					if(request[3].equals("months")) {
-						
-						
-						clMsg.setContent(DBController.getOrderReportMonths(request[4]));
+						clMsg.setContent(DBController.getMonthsInBranch(request[4]));
 					}
 				}
 			}

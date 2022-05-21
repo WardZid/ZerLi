@@ -206,9 +206,77 @@ public class ClientController extends ObservableClient {
 
 	private void handleGetReply(MyMessage svMsg) {
 
+<<<<<<< HEAD
 		//String[] reply = svMsg.getInfo().split("/");
 		replyContent=svMsg.getContent();
 		
+=======
+//		
+//		else if (request[0].equals("order")) {
+//			
+//			
+//			if (request[1].equals("all")) {
+//				clMsg.setContent(DBController.getOrdersAll());
+//			} 
+//			
+//			else if (request[1].equals("by")) {
+//				clMsg.setContent(DBController.getOrdersBy(request[2], request[3]));
+//			} 
+//			
+//			
+//			else if(request[1].equals("report")) { 
+//
+//				
+//				if(request[2].equals("sale")) {
+//					
+//					
+//					if(request[3].equals("months")) {
+//						
+//						
+//						clMsg.setContent(DBController.getOrderReportMonths(request[4]));
+//					}
+//				}
+//			}
+//		}
+
+		String[] reply = svMsg.getInfo().split("/");
+		if (reply[0].equals("login")) {
+			if (reply[1].equals("user")) {
+				ClientConsoleController.setUser((User) svMsg.getContent());
+
+			}
+			if (reply[1].equals("customer")) {
+				ClientConsoleController.setCustomer((Customer) svMsg.getContent());
+			}
+		} else if (reply[0].equals("order")) {
+			
+			
+			if (reply[1].equals("all")) {
+				//do something with all orders
+			} 
+			
+			else if (reply[1].equals("by")) {
+//				clMsg.setContent(DBController.getOrdersBy(request[2], request[3]));
+			} 
+			
+			
+			else if(reply[1].equals("report")) { 
+
+				
+				if(reply[2].equals("sale")) {
+					
+					
+					if(reply[3].equals("months")) {
+						BranchManagerIncomeReportsController.setMonthsYears((ArrayList<String>)svMsg.getContent());
+//						clMsg.setContent(DBController.getOrderReportMonths(request[4]));
+					}
+				}
+			}
+		} 
+		else {
+			MainController.print(getClass(), "Unhandled Get:" + svMsg.getInfo());
+		}
+>>>>>>> branch 'master' of https://github.com/WardZid/Assignment3.git
 	}
 
 	private void handleUpdateReply(MyMessage svMsg) {
