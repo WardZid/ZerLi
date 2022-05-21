@@ -17,7 +17,7 @@
          <children>
             <HBox alignment="CENTER" VBox.vgrow="ALWAYS">
                <children>
-                  <VBox>
+                  <VBox prefWidth="150.0">
                      <children>
                         <ImageView fx:id="logoIV" fitHeight="62.8" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" />
                         <Label fx:id="consoleLbl" alignment="CENTER" maxWidth="1.7976931348623157E308" text="Console Label">

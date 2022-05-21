@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import control.MainController;
+import entity.Store;
 import entity.User;
 import entity.MyMessage.MessageType;
 import javafx.beans.value.ChangeListener;
@@ -60,16 +61,18 @@ public class BranchManagerIncomeReportsController implements Initializable {
     /* to save the user info */
     private static User user = ClientConsoleController.getUser();
     
-    /* the current branch manager's branch ID */
-    private static int branchID;
+    /* the current branch manager's branch(store) ID */
+    private static int idStore;
     
     
     /* ------------------------------------------------------------------- */
     
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		MainController.getMyClient().send(MessageType.GET, "store/by/id_user/"+user.getIdUser(), null);
-		MainController.getMyClient().send(MessageType.GET, "order/report/sale/months/"+branchID, null);
+		ArrayList<Store> stores=(ArrayList<Store>)MainController.getMyClient().send(MessageType.GET, "store/by/id_user/"+user.getIdUser(), null);
+		idStore=stores.get(0).ordinal();
+		monthsYears=(ArrayList<String>) MainController.getMyClient().send(MessageType.GET, "order/report/sale/months/"+idStore, null);
 		monthsListView.getItems().addAll(monthsYears);
 		
 		monthsListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
@@ -96,8 +99,8 @@ public class BranchManagerIncomeReportsController implements Initializable {
 	/**
 	 * Function to set the current branch manager branchID.
 	 */
-	public void setBranchID(int branchId) {
-		branchID = branchId;
+	public void setBranchID(int idStore) {
+		idStore = idStore;
 	}
 	
 	/**
