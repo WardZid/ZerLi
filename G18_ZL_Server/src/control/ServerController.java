@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import boundary.fxmlControllers.ServerViewController;
+import entity.BuildItem;
 import entity.MyMessage;
 import entity.MyMessage.MessageType;
 import entity.Order;
@@ -247,12 +248,11 @@ public class ServerController extends ObservableServer {
 				clMsg.setContent(DBController.getItemsBy(request[2], request[3]));
 			}
 		} else if (request[0].equals("build_item")) {
-			if(request[1].equals("by")) {
+			if (request[1].equals("by")) {
 				clMsg.setContent(DBController.getBuildItemsBy(request[2], request[3]));
 			}
 		} else if (request[0].equals("item_in_build")) {
-			
-
+			clMsg.setContent(DBController.getItemInBuildAll((BuildItem)clMsg.getContent()));
 		} else if (request[0].equals("store")) {
 			if (request[1].equals("by")) {
 				clMsg.setContent(DBController.getStoreBy(request[2], request[3]));
@@ -260,7 +260,7 @@ public class ServerController extends ObservableServer {
 		} else if (request[0].equals("complaint")) {
 			if (request[1].equals("all")) {
 				clMsg.setContent(DBController.getComplaintsAll());
-			} else if(request[1].equals("by")) {
+			} else if (request[1].equals("by")) {
 				clMsg.setContent(DBController.getComplaintsBy(request[2], request[3]));
 			}
 		} else {
