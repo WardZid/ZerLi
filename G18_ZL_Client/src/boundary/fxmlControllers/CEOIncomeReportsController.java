@@ -7,6 +7,8 @@ import java.util.ResourceBundle;
 import control.MainController;
 import entity.Store;
 import entity.MyMessage.MessageType;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -36,7 +38,7 @@ public class CEOIncomeReportsController implements Initializable {
     private ChoiceBox<String> branchsChoiceBox;
 
     @FXML
-    private ListView<?> monthsListView;
+    private ListView<String> monthsListView;
 
     @FXML
     private TableColumn<?, ?> nameTableCol;
@@ -62,7 +64,7 @@ public class CEOIncomeReportsController implements Initializable {
     private static ArrayList<String> branchsNames;
     
     /* an ArrayList to fill the list view of the months (monthsListView) */
-    private  static ArrayList<String> monthsInListView = null;
+    private  static ArrayList<String> monthsInListView;
     
     /* the selected branch's ID */
     private static int branchID;
@@ -72,8 +74,20 @@ public class CEOIncomeReportsController implements Initializable {
 		setBranchNamesInArrayList();
 		this.branchsChoiceBox.getItems().addAll(branchsNames);
 		this.branchsChoiceBox.setOnAction(this::afterBranchSelected);
+		monthsListView.getItems().addAll(monthsInListView);
+		
+		monthsListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+			@Override
+			public void changed(ObservableValue<? extends String> arg0, String arg1, String arg2) {
+				monthSelectedFromListView();
+			}
+		});
 		
 	}
+	
+	
+	/* ----------------------------------------------------------------- */
+	
 	
 	/**
 	 * Function to set the branch names in an ArrayList,

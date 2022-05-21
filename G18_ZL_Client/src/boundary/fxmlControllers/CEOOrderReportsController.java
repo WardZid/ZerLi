@@ -7,6 +7,8 @@ import java.util.ResourceBundle;
 import control.MainController;
 import entity.Store;
 import entity.MyMessage.MessageType;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -68,8 +70,20 @@ public class CEOOrderReportsController implements Initializable {
 		setBranchNamesInArrayList();
 		this.branchsChoiceBox.getItems().addAll(branchsNames);
 		this.branchsChoiceBox.setOnAction(this::afterBranchSelected);
+		monthsListView.getItems().addAll(monthsInListView);
+		
+		monthsListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+			@Override
+			public void changed(ObservableValue<? extends String> arg0, String arg1, String arg2) {
+				monthSelectedFromListView();
+			}
+		});
 		
 	}
+	
+	
+	/* ----------------------------------------------------------------- */
+	
 	
 	/**
 	 * Function to set the branch names in an ArrayList,
@@ -101,8 +115,6 @@ public class CEOOrderReportsController implements Initializable {
 	}
 	
 	/**
-	 * @param event
-	 * 
 	 * Action when a line is selected in the monthsListView. 
 	 */
 	public void monthSelectedFromListView() {
