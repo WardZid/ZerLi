@@ -70,7 +70,7 @@
             <ButtonBar>
               <buttons>
                   <Button mnemonicParsing="false" text="Button" />
-                  <Button fx:id="sendReplyButton" mnemonicParsing="false" onAction="#onSendReply" text="Send Reply" />
+                  <Button fx:id="sendReplyButton" mnemonicParsing="false" onAction="#onSendReply" style="-fx-background-color: #1de9b6;" text="Send Reply" />
               </buttons>
             </ButtonBar>
          </children>
