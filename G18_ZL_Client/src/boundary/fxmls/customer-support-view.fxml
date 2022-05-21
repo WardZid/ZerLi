@@ -24,7 +24,7 @@
                      <HBox.margin>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </HBox.margin></ListView>
-                  <GridPane fx:id="gp" alignment="CENTER" translateX="20.0">
+                  <GridPane fx:id="gp" alignment="CENTER" minWidth="300.0" translateX="20.0">
                     <columnConstraints>
                       <ColumnConstraints />
                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -38,11 +38,11 @@
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <Label fx:id="CustomerIdL" text="customer ID" GridPane.columnIndex="1" />
-                        <Label fx:id="ComplaintIdL" text="complaint ID" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                        <Label fx:id="StatusL" text="status" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                        <Label fx:id="dateL" text="date" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                        <Label fx:id="refundL" text="refund" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                        <Label fx:id="CustomerIdL" text="Customer ID" GridPane.columnIndex="1" />
+                        <Label fx:id="ComplaintIdL" text="Complaint ID" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <Label fx:id="StatusL" text="Status" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <Label fx:id="dateL" text="Date" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                        <Label fx:id="refundL" text="Refund" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                         <TextField fx:id="CustomerIdT" GridPane.columnIndex="2" />
                         <TextField fx:id="ComplaintIdT" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                         <TextField fx:id="statusT" GridPane.columnIndex="2" GridPane.rowIndex="2" />
@@ -69,7 +69,7 @@
             </VBox>
             <ButtonBar>
               <buttons>
-                  <Button mnemonicParsing="false" text="Button" />
+                  <Button fx:id="refresh" mnemonicParsing="false" onAction="#onRefresh" text="Refresh" />
                   <Button fx:id="sendReplyButton" mnemonicParsing="false" onAction="#onSendReply" style="-fx-background-color: #1de9b6;" text="Send Reply" />
               </buttons>
             </ButtonBar>
