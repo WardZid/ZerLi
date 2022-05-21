@@ -230,6 +230,10 @@ public class ServerController extends ObservableServer {
 			else if (request[1].equals("by")) {
 				clMsg.setContent(DBController.getOrdersBy(request[2], request[3]));
 			}
+			
+			else if(request[1].equals("byBranchMonth")) {
+				clMsg.setContent(DBController.getOrdersByBranchMonthYear(request[2], request[3], request[4]));
+			}
 
 			else if (request[1].equals("report")) {
 

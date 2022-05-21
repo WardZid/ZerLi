@@ -6,6 +6,7 @@ import java.util.ResourceBundle;
 
 import control.MainController;
 import entity.MyMessage.MessageType;
+import entity.Order;
 import entity.Store;
 import entity.User;
 import javafx.beans.value.ChangeListener;
@@ -62,7 +63,8 @@ public class BranchManagerOrderReportsController implements Initializable {
     /* the current branch manager's branch ID */
     private static int branchID;
     
-    
+    /* An ArrayList that contains the orders of the branch in a specific month of the year */
+    private static ArrayList<Order> ordersArray;
     
     /* ------------------------------------------------------------------- */
 
@@ -136,8 +138,25 @@ public class BranchManagerOrderReportsController implements Initializable {
 	/**
 	 * Action when a line is selected in the monthsListView. 
 	 */
+	@SuppressWarnings("unchecked")
 	public void monthSelectedFromListView() {
+		String[] splitedDate;
+		String month, year;
+		splitedDate = monthsListView.getSelectionModel().getSelectedItem().split("/");
+		month = splitedDate[0];
+		year = splitedDate[1];
 		this.viewReportButton.setDisable(false);
+		ordersArray = (ArrayList<Order>)MainController.getMyClient().send(MessageType.GET,"order/byBranchMonth/"+branchID+"/"+month+"/"+year, null);
+		
+//		SELECT sum(OI.amount)
+//		FROM order_item OI , assignment3.order O
+//		WHERE O.id_order IN (
+//			SELECT id_order
+//			FROM assignment3.order 
+//			WHERE id_store = 2 AND (Month(O.date_order)) = 5 AND (Year(O.date_order)) = 2022
+//		)
 		
 	}
+	
+	
 }

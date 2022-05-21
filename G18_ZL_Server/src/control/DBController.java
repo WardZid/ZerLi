@@ -194,6 +194,38 @@ public class DBController {
 		return orders;
 	}
 	
+	/**
+	 * @param branch
+	 * @param month
+	 * @param year
+	 * @return ArrayList<Order> that contains the orders of a branch in a month of a year.
+	 */
+	public static ArrayList<Order> getOrdersByBranchMonthYear(String branch,String month, String year){
+	ArrayList<Order> orders = new ArrayList<>();
+	ResultSet rs;
+	try {
+		rs = statement.executeQuery("SELECT * FROM assignment3.order O WHERE id_store = "+branch+" AND (Month(O.date_order)) = "+month+" AND (Year(O.date_order)) = "+ year);
+		rs.beforeFirst(); // ---move back to first row
+		while (rs.next()) {
+			orders.add(new Order(
+					rs.getInt("id_order"),
+					rs.getInt("id_customer"),
+					rs.getInt("id_store"),
+					rs.getInt("id_order_status"),
+					rs.getDouble("price_order"),
+					rs.getString("date_order"),
+					rs.getString("delivery_date_order"),
+					rs.getString("address_order"),
+					rs.getString("greeting_order"),
+					rs.getString("description_order")));
+		}
+		return orders;
+	} catch (SQLException e) {
+		e.printStackTrace();
+	}
+	return orders;
+}
+	
 	public static ArrayList<Item> getItemsAll(){
 		ArrayList<Item> items = new ArrayList<>();
 		ResultSet rs;
