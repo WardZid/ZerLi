@@ -110,7 +110,8 @@ public class DBController {
 	}
 	private static Image blobToImage(Blob blob) {
 		try {
-			return new Image(blob.getBinaryStream());
+			if(blob!=null)
+				return new Image(blob.getBinaryStream());
 		} catch (SQLException e) {
 			MainController.printErr(DBController.class, "Could not load blob to image from mysql");
 		}
