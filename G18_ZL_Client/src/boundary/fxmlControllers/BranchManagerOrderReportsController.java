@@ -147,8 +147,8 @@ public class BranchManagerOrderReportsController implements Initializable {
 		year = splitedDate[1];
 		this.viewReportButton.setDisable(false);
 		ordersArray = (ArrayList<Order>)MainController.getMyClient().send(MessageType.GET,"order/byBranchMonth/"+branchID+"/"+month+"/"+year, null);
-		
-//		SELECT sum(OI.amount)
+		   
+//		SELECT count(OI.amount)
 //		FROM order_item OI , assignment3.order O
 //		WHERE O.id_order IN (
 //			SELECT id_order
