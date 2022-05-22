@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import control.MainController;
+import entity.Order;
 import entity.Store;
 import entity.MyMessage.MessageType;
 import javafx.beans.value.ChangeListener;
@@ -65,6 +66,9 @@ public class CEOOrderReportsController implements Initializable {
     /* the selected branch's ID */
     private static int branchID;
     
+    /* An ArrayList that contains the orders of the branch in a specific month of the year */
+    private static ArrayList<Order> ordersArray;
+    
     /* ----------------------------------------------- */
 
 	@Override
@@ -119,19 +123,29 @@ public class CEOOrderReportsController implements Initializable {
 	}
 	
 	/**
-	 * Action when a line is selected in the monthsListView. 
-	 */
-	public void monthSelectedFromListView() {
-		this.viewReportButton.setDisable(false);
-	}
-	
-	/**
 	 * Function to set the monthsYearsArrayList into monthsYears,
 	 * So we can show them in ListView.
 	 */
 	public static void setMonthsYears(ArrayList<String> monthsYearsArrayList) {
 		monthsYears = monthsYearsArrayList;
 	}
+	
+	/**
+	 * Action when a line is selected in the monthsListView. 
+	 */
+	@SuppressWarnings("unchecked")
+	public void monthSelectedFromListView() {
+		String[] splitedDate;
+		String month, year;
+		splitedDate = monthsListView.getSelectionModel().getSelectedItem().split("/");
+		month = splitedDate[0];
+		year = splitedDate[1];
+		
+		
+		this.viewReportButton.setDisable(false);
+		ordersArray = (ArrayList<Order>)MainController.getMyClient().send(MessageType.GET,"order/byBranchMonth/"+branchID+"/"+month+"/"+year, null);
+	}
+	
 
 	
 }

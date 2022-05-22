@@ -243,6 +243,17 @@ public class ServerController extends ObservableServer {
 						clMsg.setContent(DBController.getMonthsInBranch(request[4]));
 					}
 				}
+				
+				else if(request[2].equals("sum")) {
+					
+					if(request[3].equals("income")) {
+						clMsg.setContent(DBController.getSumOfDailyIncome(request[4],request[5],request[6]));
+					}
+				}
+				
+				else if(request[2].equals("incomebycustomer")) {
+					clMsg.setContent(DBController.getReceiptsOfMonth(request[3],request[4],request[5]));
+				}
 			}
 		}
 

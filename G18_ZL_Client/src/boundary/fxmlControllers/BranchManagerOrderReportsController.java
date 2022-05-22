@@ -89,32 +89,7 @@ public class BranchManagerOrderReportsController implements Initializable {
 	
 	/* ----------------------------------------------------------------- */
 	
-	
-//	public static ArrayList<Order> getOrdersByBranchMonthYear(String branch,String month, String year){
-//		ArrayList<Order> orders = new ArrayList<>();
-//		ResultSet rs;
-//		try {
-//			rs = statement.executeQuery("SELECT * FROM assignment3.order O WHERE id_store = "+branch+" AND (Month(O.date_order)) = "+month+" AND (Year(O.date_order)) = "+ year);
-//			rs.beforeFirst(); // ---move back to first row
-//			while (rs.next()) {
-//				orders.add(new Order(
-//						rs.getInt("id_order"),
-//						rs.getInt("id_customer"),
-//						rs.getInt("id_store"),
-//						rs.getInt("id_order_status"),
-//						rs.getDouble("price_order"),
-//						rs.getString("date_order"),
-//						rs.getString("delivery_date_order"),
-//						rs.getString("address_order"),
-//						rs.getString("greeting_order"),
-//						rs.getString("description_order")));
-//			}
-//			return orders;
-//		} catch (SQLException e) {
-//			e.printStackTrace();
-//		}
-//		return orders;
-//	}
+
 	
 	
 	/* ----------------------------------------------------------------------------*/
@@ -145,9 +120,13 @@ public class BranchManagerOrderReportsController implements Initializable {
 		splitedDate = monthsListView.getSelectionModel().getSelectedItem().split("/");
 		month = splitedDate[0];
 		year = splitedDate[1];
+		
+		
 		this.viewReportButton.setDisable(false);
 		ordersArray = (ArrayList<Order>)MainController.getMyClient().send(MessageType.GET,"order/byBranchMonth/"+branchID+"/"+month+"/"+year, null);
-		   
+		
+		
+		
 //		SELECT count(OI.amount)
 //		FROM order_item OI , assignment3.order O
 //		WHERE O.id_order IN (

@@ -12,8 +12,10 @@ import entity.BuildItem;
 import entity.Complaint;
 import entity.Customer;
 import entity.Customer.CustomerStatus;
+import entity.DailyIncome;
 import entity.Item;
 import entity.Order;
+import entity.Receipt;
 import entity.Store;
 import entity.User;
 import javafx.scene.image.Image;
@@ -192,6 +194,55 @@ public class DBController {
 			e.printStackTrace();
 		}
 		return orders;
+	}
+	
+	/**
+	 * @param branch_id
+	 * @param month
+	 * @param year
+	 * @return ArrayList of the daily income of a specific store in a month of the year
+	 */
+	public static ArrayList<DailyIncome> getSumOfDailyIncome(String branch_id, String month, String year){
+		ArrayList<DailyIncome> incomes = new ArrayList<>();
+		ResultSet rs;
+		try {
+			rs = statement.executeQuery("SELECT day(O.date_order) as day , sum(O.price_order) as income FROM assignment3.order O WHERE O.id_store =" + branch_id + "AND Month(O.date_order) = " + month + " AND Year(O.date_order) =" + year + "GROUP BY Day(O.date_order) ORDER BY day");
+			rs.beforeFirst(); // ---move back to first row
+			while (rs.next()) {
+				incomes.add(new DailyIncome(
+						rs.getInt("day"),
+						rs.getDouble("income")));
+			}
+			return incomes;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return incomes;
+	}
+	
+	/**
+	 * @param branch_id
+	 * @param month
+	 * @param year
+	 * @return ArrayList of receipts in the chosen month
+	 */
+	public static ArrayList<Receipt> getReceiptsOfMonth(String branch_id, String month, String year) {
+		ArrayList<Receipt> receipts = new ArrayList<>();
+		ResultSet rs;
+		try {
+			rs = statement.executeQuery("SELECT day(O.date_order) as day , sum(O.price_order) as income FROM assignment3.order O WHERE O.id_store =" + branch_id + "AND Month(O.date_order) = " + month + " AND Year(O.date_order) =" + year + "GROUP BY Day(O.date_order) ORDER BY day");
+			rs.beforeFirst(); // ---move back to first row
+			while (rs.next()) {
+				receipts.add(new Receipt(
+						rs.getString("name"),
+						rs.getString("date"),
+						rs.getDouble("income")));
+			}
+			return receipts;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return receipts;
 	}
 	
 	/**

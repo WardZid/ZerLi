@@ -5,8 +5,11 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import control.MainController;
+import entity.Order;
+import entity.Receipt;
 import entity.Store;
 import entity.User;
+import entity.DailyIncome;
 import entity.MyMessage.MessageType;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -64,6 +67,15 @@ public class BranchManagerIncomeReportsController implements Initializable {
     /* the current branch manager's branch(store) ID */
     private static int branchID;
     
+    /* An ArrayList that contains the orders of the branch in a specific month of the year */
+    private static ArrayList<Order> ordersArray;
+    
+    /* An ArrayList that contains the daily incomes of the selected month in this store */
+    private ArrayList<DailyIncome> dailyIncomesOfMonth;
+    
+    /* An ArrayList that contains the customer's receipts of the selected month */
+    private ArrayList<Receipt> receiptsOfTheMonth;
+    
     
     /* ------------------------------------------------------------------- */
     
@@ -86,7 +98,21 @@ public class BranchManagerIncomeReportsController implements Initializable {
     
     
     /* ------------------------------------------------------------------- */
+    // TO GET AN ARRAYLIST<INTEGER> OF THE DAILY INCOME OF THIS BRANCH IN THE SELECTED MONTH
+    // order/report/sum/income/branchID/month/year
+//    SELECT day(O.date_order) as day , sum(O.price_order) as income 
+//    FROM assignment3.order O 
+//    WHERE O.id_store = 2 AND Month(O.date_order) = 5 AND Year(O.date_order) = 2022
+//    GROUP BY Day(O.date_order)
+//    ORDER BY day
     
+    // TO GET AN ARRAYLIST<reportTable> (NAME , DATE , INCOME) OF THE CURRENT BRANCH IN THE SELECTED MONTH
+    // order/report/incomebycustomer/branchID/month/year
+//    SELECT C.name_customer as name , O.date_order as date , O.price_order as income
+//    FROM assignment3.order O , assignment3.customer C
+//    WHERE C.id_customer = O.id_customer AND O.id_store = 2 AND Month(O.date_order) = 5 AND Year(O.date_order) = 2022
+    
+    /* ------------------------------------------------------------------- */
         
 	/**
 	 * Function to set the monthsYearsArrayList into monthsYears,
@@ -106,8 +132,19 @@ public class BranchManagerIncomeReportsController implements Initializable {
 	/**
 	 * Action when a line is selected in the monthsListView. 
 	 */
+	@SuppressWarnings("unchecked")
 	public void monthSelectedFromListView() {
+		String[] splitedDate;
+		String month, year;
+		splitedDate = monthsListView.getSelectionModel().getSelectedItem().split("/");
+		month = splitedDate[0];
+		year = splitedDate[1];
+		
+		
 		this.viewReportButton.setDisable(false);
+		ordersArray = (ArrayList<Order>)MainController.getMyClient().send(MessageType.GET,"order/byBranchMonth/"+branchID+"/"+month+"/"+year, null);
+		dailyIncomesOfMonth = (ArrayList<DailyIncome>)MainController.getMyClient().send(MessageType.GET,"order/report/sum/income/"+branchID+"/"+month+"/"+year, null);
+		receiptsOfTheMonth = (ArrayList<Receipt>)MainController.getMyClient().send(MessageType.GET,"order/report/incomebycustomer/"+branchID+"/"+month+"/"+year, null);
 	}
 	
 }
