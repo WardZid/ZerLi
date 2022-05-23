@@ -163,7 +163,6 @@ public class DBController {
 						rs.getString("greeting_order"),
 						rs.getString("description_order")));
 			}
-			return orders;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -189,7 +188,6 @@ public class DBController {
 						rs.getString("greeting_order"),
 						rs.getString("description_order")));
 			}
-			return orders;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -213,7 +211,6 @@ public class DBController {
 						rs.getInt("day"),
 						rs.getDouble("income")));
 			}
-			return incomes;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -238,7 +235,6 @@ public class DBController {
 						rs.getString("date"),
 						rs.getDouble("income")));
 			}
-			return receipts;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -270,7 +266,6 @@ public class DBController {
 					rs.getString("greeting_order"),
 					rs.getString("description_order")));
 		}
-		return orders;
 	} catch (SQLException e) {
 		e.printStackTrace();
 	}
@@ -293,7 +288,6 @@ public class DBController {
 						rs.getString("color"),
 						rs.getString("description"),
 						blobToImage(rs.getBlob("image"))));
-			return items;
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -317,13 +311,14 @@ public class DBController {
 						rs.getString("color"),
 						rs.getString("description"),
 						blobToImage(rs.getBlob("image"))));
-			return items;
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return items;
 	}
+	
+	
 	
 	public static ArrayList<BuildItem> getBuildItemsBy(String column,String value){
 		ArrayList<BuildItem> buildItems = new ArrayList<>();
@@ -336,7 +331,6 @@ public class DBController {
 						rs.getInt("id_build_item"),
 						rs.getInt("id_order"),
 						rs.getInt("amount")));
-			return buildItems;
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -425,7 +419,6 @@ public class DBController {
 						rs.getString("complaint"),
 						rs.getString("response")));
 			}
-			return complaints;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -449,7 +442,6 @@ public class DBController {
 						rs.getString("complaint"),
 						rs.getString("response")));
 			}
-			return complaints;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -465,7 +457,6 @@ public class DBController {
 			while (rs.next()) {
 				monthsYears.add(rs.getString("month")+"/"+rs.getString("year"));
 			}
-			return monthsYears;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -481,7 +472,6 @@ public class DBController {
 			while (rs.next()) {
 				stores.add(Store.valueOf(rs.getString("name_store")));
 			}
-			return stores;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
