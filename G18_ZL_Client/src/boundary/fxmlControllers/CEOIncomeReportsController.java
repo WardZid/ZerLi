@@ -24,12 +24,22 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 
+/* ------------------------------------------------ */
+/*            \/ Important Comments  \/             */
+/* ------------------------------------------------ */
+/*
+ * 1.
+ * */
 
 /**
  * @author hamza
  *
  */
 public class CEOIncomeReportsController implements Initializable {
+	
+	/* ------------------------------------------------ */
+    /*               \/ FXML Variables \/               */
+    /* ------------------------------------------------ */
 	
 	@FXML
     private TableColumn<?, ?> dateTableCol;
@@ -61,7 +71,9 @@ public class CEOIncomeReportsController implements Initializable {
     @FXML
     private Button viewReportButton;
     
-    /*-------------------------------------------------*/
+    /* ------------------------------------------------ */
+    /*               \/ Help Variables \/               */
+    /* ------------------------------------------------ */
     
     /* array of the names of the branches */
     private static ArrayList<String> branchsNames;
@@ -81,32 +93,93 @@ public class CEOIncomeReportsController implements Initializable {
     /* An ArrayList that contains the customer's receipts of the selected month */
     private ArrayList<Receipt> receiptsOfTheMonth;
     
+    /* To save the overall income of the selected month */
+    private double overallIncomeThisMonth;
+    
+    /* the selected month */
+    private String month;
+    
+    /* the selected year */
+    private String year;
+    
+    /* ------------------------------------------------ */
+    /*            \/ initialize function \/             */
     /* ------------------------------------------------ */
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		setBranchNamesInArrayList();
-		this.branchsChoiceBox.getItems().addAll(branchsNames);
+		initBranchesChoiceBox();
 		this.branchsChoiceBox.setOnAction(this::afterBranchSelected);
 		monthsListView.getItems().addAll(monthsYears);
-		
-		
-		
-		monthsListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
-			@Override
-			public void changed(ObservableValue<? extends String> arg0, String arg1, String arg2) {
-				monthSelectedFromListView();
-			}
-		});
+		setActionOnListView();
 		
 	}
 	
 	
-	/* ----------------------------------------------------------------- */
-	
+    /* ------------------------------------------------ */
+    /*               \/ Action Methods \/               */
+    /* ------------------------------------------------ */
 	
 	/**
-	 * Function to set the branch names in an ArrayList,
+	 * @param event
+	 * 
+	 * Method to do after we select a branch from branchsChoiceBox.
+	 */
+	public void afterBranchSelected(ActionEvent event) {
+		setBranchID();
+		initMonthsListView();
+		
+	}
+	
+	/**
+	 * @param event
+	 * 
+	 * Action when a line is selected in the monthsListView. 
+	 */
+	public void monthSelectedFromListView() {
+		saveDate();
+		this.viewReportButton.setDisable(false);
+		getDataAfterMonthIsChosen();
+		calculateOverallIncomeOfTheMonth();
+		
+	}
+	
+    /* ------------------------------------------------ */
+    /*                 \/ Help Methods \/               */
+    /* ------------------------------------------------ */
+	
+	/**
+	 * Method to initialize the choiceBox of the branches
+	 */
+	private void initBranchesChoiceBox() {
+		setBranchNamesInArrayList();
+		this.branchsChoiceBox.getItems().addAll(branchsNames);
+	}
+
+	/**
+	 * Method to initialize the months ListView
+	 */
+	@SuppressWarnings("unchecked")
+	private void initMonthsListView() {
+		monthsYears = (ArrayList<String>) MainController.getMyClient().send(MessageType.GET, "order/report/sale/months/"+branchID , null);
+		monthsListView.getItems().addAll(monthsYears);
+	}
+	
+	/**
+	 * Method to do when a month is selected from ListView
+	 */
+	private void setActionOnListView() {
+		monthsListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+			@Override
+			// this method has the main Action that happens when selection accrues on ListView
+			public void changed(ObservableValue<? extends String> arg0, String arg1, String arg2) {
+				monthSelectedFromListView();
+			}
+		});
+	}
+	
+	/**
+	 * Method to set the branch names in an ArrayList,
 	 * so we can show them in the ChoiceBox.
 	 */
 	private void setBranchNamesInArrayList() {
@@ -114,56 +187,43 @@ public class CEOIncomeReportsController implements Initializable {
 			branchsNames.add(s.toString());
 		}
 	}
-	
+
 	/**
 	 * @param branchId		the ID we want to set
 	 * 
-	 *  Function to set the branchID according to the selected branch.
+	 *  Method to set the branchID according to the selected branch.
 	 */
-	public void setBranchID(int branchId) {
-		branchID = branchId;
+	public void setBranchID() {
+		branchID = Store.valueOf(branchsChoiceBox.getValue()).ordinal();
 	}
 	
 	/**
-	 * @param event
-	 * 
-	 * Function to do after we select a branch from branchsChoiceBox.
+	 * Method to get data from Server after selection from ListView.
 	 */
 	@SuppressWarnings("unchecked")
-	public void afterBranchSelected(ActionEvent event) {
-		setBranchID(Store.valueOf(branchsChoiceBox.getValue()).ordinal());
-		monthsYears = (ArrayList<String>)MainController.getMyClient().send(MessageType.GET, "order/report/sale/months/"+branchID, null);
-		monthsListView.getItems().addAll(monthsYears);
-	}
-	
-	/**
-	 * Function to set the monthsYearsArrayList into monthsYears,
-	 * So we can show them in ListView.
-	 */
-	public static void setMonthsYears(ArrayList<String> monthsYearsArrayList) {
-		monthsYears = monthsYearsArrayList;
-	}
-
-	
-	/**
-	 * @param event
-	 * 
-	 * Action when a line is selected in the monthsListView. 
-	 */
-	@SuppressWarnings("unchecked")
-	public void monthSelectedFromListView() {
-		String[] splitedDate;
-		String month, year;
-		splitedDate = monthsListView.getSelectionModel().getSelectedItem().split("/");
-		month = splitedDate[0];
-		year = splitedDate[1];
-		
-		
-		this.viewReportButton.setDisable(false);
+	private void getDataAfterMonthIsChosen() {
 		ordersArray = (ArrayList<Order>)MainController.getMyClient().send(MessageType.GET,"order/byBranchMonth/"+branchID+"/"+month+"/"+year, null);
 		dailyIncomesOfMonth = (ArrayList<DailyIncome>)MainController.getMyClient().send(MessageType.GET,"order/report/sum/income/"+branchID+"/"+month+"/"+year, null);
 		receiptsOfTheMonth = (ArrayList<Receipt>)MainController.getMyClient().send(MessageType.GET,"order/report/incomebycustomer/"+branchID+"/"+month+"/"+year, null);
+	}
 	
+	/**
+	 * Method to save the selected date.
+	 */
+	private void saveDate() {
+		String[] splitedDate = monthsListView.getSelectionModel().getSelectedItem().split("/");
+		month = splitedDate[0];
+		year = splitedDate[1];
+	}
+	
+	/**
+	 * To calculate the overall income value of the selected month of this branch
+	 */
+	public void calculateOverallIncomeOfTheMonth() {
+		this.overallIncomeThisMonth = 0;
+		for(DailyIncome di : dailyIncomesOfMonth) {
+			this.overallIncomeThisMonth += di.getIncome();
+		}
 	}
 	
 }
