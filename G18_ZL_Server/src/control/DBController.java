@@ -318,7 +318,22 @@ public class DBController {
 		return items;
 	}
 	
-	
+	public static ArrayList<BuildItem> getBuildItemsAll(){
+		ArrayList<BuildItem> buildItems = new ArrayList<>();
+		try {
+			ResultSet rs = statement.executeQuery("SELECT * FROM build_item");
+			rs.beforeFirst(); // ---move back to first row
+			while (rs.next()) {
+				buildItems.add(new BuildItem(
+						rs.getInt("id_build_item"),
+						rs.getInt("id_order"),
+						rs.getInt("amount")));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return buildItems;
+	}
 	
 	public static ArrayList<BuildItem> getBuildItemsBy(String column,String value){
 		ArrayList<BuildItem> buildItems = new ArrayList<>();
@@ -338,6 +353,55 @@ public class DBController {
 		return buildItems;
 	}
 	
+	public static ArrayList<BuildItem> getFullBuildItemsAll(){
+		ArrayList<BuildItem> buildItems = new ArrayList<>();
+		try {
+			ResultSet rs = statement.executeQuery("SELECT * FROM build_item");
+			rs.beforeFirst(); // ---move back to first row
+			while (rs.next()) {
+				buildItems.add(
+						getItemInBuildAll(
+								new BuildItem(
+										rs.getInt("id_build_item"),
+										rs.getInt("id_order"),
+										rs.getInt("amount"))));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return buildItems;
+	}
+	/**
+	 * 
+	 * @param column to use in the "WHERE" clause
+	 * @param value to use with the column
+	 * @return ArrayList<BuildItem> arralist with build ite with all its items
+	 */
+	public static ArrayList<BuildItem> getFullBuildItemsBy(String column,String value){
+		ArrayList<BuildItem> buildItems = new ArrayList<>();
+		ResultSet rs;
+		try {
+			rs = statement.executeQuery("SELECT * FROM build_item WHERE "+column+"='"+value+"'");
+			rs.beforeFirst(); // ---move back to first row
+			while (rs.next()) {
+				buildItems.add(
+						getItemInBuildAll(
+								new BuildItem(
+										rs.getInt("id_build_item"),
+										rs.getInt("id_order"),
+										rs.getInt("amount"))));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return buildItems;
+	}
+	
+	/**
+	 * 
+	 * @param buildItem the BuildItem to fill with the the item components
+	 * @return BuildItem same BuildItem receive in parameter after filling with the items in build
+	 */
 	public static BuildItem getItemInBuildAll(BuildItem buildItem){
 		ResultSet rs;
 		try {
