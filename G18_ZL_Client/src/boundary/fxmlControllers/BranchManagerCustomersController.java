@@ -7,6 +7,7 @@ import javafx.fxml.Initializable;
 
 /* ------------------------------------------------ */
 /*            \/ Important Comments  \/             */
+/*         PLEASE REMOVE COMMENT WHEN OVER          */
 /* ------------------------------------------------ */
 /*
  * 1.

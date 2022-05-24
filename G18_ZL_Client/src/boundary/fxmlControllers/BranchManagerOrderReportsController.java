@@ -1,6 +1,8 @@
 package boundary.fxmlControllers;
 
 import java.net.URL;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
@@ -25,9 +27,49 @@ import javafx.scene.text.Text;
 
 /* ------------------------------------------------ */
 /*            \/ Important Comments  \/             */
+/*         PLEASE REMOVE COMMENT WHEN OVER          */
 /* ------------------------------------------------ */
 /*
- * 1. 
+									1.
+
+SELECT I.name , sum(OI.amount) as amount
+FROM item I , assignment3.order_item OI , assignment3.order O
+WHERE I.id_item = OI.id_item AND OI.id_order IN (
+	SELECT O.id_order
+	WHERE O.id_store = 2 AND Month(O.date_order) = 5 AND Year(O.date_order) = 2022 
+) 
+GROUP BY I.name
+
+class AmountItem(String name , int amount)
+
+GET -> "item/amount/branchID/month/year
+
+public static ArrayList<AmountItem> getAmountOfEveryItem(String branch_id, String month, String year){
+		ArrayList<AmountItem> amounts = new ArrayList<>();
+		ResultSet rs;
+		try {
+			rs = statement.executeQuery(" #XYZ# ");
+			rs.beforeFirst(); // ---move back to first row
+			while (rs.next()) {
+				amounts.add(new AmountItem(
+						rs.getString("name"),
+						rs.getInt("amount")));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return amounts;
+}
+	
+										2.
+
+	We may need to change our SQL statements so they can be also filtered by the status of the order
+	like APPROVED or UNAPPROVED, etc...
+	
+										3.
+										
+										
+
  * */
 
 /**

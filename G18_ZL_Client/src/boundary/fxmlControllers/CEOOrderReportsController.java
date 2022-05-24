@@ -24,6 +24,7 @@ import javafx.scene.text.Text;
 
 /* ------------------------------------------------ */
 /*            \/ Important Comments  \/             */
+/*         PLEASE REMOVE COMMENT WHEN OVER          */
 /* ------------------------------------------------ */
 /*
  * 1. 
