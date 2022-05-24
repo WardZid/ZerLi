@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.DialogPane?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<DialogPane prefHeight="414.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+   <header>
+      <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0">
+         <children>
+            <VBox fx:id="vb1" prefHeight="385.0" prefWidth="600.0" spacing="10.0">
+               <children>
+                  <VBox fx:id="vb2" prefHeight="327.0" prefWidth="579.0">
+                     <children>
+                        <Label fx:id="DescriptionL" text="Description" />
+                        <TextArea fx:id="descriptionT" prefHeight="306.0" prefWidth="579.0" />
+                     </children>
+                  </VBox>
+                  <ButtonBar fx:id="buttonBar" prefHeight="40.0" prefWidth="200.0">
+                    <buttons>
+                        <Button fx:id="sendComplaintButton" mnemonicParsing="false" style="-fx-background-color: #1de9b6;" text="Send Complaint" />
+                      <Button fx:id="cancelButton" mnemonicParsing="false" text="Cancel" />
+                    </buttons>
+                  </ButtonBar>
+               </children>
+               <padding>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </padding>
+            </VBox>
+         </children>
+      </StackPane>
+   </header>
+</DialogPane>
