@@ -107,9 +107,12 @@ public class CustomerSupportController implements Initializable {
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		// send to server
-		ComplaintMap.put(1, new Complaint(1, 111, "OnTreatment", "1/5/2022", 0, "Not good", null));
-		ComplaintMap.put(2, new Complaint(2, 222, "OnTreatment", "2/5/2022", 0, "Not good flower", null));
-		ComplaintMap.put(3, new Complaint(3, 333, "OnTreatment", "3/5/2022", 0, "Not good workers", null));
+		ArrayList<Complaint> complaintsList =  (ArrayList<Complaint>)MainController.getMyClient().send(MessageType.GET, "complaint",null);
+		for(int i=0 ; i<complaintsList.size() ; i++)
+			ComplaintMap.put(complaintsList.get(i).idComplaint, complaintsList.get(i));
+//		ComplaintMap.put(1, new Complaint(1, 111, "OnTreatment", "1/5/2022", 0, "Not good", null));
+//		ComplaintMap.put(2, new Complaint(2, 222, "OnTreatment", "2/5/2022", 0, "Not good flower", null));
+//		ComplaintMap.put(3, new Complaint(3, 333, "OnTreatment", "3/5/2022", 0, "Not good workers", null));
 		ComplaintL.getItems().addAll(ComplaintMap.keySet());
 		CustomerIdT.setEditable(false);
 		ComplaintIdT.setEditable(false);
@@ -161,7 +164,9 @@ public class CustomerSupportController implements Initializable {
 	}
 
 	public void onSendReply(ActionEvent event) {
-		// sendToServer
+		selectedComplaint.setRefund(Integer.parseInt(refundT.getText()));
+		selectedComplaint.setResponse(replyT.getText());
+		MainController.getMyClient().send(MessageType.UPDATE, "complaint",selectedComplaint);
 		ComplaintMap.remove(selectedComplaintId);
 		ComplaintL.getItems().clear();
 		ComplaintL.getItems().addAll(ComplaintMap.keySet());
@@ -177,8 +182,10 @@ public class CustomerSupportController implements Initializable {
 		sendReplyButton.setDisable(true);
 	}
 	public void onRefresh(ActionEvent event) {
-		//send to server
-		ComplaintMap.put(4, new Complaint(4, 417, "OnTreatment", "57/5/2022", 0, "Not good workers", null));
+		ArrayList<Complaint> complaintsList =  (ArrayList<Complaint>)MainController.getMyClient().send(MessageType.GET, "complaint/by/Status/unAnswered",null);
+		for(int i=0 ; i<complaintsList.size() ; i++)
+			ComplaintMap.put(complaintsList.get(i).idComplaint, complaintsList.get(i));
+//		ComplaintMap.put(4, new Complaint(4, 417, "OnTreatment", "57/5/2022", 0, "Not good workers", null));
 		ComplaintL.getItems().clear();
 		ComplaintL.getItems().addAll(ComplaintMap.keySet());
 	}
