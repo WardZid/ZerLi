@@ -8,7 +8,7 @@ public class Order implements Serializable, Cloneable {
 	private static final long serialVersionUID = -3217273749865937459L;
 
 	public enum OrderStatus {
-		WAITING_APPROVAL, PROCESSING, DELIVERED, CANCELLED, UNAPPROVED;
+		WAITING_APPROVAL, PROCESSING, DELIVERED, CANCELLED, UNAPPROVED,WAITING_CANCELLATION;
 
 		public static OrderStatus getById(int id) {
 
