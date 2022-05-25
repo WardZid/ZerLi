@@ -140,7 +140,6 @@ public class BranchManagerIncomeReportsController implements Initializable {
 		this.viewReportButton.setDisable(false);
 		getDataAfterMonthIsChosen();
 		calculateOverallOfTheMonth();
-		
 	}
     
     /* ------------------------------------------------ */
