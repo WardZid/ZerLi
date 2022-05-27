@@ -41,11 +41,15 @@
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                            </VBox.margin>
                         </ListView>
-                        <Button fx:id="approveButton" disable="true" mnemonicParsing="false" text="Approve">
-                           <VBox.margin>
-                              <Insets bottom="10.0" left="10.0" right="10.0" />
-                           </VBox.margin>
-                        </Button>
+                        <HBox alignment="CENTER" spacing="10.0">
+                           <children>
+                              <Button fx:id="approveButton" disable="true" mnemonicParsing="false" text="Approve" />
+                              <Button fx:id="unapproveButton" disable="true" mnemonicParsing="false" text="Unapprove" />
+                           </children>
+                           <padding>
+                              <Insets bottom="10.0" />
+                           </padding>
+                        </HBox>
                      </children>
                   </VBox>
                   <Separator orientation="VERTICAL" prefHeight="200.0" />
@@ -103,26 +107,6 @@
                                     <Insets left="10.0" />
                                  </VBox.margin>
                               </Text>
-                              <Text fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="Buyer Name">
-                                 <font>
-                                    <Font name="System Bold" size="13.0" />
-                                 </font>
-                              </Text>
-                              <Text fx:id="buyerNameText" strokeType="OUTSIDE" strokeWidth="0.0" text="-buyer name-">
-                                 <VBox.margin>
-                                    <Insets left="10.0" />
-                                 </VBox.margin>
-                              </Text>
-                              <Text fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="Phone Number">
-                                 <font>
-                                    <Font name="System Bold" size="13.0" />
-                                 </font>
-                              </Text>
-                              <Text fx:id="phoneText" fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="-phone number-">
-                                 <VBox.margin>
-                                    <Insets left="10.0" />
-                                 </VBox.margin>
-                              </Text>
                               <Text fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="Date of Order">
                                  <font>
                                     <Font name="System Bold" size="13.0" />
@@ -153,7 +137,7 @@
                                     <Insets left="10.0" />
                                  </VBox.margin>
                               </Text>
-                              <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0" VBox.vgrow="ALWAYS">
+                              <VBox alignment="BOTTOM_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0" VBox.vgrow="ALWAYS">
                                  <children>
                                     <Text strokeType="OUTSIDE" strokeWidth="0.0" text="To Pay">
                                        <font>
@@ -165,6 +149,11 @@
                                           <Font name="System Bold Italic" size="18.0" />
                                        </font>
                                     </Text>
+                                 </children>
+                              </VBox>
+                              <VBox alignment="BOTTOM_CENTER" prefHeight="200.0" prefWidth="100.0">
+                                 <children>
+                                    <Button fx:id="viewFullDetailsButton" alignment="BOTTOM_CENTER" mnemonicParsing="false" text="View Full Details" />
                                  </children>
                               </VBox>
                            </children>
