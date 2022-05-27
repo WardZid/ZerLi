@@ -13,6 +13,16 @@ public class Complaint implements Serializable{
 	public String complaint;
 	public String response;
 	
+	/**
+	 * General constructor for all Parameters
+	 * @param idComplaint
+	 * @param idCustomer
+	 * @param status
+	 * @param date
+	 * @param refund
+	 * @param complaint
+	 * @param response
+	 */
 	public Complaint(int idComplaint, int idCustomer, String status, String date, double refund, String complaint,
 			String response) {
 		this.idComplaint = idComplaint;
@@ -22,6 +32,19 @@ public class Complaint implements Serializable{
 		this.refund = refund;
 		this.complaint = complaint;
 		this.response = response;
+	}
+	
+	/**
+	 * Constructor for new complaints from the customer
+	 * @param idCustomer
+	 * @param date
+	 * @param complaint
+	 */
+	public Complaint(int idCustomer, String date, String complaint) {
+		super();
+		this.idCustomer = idCustomer;
+		this.date = date;
+		this.complaint = complaint;
 	}
 	public int getIdComplaint() {
 		return idComplaint;

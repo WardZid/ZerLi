@@ -28,6 +28,7 @@ public class Order implements Serializable, Cloneable {
 	private double price;
 	private String orderDate;
 	private String deliveryDate;
+	private String cancelDate;
 	private String address;
 	private String description;
 	private String greetingCard;
@@ -39,7 +40,7 @@ public class Order implements Serializable, Cloneable {
 
 	// main Constructor
 	public Order(int idOrder, int idCustomer, int idStore, int idOrderStatus, double price, String orderDate,
-			String deliveryDate, String address, String description, String greetingCard) {
+			String deliveryDate, String cancelDate, String address, String description, String greetingCard) {
 		this.idOrder = idOrder;
 		this.idCustomer = idCustomer;
 		this.idStore = idStore;
@@ -47,6 +48,7 @@ public class Order implements Serializable, Cloneable {
 		this.price = price;
 		this.orderDate = orderDate;
 		this.deliveryDate = deliveryDate;
+		this.cancelDate=cancelDate;
 		this.address = address;
 		this.description = description;
 		this.greetingCard = greetingCard;
@@ -107,6 +109,14 @@ public class Order implements Serializable, Cloneable {
 
 	public void setDeliveryDate(String deliveryDate) {
 		this.deliveryDate = deliveryDate;
+	}
+
+	public String getCancelDate() {
+		return cancelDate;
+	}
+
+	public void setCancelDate(String cancelDate) {
+		this.cancelDate = cancelDate;
 	}
 
 	public String getAddress() {
