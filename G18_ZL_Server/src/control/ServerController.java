@@ -7,6 +7,7 @@ import java.sql.SQLException;
 
 import boundary.fxmlControllers.ServerViewController;
 import entity.BuildItem;
+import entity.Complaint;
 import entity.Customer;
 import entity.Customer.CustomerStatus;
 import entity.MyMessage;
@@ -313,6 +314,10 @@ public class ServerController extends ObservableServer {
 			if (request[1].equals("status")) {
 				clMsg.setContent(DBController.updateCustomerStatusOne(c, CustomerStatus.valueOf(request[2])));
 			}
+		} 
+		else if (request[0].equals("complaint")) {
+			Complaint complaint=(Complaint) clMsg.getContent();
+			clMsg.setContent(DBController.updateComplaint(complaint));
 		}
 	}
 }

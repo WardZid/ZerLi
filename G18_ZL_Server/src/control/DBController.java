@@ -488,6 +488,7 @@ public class DBController {
 	//INSERT QUERIES*******************************************************
 	
 	
+	
 	// UPDATE QUERIES*************************************************************************
 
 	public static ArrayList<Customer> updateCustomerStatusOne(Customer c, CustomerStatus status) {
