@@ -3,6 +3,7 @@ package control;
 import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -485,11 +486,25 @@ public class DBController {
 		return stores;
 	}
 
-	//INSERT QUERIES*******************************************************
-	
-	
-	
-	// UPDATE QUERIES*************************************************************************
+	// INSERT QUERIES (POST)*******************************************************
+
+	public static void insertComplaint(Complaint c) {
+		try {
+			PreparedStatement ps = conn.prepareStatement("INSERT INTO complaint VALUES(?,?,?,?,?,?)");
+			ps.setInt(1, c.getIdCustomer());
+			ps.setString(2, "OPEN");
+			ps.setString(3, c.getDate());
+			ps.setInt(4, 0);
+			ps.setString(5, c.getComplaint());
+			ps.setString(6, "");
+			ps.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			MainController.printErr(DBController.class, "Unable to add new complaint: " + c.toString());
+		}
+	}
+
+	// UPDATE QUERIES****************************************************
 
 	public static ArrayList<Customer> updateCustomerStatusOne(Customer c, CustomerStatus status) {
 
@@ -502,18 +517,17 @@ public class DBController {
 		return getCustomerBy("id_customer", c.getIdCustomer() + "");
 	}
 
-	public static ArrayList<Customer> updateComplaint(Complaint c) {
-		// not finished
-//		try {
-//			statement.executeUpdate("UPDATE customer SET id_customer_status=" + status.ordinal() + " WHERE id_customer="
-//					+ c.getIdCustomer());
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//		
-//		return getCustomerBy("id_customer", c.getIdCustomer() + "");
-		return null;
+	public static void updateComplaint(Complaint c) {
+		try {
+			PreparedStatement ps = conn.prepareStatement(
+					"UPDATE complaint SET status_complaint='CLOSED' AND refund_amount=? AND response=? WHERE id_complaint=?");
+			ps.setDouble(1, c.getRefund());
+			ps.setString(2, c.getResponse());
+			ps.setInt(3, c.getIdComplaint());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 	}
-	
 
 }

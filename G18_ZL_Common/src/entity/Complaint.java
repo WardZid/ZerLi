@@ -5,13 +5,13 @@ import java.io.Serializable;
 public class Complaint implements Serializable{
 	private static final long serialVersionUID = -4849768615516941203L;
 	
-	public int idComplaint;
-	public int idCustomer;
-	public String status;
-	public String date;
-	public double refund;
-	public String complaint;
-	public String response;
+	private int idComplaint;
+	private int idCustomer;
+	private String status;
+	private String date;
+	private double refund;
+	private String complaint;
+	private String response;
 	
 	/**
 	 * General constructor for all Parameters
@@ -41,11 +41,11 @@ public class Complaint implements Serializable{
 	 * @param complaint
 	 */
 	public Complaint(int idCustomer, String date, String complaint) {
-		super();
 		this.idCustomer = idCustomer;
 		this.date = date;
 		this.complaint = complaint;
 	}
+
 	public int getIdComplaint() {
 		return idComplaint;
 	}
@@ -89,5 +89,10 @@ public class Complaint implements Serializable{
 		this.response = response;
 	}
 	
+	@Override
+	public String toString() {
+		return "Complaint [idComplaint=" + idComplaint + ", idCustomer=" + idCustomer + ", status=" + status + ", date="
+				+ date + ", refund=" + refund + ", complaint=" + complaint + ", response=" + response + "]";
+	}
 	
 }
