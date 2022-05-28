@@ -62,12 +62,6 @@ public class CustomerSupportController implements Initializable {
 	private TextArea descriptionT;
 
 	@FXML
-	private GridPane gp;
-
-	@FXML
-	private HBox hb1;
-
-	@FXML
 	private Label refundL;
 
 	@FXML
@@ -83,44 +77,16 @@ public class CustomerSupportController implements Initializable {
 	private Button sendReplyButton;
 
 	@FXML
-	private StackPane stackPane;
-
-	@FXML
 	private TextField statusT;
-
-	@FXML
-	private VBox vb1;
-
-	@FXML
-	private VBox vb2;
-
-	@FXML
-	private VBox vb3;
 	@FXML
     private Button refresh;
 	private int selectedComplaintId;
 	private Complaint selectedComplaint;
-	public static HashMap<Integer, Complaint> ComplaintMap = new HashMap<>();
-	public void onSelectComplaint(ActionEvent event) {
-	}
-
+	private static HashMap<Integer, Complaint> ComplaintMap = new HashMap<>();
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		// send to server
-		ArrayList<Complaint> complaintsList =  (ArrayList<Complaint>)MainController.getMyClient().send(MessageType.GET, "complaint",null);
-		for(int i=0 ; i<complaintsList.size() ; i++)
-			ComplaintMap.put(complaintsList.get(i).idComplaint, complaintsList.get(i));
-//		ComplaintMap.put(1, new Complaint(1, 111, "OnTreatment", "1/5/2022", 0, "Not good", null));
-//		ComplaintMap.put(2, new Complaint(2, 222, "OnTreatment", "2/5/2022", 0, "Not good flower", null));
-//		ComplaintMap.put(3, new Complaint(3, 333, "OnTreatment", "3/5/2022", 0, "Not good workers", null));
-		ComplaintL.getItems().addAll(ComplaintMap.keySet());
-		CustomerIdT.setEditable(false);
-		ComplaintIdT.setEditable(false);
-		statusT.setEditable(false);
-		dateT.setEditable(false);
-		refundT.setEditable(false);
-		descriptionT.setEditable(false);
-		replyT.setEditable(false);
+		setComplaintsListView();
+		setEditable(false);
 		sendReplyButton.setDisable(true);
 		replyT.textProperty().addListener(new ChangeListener<String>() {
 		    @Override
@@ -147,20 +113,35 @@ public class CustomerSupportController implements Initializable {
 				try {
 					selectedComplaintId = ComplaintL.getSelectionModel().getSelectedItem();
 					selectedComplaint = ComplaintMap.get(selectedComplaintId);
-					ComplaintIdT.setText(Integer.toString(selectedComplaintId));
-					CustomerIdT.setText(Integer.toString(selectedComplaint.getIdCustomer()));
-					statusT.setText(selectedComplaint.getStatus());
-					dateT.setText(selectedComplaint.getDate());
-					descriptionT.setText(selectedComplaint.getComplaint());
+					setTexts();
 					// descriptionT.setDisable(true);
-					refundT.setEditable(true);
-					replyT.setEditable(true);
+					setEditable(true);
 					replyT.clear();
 				}catch(NullPointerException e) {}
 					
 				}
-
 		});
+	}
+
+	private void setEditable(boolean toEdit) {
+		refundT.setEditable(toEdit);
+		replyT.setEditable(toEdit);
+	}
+	private void setTexts() {
+		ComplaintIdT.setText(Integer.toString(selectedComplaintId));
+		CustomerIdT.setText(Integer.toString(selectedComplaint.getIdCustomer()));
+		statusT.setText(selectedComplaint.getStatus());
+		dateT.setText(selectedComplaint.getDate());
+		descriptionT.setText(selectedComplaint.getComplaint());
+	}
+
+
+	private void setComplaintsListView() {
+		ArrayList<Complaint> complaintsList =  ComplaintQueryFromDB(MessageType.GET,null);
+		for(int i=0 ; i<complaintsList.size() ; i++)
+		ComplaintMap.put(complaintsList.get(i).idComplaint, complaintsList.get(i));
+		ComplaintL.getItems().clear();
+		ComplaintL.getItems().addAll(ComplaintMap.keySet());
 	}
 
 	public void onSendReply(ActionEvent event) {
@@ -168,8 +149,14 @@ public class CustomerSupportController implements Initializable {
 		selectedComplaint.setResponse(replyT.getText());
 		MainController.getMyClient().send(MessageType.UPDATE, "complaint",selectedComplaint);
 		ComplaintMap.remove(selectedComplaintId);
-		ComplaintL.getItems().clear();
+		clearTexts();
 		ComplaintL.getItems().addAll(ComplaintMap.keySet());
+		setEditable(false);
+		sendReplyButton.setDisable(true);
+	}
+
+	private void clearTexts() {
+		ComplaintL.getItems().clear();
 		CustomerIdT.clear();
 		ComplaintIdT.clear();
 		statusT.clear();
@@ -177,16 +164,13 @@ public class CustomerSupportController implements Initializable {
 		refundT.clear();
 		descriptionT.clear();
 		replyT.clear();
-		replyT.setEditable(false);
-		refundT.setEditable(false);
-		sendReplyButton.setDisable(true);
 	}
 	public void onRefresh(ActionEvent event) {
-		ArrayList<Complaint> complaintsList =  (ArrayList<Complaint>)MainController.getMyClient().send(MessageType.GET, "complaint/by/Status/unAnswered",null);
-		for(int i=0 ; i<complaintsList.size() ; i++)
-			ComplaintMap.put(complaintsList.get(i).idComplaint, complaintsList.get(i));
-//		ComplaintMap.put(4, new Complaint(4, 417, "OnTreatment", "57/5/2022", 0, "Not good workers", null));
-		ComplaintL.getItems().clear();
-		ComplaintL.getItems().addAll(ComplaintMap.keySet());
+		ArrayList<Complaint> complaintsList =  ComplaintQueryFromDB(MessageType.GET,null);
+		setComplaintsListView();
+	}
+	
+	private ArrayList<Complaint> ComplaintQueryFromDB(MessageType messageType, Complaint complaint){
+		return (ArrayList<Complaint>) MainController.getMyClient().send(messageType, "complaint/by/status/unAnswered",complaint);
 	}
 }

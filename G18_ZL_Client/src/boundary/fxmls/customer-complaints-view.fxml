@@ -50,12 +50,12 @@
                     </rowConstraints>
                      <children>
                         <Label fx:id="customerIdL" text="Customer ID" />
-                        <TextField fx:id="customerIdT" GridPane.columnIndex="1" />
+                        <TextField fx:id="customerIdT" editable="false" GridPane.columnIndex="1" />
                         <Label fx:id="ComplaintIdL" text="Complaint Id" GridPane.rowIndex="1" />
-                        <TextField fx:id="ComplaintIdT" prefHeight="26.0" prefWidth="166.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                        <TextField fx:id="statusT" prefHeight="26.0" prefWidth="390.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                        <TextField fx:id="dateT" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                        <TextField fx:id="refundT" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                        <TextField fx:id="ComplaintIdT" editable="false" prefHeight="26.0" prefWidth="166.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <TextField fx:id="statusT" editable="false" prefHeight="26.0" prefWidth="390.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <TextField fx:id="dateT" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                        <TextField fx:id="refundT" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                         <Label fx:id="statusL" text="Status" GridPane.rowIndex="2" />
                         <Label fx:id="dateL" text="Date" GridPane.rowIndex="3" />
                         <Label fx:id="refundL" text="Refund" GridPane.rowIndex="4" />
@@ -64,7 +64,7 @@
                   <VBox fx:id="vb4" prefHeight="200.0" prefWidth="100.0">
                      <children>
                         <Label fx:id="descriptionL" text="Description" />
-                        <TextArea fx:id="descriptionT" prefHeight="133.0" prefWidth="528.0" />
+                        <TextArea fx:id="descriptionT" editable="false" prefHeight="133.0" prefWidth="528.0" />
                      </children>
                      <padding>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -73,7 +73,7 @@
                   <VBox fx:id="vb5" prefHeight="160.0" prefWidth="528.0">
                      <children>
                         <Label fx:id="replyL" text="Reply" />
-                        <TextArea fx:id="replyT" prefHeight="126.0" prefWidth="528.0" />
+                        <TextArea fx:id="replyT" editable="false" prefHeight="126.0" prefWidth="528.0" />
                      </children>
                      <padding>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />

@@ -43,10 +43,10 @@
                         <Label fx:id="StatusL" text="Status" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                         <Label fx:id="dateL" text="Date" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                         <Label fx:id="refundL" text="Refund" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                        <TextField fx:id="CustomerIdT" GridPane.columnIndex="2" />
-                        <TextField fx:id="ComplaintIdT" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                        <TextField fx:id="statusT" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-                        <TextField fx:id="dateT" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                        <TextField fx:id="CustomerIdT" editable="false" GridPane.columnIndex="2" />
+                        <TextField fx:id="ComplaintIdT" editable="false" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                        <TextField fx:id="statusT" editable="false" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                        <TextField fx:id="dateT" editable="false" GridPane.columnIndex="2" GridPane.rowIndex="3" />
                         <TextField fx:id="refundT" GridPane.columnIndex="2" GridPane.rowIndex="4" />
                      </children>
                   </GridPane>
@@ -55,7 +55,7 @@
             <VBox fx:id="vb2" translateY="5.0" VBox.vgrow="ALWAYS">
                <children>
                   <Label fx:id="descriptionL" text="Description" translateX="15.0" />
-                  <TextArea fx:id="descriptionT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" />
+                  <TextArea fx:id="descriptionT" editable="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" />
                </children>
             </VBox>
             <VBox fx:id="vb3" translateY="5.0" VBox.vgrow="ALWAYS">
