@@ -2,6 +2,8 @@ package control;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import boundary.ClientView;
 
@@ -53,6 +55,15 @@ public class MainController {
 	}
 	
 	// Helpful Generic Methods
+	
+	public static String currentTime() {
+		//current time is formatted into an appropriate datetime for mysql
+		SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  //formats date and time to be suitable for sql
+		Date date = new Date(System.currentTimeMillis());  
+		System.out.println("user logged at: "+formatter.format(date)); 
+		return formatter.format(date);
+	}
+	
 	/**
 	 * Prints standard info messages
 	 * @param from class that wants to print
