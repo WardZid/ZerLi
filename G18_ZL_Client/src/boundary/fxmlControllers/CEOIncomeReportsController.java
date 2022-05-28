@@ -2,6 +2,7 @@ package boundary.fxmlControllers;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.ResourceBundle;
 
 import control.MainController;
@@ -12,16 +13,20 @@ import entity.Store;
 import entity.MyMessage.MessageType;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.LineChart;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.text.Text;
 
 /* ------------------------------------------------ */
@@ -43,10 +48,10 @@ public class CEOIncomeReportsController implements Initializable {
     /* ------------------------------------------------ */
 	
 	@FXML
-    private TableColumn<?, ?> dateTableCol;
+    private TableColumn<Receipt, String> dateTableCol;
 
     @FXML
-    private TableColumn<?, ?> incomeTableCol;
+    private TableColumn<Receipt, Double> incomeTableCol;
 
     @FXML
     private ChoiceBox<String> branchsChoiceBox;
@@ -55,16 +60,16 @@ public class CEOIncomeReportsController implements Initializable {
     private ListView<String> monthsListView;
 
     @FXML
-    private TableColumn<?, ?> nameTableCol;
+    private TableColumn<Receipt, String> nameTableCol;
 
     @FXML
-    private LineChart<?, ?> reportLineChart;
+    private LineChart<Integer, Double> reportLineChart;
 
     @FXML
     private Text reportMonthText;
 
     @FXML
-    private TableView<?> reportTableView;
+    private TableView<Receipt> reportTableView;
 
     @FXML
     private TextField totalIncomeTextField;
@@ -75,6 +80,9 @@ public class CEOIncomeReportsController implements Initializable {
     /* ------------------------------------------------ */
     /*               \/ Help Variables \/               */
     /* ------------------------------------------------ */
+    
+    /* XYChart series to insert values in the line chart */
+    XYChart.Series<Integer, Double> series = new XYChart.Series<Integer, Double>();
     
     /* array of the names of the branches */
     private static ArrayList<String> branchsNames;
@@ -103,12 +111,19 @@ public class CEOIncomeReportsController implements Initializable {
     /* the selected year */
     private String year;
     
+    /* number of day in every month of the year */
+    private HashMap<String, Integer> daysOfMonth = new HashMap<String,Integer>();
+    
+    /* the incomes of a month */
+    private ArrayList<Double> incomesOfMonth = new ArrayList<>();
+    
     /* ------------------------------------------------ */
     /*            \/ initialize function \/             */
     /* ------------------------------------------------ */
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
+		initHelpVariables();
 		initBranchesChoiceBox();
 		this.branchsChoiceBox.setOnAction(this::afterBranchSelected);
 		monthsListView.getItems().addAll(monthsYears);
@@ -142,12 +157,36 @@ public class CEOIncomeReportsController implements Initializable {
 		this.viewReportButton.setDisable(false);
 		getDataAfterMonthIsChosen();
 		calculateOverallIncomeOfTheMonth();
-		
+		initLineChartVars();
+	}
+	
+	/**
+	 * Actions to do when viewReport Button is pressed.
+	 * 
+	 * @param event
+	 */
+	public void viewReportButtonAction(ActionEvent event) {
+		reportMonthText.setText("Report of "+month+"-"+year);
+		reportLineChart.setTitle("Daily Incomes Of "+month+"-"+year);
+		reportLineChart.getData().add(series);
+		totalIncomeTextField.setText(overallIncomeThisMonth+"");
+		fillReceiptsTable();
 	}
 	
     /* ------------------------------------------------ */
     /*                 \/ Help Methods \/               */
     /* ------------------------------------------------ */
+	
+	/**
+	 * Method to set the values in the table
+	 */
+	private void fillReceiptsTable() {
+		nameTableCol.setCellValueFactory(new PropertyValueFactory<Receipt,String>("name"));
+		dateTableCol.setCellValueFactory(new PropertyValueFactory<Receipt,String>("date"));
+		incomeTableCol.setCellValueFactory(new PropertyValueFactory<Receipt,Double>("income"));
+		ObservableList<Receipt> ol = FXCollections.observableArrayList(receiptsOfTheMonth);
+		reportTableView.setItems(ol);
+	}
 	
 	/**
 	 * Method to initialize the choiceBox of the branches
@@ -225,6 +264,44 @@ public class CEOIncomeReportsController implements Initializable {
 		for(DailyIncome di : dailyIncomesOfMonth) {
 			this.overallIncomeThisMonth += di.getIncome();
 		}
+	}
+	
+	/**
+	 * To initialize the help variables.
+	 */
+	private void initHelpVariables(){
+		daysOfMonth.put("1", 31);
+		daysOfMonth.put("2", 29);
+		daysOfMonth.put("3", 31);
+		daysOfMonth.put("4", 30);
+		daysOfMonth.put("5", 31);
+		daysOfMonth.put("6", 30);
+		daysOfMonth.put("7", 31);
+		daysOfMonth.put("8", 31);
+		daysOfMonth.put("9", 30);
+		daysOfMonth.put("10", 31);
+		daysOfMonth.put("11", 30);
+		daysOfMonth.put("12", 31);
+	}
+	
+	/**
+	 * Method to initialize the helpful variables of the line chart
+	 */
+	private void initLineChartVars() {
+		incomesOfMonth.clear();
+		for(int i = 0 ; i < daysOfMonth.get(month) ; i++)
+			incomesOfMonth.add(0.0);
+		for(int j = 0 ; j < dailyIncomesOfMonth.size() ; j++) {
+			int dayIndex = dailyIncomesOfMonth.get(j).getDay();
+			double income = dailyIncomesOfMonth.get(j).getIncome();
+			incomesOfMonth.set(dayIndex, incomesOfMonth.get(dayIndex)+income);
+		}
+		int d=0;
+		for(Double income : incomesOfMonth) {
+			series.getData().add(new XYChart.Data<Integer, Double>(d, income));
+			d++;
+		}
+		
 	}
 	
 }

@@ -16,7 +16,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="550.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="boundary.fxmlControllers.BranchManagerIncomeReportsController">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="550.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="boundary.fxmlControllers.BranchManagerIncomeReportsController">
    <children>
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" StackPane.alignment="CENTER">
          <children>
@@ -35,7 +35,7 @@
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </VBox.margin>
                   </ListView>
-                  <Button fx:id="viewReportButton" disable="true" mnemonicParsing="false" text="View Report" VBox.vgrow="ALWAYS">
+                  <Button fx:id="viewReportButton" disable="true" mnemonicParsing="false" onAction="#viewReportButtonAction" text="View Report" VBox.vgrow="ALWAYS">
                      <VBox.margin>
                         <Insets bottom="10.0" left="10.0" right="10.0" />
                      </VBox.margin>
@@ -52,7 +52,7 @@
                         <Font size="18.0" />
                      </font>
                   </Text>
-                  <LineChart fx:id="reportLineChart" VBox.vgrow="ALWAYS">
+                  <LineChart fx:id="reportLineChart" prefHeight="272.0" prefWidth="684.0" VBox.vgrow="ALWAYS">
                     <xAxis>
                       <CategoryAxis animated="false" side="BOTTOM" />
                     </xAxis>
@@ -65,11 +65,11 @@
                   </LineChart>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
                      <children>
-                        <TableView fx:id="reportTableView" prefHeight="101.0" prefWidth="278.0" HBox.hgrow="ALWAYS">
+                        <TableView fx:id="reportTableView" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="400.0" HBox.hgrow="ALWAYS">
                           <columns>
-                            <TableColumn fx:id="nameTableCol" editable="false" minWidth="94.0" prefWidth="94.0" resizable="false" sortable="false" text="Name" />
-                            <TableColumn fx:id="dateTableCol" editable="false" minWidth="92.0" prefWidth="92.0" resizable="false" sortable="false" text="Date" />
-                              <TableColumn fx:id="incomeTableCol" editable="false" minWidth="94.0" prefWidth="92.0" resizable="false" sortable="false" text="Income" />
+                            <TableColumn fx:id="nameTableCol" editable="false" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="150.0" resizable="false" sortable="false" text="Name" />
+                            <TableColumn fx:id="dateTableCol" editable="false" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="150.0" resizable="false" sortable="false" text="Date" />
+                              <TableColumn fx:id="incomeTableCol" editable="false" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="100.0" resizable="false" sortable="false" text="Income" />
                           </columns>
                            <HBox.margin>
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -85,7 +85,7 @@
                                     <Font size="24.0" />
                                  </font>
                               </Text>
-                              <TextField fx:id="totalIncomeTextField" editable="false" VBox.vgrow="ALWAYS">
+                              <TextField fx:id="totalIncomeTextField" editable="false" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="200.0">
                                  <VBox.margin>
                                     <Insets bottom="10.0" right="10.0" top="10.0" />
                                  </VBox.margin>
