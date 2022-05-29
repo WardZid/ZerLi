@@ -33,23 +33,7 @@ import javafx.stage.Stage;
 /* ------------------------------------------------ */
 /*			
 									
-									1.
-UPDATE assignment3.order O 
-SET O.id_order_status = value 
-WHERE O.id_order = orderID
-
-UPDATE -> waiting/approve/orderID
-
-public static int updateOrderStatus(String orderID, String value){
-		int er; // number of effected rows
-		try {
-			er = statement.executeQuery("UPDATE assignment3.order O SET O.id_order_status ="+value+"WHERE O.id_order ="+orderID);		
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return er;
-}																   								
-																	
+									1.																   																									
 									
  * */
 
@@ -94,7 +78,7 @@ public class BranchManagerOrdersController implements Initializable {
     private Button viewFullDetailsButton;
     
     @FXML
-    private Button unapproveButton;
+    private Button rejectButton;
     
     /* ------------------------------------------------ */
     /*      \/ FXML Full Order Details Variables \/     */
@@ -188,11 +172,92 @@ public class BranchManagerOrdersController implements Initializable {
     /* ------------------------------------------------ */
 	
 	/**
+	 * Method to do when approve Button is clicked.
+	 * 
+	 * @param event - event handler
+	 */
+	public void approveButtonAction(ActionEvent event) {
+/*
+
+"UPDATE assignment3.order O SET O.id_order_status =" + value + "WHERE O." + colName + "=" + colValue
+
+UPDATE -> order/status/by/id_order/currentOrder.getIdOrder()/1
+
+public static int updateOrderStatusby(String colName, String colValue, String value){
+		int er; // number of effected rows
+		try {
+			er = statement.executeQuery("UPDATE assignment3.order O SET O.id_order_status =" + value + "WHERE O." + colName + "=" + colValue);		
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return er;
+}	
+
+ * */
+		//int er = (int)MainController.getMyClient().send(MessageType.UPDATE, "order/status/by/id_order/" + currentOrder.getIdOrder() + "/1" , null);
+	}
+	
+	/**
+	 * Method to do when reject Button is clicked.
+	 * 
+	 * @param event - event handler
+	 */
+	public void rejectButtonAction(ActionEvent event) {
+		/*
+
+		"UPDATE assignment3.order O SET O.id_order_status =" + value + "WHERE O." + colName + "=" + colValue
+
+		UPDATE -> order/status/by/id_order/currentOrder.getIdOrder()/4
+
+		public static int updateOrderStatusby(String colName, String colValue, String value){
+				int er; // number of effected rows
+				try {
+					er = statement.executeQuery("UPDATE assignment3.order O SET O.id_order_status =" + value + "WHERE O." + colName + "=" + colValue);		
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+				return er;
+		}	
+
+		 * */
+		
+		//int er = (int)MainController.getMyClient().send(MessageType.UPDATE, "order/status/by/id_order/" + currentOrder.getIdOrder() + "/4" , null);
+
+	}
+	
+	/**
+	 * Method to do when viewFullDetails Button is clicked.
+	 * 
+	 * @param event - event handler
+	 */
+	public void viewFullDetailsButtonAction(ActionEvent event) {
+		/*
+
+		"UPDATE assignment3.order O SET O.id_order_status =" + value + "WHERE O." + colName + "=" + colValue
+
+		UPDATE -> order/status/by/id_order/currentOrder.getIdOrder()/3
+
+		public static int updateOrderStatusby(String colName, String colValue, String value){
+				int er; // number of effected rows
+				try {
+					er = statement.executeQuery("UPDATE assignment3.order O SET O.id_order_status =" + value + "WHERE O." + colName + "=" + colValue);		
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+				return er;
+		}	
+
+		 * */
+		
+		//int er = (int)MainController.getMyClient().send(MessageType.UPDATE, "order/status/by/id_order/" + currentOrder.getIdOrder() + "/3" , null);
+	}
+	
+	/**
 	 * Action when a line is selected in the approveListView. 
 	 */
 	public void monthSelectedFromApproveOrderListView() {
 		this.approveButton.setDisable(false);
-		this.unapproveButton.setDisable(false);
+		this.rejectButton.setDisable(false);
 		this.cancelButton.setDisable(true);
 		setOrderDetails();
 	}
@@ -202,7 +267,7 @@ public class BranchManagerOrdersController implements Initializable {
 	 */
 	public void monthSelectedFromCancelOrderListView() {
 		this.approveButton.setDisable(true);
-		this.unapproveButton.setDisable(true);
+		this.rejectButton.setDisable(true);
 		this.cancelButton.setDisable(false);
 		setOrderDetails();
 		
