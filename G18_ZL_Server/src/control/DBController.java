@@ -517,7 +517,7 @@ public class DBController {
 		return getCustomerBy("id_customer", c.getIdCustomer() + "");
 	}
 
-	public static void updateComplaint(Complaint c) {
+	public static ArrayList<Complaint> updateComplaint(Complaint c) {
 		try {
 			PreparedStatement ps = conn.prepareStatement(
 					"UPDATE complaint SET status_complaint='CLOSED' AND refund_amount=? AND response=? WHERE id_complaint=?");
@@ -527,6 +527,7 @@ public class DBController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return getComplaintsBy("id_complaint", c.getIdComplaint()+"");
 
 	}
 
