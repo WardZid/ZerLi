@@ -13,6 +13,7 @@ import entity.Customer;
 import entity.Customer.CustomerStatus;
 import entity.MyMessage;
 import entity.MyMessage.MessageType;
+import entity.Order;
 import entity.User;
 import ocsf.server.ConnectionToClient;
 import ocsf.server.ObservableServer;
@@ -309,7 +310,13 @@ public class ServerController extends ObservableServer {
 
 		String[] request = clMsg.getInfo().split("/");
 
-		if (request[0].equals("customer")) {
+		if(request[0].equals("order")) {
+			Order order=(Order)clMsg.getContent();
+			if(request[1].equals("status")) {
+				clMsg.setContent(DBController.updateOrderStatus(order));
+			}
+		}
+		else if (request[0].equals("customer")) {
 			Customer c = (Customer) clMsg.getContent();
 			if (request[1].equals("status")) {
 				clMsg.setContent(DBController.updateCustomerStatusOne(c, CustomerStatus.valueOf(request[2])));

@@ -524,11 +524,24 @@ public class DBController {
 			ps.setDouble(1, c.getRefund());
 			ps.setString(2, c.getResponse());
 			ps.setInt(3, c.getIdComplaint());
+			ps.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return getComplaintsBy("id_complaint", c.getIdComplaint()+"");
-
+	}
+	
+	public static ArrayList<Order> updateOrderStatus(Order o) {
+		try {
+			PreparedStatement ps = conn.prepareStatement(
+					"UPDATE order SET id_order_status=? WHERE id_order=?");
+			ps.setInt(1, o.getIdOrderStatus());
+			ps.setInt(2, o.getIdOrder());
+			ps.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return getOrdersBy("id_order", o.getIdOrder()+"");
 	}
 
 }
