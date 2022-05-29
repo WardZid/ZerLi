@@ -17,7 +17,6 @@ public class MainController {
 
 	// Class Variables**********************
 	private static ServerController myServer;
-	private static int printCnt = 1;
 
 	
 
@@ -35,12 +34,5 @@ public class MainController {
 	}
 
 
-	public static void print(Class<?> from, String msg) {
-		System.out.println("<" + (printCnt++) + ">\t[" + from.getName() + "]:\t" + msg);
-	}
-
-	public static void printErr(Class<?> from, String msg) {
-		System.err.println("<" + (printCnt++) + ">\t[" + from.getName() + "]:\t" + msg);
-	}
 
 }

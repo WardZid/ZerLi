@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import boundary.ServerView;
 import entity.BuildItem;
 import entity.Complaint;
 import entity.Customer;
@@ -65,27 +66,27 @@ public class DBController {
 	public static void connectDB() throws Exception {
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
-			MainController.print(DBController.class, "Driver definition succeeded");
+			ServerView.print(DBController.class, "Driver definition succeeded");
 		} catch (Exception ex) {
 			/* handle the error */
-			MainController.printErr(DBController.class, "Driver definition failed");
+			ServerView.printErr(DBController.class, "Driver definition failed");
 			throw ex;
 		}
 
 		try {
 			conn = DriverManager.getConnection("jdbc:mysql://" + DBURL + "?serverTimezone=IST&useSSL=false", userDB,
 					passDB);
-			MainController.print(DBController.class, "SQL connection successfully established!");
+			ServerView.print(DBController.class, "SQL connection successfully established!");
 
 			statement = conn.createStatement();
-			MainController.print(DBController.class, "Statement created");
+			ServerView.print(DBController.class, "Statement created");
 
 		} catch (SQLException ex) {
 			/* handle any errors */
 
-			MainController.printErr(DBController.class, "SQLException: " + ex.getMessage());
-			MainController.printErr(DBController.class, "SQLState: " + ex.getSQLState());
-			MainController.printErr(DBController.class, "VendorError: " + ex.getErrorCode());
+			ServerView.printErr(DBController.class, "SQLException: " + ex.getMessage());
+			ServerView.printErr(DBController.class, "SQLState: " + ex.getSQLState());
+			ServerView.printErr(DBController.class, "VendorError: " + ex.getErrorCode());
 
 			throw ex;
 		}
@@ -97,9 +98,9 @@ public class DBController {
 	public static void disconnectDB() {
 		try {
 			conn.close();
-			MainController.print(DBController.class, "DB Connection Terminated.");
+			ServerView.print(DBController.class, "DB Connection Terminated.");
 		} catch (SQLException e) {
-			MainController.printErr(DBController.class, "Error in DB Disconnection");
+			ServerView.printErr(DBController.class, "Error in DB Disconnection");
 		}
 	}
 
@@ -119,7 +120,7 @@ public class DBController {
 			if (blob != null)
 				return new Image(blob.getBinaryStream());
 		} catch (SQLException e) {
-			MainController.printErr(DBController.class, "Could not load blob to image from mysql");
+			ServerView.printErr(DBController.class, "Could not load blob to image from mysql");
 		}
 		return null;
 
@@ -499,8 +500,7 @@ public class DBController {
 			ps.setString(6, "");
 			ps.executeUpdate();
 		} catch (SQLException e) {
-			e.printStackTrace();
-			MainController.printErr(DBController.class, "Unable to add new complaint: " + c.toString());
+			ServerView.printErr(DBController.class, "Unable to add new complaint: " + c.toString());
 		}
 	}
 

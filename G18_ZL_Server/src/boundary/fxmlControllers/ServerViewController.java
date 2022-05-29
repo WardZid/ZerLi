@@ -13,13 +13,18 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import ocsf.server.ConnectionToClient;
 
 public class ServerViewController implements Initializable {
@@ -71,10 +76,17 @@ public class ServerViewController implements Initializable {
 	@FXML
 	private Button btnDisconnect;
 
+    @FXML
+    private ScrollPane logSP;
+    @FXML
+    private TextFlow logTextFlow;
+
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		serverCon = MainController.getServer();
+		
+		logTextFlow.heightProperty().addListener(observable -> logSP.setVvalue(1D));
 
 		initTextFields();
 		initTable();
@@ -137,7 +149,34 @@ public class ServerViewController implements Initializable {
 		btnConnect.setDisable(!connect);
 		btnDisconnect.setDisable(!disconnect);
 	}
-
+	
+	/**
+	 * Prints normal log message
+	 * @param out Log message
+	 */
+	public void printLog(String out) {
+		Text t=new Text("\n"+out);
+		print(t);
+	}
+	
+	/**
+	 * Prints Red error message
+	 * @param out Log message
+	 */
+	public void printErrLog(String out) {
+		Text t=new Text("\n"+out);
+		t.setFill(Color.RED);
+		print(t);
+	}
+	
+	/**
+	 * Adds text to add log on the JavaFX thread
+	 * @param t Text to add to log on the FX's thread
+	 */
+	private void print(Text t) {
+		javafx.application.Platform.runLater( () -> logTextFlow.getChildren().add(t));
+	}
+	
 	// Static Components
 
 	public static ObservableList<ClientConnection> getCientsObservableList() {

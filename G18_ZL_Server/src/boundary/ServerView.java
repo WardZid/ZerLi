@@ -13,9 +13,10 @@ import javafx.stage.Stage;
 
 public class ServerView extends Application {
 	// static instance of the controller to pass it any info it might need
-	@SuppressWarnings("unused")
 	private static ServerViewController svFXController;
 
+	private static int printCnt = 1;
+	
 	public static void launchApplication(String[] args) {
 		ServerView.launch(args);
 	}
@@ -35,7 +36,7 @@ public class ServerView extends Application {
 			scene.getStylesheets().add("/boundary/fxmlControllers/server.css");
 			primaryStage.getIcons().add(new Image("/boundary/media/server_icon.png"));
 			primaryStage.setScene(scene);
-			//primaryStage.setResizable(false);
+			primaryStage.setResizable(false);
 			primaryStage.sizeToScene();
 			primaryStage.show();
 
@@ -55,6 +56,19 @@ public class ServerView extends Application {
 	public void stop() {
 		MainController.getServer().stopServer();
 		System.exit(0);
+	}
+
+	
+	public static void print(Class<?> from, String msg) {
+		String outputString="<" + (printCnt++) + ">  \t[" + from.getName() + "]:\t" + msg;
+		svFXController.printLog(outputString);
+		System.out.println(outputString);
+	}
+
+	public static void printErr(Class<?> from, String msg) {
+		String outputString="<" + (printCnt++) + ">  \t[" + from.getName() + "]:\t" + msg;
+		svFXController.printErrLog(outputString);
+		System.err.println(outputString);
 	}
 
 }

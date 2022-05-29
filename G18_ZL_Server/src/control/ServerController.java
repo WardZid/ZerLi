@@ -5,6 +5,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.sql.SQLException;
 
+import boundary.ServerView;
 import boundary.fxmlControllers.ServerViewController;
 import entity.BuildItem;
 import entity.Complaint;
@@ -48,8 +49,8 @@ public class ServerController extends ObservableServer {
 		try {
 			ip = InetAddress.getLocalHost();
 			host = ip.getHostName();
-			MainController.print(getClass(), "Your current IP address : " + ip);
-			MainController.print(getClass(), "Your current Hostname : " + host);
+//			ServerView.print(getClass(), "Your current IP address : " + ip);
+//			ServerView.print(getClass(), "Your current Hostname : " + host);
 
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
@@ -79,8 +80,7 @@ public class ServerController extends ObservableServer {
 		} catch (SQLException ex) {
 			throw ex;
 		} catch (Exception ex) {
-			MainController.printErr(getClass(), "ERROR - Could not listen for clients!");
-			throw ex;
+			ServerView.printErr(getClass(), "ERROR - Could not listen for clients!\t Cause: "+ex.getMessage());
 
 		}
 	}
@@ -108,7 +108,7 @@ public class ServerController extends ObservableServer {
 	 */
 	protected void serverStarted() {
 		super.serverStarted();
-		MainController.print(ServerController.class, "Server listening for connections on port " + getPort());
+		ServerView.print(ServerController.class, "Server listening for connections on port " + getPort());
 	}
 
 	/**
@@ -117,14 +117,14 @@ public class ServerController extends ObservableServer {
 	 */
 	protected void serverStopped() {
 		super.serverStopped();
-		MainController.print(ServerController.class, "Server has stopped listening for connections.");
+		ServerView.print(ServerController.class, "Server has stopped listening for connections.");
 	}
 
 	@Override
 	protected synchronized void clientConnected(ConnectionToClient client) {
 		super.clientConnected(client);
 		ServerViewController.addClient(client);
-		MainController.print(getClass(), "New Client Connected: " + client.getInetAddress());
+		ServerView.print(getClass(), "New Client Connected: " + client.getInetAddress());
 	}
 
 	@Override
@@ -134,7 +134,7 @@ public class ServerController extends ObservableServer {
 
 	@Override
 	public void sendToAllClients(Object msg) {
-		MainController.print(getClass(), "-> " + msg);
+		ServerView.print(getClass(), "-> " + msg);
 		super.sendToAllClients(msg);
 	}
 
@@ -146,7 +146,7 @@ public class ServerController extends ObservableServer {
 	 */
 	public void handleMessageFromClient(Object msg, ConnectionToClient client) {
 		super.handleMessageFromClient(msg, client);
-		MainController.print(getClass(), "<- " + msg + " from " + client);
+		ServerView.print(getClass(), "<- " + msg + " from " + client);
 		handleRequest(msg, client);
 	}
 
@@ -174,7 +174,7 @@ public class ServerController extends ObservableServer {
 
 			break;
 		default:
-			MainController.printErr(getClass(), "Unhandled Client Request: " + clMsg.toString());
+			ServerView.printErr(getClass(), "Unhandled Client Request: " + clMsg.toString());
 			break;
 		}
 		// finally reply to client
@@ -183,21 +183,21 @@ public class ServerController extends ObservableServer {
 		} catch (IOException e) {
 			sendToAllClients(clMsg);
 		}finally {
-			MainController.print(getClass(), "-> " + clMsg + " to " + client);
+			ServerView.print(getClass(), "-> " + clMsg + " to " + client);
 		}
 
 	}
 
 	private void handleInfoMessage(MyMessage clMsg, ConnectionToClient client) {
 		if (clMsg.getInfo().startsWith("/disconnect")) {
-			MainController.print(getClass(), "Client Disconnected: " + client.toString());
+			ServerView.print(getClass(), "Client Disconnected: " + client.toString());
 			ServerViewController.removeClient(client);
 
 		} else if (clMsg.getInfo().startsWith("/connect")) {
-			MainController.print(getClass(), "Client Connected: " + client.toString());
+			ServerView.print(getClass(), "Client Connected: " + client.toString());
 
 		} else {
-			MainController.printErr(getClass(), "Unhandled info Message: " + clMsg.getInfo());
+			ServerView.printErr(getClass(), "Unhandled info Message: " + clMsg.getInfo());
 		}
 	}
 
@@ -295,7 +295,7 @@ public class ServerController extends ObservableServer {
 				clMsg.setContent(DBController.getComplaintsBy(request[2], request[3]));
 			}
 		} else {
-			MainController.printErr(getClass(), "Unhandled Get request: " + clMsg.getInfo());
+			ServerView.printErr(getClass(), "Unhandled Get request: " + clMsg.getInfo());
 		}
 
 	}

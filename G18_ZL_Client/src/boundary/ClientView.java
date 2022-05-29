@@ -81,12 +81,12 @@ public class ClientView extends Application {
 		if (connect == null)
 			try {
 				connect = FXMLLoader.load((ClientView.class).getResource("fxmls/connect-view.fxml"));
-				
-				primaryScene.setRoot(connect);
-				primaryStage.sizeToScene();
 			} catch (IOException e) {
 				MainController.printErr(ClientView.class, "Could not fetch 'connect' FXML");
 			}
+
+		primaryScene.setRoot(connect);
+		primaryStage.sizeToScene();
 	}
 
 	public static void setUpLogIn() {
