@@ -41,7 +41,7 @@ public class ClientController extends ObservableClient {
 				send(MessageType.INFO, "/connect", null);
 			}
 		} catch (IOException e) {
-			MainController.printErr(getClass(), "Connection to server unsuccessful");
+			ClientView.printErr(getClass(), "Connection to server unsuccessful");
 		}
 		return isConnected;
 	}
@@ -79,14 +79,14 @@ public class ClientController extends ObservableClient {
 	@Override
 	protected void connectionEstablished() {
 		super.connectionEstablished();
-		MainController.print(getClass(),
+		ClientView.print(getClass(),
 				"Connection established on [host:port]: [" + getHost() + "," + getPort() + "]");
 	}
 
 	@Override
 	protected void connectionClosed() {
 		super.connectionClosed();
-		MainController.print(getClass(), "Connection terminated");
+		ClientView.print(getClass(), "Connection terminated");
 	}
 
 	/**
@@ -100,7 +100,7 @@ public class ClientController extends ObservableClient {
 			awaitResponse = true;
 			MyMessage msg = new MyMessage(getHost(), msgCnt++, type, info, content);
 			sendToServer(msg);
-			MainController.print(getClass(), "-> " + msg.toString());
+			ClientView.print(getClass(), "-> " + msg.toString());
 
 			// wait for response
 			int timeoutCounter = 0;
@@ -114,7 +114,7 @@ public class ClientController extends ObservableClient {
 					
 					Thread.sleep(100);
 					
-					MainController.print(getClass(),
+					ClientView.print(getClass(),
 							"Awaiting Response -> [" + msg.getMsgID() + "] info=" + msg.getInfo());
 					
 				} catch (InterruptedException e) {
@@ -122,18 +122,18 @@ public class ClientController extends ObservableClient {
 				}
 			}
 			
-			MainController.print(getClass(),
+			ClientView.print(getClass(),
 					"Response Received <- [" + msg.getMsgID() + "] info=" + msg.getInfo() + "\n");
 			
 		} catch (IOException e) {
 			e.printStackTrace();
-			MainController.print(getClass(), "Could not send message to server: Terminating client." + e);
+			ClientView.printErr(getClass(), "Could not send message to server: Terminating client." + e);
 		}
 		return replyContent;
 	}
 
 	private void timeOut() {
-		MainController.printErr(getClass(), "Client timed out. Server Unreachable.");
+		ClientView.printErr(getClass(), "Client timed out. Server Unreachable.");
 		disconnectNoMessage();
 
 		Alert errorAlert = new Alert(AlertType.ERROR);
@@ -145,7 +145,7 @@ public class ClientController extends ObservableClient {
 	@Override
 	protected void handleMessageFromServer(Object msg) {
 		super.handleMessageFromServer(msg);
-		MainController.print(getClass(), "<- " + msg.toString());
+		ClientView.print(getClass(), "<- " + msg.toString());
 		handleServerMessage(msg);
 	}
 
@@ -155,7 +155,7 @@ public class ClientController extends ObservableClient {
 		}
 		MyMessage svMsg = (MyMessage) msg;
 		if (svMsg.getClientAddress() == null) {
-			MainController.print(getClass(), "Global Message from server: " + svMsg.getInfo());
+			ClientView.print(getClass(), "Global Message from server: " + svMsg.getInfo());
 			handleInfoMessage(svMsg);
 			return;
 		}
@@ -199,7 +199,7 @@ public class ClientController extends ObservableClient {
 		else if (svMsg.getInfo().startsWith("/connect"))
 			isConnected = true;
 		else
-			MainController.print(getClass(), "Unhandled info:" + svMsg.getInfo());
+			ClientView.printErr(getClass(), "Unhandled info:" + svMsg.getInfo());
 	}
 
 	private void handleGetReply(MyMessage svMsg) {

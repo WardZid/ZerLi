@@ -25,6 +25,11 @@ public class ClientView extends Application {
 
 	private static Stage primaryStage;
 	public static Scene primaryScene;
+	
+	/**
+	 * console log counter
+	 */
+	private static int printCnt = 1;
 
 	public static void launchApplication(String[] args) {
 
@@ -82,7 +87,7 @@ public class ClientView extends Application {
 			try {
 				connect = FXMLLoader.load((ClientView.class).getResource("fxmls/connect-view.fxml"));
 			} catch (IOException e) {
-				MainController.printErr(ClientView.class, "Could not fetch 'connect' FXML");
+				ClientView.printErr(ClientView.class, "Could not fetch 'connect' FXML");
 			}
 
 		primaryScene.setRoot(connect);
@@ -97,7 +102,7 @@ public class ClientView extends Application {
 			primaryScene.setRoot(logIn);
 			primaryStage.sizeToScene();
 		} catch (IOException e) {
-			MainController.printErr(ClientView.class, "Could not fetch 'log in' FXML");
+			ClientView.printErr(ClientView.class, "Could not fetch 'log in' FXML");
 		}
 	}
 
@@ -108,9 +113,27 @@ public class ClientView extends Application {
 			primaryScene.setRoot(clientConsole);
 			primaryStage.sizeToScene();
 		} catch (IOException e) {
-			MainController.print(ClientView.class, "Could not fetch 'client console' FXML");
+			ClientView.print(ClientView.class, "Could not fetch 'client console' FXML");
 		}
 
+	}
+	
+	/**
+	 * Prints standard info messages
+	 * @param from class that wants to print
+	 * @param msg simple info message
+	 */
+	public static void print(Class<?> from, String msg) {
+		System.out.println("<" + (printCnt++) + ">\t[" + from.getName() + "]:\t" + msg);
+	}
+	
+	/**
+	 * 
+	 * @param from class that wants to print
+	 * @param msg simple error message
+	 */
+	public static void printErr(Class<?> from, String msg) {
+		System.err.println("<" + (printCnt++) + ">\t[" + from.getName() + "]:\t" + msg);
 	}
 
 }

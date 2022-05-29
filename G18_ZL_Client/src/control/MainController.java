@@ -27,11 +27,6 @@ public class MainController {
 	 */
 	private static String ipAddress;
 
-	/**
-	 * console log counter
-	 */
-	private static int printCnt = 1;
-
 	//Getters
 	/**
 	 * 
@@ -64,21 +59,5 @@ public class MainController {
 		return formatter.format(date);
 	}
 	
-	/**
-	 * Prints standard info messages
-	 * @param from class that wants to print
-	 * @param msg simple info message
-	 */
-	public static void print(Class<?> from, String msg) {
-		System.out.println("<" + (printCnt++) + ">\t[" + from.getName() + "]:\t" + msg);
-	}
 	
-	/**
-	 * 
-	 * @param from class that wants to print
-	 * @param msg simple error message
-	 */
-	public static void printErr(Class<?> from, String msg) {
-		System.err.println("<" + (printCnt++) + ">\t[" + from.getName() + "]:\t" + msg);
-	}
 }

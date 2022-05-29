@@ -135,7 +135,7 @@ public class ClientConsoleController implements Initializable {
 			break;
 
 		default:
-			MainController.printErr(getClass(), "no such user type");
+			ClientView.printErr(getClass(), "no such user type");
 			break;
 		}
 	}
@@ -161,6 +161,7 @@ public class ClientConsoleController implements Initializable {
 		return btn;
 	}
 	
+	@SuppressWarnings("unchecked")
 	private void loadCustomerConsole() {
 		ArrayList<Customer>  c=  (ArrayList<Customer>) MainController.getMyClient().send(MessageType.GET, "login/customer", user);
 		customer=c.get(0);
