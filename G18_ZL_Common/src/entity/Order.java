@@ -44,8 +44,8 @@ public class Order implements Serializable, Cloneable {
 
 	// Products in the order are enetered on request only as to minimize load to the
 	// server
-	private ArrayList<BuildItem> buildItems;
-	private ArrayList<OrderItem> items;
+	private ArrayList<BuildItem> buildItems=new ArrayList<>();
+	private ArrayList<OrderItem> items=new ArrayList<>();
 
 	// main Constructor
 	public Order(int idOrder, int idCustomer, int idStore, int idOrderStatus, double price, String orderDate,
@@ -150,6 +150,8 @@ public class Order implements Serializable, Cloneable {
 
 	// create build item and add it to arr-> build item-view
 	public void addIBuildtemtoOrder(BuildItem buildItem) {
+		if(buildItem==null)
+			System.out.println("sssssssssssssssssss");
 		buildItems.add(buildItem);
 		ItemInOrder++;
 		price += buildItem.getPrice();

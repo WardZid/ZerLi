@@ -106,6 +106,7 @@ public class ClientConsoleController implements Initializable {
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 
+		Navigation.setClientConsoleController(this);
 		logoIV.setImage(new Image("boundary/media/zli-logo.png"));
 		menuVB.getStylesheets().add("boundary/fxmlControllers/menu.css");
 		if (user == null)

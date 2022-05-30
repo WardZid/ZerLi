@@ -295,6 +295,22 @@ public class DBController {
 		return items;
 	}
 
+	public static ArrayList<String> getCategoryAll(){
+		ArrayList<String> category = new ArrayList<>();
+		
+		try {
+			ResultSet rs = statement.executeQuery("SELECT * FROM category");
+			rs.beforeFirst(); // ---move back to first row
+			while (rs.next()) {
+				category.add(rs.getString("category"));
+			
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return category;
+	}
+	
 	public static ArrayList<AmountItem> getAmountOfEveryItem(String branchID, String month, String year){
 		ArrayList<AmountItem> amounts = new ArrayList<>();
 		ResultSet rs;
@@ -497,6 +513,21 @@ public class DBController {
 		return monthsYears;
 	}
 
+	public static ArrayList<String> getStoreAll() {
+		ArrayList<String> stores = new ArrayList<>();
+		ResultSet rs;
+		try {
+			rs = statement.executeQuery("SELECT * FROM store");
+			rs.beforeFirst(); // ---move back to first row
+			while (rs.next()) {
+				stores.add(rs.getString("name_store"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return stores;
+	}
+	
 	public static ArrayList<Store> getStoreBy(String column, String value) {
 		ArrayList<Store> stores = new ArrayList<>();
 		ResultSet rs;

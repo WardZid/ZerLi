@@ -282,10 +282,17 @@ public class ServerController extends ObservableServer {
 		} else if (request[0].equals("item_in_build")) {
 			clMsg.setContent(DBController.getItemInBuildAll((BuildItem) clMsg.getContent()));
 		} else if (request[0].equals("store")) {
-			if (request[1].equals("by")) {
+			if(request[1].equals("all")) {
+				clMsg.setContent(DBController.getStoreAll());
+			} else if (request[1].equals("by")) {
 				clMsg.setContent(DBController.getStoreBy(request[2], request[3]));
 			}
-		} else if (request[0].equals("customer")) {
+		}
+		else if (request[0].equals("category")) {
+			if(request[1].equals("all"))
+				clMsg.setContent(DBController.getCategoryAll());
+		}
+		else if (request[0].equals("customer")) {
 			if (request[1].equals("all")) {
 				clMsg.setContent(DBController.getCustomerAll());
 			} else if (request[1].equals("by")) {
