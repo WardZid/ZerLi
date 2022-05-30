@@ -176,25 +176,15 @@ public class BranchManagerOrdersController implements Initializable {
 	 * 
 	 * @param event - event handler
 	 */
+	@SuppressWarnings("unchecked")
 	public void approveButtonAction(ActionEvent event) {
-/*
-
-"UPDATE assignment3.order O SET O.id_order_status =" + value + "WHERE O." + colName + "=" + colValue
-
-UPDATE -> order/status/by/id_order/currentOrder.getIdOrder()/1
-
-public static int updateOrderStatusby(String colName, String colValue, String value){
-		int er; // number of effected rows
-		try {
-			er = statement.executeQuery("UPDATE assignment3.order O SET O.id_order_status =" + value + "WHERE O." + colName + "=" + colValue);		
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return er;
-}	
-
- * */
-		//int er = (int)MainController.getMyClient().send(MessageType.UPDATE, "order/status/by/id_order/" + currentOrder.getIdOrder() + "/1" , null);
+		//change the current selected order status to 1 (APPROVED).
+		currentOrder.setIdOrderStatus(1);
+		ArrayList<Order> order = (ArrayList<Order>)MainController.getMyClient().send(MessageType.UPDATE, "order/status", currentOrder);
+		//check if order was changed.
+		if(order.get(0).getIdOrderStatus() == 1)
+			System.out.println("Order updated successfully!");
+		else System.out.println("Error updating order!");
 	}
 	
 	/**
@@ -202,54 +192,32 @@ public static int updateOrderStatusby(String colName, String colValue, String va
 	 * 
 	 * @param event - event handler
 	 */
+	@SuppressWarnings("unchecked")
 	public void rejectButtonAction(ActionEvent event) {
-		/*
-
-		"UPDATE assignment3.order O SET O.id_order_status =" + value + "WHERE O." + colName + "=" + colValue
-
-		UPDATE -> order/status/by/id_order/currentOrder.getIdOrder()/4
-
-		public static int updateOrderStatusby(String colName, String colValue, String value){
-				int er; // number of effected rows
-				try {
-					er = statement.executeQuery("UPDATE assignment3.order O SET O.id_order_status =" + value + "WHERE O." + colName + "=" + colValue);		
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-				return er;
-		}	
-
-		 * */
-		
-		//int er = (int)MainController.getMyClient().send(MessageType.UPDATE, "order/status/by/id_order/" + currentOrder.getIdOrder() + "/4" , null);
+		//change the current selected order status to 4 (UNAPPROVED).
+				currentOrder.setIdOrderStatus(4);
+				ArrayList<Order> order = (ArrayList<Order>)MainController.getMyClient().send(MessageType.UPDATE, "order/status", currentOrder);
+				//check if order was changed.
+				if(order.get(0).getIdOrderStatus() == 4)
+					System.out.println("Order updated successfully!");
+				else System.out.println("Error updating order!");
 
 	}
 	
 	/**
-	 * Method to do when viewFullDetails Button is clicked.
+	 * Method to do when cancel Button is clicked.
 	 * 
 	 * @param event - event handler
 	 */
-	public void viewFullDetailsButtonAction(ActionEvent event) {
-		/*
-
-		"UPDATE assignment3.order O SET O.id_order_status =" + value + "WHERE O." + colName + "=" + colValue
-
-		UPDATE -> order/status/by/id_order/currentOrder.getIdOrder()/3
-
-		public static int updateOrderStatusby(String colName, String colValue, String value){
-				int er; // number of effected rows
-				try {
-					er = statement.executeQuery("UPDATE assignment3.order O SET O.id_order_status =" + value + "WHERE O." + colName + "=" + colValue);		
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-				return er;
-		}	
-
-		 * */
-		
-		//int er = (int)MainController.getMyClient().send(MessageType.UPDATE, "order/status/by/id_order/" + currentOrder.getIdOrder() + "/3" , null);
+	@SuppressWarnings("unchecked")
+	public void cancelButtonAction(ActionEvent event) {
+		//change the current selected order status to 3 (CANCELED).
+				currentOrder.setIdOrderStatus(3);
+				ArrayList<Order> order = (ArrayList<Order>)MainController.getMyClient().send(MessageType.UPDATE, "order/status", currentOrder);
+				//check if order was changed.
+				if(order.get(0).getIdOrderStatus() == 3)
+					System.out.println("Order updated successfully!");
+				else System.out.println("Error updating order!");
 	}
 	
 	/**

@@ -10,6 +10,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 import boundary.ServerView;
+import entity.AmountItem;
 import entity.BuildItem;
 import entity.Complaint;
 import entity.Customer;
@@ -294,6 +295,30 @@ public class DBController {
 		return items;
 	}
 
+	public static ArrayList<AmountItem> getAmountOfEveryItem(String branchID, String month, String year){
+		ArrayList<AmountItem> amounts = new ArrayList<>();
+		ResultSet rs;
+		try {
+			rs = statement.executeQuery("SELECT I.name , sum(OI.amount) as amount"+
+										"FROM order_item OI , item I"+
+										"WHERE I.id_item = OI.id_item AND OI.id_order IN ("+
+										"	SELECT id_order"+
+										"	FROM assignment3.order O"+
+										"	WHERE id_store ="+branchID+"AND (Month(O.date_order)) ="+month+"AND (Year(O.date_order)) ="+year+
+										")"+
+								        "GROUP BY name");
+			rs.beforeFirst(); // ---move back to first row
+			while (rs.next()) {
+				amounts.add(new AmountItem(
+						rs.getString("name"),
+						rs.getInt("amount")));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return amounts;
+}
+	
 	public static ArrayList<BuildItem> getBuildItemsAll() {
 		ArrayList<BuildItem> buildItems = new ArrayList<>();
 		try {

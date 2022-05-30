@@ -264,6 +264,8 @@ public class ServerController extends ObservableServer {
 				clMsg.setContent(DBController.getItemsAll());
 			} else if (request[1].equals("by")) {
 				clMsg.setContent(DBController.getItemsBy(request[2], request[3]));
+			} else if(request[1].equals("amount")) {
+				clMsg.setContent(DBController.getAmountOfEveryItem(request[2], request[3], request[4]));
 			}
 		} else if (request[0].equals("build_item")) {
 			if(request[1].equals("all")) {

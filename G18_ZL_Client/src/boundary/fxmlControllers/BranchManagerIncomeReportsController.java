@@ -25,7 +25,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.text.Text;
 
@@ -50,6 +49,18 @@ public class BranchManagerIncomeReportsController implements Initializable {
     /* ------------------------------------------------ */
 	
 	@FXML
+    private Text averageText;
+	
+	@FXML
+    private Text maxText;
+
+    @FXML
+    private Text minText;
+    
+    @FXML
+    private Text totalIncomeText;
+	
+	@FXML
     private TableView<Receipt> reportTableView;
 	
     @FXML
@@ -69,9 +80,6 @@ public class BranchManagerIncomeReportsController implements Initializable {
 
     @FXML
     private Text reportMonthText;
-
-    @FXML
-    private TextField totalIncomeTextField;
 
     @FXML
     private Button viewReportButton;
@@ -104,6 +112,9 @@ public class BranchManagerIncomeReportsController implements Initializable {
     /* To save the overall income of the selected month */
     private double overallIncomeThisMonth;
     
+    /* to save the values that will be set in Text */
+    private double max,min,avg;
+    
     /* the selected month */
     private String month;
     
@@ -126,25 +137,10 @@ public class BranchManagerIncomeReportsController implements Initializable {
     	initHelpVariables();
 		setBranchID();
 		initMonthsListView();
+		initTableCols();
 		setActionOnListView();
 		
 	}
-    
-    
-    /* ------------------------------------------------------------------- */
-    // TO GET AN ARRAYLIST<INTEGER> OF THE DAILY INCOME OF THIS BRANCH IN THE SELECTED MONTH
-    // order/report/sum/income/branchID/month/year
-//    SELECT day(O.date_order) as day , sum(O.price_order) as income 
-//    FROM assignment3.order O 
-//    WHERE O.id_store = 2 AND Month(O.date_order) = 5 AND Year(O.date_order) = 2022
-//    GROUP BY Day(O.date_order)
-//    ORDER BY day
-    
-    // TO GET AN ARRAYLIST<reportTable> (NAME , DATE , INCOME) OF THE CURRENT BRANCH IN THE SELECTED MONTH
-    // order/report/incomebycustomer/branchID/month/year
-//    SELECT C.name_customer as name , O.date_order as date , O.price_order as income
-//    FROM assignment3.order O , assignment3.customer C
-//    WHERE C.id_customer = O.id_customer AND O.id_store = 2 AND Month(O.date_order) = 5 AND Year(O.date_order) = 2022
     
     /* ------------------------------------------------ */
     /*               \/ Action Methods \/               */
@@ -157,7 +153,7 @@ public class BranchManagerIncomeReportsController implements Initializable {
 		saveDate();
 		this.viewReportButton.setDisable(false);
 		getDataAfterMonthIsChosen();
-		calculateOverallOfTheMonth();
+		calculateTextValues();
 		initLineChartVars();
 	}
 	
@@ -170,7 +166,10 @@ public class BranchManagerIncomeReportsController implements Initializable {
 		reportMonthText.setText("Report of "+month+"-"+year);
 		reportLineChart.setTitle("Daily Incomes Of "+month+"-"+year);
 		reportLineChart.getData().add(series);
-		totalIncomeTextField.setText(overallIncomeThisMonth+"");
+		totalIncomeText.setText(overallIncomeThisMonth+"");
+		averageText.setText(avg+"");
+		minText.setText(min+"");
+		maxText.setText(max+"");
 		fillReceiptsTable();
 	}
     
@@ -178,13 +177,20 @@ public class BranchManagerIncomeReportsController implements Initializable {
     /*                 \/ Help Methods \/               */
     /* ------------------------------------------------ */
 	
+	
+	/**
+	 * To initialize the table columns.
+	 */
+	private void initTableCols() {
+		nameTableCol.setCellValueFactory(new PropertyValueFactory<Receipt,String>("name"));
+		dateTableCol.setCellValueFactory(new PropertyValueFactory<Receipt,String>("date"));
+		incomeTableCol.setCellValueFactory(new PropertyValueFactory<Receipt,Double>("income"));
+	}
+	
 	/**
 	 * Method to set the values in the table
 	 */
 	private void fillReceiptsTable() {
-		nameTableCol.setCellValueFactory(new PropertyValueFactory<Receipt,String>("name"));
-		dateTableCol.setCellValueFactory(new PropertyValueFactory<Receipt,String>("date"));
-		incomeTableCol.setCellValueFactory(new PropertyValueFactory<Receipt,Double>("income"));
 		ObservableList<Receipt> ol = FXCollections.observableArrayList(receiptsOfTheMonth);
 		reportTableView.setItems(ol);
 	}
@@ -241,13 +247,21 @@ public class BranchManagerIncomeReportsController implements Initializable {
 	}
 	
 	/**
-	 * To calculate the overall income value of the selected month of this branch
+	 * To calculate the values of the texts in report.
 	 */
-	public void calculateOverallOfTheMonth() {
+	public void calculateTextValues() {
 		this.overallIncomeThisMonth = 0;
-		for(DailyIncome di : dailyIncomesOfMonth) {
-			this.overallIncomeThisMonth += di.getIncome();
+		this.max = incomesOfMonth.get(0);
+		this.min = incomesOfMonth.get(0);
+		for(Double d : incomesOfMonth) {
+			this.overallIncomeThisMonth += d;
+			if(d > max)
+				max = d;
+			if(d < min)
+				min = d;
 		}
+		this.avg = this.overallIncomeThisMonth/incomesOfMonth.size();
+		
 	}
 	
 	/**

@@ -5,21 +5,24 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import control.MainController;
-import entity.Order;
+import entity.AmountItem;
 import entity.Store;
 import entity.MyMessage.MessageType;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.chart.BarChart;
+import javafx.scene.chart.PieChart;
+import javafx.scene.chart.PieChart.Data;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.text.Text;
 
 /* ------------------------------------------------ */
@@ -42,13 +45,13 @@ public class CEOOrderReportsController implements Initializable {
     /* ------------------------------------------------ */
 	
 	@FXML
-    private TableView<?> ReportTableView;
+    private TableView<AmountItem> reportTableView;
 
     @FXML
-    private TableColumn<?, ?> amountSoldTableCol;
+    private TableColumn<AmountItem, Integer> amountSoldTableCol;
 
     @FXML
-    private TableColumn<?, ?> itemNameTableCol;
+    private TableColumn<AmountItem, String> itemNameTableCol;
 
     @FXML
     private ChoiceBox<String> branchsChoiceBox;
@@ -57,13 +60,22 @@ public class CEOOrderReportsController implements Initializable {
     private ListView<String> monthsListView;
 
     @FXML
-    private BarChart<?, ?> reportBarChart;
+    private PieChart reportPieChart;
 
     @FXML
     private Text reportMonthText;
 
     @FXML
-    private TextField totalItemsSoldTextField;
+    private Text totalItemsSoldText;
+    
+    @FXML
+    private Text averageText;
+    
+    @FXML
+    private Text maxText;
+
+    @FXML
+    private Text minText;
 
     @FXML
     private Button viewReportButton;
@@ -71,6 +83,12 @@ public class CEOOrderReportsController implements Initializable {
     /* ------------------------------------------------ */
     /*               \/ Help Variables \/               */
     /* ------------------------------------------------ */
+    
+    /* to save data for the table */
+    private ObservableList<AmountItem> tableData = FXCollections.observableArrayList();
+    
+    /* to save data for the pie chart */
+    private ObservableList<Data> pieChartData = FXCollections.observableArrayList();
     
     /* array of the names of the branches */
     private static ArrayList<String> branchsNames;
@@ -82,13 +100,22 @@ public class CEOOrderReportsController implements Initializable {
     private static int branchID;
     
     /* An ArrayList that contains the orders of the branch in a specific month of the year */
-    private static ArrayList<Order> ordersArray;
+    private static ArrayList<AmountItem> amountOfItems;
     
     /* the selected month */
     private String month;
     
     /* the selected year */
     private String year;
+    
+    /* To save the overall income of the selected month */
+    private double overallSoldItemsThisMonth;
+    
+    /* to save the values that will be set in Text */
+    private double max,min,avg;
+    
+    /* names of the max and min sold items */
+    private String maxI,minI;
     
     /* ------------------------------------------------ */
     /*            \/ initialize function \/             */
@@ -97,6 +124,7 @@ public class CEOOrderReportsController implements Initializable {
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		initBranchesChoiceBox();
+		initTableCols();
 		this.branchsChoiceBox.setOnAction(this::afterBranchSelected);
 		monthsListView.getItems().addAll(monthsYears);
 		setActionOnListView();
@@ -114,7 +142,6 @@ public class CEOOrderReportsController implements Initializable {
 	public void afterBranchSelected(ActionEvent event) {
 		setBranchID();
 		initMonthsListView();
-		
 	}
 	
 	/**
@@ -124,11 +151,38 @@ public class CEOOrderReportsController implements Initializable {
 		saveDate();
 		this.viewReportButton.setDisable(false);
 		getDataAfterMonthIsChosen();
+		initDataForPieChart();
+		initDataForTable();
+	}
+	
+	/**
+	 * When the "View Report" Button is pressed, this method starts,
+	 * it will show all the information (Table, Chart, Texts) on 
+	 * the report screen.
+	 * 
+	 * @param event
+	 */
+	public void viewReportButtonAction(ActionEvent event) {
+		reportMonthText.setText(month+"-"+year+" Report");
+		reportTableView.setItems(tableData);
+		reportPieChart.setData(pieChartData);
+		this.totalItemsSoldText.setText(overallSoldItemsThisMonth+"");
+		this.averageText.setText(avg+"");
+		this.maxText.setText(max+" ("+maxI+")");
+		this.minText.setText(min+" ("+minI+")");
 	}
 	
 	/* ------------------------------------------------ */
     /*                 \/ Help Methods \/               */
     /* ------------------------------------------------ */
+	
+	/**
+	 * To initialize the table columns.
+	 */
+	private void initTableCols() {
+		itemNameTableCol.setCellValueFactory(new PropertyValueFactory<AmountItem,String>("name"));
+		amountSoldTableCol.setCellValueFactory(new PropertyValueFactory<AmountItem,Integer>("amount"));
+	}
 	
 	/**
 	 * Method to initialize the choiceBox of the branches
@@ -184,7 +238,7 @@ public class CEOOrderReportsController implements Initializable {
 	 */
 	@SuppressWarnings("unchecked")
 	private void getDataAfterMonthIsChosen() {
-		ordersArray = (ArrayList<Order>)MainController.getMyClient().send(MessageType.GET,"order/byBranchMonth/"+branchID+"/"+month+"/"+year, null);
+		amountOfItems = (ArrayList<AmountItem>)MainController.getMyClient().send(MessageType.GET,"item/amount/"+branchID+"/"+month+"/"+year, null);
 	}
 	
 	/**
@@ -194,6 +248,48 @@ public class CEOOrderReportsController implements Initializable {
 		String[] splitedDate = monthsListView.getSelectionModel().getSelectedItem().split("/");
 		month = splitedDate[0];
 		year = splitedDate[1];
+	}
+	
+	/**
+	 * To calculate the values of the texts in report.
+	 */
+	public void calculateTextValues() {
+		this.overallSoldItemsThisMonth = 0;
+		max = amountOfItems.get(0).getAmount();
+		maxI = amountOfItems.get(0).getName();
+		min = amountOfItems.get(0).getAmount();
+		minI = amountOfItems.get(0).getName();
+		for(AmountItem ai : amountOfItems) {
+			this.overallSoldItemsThisMonth += ai.getAmount();
+			if(ai.getAmount() > max) {
+				max = ai.getAmount();
+				maxI = ai.getName();
+			}
+			if(ai.getAmount() < min) {
+				min = ai.getAmount();
+				minI = ai.getName();
+			}	
+		}
+		this.avg = this.overallSoldItemsThisMonth/amountOfItems.size();	
+	}
+	
+	/**
+	 * Method to initialize date for the PieChart.
+	 */
+	private void initDataForPieChart() {
+		reportPieChart.setLegendVisible(false);
+		pieChartData.clear();
+		for(AmountItem ai : amountOfItems) {
+			pieChartData.add(new PieChart.Data(ai.getName(), ai.getAmount()));
+		}
+	}
+	
+	/**
+	 * To initialize the data for the table.
+	 */
+	private void initDataForTable() {
+		tableData.clear();
+		tableData.addAll(amountOfItems);
 	}
 	
 }

@@ -72,7 +72,16 @@ public class CEOIncomeReportsController implements Initializable {
     private TableView<Receipt> reportTableView;
 
     @FXML
-    private TextField totalIncomeTextField;
+    private Text totalIncomeText;
+    
+    @FXML
+    private Text averageText;
+	
+	@FXML
+    private Text maxText;
+
+    @FXML
+    private Text minText;
 
     @FXML
     private Button viewReportButton;
@@ -105,6 +114,9 @@ public class CEOIncomeReportsController implements Initializable {
     /* To save the overall income of the selected month */
     private double overallIncomeThisMonth;
     
+    /* to save the values that will be set in Text */
+    private double max,min,avg;
+    
     /* the selected month */
     private String month;
     
@@ -125,6 +137,7 @@ public class CEOIncomeReportsController implements Initializable {
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		initHelpVariables();
 		initBranchesChoiceBox();
+		initTableCols();
 		this.branchsChoiceBox.setOnAction(this::afterBranchSelected);
 		monthsListView.getItems().addAll(monthsYears);
 		setActionOnListView();
@@ -156,7 +169,7 @@ public class CEOIncomeReportsController implements Initializable {
 		saveDate();
 		this.viewReportButton.setDisable(false);
 		getDataAfterMonthIsChosen();
-		calculateOverallIncomeOfTheMonth();
+		calculateTextValues();
 		initLineChartVars();
 	}
 	
@@ -169,7 +182,10 @@ public class CEOIncomeReportsController implements Initializable {
 		reportMonthText.setText("Report of "+month+"-"+year);
 		reportLineChart.setTitle("Daily Incomes Of "+month+"-"+year);
 		reportLineChart.getData().add(series);
-		totalIncomeTextField.setText(overallIncomeThisMonth+"");
+		totalIncomeText.setText(overallIncomeThisMonth+"");
+		averageText.setText(avg+"");
+		minText.setText(min+"");
+		maxText.setText(max+"");
 		fillReceiptsTable();
 	}
 	
@@ -178,12 +194,18 @@ public class CEOIncomeReportsController implements Initializable {
     /* ------------------------------------------------ */
 	
 	/**
-	 * Method to set the values in the table
+	 * To initialize the table columns.
 	 */
-	private void fillReceiptsTable() {
+	private void initTableCols() {
 		nameTableCol.setCellValueFactory(new PropertyValueFactory<Receipt,String>("name"));
 		dateTableCol.setCellValueFactory(new PropertyValueFactory<Receipt,String>("date"));
 		incomeTableCol.setCellValueFactory(new PropertyValueFactory<Receipt,Double>("income"));
+	}
+	
+	/**
+	 * Method to set the values in the table
+	 */
+	private void fillReceiptsTable() {
 		ObservableList<Receipt> ol = FXCollections.observableArrayList(receiptsOfTheMonth);
 		reportTableView.setItems(ol);
 	}
@@ -259,11 +281,19 @@ public class CEOIncomeReportsController implements Initializable {
 	/**
 	 * To calculate the overall income value of the selected month of this branch
 	 */
-	public void calculateOverallIncomeOfTheMonth() {
+	public void calculateTextValues() {
 		this.overallIncomeThisMonth = 0;
-		for(DailyIncome di : dailyIncomesOfMonth) {
-			this.overallIncomeThisMonth += di.getIncome();
+		this.max = incomesOfMonth.get(0);
+		this.min = incomesOfMonth.get(0);
+		for(Double d : incomesOfMonth) {
+			this.overallIncomeThisMonth += d;
+			if(d > max)
+				max = d;
+			if(d < min)
+				min = d;
 		}
+		this.avg = this.overallIncomeThisMonth/incomesOfMonth.size();
+		
 	}
 	
 	/**
