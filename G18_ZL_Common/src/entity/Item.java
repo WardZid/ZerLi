@@ -18,6 +18,11 @@ public class Item implements Serializable {
 			super(idItem, idCategory, name, price, sale, color, description, image);
 			this.amount = amount;
 		}
+		public OrderItem(Item item, int amount) {
+			super(item.getIdItem(), item.getIdCategory(), item.getName(), item.getPrice(), item.getSale(),
+					item.getColor(), item.getDescription(), item.getImage());
+			this.amount=amount;
+		}
 
 		/**
 		 * Adds one unit to the order

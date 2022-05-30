@@ -10,15 +10,27 @@ import entity.Item.OrderItem;
 public class BuildItem implements Serializable {
 
 	private static final long serialVersionUID = 4594039631520296979L;
-	
+
 	private int idBuildItem;
 	private int idOrder;
 	private String name;
 	private int amount;
+	private int sale;
 	private String description;
+	
 	private HashMap<Integer, ItemInBuild> itemsInBuild = new HashMap<>();
 
+	//non sql variables
+	private double price;
+	private static int idBuildItemAutomatic = 0;
+
 	// Constructors
+	public BuildItem() {
+		amount = 1;
+		idBuildItemAutomatic++;
+		idOrder = 0;
+	}
+
 	public BuildItem(int idBuildItem, int idOrder) {
 		this.idBuildItem = idBuildItem;
 		this.idOrder = idOrder;
@@ -26,6 +38,7 @@ public class BuildItem implements Serializable {
 
 	/**
 	 * Constructor FOR BUILD_ITEM
+	 * 
 	 * @param idBuildItem
 	 * @param idOrder
 	 * @param amount
@@ -38,19 +51,22 @@ public class BuildItem implements Serializable {
 
 	/**
 	 * Constructor without items in build FOR CATALOG
+	 * 
 	 * @param idBuildItem
 	 * @param idOrder
 	 * @param amount
 	 */
-	public BuildItem(int idBuildItem,String name, int amount,String description) {
+	public BuildItem(int idBuildItem, String name, int amount,int sale, String description) {
 		this.idBuildItem = idBuildItem;
-		this.name=name;
+		this.name = name;
 		this.amount = amount;
-		this.description=description;
+		this.sale=sale;
+		this.description = description;
 	}
 
 	/**
 	 * Full constructor FOR CATALOG
+	 * 
 	 * @param idBuildItem
 	 * @param idOrder
 	 * @param name
@@ -58,11 +74,12 @@ public class BuildItem implements Serializable {
 	 * @param description
 	 * @param items
 	 */
-	public BuildItem(int idBuildItem,String name, int amount,String description, Collection<Item> items) {
+	public BuildItem(int idBuildItem, String name, int amount,int sale, String description, Collection<Item> items) {
 		this.idBuildItem = idBuildItem;
-		this.name=name;
+		this.name = name;
 		this.amount = amount;
-		this.description=description;
+		this.sale=sale;
+		this.description = description;
 		addItemsInBuild(items);
 	}
 
@@ -115,6 +132,17 @@ public class BuildItem implements Serializable {
 		this.itemsInBuild = itemsInBuild;
 	}
 
+	//non sql getters+setters
+	
+	public void setPrice(double price) {
+		this.price=price;
+	}
+	
+	public double getPrice() {
+		return price;
+	}
+	
+
 	@Override
 	public String toString() {
 		return "BuildItem [idBuildItem=" + idBuildItem + ", idOrder=" + idOrder + ", name=" + name + ", amount="
@@ -138,28 +166,28 @@ public class BuildItem implements Serializable {
 	 * @return true if successfully added
 	 */
 	public boolean addItem(Item item) {
-		if(item instanceof OrderItem)
+		if (item instanceof OrderItem)
 			return false;
-		ItemInBuild itemToAdd=item.new ItemInBuild(item);//************************************SUS
-		if(itemsInBuild.containsKey(itemToAdd.getIdItem()))
+		ItemInBuild itemToAdd = item.new ItemInBuild(item);// ************************************SUS
+		if (itemsInBuild.containsKey(itemToAdd.getIdItem()))
 			itemsInBuild.get(itemToAdd.getIdItem()).addAmount(itemToAdd.getAmount());
-		else 
+		else
 			itemsInBuild.put(itemToAdd.getIdItem(), itemToAdd);
 		return true;
 	}
-	
+
 	/**
 	 * 
 	 * @param item
 	 * @return true if successfully added
 	 */
 	public boolean addItem(Item item, int amountInBuild) {
-		if(item instanceof OrderItem)
+		if (item instanceof OrderItem)
 			return false;
-		ItemInBuild itemToAdd=item.new ItemInBuild(item,amountInBuild);//************************************SUS
-		if(itemsInBuild.containsKey(itemToAdd.getIdItem()))
+		ItemInBuild itemToAdd = item.new ItemInBuild(item, amountInBuild);// ************************************SUS
+		if (itemsInBuild.containsKey(itemToAdd.getIdItem()))
 			itemsInBuild.get(itemToAdd.getIdItem()).addAmount(itemToAdd.getAmount());
-		else 
+		else
 			itemsInBuild.put(itemToAdd.getIdItem(), itemToAdd);
 		return true;
 	}
@@ -177,4 +205,72 @@ public class BuildItem implements Serializable {
 		}
 	}
 
+	// AMEER
+
+	// add itemInBuild to build item
+	public void addItem(ItemInBuild itemInBuild) {
+
+		int amount = itemInBuild.getAmount();
+		itemsInBuild.get(itemInBuild.getIdItem()).setAmount(amount++);
+		itemInBuild.setAmount(amount++);
+		this.setPrice(this.getPrice() + itemInBuild.getPrice());
+
+	}
+
+	public void deleteItem(ItemInBuild itemInBuild) {
+
+		int amount = itemInBuild.getAmount();
+		if (amount > 1) {
+			// update amount
+			this.getItemsInBuild().get(itemInBuild.getIdItem()).setAmount(amount--);
+			itemInBuild.setAmount(amount--);
+
+		} else {
+			// amount == 1
+			this.getItemsInBuild().remove(itemInBuild.getIdItem());
+
+		}
+
+		// update price
+		this.setPrice(this.getPrice() - itemInBuild.getPrice());
+
+	}
+
+	public boolean DeleteItem(Item item) {
+		if (item instanceof OrderItem)
+			return false;
+		if (itemsInBuild.get(item.getIdItem()) != null)
+			this.setPrice(this.getPrice() - itemsInBuild.get(item.getIdItem()).getAmount() * item.getPrice());
+		itemsInBuild.remove(item.getIdItem());
+		return true;
+	}
+
+	/**
+	 * For each item in the given collection, it checks if it exists in the HashMap,
+	 * and also checks if it is an ItemInBuild or just an item and adds to HashMap
+	 * accordingly
+	 * 
+	 * @param items to be added
+	 */
+
+	public boolean setItem(Item item, int amountInBuild) {
+		int oldAmount;
+		int newAmount = amountInBuild;
+		if (item instanceof OrderItem)
+			return false;
+		ItemInBuild itemToAdd = item.new ItemInBuild(item, amountInBuild);// ******SUS
+		if (itemsInBuild.containsKey(itemToAdd.getIdItem())) {
+
+			oldAmount = itemsInBuild.get(itemToAdd.getIdItem()).getAmount();
+			this.setPrice(this.getPrice() + (newAmount - oldAmount) * item.getPrice());
+
+			itemToAdd.setAmount(amountInBuild);
+			itemsInBuild.get(itemToAdd.getIdItem()).setAmount(itemToAdd.getAmount());
+		} else {
+			this.setPrice(this.getPrice() + item.getPrice() * amountInBuild);
+			itemToAdd.setAmount(amountInBuild);
+			itemsInBuild.put(itemToAdd.getIdItem(), itemToAdd);
+		}
+		return true;
+	}
 }

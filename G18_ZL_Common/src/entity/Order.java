@@ -3,12 +3,15 @@ package entity;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import entity.Item.ItemInBuild;
+import entity.Item.OrderItem;
+
 public class Order implements Serializable, Cloneable {
 
 	private static final long serialVersionUID = -3217273749865937459L;
 
 	public enum OrderStatus {
-		WAITING_APPROVAL, PROCESSING, DELIVERED, CANCELLED, UNAPPROVED,WAITING_CANCELLATION;
+		WAITING_APPROVAL, PROCESSING, DELIVERED, CANCELLED, UNAPPROVED, WAITING_CANCELLATION;
 
 		public static OrderStatus getById(int id) {
 
@@ -33,10 +36,12 @@ public class Order implements Serializable, Cloneable {
 	private String description;
 	private String greetingCard;
 
+	private int ItemInOrder;
+
 	// Products in the order are enetered on request only as to minimize load to the
 	// server
 	private ArrayList<BuildItem> buildItems;
-	private ArrayList<Item> items;
+	private ArrayList<OrderItem> items;
 
 	// main Constructor
 	public Order(int idOrder, int idCustomer, int idStore, int idOrderStatus, double price, String orderDate,
@@ -48,10 +53,137 @@ public class Order implements Serializable, Cloneable {
 		this.price = price;
 		this.orderDate = orderDate;
 		this.deliveryDate = deliveryDate;
-		this.cancelDate=cancelDate;
+		this.cancelDate = cancelDate;
 		this.address = address;
 		this.description = description;
 		this.greetingCard = greetingCard;
+	}
+
+	public Order() {
+		this.ItemInOrder = 0;
+		items = new ArrayList<OrderItem>();
+	}
+
+	// add item to order
+
+	public void addItemtoOrder(Item item) {
+		if (item == null)
+			System.out.println("item is null when i add");
+
+		int flagNotfoundItem = 0;
+		if (items.size() == 0) {
+			OrderItem itemToAdd = item.new OrderItem(item, 1);
+			items.add(itemToAdd);
+			System.out.println("Add to array " + itemToAdd);
+			flagNotfoundItem = 1;
+		} else
+			for (OrderItem orderItem : items) {
+				if (orderItem.getIdItem() == item.getIdItem()) {
+					orderItem.addOne();
+					System.out.println("update Amount" + orderItem);
+					flagNotfoundItem = 1;
+				}
+			}
+
+		if (flagNotfoundItem == 0) {
+
+			OrderItem itemToAdd = item.new OrderItem(item, 1);
+			items.add(itemToAdd);
+			System.out.println("Add to array " + itemToAdd);
+		}
+
+		ItemInOrder++;
+		price += item.getPrice();
+
+	}
+
+	public void DeleteItemtoOrder(OrderItem item) {
+
+		int amount;
+		ItemInOrder--;
+		amount = item.getAmount();
+		for (OrderItem orderItem : items) {
+			if (orderItem.getIdItem() == item.getIdItem()) {
+				if (amount > 1) {
+					item.setAmount(amount--);
+					orderItem.setAmount(amount--);
+					setPrice(getPrice() - item.getPrice());
+					return;
+				} else {
+					break;
+				}
+
+			}
+
+		}
+		if (item.getAmount() == 1) {
+			items.remove(item);
+
+			setPrice(getPrice() - item.getPrice());
+		}
+
+	}
+
+	// add build item to cart
+
+	// add item to Order (to Cart)
+	public void addItemtoOrder(BuildItem buildItem) {
+		int Amount = 0;
+		for (BuildItem searchItem : buildItems) {
+			Amount = buildItem.getAmount();
+			System.out.println("amout " + Amount);
+			if (searchItem.getIdBuildItem() == buildItem.getIdBuildItem()) {
+				buildItem.setAmount(Amount++);
+				searchItem.setAmount(Amount++);
+				System.out.println("new amount " + searchItem.getAmount());
+				setPrice(getPrice() + buildItem.getPrice());
+				buildItem.setPrice(buildItem.getPrice());
+				return;
+			}
+		}
+
+	}
+
+	// create build item and add it to arr-> build item-view
+	public void addIBuildtemtoOrder(BuildItem buildItem) {
+		buildItems.add(buildItem);
+		ItemInOrder++;
+		price += buildItem.getPrice();
+
+	}
+
+	public void DeleteItemtoOrder(BuildItem buildItem) {
+		ItemInOrder--;
+
+		if (buildItems.size() == 0) {
+			return;
+		}
+		if (buildItems == null) {
+			return;
+		}
+		if (buildItem == null) {
+			return;
+		}
+		int Amount = buildItem.getAmount();
+		for (BuildItem searchItem : buildItems) {
+			if (searchItem.getIdBuildItem() == buildItem.getIdBuildItem()) {
+
+				if (Amount > 1) {
+					buildItem.setAmount(Amount--);
+					searchItem.setAmount(Amount--);
+					setPrice(getPrice() - buildItem.getPrice());
+
+					return;
+				} else {
+					break;
+
+				}
+
+			}
+		}
+		setPrice(getPrice() - buildItem.getPrice());
+		buildItems.remove(buildItem);
+
 	}
 
 	// Getters and Setters
@@ -151,11 +283,11 @@ public class Order implements Serializable, Cloneable {
 		this.buildItems = buildItems;
 	}
 
-	public ArrayList<Item> getItems() {
+	public ArrayList<OrderItem> getItems() {
 		return items;
 	}
 
-	public void setItems(ArrayList<Item> items) {
+	public void setItems(ArrayList<OrderItem> items) {
 		this.items = items;
 	}
 
@@ -174,6 +306,26 @@ public class Order implements Serializable, Cloneable {
 
 	public void setOrderStatus(OrderStatus status) {
 		idOrderStatus = status.ordinal();
+	}
+
+	public void addPrice(double itemPrice, BuildItem buildItem) {
+
+		this.setPrice(this.getPrice() + (itemPrice * buildItem.getAmount()));
+	}
+
+	public void deletePrice(double itemPrice, BuildItem buildItem) {
+
+		this.setPrice(this.getPrice() - (itemPrice * buildItem.getAmount()));
+	}
+
+	public void deleteItem(ItemInBuild itemInBuild) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void deletePrice(double price2, int i) {
+		this.setPrice(this.getPrice() - (price2));
+
 	}
 
 	@Override
