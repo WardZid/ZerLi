@@ -16,6 +16,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
@@ -59,6 +60,27 @@ public class OrderDetailsController implements Initializable {
 	@FXML
 	private TextArea DescribtionArea;
 
+	@FXML
+	private Label noteLable;
+
+	@FXML
+	private Label required1;
+
+	@FXML
+	private Label required2;
+
+	@FXML
+	private Label required3;
+
+	@FXML
+	private Label required4;
+
+	@FXML
+	private Label required5;
+
+	@FXML
+	private Label required6;
+
 	private static ArrayList<String> StoreAddressName = new ArrayList<String>();
 	private static ArrayList<String> houreNum = new ArrayList<String>();
 	private static ArrayList<String> MinNum = new ArrayList<String>();
@@ -66,6 +88,14 @@ public class OrderDetailsController implements Initializable {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+
+		noteLable.setVisible(false);
+		required1.setVisible(false);
+		required2.setVisible(false);
+		required3.setVisible(false);
+		required4.setVisible(false);
+		required5.setVisible(false);
+		required6.setVisible(false);
 
 		shippingVbox.setVisible(false);
 
@@ -103,18 +133,71 @@ public class OrderDetailsController implements Initializable {
 	}
 
 	public void onPaymentPressed() {
+		if (DelevireyDatePicker.getValue() == null || StoreAddressCombo.getValue() == null
+				|| HourCombo.getValue() == null || MinutesCombo.getValue() == null) {
 
-		CartController.getOrderInProcess().setGreetingCard(GreetingArea.getText());
-		CartController.getOrderInProcess().setDeliveryDate(DelevireyDatePicker.getValue().toString());
-		CartController.getOrderInProcess().setIdCustomer(ClientConsoleController.getCustomer().getIdCustomer());
-		CartController.getOrderInProcess().setDescription(DescribtionArea.getText());
-		CartController.getOrderInProcess().setIdOrderStatus(0);
-		CartController.getOrderInProcess().setAddress(AddressText.getText());
-		if (StoreAddressCombo.getValue() != null)
-			CartController.getOrderInProcess().setStore(Store.valueOf(StoreAddressCombo.getValue()));
-		
-		System.out.println(CartController.getOrderInProcess().toString());
+			noteLable.setVisible(true);
+			required1.setVisible(true);
+			required2.setVisible(true);
+			required3.setVisible(true);
+			required4.setVisible(true);
+			required5.setVisible(true);
+			required6.setVisible(true);
+
+		} else {
+			
+			if (AddShippingCheckBox.isSelected() == true) {
+				System.out.println(" print inside"+AddressText.getText() + PhoneText.getText()  + NameReceiverText.getText() +"1" );
+				
+				if (AddressText.getText().trim().isEmpty() || PhoneText.getText().trim().isEmpty()
+						|| NameReceiverText.getText().trim().isEmpty()) {
+					noteLable.setVisible(true);
+					required1.setVisible(true);
+					required2.setVisible(true);
+					required3.setVisible(true);
+					required4.setVisible(true);
+					required5.setVisible(true);
+					required6.setVisible(true);
+						
+					System.out.println("visable true");
+				}
+				 
+			}
+			else {
+			
+				noteLable.setVisible(false);
+				required1.setVisible(false);
+				required2.setVisible(false);
+				required3.setVisible(false);
+				required4.setVisible(false);
+				required5.setVisible(false);
+				required6.setVisible(false);
+				CartController.getOrderInProcess().setGreetingCard(GreetingArea.getText());
+				CartController.getOrderInProcess().setDeliveryDate(DelevireyDatePicker.getValue().toString());
+				CartController.getOrderInProcess().setIdCustomer(ClientConsoleController.getCustomer().getIdCustomer());
+				CartController.getOrderInProcess().setDescription(DescribtionArea.getText());
+				CartController.getOrderInProcess().setIdOrderStatus(0);
+				CartController.getOrderInProcess().setAddress(AddressText.getText());
+				CartController.getOrderInProcess().addPriceForShipping();
+				if (StoreAddressCombo.getValue() != null)
+					CartController.getOrderInProcess().setStore(Store.valueOf(StoreAddressCombo.getValue()));
+
+				System.out.println(CartController.getOrderInProcess().toString());
+				System.out.println("dsfsgdthrjtkyukyioiulkjljmyf");
+			}
+		}
+//		if (AddShippingCheckBox.isSelected() == true) {
+//			if (AddressText.getText() == null || PhoneText.getText() == null
+//					|| NameReceiverText.getText() == null) {
+//				noteLable.setVisible(true);
+//				required1.setVisible(true);
+//				required2.setVisible(true);
+//				required3.setVisible(true);
+//				required4.setVisible(true);
+//				required5.setVisible(true);
+//				required6.setVisible(true);
+//			}
+//		}
 
 	}
-
 }
