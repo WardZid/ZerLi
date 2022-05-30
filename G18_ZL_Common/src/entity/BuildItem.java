@@ -3,6 +3,7 @@ package entity;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 
 import entity.Item.ItemInBuild;
 import entity.Item.OrderItem;
@@ -148,6 +149,31 @@ public class BuildItem implements Serializable {
 		return "BuildItem [idBuildItem=" + idBuildItem + ", idOrder=" + idOrder + ", name=" + name + ", amount="
 				+ amount + ", description=" + description + ", itemsInBuild=" + itemsInBuild + "]";
 	}
+	
+	public String infoString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("idBuildItem=");
+		builder.append(idBuildItem);
+		builder.append("\n idOrder=");
+		builder.append(idOrder);
+		builder.append("\n name=");
+		builder.append(name);
+		builder.append("\n amount=");
+		builder.append(amount);
+		builder.append("\n sale=");
+		builder.append(sale);
+		builder.append("\n description=");
+		builder.append(description);
+		builder.append("\n itemsInBuild=");
+		for (ItemInBuild item : itemsInBuild.values()) {
+			builder.append("\n\t item="+item.getName());
+			builder.append("\n\t\t amount="+item.getAmount());
+		}
+		builder.append("\n price=");
+		builder.append(price);
+		return builder.toString();
+	}
+
 
 	// Instance methods
 	public int addOne() {

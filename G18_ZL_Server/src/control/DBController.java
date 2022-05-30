@@ -15,6 +15,7 @@ import entity.BuildItem;
 import entity.Complaint;
 import entity.Customer;
 import entity.Customer.CustomerStatus;
+import entity.Item.OrderItem;
 import entity.DailyIncome;
 import entity.Item;
 import entity.Order;
@@ -170,7 +171,7 @@ public class DBController {
 		ArrayList<Order> orders = new ArrayList<>();
 		ResultSet rs;
 		try {
-			rs = statement.executeQuery("SELECT * FROM order WHERE " + column + "='" + value + "'");
+			rs = statement.executeQuery("SELECT * FROM assignment3.order WHERE " + column + " = " + value);
 			rs.beforeFirst(); // ---move back to first row
 			while (rs.next()) {
 				orders.add(new Order(rs.getInt("id_order"), rs.getInt("id_customer"), rs.getInt("id_store"),
@@ -185,80 +186,21 @@ public class DBController {
 		return orders;
 	}
 
-	/**
-	 * @param branch_id
-	 * @param month
-	 * @param year
-	 * @return ArrayList of the daily income of a specific store in a month of the
-	 *         year
-	 */
-	public static ArrayList<DailyIncome> getSumOfDailyIncome(String branch_id, String month, String year) {
-		ArrayList<DailyIncome> incomes = new ArrayList<>();
-		ResultSet rs;
+	public static Order getOrderItemsFull(Order o) {
 		try {
-			rs = statement.executeQuery(
-					"SELECT day(O.date_order) as day , sum(O.price_order) as income FROM assignment3.order O WHERE O.id_store ="
-							+ branch_id + "AND Month(O.date_order) = " + month + " AND Year(O.date_order) =" + year
-							+ "GROUP BY Day(O.date_order) ORDER BY day");
+			ArrayList<OrderItem> orderItems=new ArrayList<>();
+			ResultSet rs = statement.executeQuery("SELECT * FROM order_item WHERE id_order="+o.getIdOrder());
 			rs.beforeFirst(); // ---move back to first row
 			while (rs.next()) {
-				incomes.add(new DailyIncome(rs.getInt("day"), rs.getDouble("income")));
+				Item itemToAdd=getItemsBy("id_item", rs.getInt("id_item")+"").get(0);
+				orderItems.add(itemToAdd.new OrderItem(itemToAdd,rs.getInt("amount")));
 			}
-		} catch (SQLException e) {
-			e.printStackTrace();
+			o.addOrderItems(orderItems);
+		} catch (Exception e) {
+			ServerView.printErr(DBController.class, "ERROR -> Unable to fetch all order items");
 		}
-		return incomes;
-	}
-
-	/**
-	 * @param branch_id
-	 * @param month
-	 * @param year
-	 * @return ArrayList of receipts in the chosen month
-	 */
-	public static ArrayList<Receipt> getReceiptsOfMonth(String branch_id, String month, String year) {
-		ArrayList<Receipt> receipts = new ArrayList<>();
-		ResultSet rs;
-		try {
-			rs = statement.executeQuery(
-					"SELECT day(O.date_order) as day , sum(O.price_order) as income FROM assignment3.order O WHERE O.id_store ="
-							+ branch_id + "AND Month(O.date_order) = " + month + " AND Year(O.date_order) =" + year
-							+ "GROUP BY Day(O.date_order) ORDER BY day");
-			rs.beforeFirst(); // ---move back to first row
-			while (rs.next()) {
-				receipts.add(new Receipt(rs.getString("name"), rs.getString("date"), rs.getDouble("income")));
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return receipts;
-	}
-
-	/**
-	 * @param branch
-	 * @param month
-	 * @param year
-	 * @return ArrayList<Order> that contains the orders of a branch in a month of a
-	 *         year.
-	 */
-	public static ArrayList<Order> getOrdersByBranchMonthYear(String branch, String month, String year) {
-		ArrayList<Order> orders = new ArrayList<>();
-		ResultSet rs;
-		try {
-			rs = statement.executeQuery("SELECT * FROM assignment3.order O WHERE id_store = " + branch
-					+ " AND (Month(O.date_order)) = " + month + " AND (Year(O.date_order)) = " + year);
-			rs.beforeFirst(); // ---move back to first row
-			while (rs.next()) {
-				orders.add(new Order(rs.getInt("id_order"), rs.getInt("id_customer"), rs.getInt("id_store"),
-						rs.getInt("id_order_status"), rs.getDouble("price_order"), rs.getString("date_order"),
-						rs.getString("delivery_date_order"), rs.getString("cancel_date_order"),
-						rs.getString("address_order"), rs.getString("greeting_order"),
-						rs.getString("description_order")));
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return orders;
+		o.addBuildItems(getFullBuildItemsBy("id_order", o.getIdOrder()+""));
+		return o;
 	}
 
 	public static ArrayList<Item> getItemsAll() {
@@ -295,46 +237,22 @@ public class DBController {
 		return items;
 	}
 
-	public static ArrayList<String> getCategoryAll(){
+	public static ArrayList<String> getCategoryAll() {
 		ArrayList<String> category = new ArrayList<>();
-		
+
 		try {
 			ResultSet rs = statement.executeQuery("SELECT * FROM category");
 			rs.beforeFirst(); // ---move back to first row
 			while (rs.next()) {
 				category.add(rs.getString("category"));
-			
+
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return category;
 	}
-	
-	public static ArrayList<AmountItem> getAmountOfEveryItem(String branchID, String month, String year){
-		ArrayList<AmountItem> amounts = new ArrayList<>();
-		ResultSet rs;
-		try {
-			rs = statement.executeQuery("SELECT I.name , sum(OI.amount) as amount"+
-										"FROM order_item OI , item I"+
-										"WHERE I.id_item = OI.id_item AND OI.id_order IN ("+
-										"	SELECT id_order"+
-										"	FROM assignment3.order O"+
-										"	WHERE id_store ="+branchID+"AND (Month(O.date_order)) ="+month+"AND (Year(O.date_order)) ="+year+
-										")"+
-								        "GROUP BY name");
-			rs.beforeFirst(); // ---move back to first row
-			while (rs.next()) {
-				amounts.add(new AmountItem(
-						rs.getString("name"),
-						rs.getInt("amount")));
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return amounts;
-}
-	
+
 	public static ArrayList<BuildItem> getBuildItemsAll() {
 		ArrayList<BuildItem> buildItems = new ArrayList<>();
 		try {
@@ -497,6 +415,37 @@ public class DBController {
 
 	}
 
+	public static ArrayList<String> getStoreAll() {
+		ArrayList<String> stores = new ArrayList<>();
+		ResultSet rs;
+		try {
+			rs = statement.executeQuery("SELECT * FROM store");
+			rs.beforeFirst(); // ---move back to first row
+			while (rs.next()) {
+				stores.add(rs.getString("name_store"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return stores;
+	}
+
+	public static ArrayList<Store> getStoreBy(String column, String value) {
+		ArrayList<Store> stores = new ArrayList<>();
+		ResultSet rs;
+		try {
+			rs = statement.executeQuery("SELECT * FROM store WHERE " + column + "='" + value + "'");
+			rs.beforeFirst(); // ---move back to first row
+			while (rs.next()) {
+				stores.add(Store.valueOf(rs.getString("name_store")));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return stores;
+	}
+
+	// Report get queries
 	public static ArrayList<String> getMonthsInBranch(String idStore) {
 		ArrayList<String> monthsYears = new ArrayList<>();
 		try {
@@ -513,34 +462,98 @@ public class DBController {
 		return monthsYears;
 	}
 
-	public static ArrayList<String> getStoreAll() {
-		ArrayList<String> stores = new ArrayList<>();
+	/**
+	 * @param branch_id
+	 * @param month
+	 * @param year
+	 * @return ArrayList of the daily income of a specific store in a month of the
+	 *         year
+	 */
+	public static ArrayList<DailyIncome> getSumOfDailyIncome(String branch_id, String month, String year) {
+		ArrayList<DailyIncome> incomes = new ArrayList<>();
 		ResultSet rs;
 		try {
-			rs = statement.executeQuery("SELECT * FROM store");
+			rs = statement.executeQuery(
+					"SELECT day(O.date_order) as day , sum(O.price_order) as income FROM assignment3.order O WHERE O.id_store ="
+							+ branch_id + "AND Month(O.date_order) = " + month + " AND Year(O.date_order) =" + year
+							+ "GROUP BY Day(O.date_order) ORDER BY day");
 			rs.beforeFirst(); // ---move back to first row
 			while (rs.next()) {
-				stores.add(rs.getString("name_store"));
+				incomes.add(new DailyIncome(rs.getInt("day"), rs.getDouble("income")));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return stores;
+		return incomes;
 	}
-	
-	public static ArrayList<Store> getStoreBy(String column, String value) {
-		ArrayList<Store> stores = new ArrayList<>();
+
+	/**
+	 * @param branch_id
+	 * @param month
+	 * @param year
+	 * @return ArrayList of receipts in the chosen month
+	 */
+	public static ArrayList<Receipt> getReceiptsOfMonth(String branch_id, String month, String year) {
+		ArrayList<Receipt> receipts = new ArrayList<>();
 		ResultSet rs;
 		try {
-			rs = statement.executeQuery("SELECT * FROM store WHERE " + column + "='" + value + "'");
+			rs = statement.executeQuery(
+					"SELECT day(O.date_order) as day , sum(O.price_order) as income FROM assignment3.order O WHERE O.id_store ="
+							+ branch_id + "AND Month(O.date_order) = " + month + " AND Year(O.date_order) =" + year
+							+ "GROUP BY Day(O.date_order) ORDER BY day");
 			rs.beforeFirst(); // ---move back to first row
 			while (rs.next()) {
-				stores.add(Store.valueOf(rs.getString("name_store")));
+				receipts.add(new Receipt(rs.getString("name"), rs.getString("date"), rs.getDouble("income")));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return stores;
+		return receipts;
+	}
+
+	/**
+	 * @param branch
+	 * @param month
+	 * @param year
+	 * @return ArrayList<Order> that contains the orders of a branch in a month of a
+	 *         year.
+	 */
+	public static ArrayList<Order> getOrdersByBranchMonthYear(String branch, String month, String year) {
+		ArrayList<Order> orders = new ArrayList<>();
+		ResultSet rs;
+		try {
+			rs = statement.executeQuery("SELECT * FROM assignment3.order O WHERE id_store = " + branch
+					+ " AND (Month(O.date_order)) = " + month + " AND (Year(O.date_order)) = " + year);
+			rs.beforeFirst(); // ---move back to first row
+			while (rs.next()) {
+				orders.add(new Order(rs.getInt("id_order"), rs.getInt("id_customer"), rs.getInt("id_store"),
+						rs.getInt("id_order_status"), rs.getDouble("price_order"), rs.getString("date_order"),
+						rs.getString("delivery_date_order"), rs.getString("cancel_date_order"),
+						rs.getString("address_order"), rs.getString("greeting_order"),
+						rs.getString("description_order")));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return orders;
+	}
+
+	public static ArrayList<AmountItem> getAmountOfEveryItem(String branchID, String month, String year) {
+		ArrayList<AmountItem> amounts = new ArrayList<>();
+		ResultSet rs;
+		try {
+			rs = statement.executeQuery("SELECT I.name , sum(OI.amount) as amount" + "FROM order_item OI , item I"
+					+ "WHERE I.id_item = OI.id_item AND OI.id_order IN (" + "	SELECT id_order"
+					+ "	FROM assignment3.order O" + "	WHERE id_store =" + branchID + "AND (Month(O.date_order)) ="
+					+ month + "AND (Year(O.date_order)) =" + year + ")" + "GROUP BY name");
+			rs.beforeFirst(); // ---move back to first row
+			while (rs.next()) {
+				amounts.add(new AmountItem(rs.getString("name"), rs.getInt("amount")));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return amounts;
 	}
 
 	// INSERT QUERIES (POST)*******************************************************
@@ -584,20 +597,19 @@ public class DBController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return getComplaintsBy("id_complaint", c.getIdComplaint()+"");
+		return getComplaintsBy("id_complaint", c.getIdComplaint() + "");
 	}
-	
+
 	public static ArrayList<Order> updateOrderStatus(Order o) {
 		try {
-			PreparedStatement ps = conn.prepareStatement(
-					"UPDATE order SET id_order_status=? WHERE id_order=?");
+			PreparedStatement ps = conn.prepareStatement("UPDATE order SET id_order_status=? WHERE id_order=?");
 			ps.setInt(1, o.getIdOrderStatus());
 			ps.setInt(2, o.getIdOrder());
 			ps.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return getOrdersBy("id_order", o.getIdOrder()+"");
+		return getOrdersBy("id_order", o.getIdOrder() + "");
 	}
 
 }

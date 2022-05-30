@@ -81,7 +81,7 @@ public class ServerController extends ObservableServer {
 		} catch (SQLException ex) {
 			throw ex;
 		} catch (Exception ex) {
-			ServerView.printErr(getClass(), "ERROR - Could not listen for clients!\t Cause: "+ex.getMessage());
+			ServerView.printErr(getClass(), "ERROR - Could not listen for clients!\t Cause: " + ex.getMessage());
 
 		}
 	}
@@ -183,7 +183,7 @@ public class ServerController extends ObservableServer {
 			client.sendToClient(clMsg);
 		} catch (IOException e) {
 			sendToAllClients(clMsg);
-		}finally {
+		} finally {
 			ServerView.print(getClass(), "-> " + clMsg + " to " + client);
 		}
 
@@ -217,82 +217,64 @@ public class ServerController extends ObservableServer {
 			if (request[1].equals("user")) {
 				clMsg.setContent(DBController.getUser(user.getUsername(), user.getPassword()));
 
-			}
-			if (request[1].equals("customer")) {
+			} else if (request[1].equals("customer")) {
 				clMsg.setContent(DBController.getCustomerBy("id_user", user.getIdUser() + ""));
 			}
-		}
-
-		else if (request[0].equals("order")) {
-
+		} else if (request[0].equals("order")) {
 			if (request[1].equals("all")) {
 				clMsg.setContent(DBController.getOrdersAll());
-			}
-
-			else if (request[1].equals("by")) {
+			} else if (request[1].equals("by")) {
 				clMsg.setContent(DBController.getOrdersBy(request[2], request[3]));
-			}
-			
-			else if(request[1].equals("byBranchMonth")) {
+			}else if (request[1].equals("fill")) {
+				Order o=(Order)clMsg.getContent();
+				clMsg.setContent(DBController.getOrderItemsFull(o));
+			}else if (request[1].equals("byBranchMonth")) {
 				clMsg.setContent(DBController.getOrdersByBranchMonthYear(request[2], request[3], request[4]));
-			}
-
-			else if (request[1].equals("report")) {
-
+			} else if (request[1].equals("report")) {
 				if (request[2].equals("sale")) {
-
 					if (request[3].equals("months")) {
 						clMsg.setContent(DBController.getMonthsInBranch(request[4]));
 					}
-				}
-				
-				else if(request[2].equals("sum")) {
-					
-					if(request[3].equals("income")) {
-						clMsg.setContent(DBController.getSumOfDailyIncome(request[4],request[5],request[6]));
+				} else if (request[2].equals("sum")) {
+					if (request[3].equals("income")) {
+						clMsg.setContent(DBController.getSumOfDailyIncome(request[4], request[5], request[6]));
 					}
-				}
-				
-				else if(request[2].equals("incomebycustomer")) {
-					clMsg.setContent(DBController.getReceiptsOfMonth(request[3],request[4],request[5]));
+				} else if (request[2].equals("incomebycustomer")) {
+					clMsg.setContent(DBController.getReceiptsOfMonth(request[3], request[4], request[5]));
 				}
 			}
-		}
-
-		else if (request[0].equals("item")) {
+		} else if (request[0].equals("item")) {
 			if (request[1].equals("all")) {
 				clMsg.setContent(DBController.getItemsAll());
 			} else if (request[1].equals("by")) {
 				clMsg.setContent(DBController.getItemsBy(request[2], request[3]));
-			} else if(request[1].equals("amount")) {
+			} else if (request[1].equals("amount")) {
 				clMsg.setContent(DBController.getAmountOfEveryItem(request[2], request[3], request[4]));
 			}
 		} else if (request[0].equals("build_item")) {
-			if(request[1].equals("all")) {
+			if (request[1].equals("all")) {
 				clMsg.setContent(DBController.getBuildItemsAll());
 			} else if (request[1].equals("by")) {
 				clMsg.setContent(DBController.getBuildItemsBy(request[2], request[3]));
 			} else if (request[1].equals("full")) {
-				if(request[2].equals("all")) {
+				if (request[2].equals("all")) {
 					clMsg.setContent(DBController.getFullBuildItemsAll());
-				} else if(request[2].equals("by")) {
+				} else if (request[2].equals("by")) {
 					clMsg.setContent(DBController.getFullBuildItemsBy(request[3], request[4]));
 				}
 			}
 		} else if (request[0].equals("item_in_build")) {
 			clMsg.setContent(DBController.getItemInBuildAll((BuildItem) clMsg.getContent()));
 		} else if (request[0].equals("store")) {
-			if(request[1].equals("all")) {
+			if (request[1].equals("all")) {
 				clMsg.setContent(DBController.getStoreAll());
 			} else if (request[1].equals("by")) {
 				clMsg.setContent(DBController.getStoreBy(request[2], request[3]));
 			}
-		}
-		else if (request[0].equals("category")) {
-			if(request[1].equals("all"))
+		} else if (request[0].equals("category")) {
+			if (request[1].equals("all"))
 				clMsg.setContent(DBController.getCategoryAll());
-		}
-		else if (request[0].equals("customer")) {
+		} else if (request[0].equals("customer")) {
 			if (request[1].equals("all")) {
 				clMsg.setContent(DBController.getCustomerAll());
 			} else if (request[1].equals("by")) {
@@ -319,20 +301,18 @@ public class ServerController extends ObservableServer {
 
 		String[] request = clMsg.getInfo().split("/");
 
-		if(request[0].equals("order")) {
-			Order order=(Order)clMsg.getContent();
-			if(request[1].equals("status")) {
+		if (request[0].equals("order")) {
+			Order order = (Order) clMsg.getContent();
+			if (request[1].equals("status")) {
 				clMsg.setContent(DBController.updateOrderStatus(order));
 			}
-		}
-		else if (request[0].equals("customer")) {
+		} else if (request[0].equals("customer")) {
 			Customer c = (Customer) clMsg.getContent();
 			if (request[1].equals("status")) {
 				clMsg.setContent(DBController.updateCustomerStatusOne(c, CustomerStatus.valueOf(request[2])));
 			}
-		} 
-		else if (request[0].equals("complaint")) {
-			Complaint complaint=(Complaint) clMsg.getContent();
+		} else if (request[0].equals("complaint")) {
+			Complaint complaint = (Complaint) clMsg.getContent();
 			clMsg.setContent(DBController.updateComplaint(complaint));
 		}
 	}

@@ -235,8 +235,26 @@ public class Item implements Serializable {
 	@Override
 	public String toString() {
 		return "Item [idItem=" + idItem + ", Category=(" + idCategory + ") " + getCategory() + ", name=" + name
-				+ ", price=" + price + ", sale=" + sale + ", color=" + color + ", description=" + description
-				+ ", image=" + image + "]";
+				+ ", price=" + price + ", sale=" + sale + ", color=" + color + ", description=" + description + "]";
+	}
+
+	public String infoString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("\n\t idItem=");
+		builder.append(idItem);
+		builder.append("\n\t Category=");
+		builder.append(getCategory());
+		builder.append("\n\t name=");
+		builder.append(name);
+		builder.append("\n\t price=");
+		builder.append(price);
+		builder.append("\n\t sale=");
+		builder.append(sale);
+		builder.append("\n\t color=");
+		builder.append(color);
+		builder.append("\n\t description=");
+		builder.append(description);
+		return builder.toString();
 	}
 
 	@Override

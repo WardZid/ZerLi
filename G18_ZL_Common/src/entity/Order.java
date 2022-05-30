@@ -297,6 +297,15 @@ public class Order implements Serializable, Cloneable {
 		this.items = items;
 	}
 
+	//adding full item arrays
+	
+	public void addOrderItems(ArrayList<OrderItem> orderItems) {
+		this.items.addAll(orderItems);
+	}
+	
+	public void addBuildItems(ArrayList<BuildItem> buildItems) {
+		this.buildItems.addAll(buildItems);
+	}
 	// handling id as enum
 	public Store getStore() {
 		return Store.getById(idStore);
