@@ -13,7 +13,9 @@ public class BuildItem implements Serializable {
 	
 	private int idBuildItem;
 	private int idOrder;
+	private String name;
 	private int amount;
+	private String description;
 	private HashMap<Integer, ItemInBuild> itemsInBuild = new HashMap<>();
 
 	// Constructors
@@ -22,16 +24,45 @@ public class BuildItem implements Serializable {
 		this.idOrder = idOrder;
 	}
 
+	/**
+	 * Constructor FOR BUILD_ITEM
+	 * @param idBuildItem
+	 * @param idOrder
+	 * @param amount
+	 */
 	public BuildItem(int idBuildItem, int idOrder, int amount) {
 		this.idBuildItem = idBuildItem;
 		this.idOrder = idOrder;
 		this.amount = amount;
 	}
 
-	public BuildItem(int idBuildItem, int idOrder, int amount, Collection<Item> items) {
+	/**
+	 * Constructor without items in build FOR CATALOG
+	 * @param idBuildItem
+	 * @param idOrder
+	 * @param amount
+	 */
+	public BuildItem(int idBuildItem,String name, int amount,String description) {
 		this.idBuildItem = idBuildItem;
-		this.idOrder = idOrder;
+		this.name=name;
 		this.amount = amount;
+		this.description=description;
+	}
+
+	/**
+	 * Full constructor FOR CATALOG
+	 * @param idBuildItem
+	 * @param idOrder
+	 * @param name
+	 * @param amount
+	 * @param description
+	 * @param items
+	 */
+	public BuildItem(int idBuildItem,String name, int amount,String description, Collection<Item> items) {
+		this.idBuildItem = idBuildItem;
+		this.name=name;
+		this.amount = amount;
+		this.description=description;
 		addItemsInBuild(items);
 	}
 
@@ -52,6 +83,14 @@ public class BuildItem implements Serializable {
 		this.idOrder = idOrder;
 	}
 
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
 	public int getAmount() {
 		return amount;
 	}
@@ -60,12 +99,26 @@ public class BuildItem implements Serializable {
 		this.amount = amount;
 	}
 
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
 	public HashMap<Integer, ItemInBuild> getItemsInBuild() {
 		return itemsInBuild;
 	}
 
 	public void setItemsInBuild(HashMap<Integer, ItemInBuild> itemsInBuild) {
 		this.itemsInBuild = itemsInBuild;
+	}
+
+	@Override
+	public String toString() {
+		return "BuildItem [idBuildItem=" + idBuildItem + ", idOrder=" + idOrder + ", name=" + name + ", amount="
+				+ amount + ", description=" + description + ", itemsInBuild=" + itemsInBuild + "]";
 	}
 
 	// Instance methods
