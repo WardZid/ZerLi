@@ -118,7 +118,7 @@ public class CustomerComplaintsController implements Initializable {
 	private void initializeComplaintsList() {
 		ArrayList<Complaint> complaintsList =  ComplaintQueryFromDB(MessageType.GET,null);
 		for(int i=0 ; i<complaintsList.size() ; i++)
-			complaints.put(complaintsList.get(i).idComplaint, complaintsList.get(i));
+			complaints.put(complaintsList.get(i).getIdComplaint(), complaintsList.get(i));
 		ComplaintsL.getItems().clear();
 		ComplaintsL.getItems().addAll(complaints.keySet());
 	}
