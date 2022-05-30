@@ -6,57 +6,110 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import boundary.ClientView;
+import boundary.fxmlControllers.ClientConsoleController.Navigation;
 import control.MainController;
 import entity.Item;
+import entity.Item.OrderItem;
 import entity.MyMessage.MessageType;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Region;
 
 public class CatalogController implements Initializable {
 
 	@FXML
 	private GridPane grid;
+	@FXML
+	private ComboBox<String> CategoryComboBox;
+
+	@FXML
+	private Label numberItemInOrder;
 
 	private static ArrayList<Item> items;
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public void initialize(URL location, ResourceBundle resources) {
+	private static ArrayList<String> Category = new ArrayList<String>();
+
+	public void LoadCatalog(String category) throws IOException {
 		int column = 0;
-		int row = 0;
-		 
-       
-		items=(ArrayList<Item>) MainController.getMyClient().send(MessageType.GET, "item/all", null);
-		System.out.println(items.toString());
-		
-		try {
-			for (int i = 0; i < items.size(); i++) {
+		int row = 1;
+		int flagForALlItem = 0;
+		grid.getChildren().clear();
+		for (int i = 0; i < items.size(); i++) {
+			flagForALlItem = 0;
+			if (category.equals("All Items"))
+				flagForALlItem = 1;
+
+			if (flagForALlItem == 1 || category.equals(Category.get(items.get(i).getIdCategory() + 1))) {
 
 				FXMLLoader fXMLLoader = new FXMLLoader(ClientView.class.getResource("fxmls/catalog-item-view.fxml"));
 				Node node = fXMLLoader.load();
-				
-				CatalogItemController catalogItemController = fXMLLoader.getController();
-				catalogItemController.setData(items.get(i));
 
-				grid.add(node, column++, row);
+				CatalogItemController catalogItemController = fXMLLoader.getController();
+				catalogItemController.setData(items.get(i), this);
 
 				if (column == 3) {
 					column = 0;
 					row++;
 				}
 
-				GridPane.setMargin(node, new Insets(10));
+				grid.add(node, column++, row);
+
 			}
+		}
+
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public void initialize(URL location, ResourceBundle resources) {
+		setLabelNumItemInOrderText();
+
+		Category = (ArrayList<String>) MainController.getMyClient().send(MessageType.GET, "category/all", null);
+		Category.add(0, "All Items");
+		ObservableList<String> catagory = FXCollections.observableArrayList();
+		catagory.setAll(Category);
+		CategoryComboBox.setItems(catagory);
+
+		items = (ArrayList<Item>) MainController.getMyClient().send(MessageType.GET, "item/all", null);
+
+		try {
+			LoadCatalog("All Items");
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
+
+	}
+
+	public void onBuildItemPressed() {
+
+		Navigation.navigator("build-ItemsScene-View.fxml");
+	}
+
+	public void GetSelected() {
+		CategoryComboBox.setOnAction(e -> {
+
+			try {
+				LoadCatalog(CategoryComboBox.getValue());
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+
+		});
+	}
+
+	void setLabelNumItemInOrderText() {
+
+		numberItemInOrder.setText(CartController.getOrderInProcess().getItemInOrder() + "");
 	}
 
 }

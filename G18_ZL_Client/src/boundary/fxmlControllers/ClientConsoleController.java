@@ -252,4 +252,33 @@ public class ClientConsoleController implements Initializable {
 
 	}
 
+	public static class Navigation {
+
+		private static ClientConsoleController clientConsoleController;
+		private static Node currentNode;
+
+		public static ClientConsoleController getClientConsoleController() {
+			return clientConsoleController;
+		}
+
+
+		public static void setClientConsoleController(ClientConsoleController clientConsoleController1) {
+			 clientConsoleController = clientConsoleController1;
+			
+		}
+		public static void navigator(String fxml) {
+
+			try {
+				currentNode = FXMLLoader.load(ClientView.class.getResource("fxmls/" + fxml));
+				if(clientConsoleController==null)
+					System.out.println("clientConsoleController is null");
+
+				clientConsoleController.mainSP.getChildren().clear();
+				clientConsoleController.mainSP.getChildren().add(currentNode);
+			} catch (IOException ex) {
+				ex.printStackTrace();
+			}
+
+		}
+	}
 }

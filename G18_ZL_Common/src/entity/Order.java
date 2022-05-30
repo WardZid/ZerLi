@@ -37,6 +37,10 @@ public class Order implements Serializable, Cloneable {
 	private String greetingCard;
 
 	private int ItemInOrder;
+	
+	public int getItemInOrder() {
+		return ItemInOrder;
+	}
 
 	// Products in the order are enetered on request only as to minimize load to the
 	// server

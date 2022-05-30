@@ -2,8 +2,9 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
-<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -12,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<StackPane prefWidth="250.0" style="-fx-background-color: white; -fx-background-radius: 15;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="boundary.fxmlControllers.CatalogItemController">
+<StackPane prefWidth="250.0" style="-fx-background-color: white; -fx-background-radius: 15;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="boundary.fxmlControllers.BuildItemController">
    <children>
       <VBox alignment="CENTER" spacing="5.0">
          <children>
@@ -29,21 +30,19 @@
                   <Image url="@../media/WhatsApp_Image_2022-04-28_at_11.05.13_PM-removebg-preview.png" />
                </image>
             </ImageView>
-            <Label fx:id="pricelabel" alignment="CENTER" text="\$$$" textFill="#0c0e96">
+             <CheckBox fx:id="chooceItemChecBox" mnemonicParsing="false" onAction="#change" text="chooceItemChecBox" >
                <font>
                   <Font name="System Bold Italic" size="15.0" />
                </font>
-            </Label>
-            <HBox alignment="CENTER">
+            </CheckBox>
+            <HBox alignment="CENTER" spacing="10.0">
                <children>
-                  <Button fx:id="AddToCartButton" mnemonicParsing="false" style="-fx-background-color: #1de9b6;" text="Add To Cart" textFill="#0c0e96" onMousePressed="#onPressedAddItem">
+                  <Label text="quantity:" textFill="#0c0e96">
                      <font>
                         <Font name="System Bold Italic" size="15.0" />
                      </font>
-                     <HBox.margin>
-                        <Insets left="5.0" />
-                     </HBox.margin>
-                  </Button>
+                  </Label>
+                  <TextField fx:id="quantityTextField" disable="true"  />
                </children>
                <VBox.margin>
                   <Insets />
