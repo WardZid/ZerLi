@@ -61,12 +61,12 @@ public class ClientConsoleController implements Initializable {
 
 	@FXML
 	private VBox menuVB;
-	
-	//Current page
+
+	// Current page
 	private Node currentNode;
 	private static Button pressedBtn;
 
-	// MENU BUTTONS**************
+	// user specific FXML nodes
 
 	// Customer menu
 	private Button cusCatalogBtn;
@@ -82,20 +82,27 @@ public class ClientConsoleController implements Initializable {
 	private Button bmOrdersBtn;
 
 	// CEO MENU
-	
-	//Customer support
-	
+
+	// Store worker
+
+	// delivery worker
+
+	// Customer support
+
 	private Button csComplaintsBtn;
 	private Button csReportsBtn;
 
-	
+	// support specialist
+
+	// catalog manager
+
 	@FXML
 	void onLogOutPressed(MouseEvent event) {
 		user = null;
 		customer = null;
 		ClientView.setUpLogIn();
 	}
-	
+
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 
@@ -104,7 +111,6 @@ public class ClientConsoleController implements Initializable {
 		if (user == null)
 			return;
 
-		
 		consoleLbl.setText(user.getUserType().toString().replace('_', ' ') + " CONSOLE");
 		nameText.setText(user.getUsername());
 
@@ -140,17 +146,17 @@ public class ClientConsoleController implements Initializable {
 		}
 	}
 
-	private Button menuButton(String btnName,String fxml) {
-		Button btn=new Button(btnName);
+	private Button menuButton(String btnName, String fxml) {
+		Button btn = new Button(btnName);
 		btn.setMaxWidth(Double.MAX_VALUE);
 		btn.setOnAction((ActionEvent e) -> {
-			if(pressedBtn.equals(btn))
+			if (pressedBtn.equals(btn))
 				return;
 			pressedBtn.setStyle("-fx-background-color: white");
-			pressedBtn=btn;
+			pressedBtn = btn;
 			btn.setStyle("-fx-background-color: #3AAED8");
 			try {
-				currentNode = FXMLLoader.load(ClientView.class.getResource("fxmls/"+fxml));
+				currentNode = FXMLLoader.load(ClientView.class.getResource("fxmls/" + fxml));
 				mainSP.getChildren().clear();
 				mainSP.getChildren().add(currentNode);
 			} catch (IOException ex) {
@@ -160,20 +166,21 @@ public class ClientConsoleController implements Initializable {
 		menuVB.getChildren().add(btn);
 		return btn;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	private void loadCustomerConsole() {
-		ArrayList<Customer>  c=  (ArrayList<Customer>) MainController.getMyClient().send(MessageType.GET, "login/customer", user);
-		customer=c.get(0);
-		
-		cusCatalogBtn=menuButton("Catalog", "catalog-view.fxml");
-		cusCartBtn=menuButton("Cart", "cart-view.fxml");   
-		cusOrdersBtn=menuButton("Orders", "customer-orders-view.fxml");  
-		cusComplaintsBtn=menuButton("Complaints", "customer-complaints-view.fxml");
-		
+		ArrayList<Customer> c = (ArrayList<Customer>) MainController.getMyClient().send(MessageType.GET,
+				"login/customer", user);
+		customer = c.get(0);
+
+		cusCatalogBtn = menuButton("Catalog", "catalog-view.fxml");
+		cusCartBtn = menuButton("Cart", "cart-view.fxml");
+		cusOrdersBtn = menuButton("Orders", "customer-orders-view.fxml");
+		cusComplaintsBtn = menuButton("Complaints", "customer-complaints-view.fxml");
+
 		cusCatalogBtn.setStyle("-fx-background-color: #3AAED8");
-		pressedBtn=cusCatalogBtn;
-		
+		pressedBtn = cusCatalogBtn;
+
 		try {
 			currentNode = FXMLLoader.load(ClientView.class.getResource("fxmls/catalog-view.fxml"));
 			mainSP.getChildren().clear();
@@ -183,17 +190,17 @@ public class ClientConsoleController implements Initializable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 	}
 
 	private void loadBranchManagerConsole() {
-		bmOrdersBtn=menuButton("Orders", "branch-manager-orders-view.fxml"); 
-		bmCustomersBtn=menuButton("Customers", "branch-manager-customers-view.fxml");
-		bmIReportsBtn=menuButton("Income Reports", "branch-manager-income-reports-view.fxml");
-		bmOReportsBtn=menuButton("Order Reports", "branch-manager-order-reports-view.fxml");
-		
+		bmOrdersBtn = menuButton("Orders", "branch-manager-orders-view.fxml");
+		bmCustomersBtn = menuButton("Customers", "branch-manager-customers-view.fxml");
+		bmIReportsBtn = menuButton("Income Reports", "branch-manager-income-reports-view.fxml");
+		bmOReportsBtn = menuButton("Order Reports", "branch-manager-order-reports-view.fxml");
+
 		bmOrdersBtn.setStyle("-fx-background-color: #3AAED8");
-		pressedBtn=bmOrdersBtn;
+		pressedBtn = bmOrdersBtn;
 		try {
 			currentNode = FXMLLoader.load(ClientView.class.getResource("fxmls/branch-manager-orders-view.fxml"));
 			mainSP.getChildren().clear();
@@ -202,26 +209,32 @@ public class ClientConsoleController implements Initializable {
 			e.printStackTrace();
 		}
 	}
-	
+
 	private void loadCEOConsole() {
-		
+
 	}
-	
+
 	private void loadStoreWorkerConsole() {
-		
+
 	}
-	
+
 	private void loadDeliveryWorkerConsole() {
-		
+		try {
+			currentNode = FXMLLoader.load(ClientView.class.getResource("fxmls/delivery-view.fxml"));
+			mainSP.getChildren().clear();
+			mainSP.getChildren().add(currentNode);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
-	
+
 	private void loadCustomerSupportConsole() {
-		csComplaintsBtn=menuButton("Complaints","customer-support-view.fxml");
-		//csReportsBtn=new Button("Reports");
-		
+		csComplaintsBtn = menuButton("Complaints", "customer-support-view.fxml");
+		// csReportsBtn=new Button("Reports");
+
 		csComplaintsBtn.setStyle("-fx-background-color: #3AAED8");
-		pressedBtn=csComplaintsBtn;
-		
+		pressedBtn = csComplaintsBtn;
+
 		try {
 			currentNode = FXMLLoader.load(ClientView.class.getResource("fxmls/customer-support-view.fxml"));
 			mainSP.getChildren().clear();
@@ -230,13 +243,13 @@ public class ClientConsoleController implements Initializable {
 			e.printStackTrace();
 		}
 	}
-	
+
 	private void loadSupportSpecialistConsole() {
-		
+
 	}
-	
+
 	private void loadCatalogManagerConsole() {
-		
+
 	}
-	
+
 }
