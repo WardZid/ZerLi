@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<StackPane prefHeight="122.0" prefWidth="280.0" style="-fx-background-color: &quot;white&quot;;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="boundary.fxmlControllers.orderItemController">
+   <children>
+      <HBox>
+         <children>
+            <ImageView fitHeight="150.0" fitWidth="116.0" pickOnBounds="true" preserveRatio="true" />
+            <VBox alignment="CENTER" minWidth="118.0" prefHeight="122.0" prefWidth="164.0" spacing="10.0" style="-fx-background-color: &quot;gray&quot;; -fx-border-color: &quot;black&quot;;" HBox.hgrow="ALWAYS">
+               <children>
+                  <Label fx:id="nameOrderLbl" text="name" VBox.vgrow="ALWAYS">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="amountLbl" text="X2">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="priceLbl" text="Label" VBox.vgrow="ALWAYS">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </Label>
+                  <Button fx:id="viewBtn" mnemonicParsing="false" onMousePressed="#onViewCustomItemPressed" text="View" visible="false" />
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+   </children>
+</StackPane>
