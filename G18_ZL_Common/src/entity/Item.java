@@ -54,6 +54,9 @@ public class Item implements Serializable {
 		public String toString() {
 			return "OrderItem [" + super.toString() + ", amount=" + amount + "]";
 		}
+		
+		
+		
 	}
 
 	public class ItemInBuild extends Item {
@@ -156,7 +159,9 @@ public class Item implements Serializable {
 		this.description = description;
 		this.image = image;
 	}
-
+	public void setPriceAfterSale(double sale) {
+		this.setPrice((this.getPrice()-((sale/100)*this.getPrice())));
+		}
 	// Getters and setters
 	public int getIdItem() {
 		return idItem;

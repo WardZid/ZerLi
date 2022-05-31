@@ -47,9 +47,6 @@ public class CustomerComplaintsController implements Initializable {
 	private TextField ComplaintIdT;
 
 	@FXML
-	private Button buttonSendComplaints;
-
-	@FXML
 	private Label customerIdL;
 
 	@FXML
@@ -89,7 +86,6 @@ public class CustomerComplaintsController implements Initializable {
 	private TextField statusT;
 	private int selectedComplaintId;
 	private Complaint selectedComplaint;
-	public static Node finishButton;
 	private HashMap<Integer, Complaint> complaints = new HashMap<>();
 
 	@Override
@@ -123,32 +119,6 @@ public class CustomerComplaintsController implements Initializable {
 		ComplaintsL.getItems().addAll(complaints.keySet());
 	}
 
-	@FXML
-	public void onSend(ActionEvent event) throws IOException {
-		Dialog<ButtonType> dialog = LoadDialogPane();
-		Optional<ButtonType> clickedButton = dialog.showAndWait();
-		if (clickedButton.get() == ButtonType.FINISH) {
-			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
-			LocalDateTime now = LocalDateTime.now();
-			Complaint newComplaint = new Complaint(ClientConsoleController.getCustomer().getIdCustomer(),
-					dtf.format(now), CustomerComplaintSendViewController.getComplaint());
-			ComplaintQueryFromDB(MessageType.POST, newComplaint);
-			ArrayList<Complaint> complaintsList = ComplaintQueryFromDB(MessageType.GET,null);  
-			initializeComplaintsList();
-			dialog.close();
-		} else
-			dialog.close();
-	}
-	private Dialog<ButtonType> LoadDialogPane() throws IOException {
-		FXMLLoader fxmlLoader = new FXMLLoader(
-		ClientView.class.getResource("/boundary/fxmls/customer-complaints-send-view.fxml"));
-		DialogPane pane = fxmlLoader.load();
-		finishButton = pane.lookupButton(ButtonType.FINISH);
-		pane.lookupButton(ButtonType.FINISH).setDisable(true);
-		Dialog<ButtonType> dialog = new Dialog<>();
-		dialog.setDialogPane(pane);
-		return dialog;
-	}
 	private ArrayList<Complaint> ComplaintQueryFromDB(MessageType messageType, Complaint complaint){
 		return (ArrayList<Complaint>) MainController.getMyClient().send(messageType, "complaint/by/id_customer/"+ ClientConsoleController.getCustomer().getIdCustomer(),complaint);
 	}

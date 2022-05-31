@@ -54,8 +54,7 @@ public class MainController {
 	public static String currentTime() {
 		//current time is formatted into an appropriate datetime for mysql
 		SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  //formats date and time to be suitable for sql
-		Date date = new Date(System.currentTimeMillis());  
-		System.out.println("user logged at: "+formatter.format(date)); 
+		Date date = new Date(System.currentTimeMillis());
 		return formatter.format(date);
 	}
 	
