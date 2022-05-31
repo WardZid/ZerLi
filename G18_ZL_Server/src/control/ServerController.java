@@ -301,7 +301,7 @@ public class ServerController extends ObservableServer {
 			DBController.insertComplaint(complaint);
 		}
 		else {
-			ServerView.printErr(getClass(), "Unhandled Get request: " + clMsg.getInfo());
+			ServerView.printErr(getClass(), "Unhandled POST request: " + clMsg.getInfo());
 		}
 
 	}

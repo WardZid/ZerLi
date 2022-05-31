@@ -599,16 +599,15 @@ public class DBController {
 
 	public static void insertComplaint(Complaint c) {
 		try {
-			PreparedStatement ps = conn.prepareStatement("INSERT INTO complaint VALUES(?,?,?,?,?,?)");
+			PreparedStatement ps = conn.prepareStatement("INSERT INTO complaint (`id_customer`, `status_complaint`, `date_complaint`, `complaint`) VALUES(?,?,?,?)");
 			ps.setInt(1, c.getIdCustomer());
 			ps.setString(2, "OPEN");
 			ps.setString(3, c.getDate());
-			ps.setInt(4, 0);
-			ps.setString(5, c.getComplaint());
-			ps.setString(6, "");
+			ps.setString(4, c.getComplaint());
 			ps.executeUpdate();
 			ps.close();
 		} catch (SQLException e) {
+			e.printStackTrace();
 			ServerView.printErr(DBController.class, "Unable to add new complaint: " + c.toString());
 		}
 	}
