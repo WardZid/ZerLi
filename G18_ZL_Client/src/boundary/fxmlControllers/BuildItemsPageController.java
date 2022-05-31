@@ -37,7 +37,7 @@ public class BuildItemsPageController implements Initializable {
 	private static ArrayList<Item> items;
 	private static ArrayList<Item> Checkeditems;
 
-	private int numberOfColumn = 3;
+	private int numberOfColumn = 4;
 	private static BuildItem buildSelected ;
 
 	@SuppressWarnings("unchecked")
