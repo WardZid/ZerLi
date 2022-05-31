@@ -7,11 +7,13 @@ import java.util.ResourceBundle;
 
 import boundary.ClientView;
 import control.MainController;
+import entity.BuildItem;
 import entity.Customer;
 import entity.Item;
 import entity.Order;
 import entity.Store;
 import entity.Item.ItemInBuild;
+import entity.Item.OrderItem;
 import entity.MyMessage.MessageType;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -102,13 +104,26 @@ public class CustomerOrdersController implements Initializable {
 		selectedOrder = (Order) MainController.getMyClient().send(MessageType.GET, "order/fill", selectedOrder);
 		System.out.println(selectedOrder.getItems());
 		
-		
-		for (Item orderItem : selectedOrder.getItems()) {
+		 //load items
+		for (OrderItem orderItem : selectedOrder.getItems()) {
 			FXMLLoader fXMLLoader = new FXMLLoader(ClientView.class.getResource("fxmls/orderItem-view.fxml"));
 			Node node = fXMLLoader.load();
 			
 			orderItemController orderItemController = fXMLLoader.getController();
+			orderItemController.setData(orderItem,null, this);
+			 
+			orderItemVB.getChildren().add(node );
+
+		}
+		
+		// load builditem
+		
+		for (BuildItem buildItem : selectedOrder.getBuildItems()) {
+			FXMLLoader fXMLLoader = new FXMLLoader(ClientView.class.getResource("fxmls/orderItem-view.fxml"));
+			Node node = fXMLLoader.load();
 			
+			orderItemController orderItemController = fXMLLoader.getController();
+		 	orderItemController.setData(null,buildItem, this);
 			 
 			orderItemVB.getChildren().add(node );
 
