@@ -16,9 +16,9 @@
          <children>
             <HBox alignment="CENTER" VBox.vgrow="ALWAYS">
                <children>
-                  <VBox alignment="CENTER" prefWidth="150.0" style="-fx-background-color: white;">
+                  <VBox alignment="CENTER" prefWidth="200.0" spacing="5.0" style="-fx-background-color: white;">
                      <children>
-                        <ImageView fx:id="logoIV" fitHeight="62.8" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="logoIV" fitHeight="84.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
                         <Label fx:id="consoleLbl" alignment="CENTER" maxWidth="1.7976931348623157E308" text="Console Label" textAlignment="CENTER" wrapText="true">
                            <font>
                               <Font name="System Bold Italic" size="12.0" />

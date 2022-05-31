@@ -89,9 +89,6 @@ public class ClientConsoleController implements Initializable {
 
 	// Customer support
 
-	private Button csComplaintsBtn;
-	private Button csReportsBtn;
-
 	// support specialist
 
 	// catalog manager
@@ -140,7 +137,6 @@ public class ClientConsoleController implements Initializable {
 		case CATALOG_MANAGER:
 			loadCatalogManagerConsole();
 			break;
-
 		default:
 			ClientView.printErr(getClass(), "no such user type");
 			break;
@@ -150,12 +146,13 @@ public class ClientConsoleController implements Initializable {
 	private Button menuButton(String btnName, String fxml) {
 		Button btn = new Button(btnName);
 		btn.setMaxWidth(Double.MAX_VALUE);
+		btn.setPrefHeight(30);
 		btn.setOnAction((ActionEvent e) -> {
 			if (pressedBtn.equals(btn))
 				return;
 			pressedBtn.setStyle("-fx-background-color: white");
 			pressedBtn = btn;
-			btn.setStyle("-fx-background-color: #3AAED8");
+			btn.setStyle("-fx-background-color: #BBBBBB");
 			try {
 				currentNode = FXMLLoader.load(ClientView.class.getResource("fxmls/" + fxml));
 				mainSP.getChildren().clear();
@@ -166,6 +163,23 @@ public class ClientConsoleController implements Initializable {
 		});
 		menuVB.getChildren().add(btn);
 		return btn;
+	}
+
+	private void initPage(Button firstBtn, String fxmlPath) {
+		if (firstBtn != null) {
+			cusCatalogBtn.setStyle("-fx-background-color: #BBBBBB");
+			pressedBtn = firstBtn;
+		}
+
+		try {
+			currentNode = FXMLLoader.load(ClientView.class.getResource(fxmlPath));
+			mainSP.getChildren().clear();
+			mainSP.getChildren().add(currentNode);
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@SuppressWarnings("unchecked")
@@ -179,18 +193,7 @@ public class ClientConsoleController implements Initializable {
 		cusOrdersBtn = menuButton("Orders", "customer-orders-view.fxml");
 		cusComplaintsBtn = menuButton("Complaints", "customer-complaints-view.fxml");
 
-		cusCatalogBtn.setStyle("-fx-background-color: #3AAED8");
-		pressedBtn = cusCatalogBtn;
-
-		try {
-			currentNode = FXMLLoader.load(ClientView.class.getResource("fxmls/catalog-view.fxml"));
-			mainSP.getChildren().clear();
-			mainSP.getChildren().add(currentNode);
-
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		initPage(cusCatalogBtn, "fxmls/catalog-view.fxml");
 
 	}
 
@@ -200,15 +203,7 @@ public class ClientConsoleController implements Initializable {
 		bmIReportsBtn = menuButton("Income Reports", "branch-manager-income-reports-view.fxml");
 		bmOReportsBtn = menuButton("Order Reports", "branch-manager-order-reports-view.fxml");
 
-		bmOrdersBtn.setStyle("-fx-background-color: #3AAED8");
-		pressedBtn = bmOrdersBtn;
-		try {
-			currentNode = FXMLLoader.load(ClientView.class.getResource("fxmls/branch-manager-orders-view.fxml"));
-			mainSP.getChildren().clear();
-			mainSP.getChildren().add(currentNode);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		initPage(bmOrdersBtn, "fxmls/branch-manager-orders-view.fxml");
 	}
 
 	private void loadCEOConsole() {
@@ -216,33 +211,15 @@ public class ClientConsoleController implements Initializable {
 	}
 
 	private void loadStoreWorkerConsole() {
-
+		initPage(null, "fxmls/store-worker-survey-view.fxml");
 	}
 
 	private void loadDeliveryWorkerConsole() {
-		try {
-			currentNode = FXMLLoader.load(ClientView.class.getResource("fxmls/delivery-view.fxml"));
-			mainSP.getChildren().clear();
-			mainSP.getChildren().add(currentNode);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		initPage(null, "fxmls/delivery-view.fxml");
 	}
 
 	private void loadCustomerSupportConsole() {
-		csComplaintsBtn = menuButton("Complaints", "customer-support-view.fxml");
-		// csReportsBtn=new Button("Reports");
-
-		csComplaintsBtn.setStyle("-fx-background-color: #3AAED8");
-		pressedBtn = csComplaintsBtn;
-
-		try {
-			currentNode = FXMLLoader.load(ClientView.class.getResource("fxmls/customer-support-view.fxml"));
-			mainSP.getChildren().clear();
-			mainSP.getChildren().add(currentNode);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		initPage(null, "fxmls/customer-support-view.fxml");
 	}
 
 	private void loadSupportSpecialistConsole() {
@@ -262,16 +239,16 @@ public class ClientConsoleController implements Initializable {
 			return clientConsoleController;
 		}
 
-
 		public static void setClientConsoleController(ClientConsoleController clientConsoleController1) {
-			 clientConsoleController = clientConsoleController1;
-			
+			clientConsoleController = clientConsoleController1;
+
 		}
+
 		public static void navigator(String fxml) {
 
 			try {
 				currentNode = FXMLLoader.load(ClientView.class.getResource("fxmls/" + fxml));
-				if(clientConsoleController==null)
+				if (clientConsoleController == null)
 					System.out.println("clientConsoleController is null");
 
 				clientConsoleController.mainSP.getChildren().clear();
