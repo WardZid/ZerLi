@@ -159,7 +159,7 @@ public class OrderDetailsController implements Initializable {
 					required5.setVisible(true);
 					required6.setVisible(true);
 						
-					System.out.println("visable true");
+					 
 				}
 				 
 			}
@@ -186,18 +186,7 @@ public class OrderDetailsController implements Initializable {
 				System.out.println("dsfsgdthrjtkyukyioiulkjljmyf");
 			}
 		}
-//		if (AddShippingCheckBox.isSelected() == true) {
-//			if (AddressText.getText() == null || PhoneText.getText() == null
-//					|| NameReceiverText.getText() == null) {
-//				noteLable.setVisible(true);
-//				required1.setVisible(true);
-//				required2.setVisible(true);
-//				required3.setVisible(true);
-//				required4.setVisible(true);
-//				required5.setVisible(true);
-//				required6.setVisible(true);
-//			}
-//		}
+ 
 
 	}
 }

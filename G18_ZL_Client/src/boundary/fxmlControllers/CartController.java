@@ -174,7 +174,10 @@ public class CartController implements Initializable {
 	}
 
 	public void CheckOutPressed() {
-		Navigation.navigator("Order-Details-view.fxml");
+		if(!(items.isEmpty()) || !(BuildItems.isEmpty())) {
+ 		Navigation.navigator("Order-Details-view.fxml");
+ 		
+		}
 	}
 
 }

@@ -5,50 +5,42 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.effect.DropShadow?>
-<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<StackPane prefWidth="250.0" style="-fx-background-color: white; -fx-background-radius: 15;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="boundary.fxmlControllers.CatalogItemController">
+<StackPane prefWidth="200.0" style="-fx-background-color: white; -fx-background-radius: 15;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="boundary.fxmlControllers.CatalogItemController">
    <children>
       <VBox alignment="CENTER" spacing="5.0">
          <children>
-            <Label fx:id="namelabel" text="Name" textFill="#0c0e96">
-               <font>
-                  <Font name="System Bold Italic" size="15.0" />
-               </font>
-            </Label>
-            <ImageView fitWidth="250.0" pickOnBounds="true" preserveRatio="true">
-               <VBox.margin>
-                  <Insets />
-               </VBox.margin>
-               <image>
-                  <Image url="@../media/WhatsApp_Image_2022-04-28_at_11.05.13_PM-removebg-preview.png" />
-               </image>
-            </ImageView>
-            <Label fx:id="pricelabel" alignment="CENTER" text="\$$$" textFill="#0c0e96">
-               <font>
-                  <Font name="System Bold Italic" size="15.0" />
-               </font>
-            </Label>
-            <HBox alignment="CENTER">
+            <VBox fx:id="catalogItemVbox" alignment="CENTER" onMousePressed="#onItemPressed" spacing="5.0">
                <children>
-                  <Button fx:id="AddToCartButton" mnemonicParsing="false" style="-fx-background-color: #1de9b6;" text="Add To Cart" textFill="#0c0e96" onMousePressed="#onPressedAddItem">
+                  <Label fx:id="namelabel" text="Name" textFill="#0c0e96">
                      <font>
                         <Font name="System Bold Italic" size="15.0" />
                      </font>
-                     <HBox.margin>
-                        <Insets left="5.0" />
-                     </HBox.margin>
-                  </Button>
+                  </Label>
+                  <ImageView fitHeight="150.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                  </ImageView>
+                  <Label fx:id="pricelabel" alignment="CENTER" text="\$$$" textFill="#0c0e96">
+                     <font>
+                        <Font name="System Bold Italic" size="15.0" />
+                     </font>
+                  </Label>
                </children>
-               <VBox.margin>
-                  <Insets />
-               </VBox.margin>
-            </HBox>
+               <padding>
+                  <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+               </padding>
+            </VBox>
+            <Button fx:id="AddToCartButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onMousePressed="#onPressedAddItem" style="-fx-background-color: #1de9b6;" text="Add To Cart" textFill="#0c0e96">
+               <font>
+                  <Font name="System Bold Italic" size="15.0" />
+               </font>
+            </Button>
          </children>
          <StackPane.margin>
             <Insets />

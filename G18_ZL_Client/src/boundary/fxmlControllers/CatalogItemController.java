@@ -11,6 +11,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 
 public class CatalogItemController implements Initializable{
 
@@ -22,6 +23,10 @@ public class CatalogItemController implements Initializable{
 
     @FXML
     private Label pricelabel;
+    
+    @FXML
+    private VBox catalogItemVbox;
+    
     
     CatalogController catalogController;
 
@@ -42,10 +47,17 @@ public class CatalogItemController implements Initializable{
 		 
 		CartController.getOrderInProcess().addItemtoOrder(PressedItem);
 		catalogController.setLabelNumItemInOrderText();
-		//CartController.SetTotalPrice(PressedItem);
+		 
 		
 	 
 
+	}
+	public void onItemPressed() {
+		
+		catalogController.getvboxViewItemDescription().setVisible(true);
+		catalogController.getcatalogvbox().setDisable(true);
+		catalogController.getnameItemLable().setText(PressedItem.getName());
+		catalogController.getdescriptionLable().setText(PressedItem.getDescription());
 	}
 	 
 	

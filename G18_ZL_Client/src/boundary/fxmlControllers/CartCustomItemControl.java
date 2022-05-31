@@ -66,7 +66,7 @@ public class CartCustomItemControl implements Initializable {
 		cartController.getCartItemStackPace().setDisable(true);
 
 		loadCustomItemToVBox();
-	}
+	} 
 
 	public void loadCustomItemToVBox() throws IOException {
 		cartController.getViewItemInBuildVBox().getChildren().clear();
