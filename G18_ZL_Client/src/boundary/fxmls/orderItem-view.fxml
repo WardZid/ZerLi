@@ -10,10 +10,10 @@
 
 <StackPane prefHeight="122.0" prefWidth="280.0" style="-fx-background-color: &quot;white&quot;;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="boundary.fxmlControllers.orderItemController">
    <children>
-      <HBox spacing="40.0">
+      <HBox>
          <children>
-            <ImageView fitHeight="150.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" />
-            <VBox alignment="CENTER" minWidth="118.0" prefHeight="122.0" prefWidth="164.0" spacing="10.0" style="-fx-background-color: &quot;gray&quot;;" HBox.hgrow="ALWAYS">
+            <ImageView fitHeight="150.0" fitWidth="116.0" pickOnBounds="true" preserveRatio="true" />
+            <VBox alignment="CENTER" minWidth="118.0" prefHeight="122.0" prefWidth="164.0" spacing="10.0" style="-fx-background-color: &quot;gray&quot;; -fx-border-color: &quot;black&quot;;" HBox.hgrow="ALWAYS">
                <children>
                   <Label fx:id="nameOrderLbl" text="name" VBox.vgrow="ALWAYS">
                      <font>
@@ -30,7 +30,7 @@
                         <Font size="15.0" />
                      </font>
                   </Label>
-                  <Button fx:id="viewBtn" mnemonicParsing="false" text="View" visible="false" />
+                  <Button fx:id="viewBtn" mnemonicParsing="false" onMousePressed="#onViewCustomItemPressed" text="View" visible="false" />
                </children>
             </VBox>
          </children>

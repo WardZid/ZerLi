@@ -21,9 +21,11 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 public class CustomerOrdersController implements Initializable {
@@ -63,6 +65,18 @@ public class CustomerOrdersController implements Initializable {
 
 	@FXML
 	private ListView<String> ordersLV;
+	
+    @FXML
+    private VBox innerVbox;
+    
+    @FXML
+    private VBox itemsViewVbox;
+    
+    @FXML
+    private HBox  orderPageHBox;
+    
+    @FXML
+    private Button backBtn;
 
 	
 
@@ -183,5 +197,37 @@ public class CustomerOrdersController implements Initializable {
 		grearingTA.clear();
  	 
 	}
+
+	
+
+	public void showInnerVbox() {
+		 
+		orderPageHBox.setDisable(true);
+		innerVbox.setVisible(true);
+	}
+	
+      public void closeInnerVbox() {
+    	  orderPageHBox.setDisable(false);
+		innerVbox.setVisible(false);
+	}
+      
+      public void onbackBtnPressed() {
+    	  
+    	  closeInnerVbox();
+      }
+      
+      public VBox getInnerVbox() {
+  		return innerVbox;
+  	}
+
+	public VBox getItemsViewVbox() {
+		return itemsViewVbox;
+	}
+
+	public void setItemsViewVbox(VBox itemsViewVbox) {
+		this.itemsViewVbox = itemsViewVbox;
+	}
+	 
+      
  
 }
