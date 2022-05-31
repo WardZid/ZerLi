@@ -342,6 +342,10 @@ public class Order implements Serializable, Cloneable {
 		this.setPrice(this.getPrice() - (price2));
 
 	}
+	public void addPriceForShipping( ) {
+		this.setPrice(this.getPrice()+20);
+
+	}
 
 	@Override
 	public String toString() {

@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<StackPane prefHeight="550.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="boundary.fxmlControllers.OrderDetailsController">
+<StackPane prefHeight="550.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="boundary.fxmlControllers.OrderDetailsController">
    <children>
       <VBox alignment="CENTER" StackPane.alignment="CENTER">
          <children>
@@ -32,6 +32,11 @@
                      <children>
                         <HBox spacing="20.0">
                            <children>
+                              <Label fx:id="required1" text="*" textFill="RED">
+                                 <font>
+                                    <Font size="15.0" />
+                                 </font>
+                              </Label>
                               <Label text="Store Address :">
                                  <font>
                                     <Font size="15.0" />
@@ -48,6 +53,11 @@
                         </HBox>
                         <HBox spacing="20.0">
                            <children>
+                              <Label fx:id="required2" text="*" textFill="RED">
+                                 <font>
+                                    <Font size="15.0" />
+                                 </font>
+                              </Label>
                               <Label text="Delivery Date :">
                                  <font>
                                     <Font size="15.0" />
@@ -61,6 +71,11 @@
                         </HBox>
                         <HBox spacing="20.0">
                            <children>
+                              <Label fx:id="required3" text="*" textFill="RED">
+                                 <font>
+                                    <Font size="15.0" />
+                                 </font>
+                              </Label>
                               <Label layoutX="10.0" layoutY="10.0" text="Delivery Time :">
                                  <font>
                                     <Font size="15.0" />
@@ -117,7 +132,7 @@
                         </HBox>
                      </children>
                   </VBox>
-                  <VBox fx:id="shippingVbox" HBox.hgrow="ALWAYS">
+                  <VBox fx:id="shippingVbox" prefHeight="341.0" prefWidth="534.0" HBox.hgrow="ALWAYS">
                      <children>
                         <HBox>
                            <children>
@@ -136,8 +151,13 @@
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                            </padding>
                         </HBox>
-                        <HBox spacing="20.0">
+                        <HBox spacing="10.0">
                            <children>
+                              <Label fx:id="required4" text="*" textFill="RED">
+                                 <font>
+                                    <Font size="15.0" />
+                                 </font>
+                              </Label>
                               <Label text="Name Receiver :">
                                  <font>
                                     <Font size="15.0" />
@@ -149,21 +169,34 @@
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                            </padding>
                         </HBox>
-                        <HBox spacing="65.0">
+                        <HBox spacing="20.0">
                            <children>
+                              <Label fx:id="required5" text="*" textFill="RED">
+                                 <font>
+                                    <Font size="15.0" />
+                                 </font>
+                              </Label>
                               <Label text="Address :">
                                  <font>
                                     <Font size="15.0" />
                                  </font>
                               </Label>
-                              <TextField fx:id="AddressText" />
+                              <TextField fx:id="AddressText">
+                                 <HBox.margin>
+                                    <Insets left="25.0" />
+                                 </HBox.margin></TextField>
                            </children>
                            <padding>
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                            </padding>
                         </HBox>
-                        <HBox spacing="20.0">
+                        <HBox spacing="10.0">
                            <children>
+                              <Label fx:id="required6" text="*" textFill="RED">
+                                 <font>
+                                    <Font size="15.0" />
+                                 </font>
+                              </Label>
                               <Label text="Phone Number :">
                                  <font>
                                     <Font size="15.0" />
@@ -178,6 +211,18 @@
                      </children>
                   </VBox>
                </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Label fx:id="noteLable" text="fill all the required fields in *" textFill="RED">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </Label>
+               </children>
+               <padding>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </padding>
             </HBox>
             <HBox spacing="50.0" VBox.vgrow="ALWAYS">
                <children>
