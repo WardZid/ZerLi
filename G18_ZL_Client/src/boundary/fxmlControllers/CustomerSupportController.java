@@ -1,10 +1,15 @@
 package boundary.fxmlControllers;
 
+import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
+import boundary.ClientView;
 import control.ClientController;
 import control.MainController;
 import entity.Complaint;
@@ -16,8 +21,13 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
@@ -51,6 +61,8 @@ public class CustomerSupportController implements Initializable {
 
 	@FXML
 	private Label dateL;
+	@FXML
+    private Button enterNewComplaintButton;
 
 	@FXML
 	private TextField dateT;
@@ -80,8 +92,10 @@ public class CustomerSupportController implements Initializable {
 	private TextField statusT;
 	@FXML
     private Button refresh;
+	private CustomerComplaintSendViewController CCSV = new CustomerComplaintSendViewController();
 	private int selectedComplaintId;
 	private Complaint selectedComplaint;
+	public static Node finishButton;
 	private static HashMap<Integer, Complaint> ComplaintMap = new HashMap<>();
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
@@ -111,6 +125,7 @@ public class CustomerSupportController implements Initializable {
 			@Override
 			public void changed(ObservableValue<? extends Integer> arg0, Integer arg1, Integer arg2) {
 				try {
+					refundT.setText("");
 					selectedComplaintId = ComplaintL.getSelectionModel().getSelectedItem();
 					selectedComplaint = ComplaintMap.get(selectedComplaintId);
 					setTexts();
@@ -145,6 +160,8 @@ public class CustomerSupportController implements Initializable {
 	}
 
 	public void onSendReply(ActionEvent event) {
+		if(refundT.getText().equals(""))
+			refundT.setText("0");
 		selectedComplaint.setRefund(Integer.parseInt(refundT.getText()));
 		selectedComplaint.setResponse(replyT.getText());
 		MainController.getMyClient().send(MessageType.UPDATE, "complaint",selectedComplaint);
@@ -168,6 +185,35 @@ public class CustomerSupportController implements Initializable {
 	public void onRefresh(ActionEvent event) {
 		ArrayList<Complaint> complaintsList =  ComplaintQueryFromDB(MessageType.GET,null);
 		setComplaintsListView();
+	}
+	@FXML
+	public void onEnter(ActionEvent event) throws IOException {
+		ArrayList<Complaint> arraylist = null;
+		Dialog<ButtonType> dialog = LoadDialogPane();
+		Optional<ButtonType> clickedButton = dialog.showAndWait();
+		if (clickedButton.get() == ButtonType.FINISH) {
+			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+			LocalDateTime now = LocalDateTime.now();
+			Complaint newComplaint = new Complaint(CustomerComplaintSendViewController.getCustomerID(),
+					dtf.format(now), CustomerComplaintSendViewController.getComplaint());
+			ComplaintQueryFromDB(MessageType.POST, newComplaint);
+			initialize(null,null);
+			dialog.close();
+		}
+		else 
+			dialog.close();
+		
+	}
+	private Dialog<ButtonType> LoadDialogPane() throws IOException {
+		FXMLLoader fxmlLoader = new FXMLLoader(
+		ClientView.class.getResource("/boundary/fxmls/customer-complaints-send-view.fxml"));
+		DialogPane pane = fxmlLoader.load();
+		finishButton = pane.lookupButton(ButtonType.FINISH);
+		finishButton.setDisable(true);
+		pane.lookupButton(ButtonType.FINISH).setDisable(true);
+		Dialog<ButtonType> dialog = new Dialog<>();
+		dialog.setDialogPane(pane);
+		return dialog;
 	}
 	
 	private ArrayList<Complaint> ComplaintQueryFromDB(MessageType messageType, Complaint complaint){

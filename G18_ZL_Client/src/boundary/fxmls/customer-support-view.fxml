@@ -18,7 +18,7 @@
    <children>
       <VBox fx:id="vb1" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0">
          <children>
-            <HBox fx:id="hb1" alignment="CENTER_LEFT">
+            <HBox fx:id="hb1" alignment="CENTER_LEFT" spacing="40.0">
                <children>
                   <ListView fx:id="ComplaintL" prefHeight="200.0">
                      <HBox.margin>
@@ -71,6 +71,7 @@
               <buttons>
                   <Button fx:id="refresh" mnemonicParsing="false" onAction="#onRefresh" text="Refresh" />
                   <Button fx:id="sendReplyButton" mnemonicParsing="false" onAction="#onSendReply" style="-fx-background-color: #1de9b6;" text="Send Reply" />
+                  <Button fx:id="enterNewComplaintButton" mnemonicParsing="false" onAction="#onEnter" text="Enter new Complaint" />
               </buttons>
             </ButtonBar>
          </children>
