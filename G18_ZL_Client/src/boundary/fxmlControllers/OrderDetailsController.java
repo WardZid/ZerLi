@@ -80,6 +80,9 @@ public class OrderDetailsController implements Initializable {
 
 	@FXML
 	private Label required6;
+	
+    @FXML
+    private Label required7;
 
 	private static ArrayList<String> StoreAddressName = new ArrayList<String>();
 	private static ArrayList<String> houreNum = new ArrayList<String>();
@@ -96,6 +99,7 @@ public class OrderDetailsController implements Initializable {
 		required4.setVisible(false);
 		required5.setVisible(false);
 		required6.setVisible(false);
+		required7.setVisible(false);
 
 		shippingVbox.setVisible(false);
 
@@ -148,6 +152,7 @@ public class OrderDetailsController implements Initializable {
 			required4.setVisible(true);
 			required5.setVisible(true);
 			required6.setVisible(true);
+			required7.setVisible(true);
 
 		} else {
 
@@ -164,7 +169,7 @@ public class OrderDetailsController implements Initializable {
 					required4.setVisible(true);
 					required5.setVisible(true);
 					required6.setVisible(true);
-
+					required7.setVisible(true);
 				}
 
 			} else {
@@ -176,6 +181,7 @@ public class OrderDetailsController implements Initializable {
 				required4.setVisible(false);
 				required5.setVisible(false);
 				required6.setVisible(false);
+				required7.setVisible(false);
 				CartController.getOrderInProcess().setGreetingCard(GreetingArea.getText());
 				CartController.getOrderInProcess().setDeliveryDate(DelevireyDatePicker.getValue().toString() + " "
 						+ HourCombo.getValue() + ":" + MinutesCombo.getValue() + ":00");

@@ -61,7 +61,7 @@ public class CatalogController implements Initializable {
 			if (category.equals("All Items"))
 				flagForALlItem = 1;
 
-			if (flagForALlItem == 1 || category.equals(Category.get(items.get(i).getIdCategory() + 1))) {
+			if (flagForALlItem == 1 || category.equals(items.get(i).getCategory() )) {
 
 				FXMLLoader fXMLLoader = new FXMLLoader(ClientView.class.getResource("fxmls/catalog-item-view.fxml"));
 				Node node = fXMLLoader.load();

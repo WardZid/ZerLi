@@ -20,10 +20,10 @@
          <children>
             <Label maxWidth="1.7976931348623157E308" text="Order Details">
                <font>
-                  <Font size="36.0" />
+                  <Font size="20.0" />
                </font>
                <padding>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </padding>
             </Label>
             <HBox alignment="CENTER" VBox.vgrow="ALWAYS">
@@ -42,7 +42,10 @@
                                     <Font size="15.0" />
                                  </font>
                               </Label>
-                              <ComboBox fx:id="StoreAddressCombo" prefHeight="26.0" prefWidth="172.0" promptText="Choose Address" />
+                              <ComboBox fx:id="StoreAddressCombo" prefHeight="26.0" prefWidth="172.0" promptText="Choose Address">
+                                 <HBox.margin>
+                                    <Insets left="5.0" />
+                                 </HBox.margin></ComboBox>
                            </children>
                            <VBox.margin>
                               <Insets />
@@ -63,7 +66,10 @@
                                     <Font size="15.0" />
                                  </font>
                               </Label>
-                              <DatePicker fx:id="DelevireyDatePicker" promptText="00/00/0000" />
+                              <DatePicker fx:id="DelevireyDatePicker" promptText="00/00/0000">
+                                 <HBox.margin>
+                                    <Insets left="7.0" />
+                                 </HBox.margin></DatePicker>
                            </children>
                            <padding>
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -81,41 +87,46 @@
                                     <Font size="15.0" />
                                  </font>
                               </Label>
-                              <ComboBox fx:id="HourCombo" promptText="Houre" />
+                              <ComboBox fx:id="HourCombo" promptText="Houre">
+                                 <HBox.margin>
+                                    <Insets left="7.0" />
+                                 </HBox.margin></ComboBox>
                               <ComboBox fx:id="MinutesCombo" promptText="Minutes" />
                            </children>
                            <padding>
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                            </padding>
                         </HBox>
-                        <HBox spacing="37.0">
+                        <HBox spacing="27.0">
                            <children>
                               <Label text="Add Greeting :">
                                  <font>
                                     <Font size="15.0" />
                                  </font>
+                                 <HBox.margin>
+                                    <Insets left="25.0" />
+                                 </HBox.margin>
                               </Label>
-                              <TextArea fx:id="GreetingArea" prefHeight="75.0" prefWidth="240.0">
-                                 <font>
-                                    <Font size="15.0" />
-                                 </font>
-                              </TextArea>
+                              <TextArea fx:id="GreetingArea" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="75.0" prefWidth="240.0" />
                            </children>
                            <padding>
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                            </padding>
                         </HBox>
-                        <HBox prefHeight="98.0" prefWidth="551.0" spacing="20.0">
+                        <HBox prefHeight="98.0" prefWidth="551.0" spacing="15.0">
                            <children>
                               <Label text="Add Describtion :">
                                  <font>
                                     <Font size="15.0" />
                                  </font>
+                                 <HBox.margin>
+                                    <Insets left="25.0" />
+                                 </HBox.margin>
                               </Label>
-                              <TextArea fx:id="DescribtionArea" prefHeight="75.0" prefWidth="240.0" />
+                              <TextArea fx:id="DescribtionArea" maxHeight="-Infinity" prefHeight="75.0" prefWidth="240.0" />
                            </children>
                            <padding>
-                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                            </padding>
                         </HBox>
                         <HBox>
@@ -124,10 +135,13 @@
                                  <font>
                                     <Font size="15.0" />
                                  </font>
+                                 <HBox.margin>
+                                    <Insets left="30.0" />
+                                 </HBox.margin>
                               </CheckBox>
                            </children>
                            <padding>
-                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                            </padding>
                         </HBox>
                      </children>
@@ -212,7 +226,40 @@
                   </VBox>
                </children>
             </HBox>
-            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+            <VBox prefHeight="61.0" prefWidth="850.0" spacing="7.0" VBox.vgrow="ALWAYS">
+               <children>
+                  <Label text="Enter Payment Details">
+                     <font>
+                        <Font size="17.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
+                  </Label>
+                  <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+                     <children>
+                        <Label fx:id="required7" text="*" textFill="RED">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Label>
+                        <Label text="Credit Card :">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Label>
+                        <TextField />
+                     </children>
+                  </HBox>
+               </children>
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+            </VBox>
+            <HBox alignment="CENTER">
                <children>
                   <Label fx:id="noteLable" text="fill all the required fields in *" textFill="RED">
                      <font>
@@ -221,7 +268,7 @@
                   </Label>
                </children>
                <padding>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </padding>
             </HBox>
             <HBox spacing="50.0" VBox.vgrow="ALWAYS">
@@ -252,7 +299,7 @@
                   </HBox>
                </children>
                <padding>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </padding>
             </HBox>
          </children>
