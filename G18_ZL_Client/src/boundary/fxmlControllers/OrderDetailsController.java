@@ -173,7 +173,7 @@ public class OrderDetailsController implements Initializable {
 				required5.setVisible(false);
 				required6.setVisible(false);
 				CartController.getOrderInProcess().setGreetingCard(GreetingArea.getText());
-				CartController.getOrderInProcess().setDeliveryDate(DelevireyDatePicker.getValue().toString());
+				CartController.getOrderInProcess().setDeliveryDate(DelevireyDatePicker.getValue().toString()+" "+HourCombo.getValue()+":"+MinutesCombo.getValue()+":00");
 				CartController.getOrderInProcess().setIdCustomer(ClientConsoleController.getCustomer().getIdCustomer());
 				CartController.getOrderInProcess().setDescription(DescribtionArea.getText());
 				CartController.getOrderInProcess().setIdOrderStatus(0);
@@ -183,7 +183,7 @@ public class OrderDetailsController implements Initializable {
 					CartController.getOrderInProcess().setStore(Store.valueOf(StoreAddressCombo.getValue()));
 
 				System.out.println(CartController.getOrderInProcess().toString());
-				System.out.println("dsfsgdthrjtkyukyioiulkjljmyf");
+				System.out.println(DelevireyDatePicker.getValue().toString()+" "+HourCombo.getValue()+":"+MinutesCombo.getValue()+":00");
 			}
 		}
  
