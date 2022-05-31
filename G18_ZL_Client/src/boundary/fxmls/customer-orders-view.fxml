@@ -95,11 +95,7 @@
                         <Label text="Item Summary" />
                         <ScrollPane prefHeight="447.0" prefWidth="298.0">
                            <content>
-                              <GridPane prefHeight="30.0" prefWidth="330.0">
-                                <rowConstraints>
-                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                </rowConstraints>
-                              </GridPane>
+                              <VBox fx:id="orderItemVB" prefHeight="12.0" prefWidth="14.0" />
                            </content>
                         </ScrollPane>
                      </children>

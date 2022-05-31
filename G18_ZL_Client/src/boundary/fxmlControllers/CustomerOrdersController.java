@@ -16,6 +16,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.VBox;
 
 public class CustomerOrdersController implements Initializable {
 
@@ -48,6 +49,8 @@ public class CustomerOrdersController implements Initializable {
 	@FXML
 	private TextArea grearingTA;
 
+    @FXML
+    private VBox orderItemVB;
 	
 
 	@FXML
@@ -70,14 +73,21 @@ public class CustomerOrdersController implements Initializable {
 				
 				
 				System.out.println("oldValue "+oldValue+" newValue "+newValue);
-  				int indexorder = (Integer.parseInt(newValue));
-  				previewOrder(orders.get(--indexorder));
+  				int indexorder = (Integer.parseInt(newValue))-1;
+  				selectedOrder=orders.get(indexorder);
+  				previewOrder( );
+  				loadItemToVBox( );
  
 			}
 		});
 
 	}
 	
+	private void loadItemToVBox() {
+		 
+		
+	}
+
 	private void loadOrders( ) {
 		int numberOrder=1;
 		orders = (ArrayList<Order>) MainController.getMyClient().send(MessageType.GET, "order/by/id_customer/"+ClientConsoleController.getCustomer().getIdCustomer(),null);
@@ -90,8 +100,8 @@ public class CustomerOrdersController implements Initializable {
 	}
 	
 	
-	private void previewOrder(Order o) {
-		selectedOrder = o;
+	private void previewOrder( ) {
+		 
 
 		// fill fields
 		orderIdTF.setText(selectedOrder.getIdOrder() + "");
@@ -120,15 +130,16 @@ public class CustomerOrdersController implements Initializable {
 		ordersLV.getItems().clear();
 		selectedOrder = null;
 
-		orderIdTF.clear();
-		 
+		orderIdTF.clear(); 
 		orderDateTF.clear();
 		deliveryTF.clear();
 		addressTF.clear();
-		 
- 
-
-		 
+		PriceTF.clear();
+		orderStatusTF.clear();
+		storeTF.clear();
+		descriptionTA.clear();
+		grearingTA.clear();
+ 	 
 	}
  
 }
