@@ -1,8 +1,127 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
 
-
-<StackPane prefHeight="550.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="boundary.fxmlControllers.CustomerOrdersController">
-	<!-- TODO Add Nodes -->
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="boundary.fxmlControllers.DeliveryController">
+   <children>
+      <HBox alignment="CENTER" spacing="15.0">
+         <children>
+            <VBox alignment="CENTER" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="200.0" spacing="15.0">
+               <children>
+                  <Label text="Orders" />
+                  <ListView fx:id="ordersLV" prefWidth="100.0" VBox.vgrow="ALWAYS" />
+                  <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" style="-fx-background-color: #ff5000;" text="Cancel Order" />
+               </children>
+            </VBox>
+            <VBox alignment="CENTER_LEFT" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="300.0" spacing="15.0">
+               <children>
+                  <GridPane alignment="CENTER" hgap="2.0" style="-fx-background-color: white; -fx-border-radius: 5; -fx-background-radius: 5;" vgap="2.0">
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints minHeight="20.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="20.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="20.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="20.0" vgrow="SOMETIMES" />
+                        <RowConstraints fillHeight="false" minHeight="20.0" vgrow="SOMETIMES" />
+                        <RowConstraints fillHeight="false" minHeight="20.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints fillHeight="false" minHeight="20.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints fillHeight="false" minHeight="20.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                     <children>
+                        <Label text="Order Info:" underline="true" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Order ID:" GridPane.rowIndex="1" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Order Date:" GridPane.rowIndex="2" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Delivery Date:" GridPane.rowIndex="3" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Address:" GridPane.rowIndex="4" />
+                        <Text layoutX="15.0" layoutY="53.0" strokeType="OUTSIDE" strokeWidth="0.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <Text layoutX="161.0" layoutY="53.0" strokeType="OUTSIDE" strokeWidth="0.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <Text layoutX="161.0" layoutY="52.0" strokeType="OUTSIDE" strokeWidth="0.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                        <Text layoutX="161.0" layoutY="53.0" strokeType="OUTSIDE" strokeWidth="0.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                        <TextField fx:id="orderIdTF" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <TextField fx:id="orderDateTF" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <TextField fx:id="deliveryTF" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                        <TextField fx:id="addressTF" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Store:" GridPane.rowIndex="5" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Order Stauts:" GridPane.rowIndex="6" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Price:" GridPane.rowIndex="7" />
+                        <TextField fx:id="storeTF" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                        <TextField fx:id="orderStatusTF" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                        <TextField fx:id="PriceTF" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                     </children>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+                     <effect>
+                        <DropShadow />
+                     </effect>
+                  </GridPane>
+                  <VBox prefHeight="366.0" prefWidth="300.0" spacing="5.0" style="-fx-background-color: white; -fx-border-radius: 5; -fx-border-color: grey;" VBox.vgrow="ALWAYS">
+                     <children>
+                        <Label text="Description" />
+                        <TextArea fx:id="descriptionTA" prefHeight="156.0" prefWidth="288.0" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Greating" />
+                        <TextArea fx:id="grearingTA" prefHeight="200.0" prefWidth="200.0" />
+                     </children>
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+                  </VBox>
+               </children>
+            </VBox>
+            <VBox spacing="15.0">
+               <children>
+                  <VBox alignment="TOP_CENTER" prefHeight="514.0" prefWidth="369.0" spacing="5.0" style="-fx-background-color: white; -fx-border-radius: 5; -fx-background-radius: 5;" VBox.vgrow="ALWAYS">
+                     <children>
+                        <Label text="Item Summary" />
+                        <ScrollPane prefHeight="459.0" prefWidth="330.0">
+                           <content>
+                              <GridPane prefHeight="30.0" prefWidth="330.0">
+                                <rowConstraints>
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                </rowConstraints>
+                              </GridPane>
+                           </content>
+                        </ScrollPane>
+                     </children>
+                     <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </padding>
+                     <effect>
+                        <DropShadow />
+                     </effect>
+                  </VBox>
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="You have time" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+         </children>
+         <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </padding>
+      </HBox>
+   </children>
 </StackPane>
