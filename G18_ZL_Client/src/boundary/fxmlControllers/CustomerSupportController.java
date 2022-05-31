@@ -139,7 +139,7 @@ public class CustomerSupportController implements Initializable {
 	private void setComplaintsListView() {
 		ArrayList<Complaint> complaintsList =  ComplaintQueryFromDB(MessageType.GET,null);
 		for(int i=0 ; i<complaintsList.size() ; i++)
-		ComplaintMap.put(complaintsList.get(i).idComplaint, complaintsList.get(i));
+		ComplaintMap.put(complaintsList.get(i).getIdComplaint(), complaintsList.get(i));
 		ComplaintL.getItems().clear();
 		ComplaintL.getItems().addAll(ComplaintMap.keySet());
 	}
@@ -171,6 +171,6 @@ public class CustomerSupportController implements Initializable {
 	}
 	
 	private ArrayList<Complaint> ComplaintQueryFromDB(MessageType messageType, Complaint complaint){
-		return (ArrayList<Complaint>) MainController.getMyClient().send(messageType, "complaint/by/status/unAnswered",complaint);
+		return (ArrayList<Complaint>) MainController.getMyClient().send(messageType, "complaint/by/status_complaint/OPEN",complaint);
 	}
 }
