@@ -17,28 +17,26 @@ import javafx.scene.image.ImageView;
 
 public class LogInController implements Initializable {
 
+	@FXML
+	private ImageView logInBackgroundIV;
 
-    @FXML
-    private ImageView logInBackgroundIV;
+	@FXML
+	private ImageView welcomeIV;
 
-    @FXML
-    private ImageView welcomeIV;
-    
-    @FXML
-    private ImageView userIconIv;
-    
-    @FXML
-    private ImageView passIconIV;
+	@FXML
+	private ImageView userIconIv;
 
-    @FXML
-    private PasswordField passwordPF;
-    
-    @FXML
-    private TextField usernameTF;
-    
-    @FXML
-    private Label errorLbl;
+	@FXML
+	private ImageView passIconIV;
 
+	@FXML
+	private PasswordField passwordPF;
+
+	@FXML
+	private TextField usernameTF;
+
+	@FXML
+	private Label errorLbl;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -48,23 +46,36 @@ public class LogInController implements Initializable {
 		passIconIV.setImage(new Image("boundary/media/pass-icon.png"));
 
 	}
-	
+
+	/**
+	 * checks that the fields arent empty. fetches user with appropriate username
+	 * AND pass, if non is found then something is incorrect.
+	 * Makes sure the user can't log in if he is logged in somewhere else
+	 * 
+	 */
 	public void onLogInPressed() {
-		if(usernameTF.getText().isEmpty() || passwordPF.getText().isEmpty()) {
+		if (usernameTF.getText().isEmpty() || passwordPF.getText().isEmpty()) {
 			errorLbl.setVisible(true);
 			errorLbl.setText("*Please fill the missing fields");
 			return;
 		}
-		
-		User user=(User)MainController.getMyClient().send(MessageType.GET, "login/user", new User(usernameTF.getText(),passwordPF.getText()));
-		ClientConsoleController.setUser(user);
-		
-		if(user==null) {
+
+		User user = (User) MainController.getMyClient().send(MessageType.GET, "login/user",
+				new User(usernameTF.getText(), passwordPF.getText()));
+
+		if (user == null) {
 			errorLbl.setVisible(true);
 			errorLbl.setText("*Incorrect user or password");
 			return;
 		}
-		
+
+		if (!(boolean) MainController.getMyClient().send(MessageType.INFO, "log/in", user)) {
+			errorLbl.setVisible(true);
+			errorLbl.setText("*User is already logged in");
+			return;
+		}
+
+		ClientConsoleController.setUser(user);
 		ClientView.setUpClientConsole();
 	}
 

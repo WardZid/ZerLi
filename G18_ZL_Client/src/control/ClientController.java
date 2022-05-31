@@ -33,17 +33,17 @@ public class ClientController extends ObservableClient {
 	 * 
 	 * @return true if connection successful
 	 */
-	public boolean connectToServer(String host) {
+	public void connectToServer(String host) throws Exception {
 		setHost(host);
 		try {
 			if (!isConnected) {
 				openConnection();
-				send(MessageType.INFO, "/connect", null);
+				send(MessageType.INFO, "connect", null);
 			}
 		} catch (IOException e) {
 			ClientView.printErr(getClass(), "Connection to server unsuccessful");
+			throw e;
 		}
-		return isConnected;
 	}
 
 	/**
@@ -52,7 +52,7 @@ public class ClientController extends ObservableClient {
 	public boolean disconnectFromServer() {
 		try {
 			if (isConnected) {
-				send(MessageType.INFO, "/disconnect", null);
+				send(MessageType.INFO, "disconnect", null);
 				closeConnection();
 			}
 		} catch (IOException e) {
@@ -184,35 +184,40 @@ public class ClientController extends ObservableClient {
 		default:
 			break;
 		}
+		replyContent=svMsg.getContent();
 		awaitResponse = false;
 	}
 
 	private void handleInfoMessage(MyMessage svMsg) {
-		if (svMsg.getInfo().startsWith("/global/stop")) {
-			/*
-			 * any action that needs to be done before closing
-			 */
-			disconnectNoMessage();
+		String[] reply=svMsg.getInfo().split("/");
+		if (reply[0].equals("global")) {
+			if (reply[1].equals("stop")) {
 
-		} else if (svMsg.getInfo().startsWith("/disconnect"))
+				/*
+				 * any action that needs to be done before closing
+				 */
+				disconnectNoMessage();
+			} else if(reply[1].equals("logout")) {
+				javafx.application.Platform.runLater(() -> ClientView.setUpLogIn());
+			}
+
+		} else if (reply[0].equals("disconnect"))
 			isConnected = false;
-		else if (svMsg.getInfo().startsWith("/connect"))
+		else if (reply[0].equals("connect"))
 			isConnected = true;
+		else if (reply[0].equals("log")) {
+//			replyContent=svMsg.getContent();
+		}
 		else
 			ClientView.printErr(getClass(), "Unhandled info:" + svMsg.getInfo());
 	}
 
 	private void handleGetReply(MyMessage svMsg) {
-		replyContent=svMsg.getContent();
+//		replyContent=svMsg.getContent();
 	}
 
 	private void handleUpdateReply(MyMessage svMsg) {
-//		if (svMsg.getInfo().startsWith("/order"))
-//			return;
-////			ClientFXMLController.putOrders((ArrayList<Order>) svMsg.getContent());
-//		else {
-//			MainController.print(getClass(), "Unhandled Update:" + svMsg.getInfo());
-//		}
+
 	}
 
 }

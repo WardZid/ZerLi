@@ -14,23 +14,35 @@ import javafx.scene.control.TextField;
 
 public class ConnectController implements Initializable {
 
-    @FXML
-    private TextField txtIP;
+	@FXML
+	/**
+	 * TextField to entered desired ip
+	 */
+	private TextField txtIP;
 
 	@Override
+	/**
+	 * inits textfield with ip
+	 */
 	public void initialize(URL location, ResourceBundle resources) {
 		txtIP.setText(MainController.getIpAddress());
 	}
-	
+
 	@FXML
+	/**
+	 * attempts t connect, if server is unreachable, shows dialog box with reason
+	 * 
+	 * @param event
+	 */
 	void onConnect(ActionEvent event) {
-		if (MainController.getMyClient().connectToServer(txtIP.getText())) {
+		try {
+			MainController.getMyClient().connectToServer(txtIP.getText());
 			ClientView.setUpLogIn();
-		}
-		else {
+		} catch (Exception e) {
+
 			Alert errorAlert = new Alert(AlertType.ERROR);
 			errorAlert.setHeaderText(null);
-			errorAlert.setContentText("Unable to reach server");
+			errorAlert.setContentText(e.getMessage());
 			errorAlert.showAndWait();
 		}
 	}

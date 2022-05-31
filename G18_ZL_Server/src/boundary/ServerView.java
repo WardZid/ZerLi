@@ -55,7 +55,6 @@ public class ServerView extends Application {
 	 */
 	public void stop() {
 		MainController.getServer().stopServer();
-		System.exit(0);
 	}
 
 	

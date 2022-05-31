@@ -648,6 +648,39 @@ public class DBController {
 
 	// UPDATE QUERIES****************************************************
 
+	public static void logOutAll() {
+		try {
+			statement.executeUpdate("UPDATE user SET logged_in=FALSE");
+		} catch (SQLException e) {
+			ServerView.printErr(DBController.class, e.getMessage());
+		}
+	}
+	
+	public static boolean updateLogIn(User u) {
+		int linesChanged=0;
+		try {
+			linesChanged=statement.executeUpdate("UPDATE user SET logged_in=TRUE WHERE id_user="+u.getIdUser());
+		} catch (SQLException e) {
+			ServerView.printErr(DBController.class, e.getMessage());
+		}
+		if(linesChanged==0)
+			return false;
+		return true;
+	}
+	
+	public static boolean updateLogOut(User u) {
+		int linesChanged=0;
+		try {
+			linesChanged=statement.executeUpdate("UPDATE user SET logged_in=FALSE WHERE id_user="+u.getIdUser());
+		} catch (SQLException e) {
+			ServerView.printErr(DBController.class, e.getMessage());
+		}
+		if(linesChanged==0)
+			return false;
+		return true;
+	}
+	
+	
 	public static ArrayList<Customer> updateCustomerStatusOne(Customer c, CustomerStatus status) {
 
 		try {

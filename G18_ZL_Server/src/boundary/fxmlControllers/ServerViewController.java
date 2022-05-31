@@ -8,6 +8,8 @@ import control.DBController;
 import control.MainController;
 import control.ServerController;
 import entity.ClientConnection;
+import entity.MyMessage;
+import entity.MyMessage.MessageType;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -67,24 +69,28 @@ public class ServerViewController implements Initializable {
 	@FXML
 	private TextField txtPass;
 
-
-    @FXML
-    private Button btnReset;
+	@FXML
+	private Button btnReset;
 	@FXML
 	private Button btnConnect;
 	@FXML
 	private Button btnDisconnect;
 
-    @FXML
-    private ScrollPane logSP;
-    @FXML
-    private TextFlow logTextFlow;
+	@FXML
+	private Button btnImport;
 
+	@FXML
+	private Button btnLogOut;
+
+	@FXML
+	private ScrollPane logSP;
+	@FXML
+	private TextFlow logTextFlow;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		serverCon = MainController.getServer();
-		
+
 		logTextFlow.heightProperty().addListener(observable -> logSP.setVvalue(1D));
 
 		initTextFields();
@@ -116,7 +122,7 @@ public class ServerViewController implements Initializable {
 			DBController.setDBInfo(txtDBURL.getText(), txtUser.getText(), txtPass.getText());
 			MainController.getServer().startServer();
 
-			enableButtons(false,false,true);
+			enableButtons(false, false, true, false, true);
 
 			gridTextInputs.setDisable(true);
 		} catch (SQLException e) {
@@ -132,7 +138,7 @@ public class ServerViewController implements Initializable {
 		MainController.getServer().stopServer();
 		clientsObservableList.clear();
 
-		enableButtons(true,true,false);
+		enableButtons(true, true, false, true, false);
 
 		gridTextInputs.setDisable(false);
 	}
@@ -142,40 +148,56 @@ public class ServerViewController implements Initializable {
 		DBController.resetDBInfo();
 		initTextFields();
 	}
-	
-	private void enableButtons(boolean reset,boolean connect,boolean disconnect) {
+
+	@FXML
+	void onImport() {
+
+	}
+
+	@FXML
+	void onLogOut() {
+		MainController.getServer().sendToAllClients(new MyMessage(null,0,MessageType.INFO,"global/logout",null));
+		DBController.logOutAll();
+	}
+
+	private void enableButtons(boolean reset, boolean connect, boolean disconnect, boolean imports, boolean logOut) {
 		btnReset.setDisable(!reset);
 		btnConnect.setDisable(!connect);
 		btnDisconnect.setDisable(!disconnect);
+		btnImport.setDisable(!imports);
+		btnLogOut.setDisable(!logOut);
 	}
-	
+
 	/**
 	 * Prints normal log message
+	 * 
 	 * @param out Log message
 	 */
 	public void printLog(String out) {
-		Text t=new Text("\n"+out);
+		Text t = new Text("\n" + out);
 		print(t);
 	}
-	
+
 	/**
 	 * Prints Red error message
+	 * 
 	 * @param out Log message
 	 */
 	public void printErrLog(String out) {
-		Text t=new Text("\n"+out);
+		Text t = new Text("\n" + out);
 		t.setFill(Color.RED);
 		print(t);
 	}
-	
+
 	/**
 	 * Adds text to add log on the JavaFX thread
+	 * 
 	 * @param t Text to add to log on the FX's thread
 	 */
 	private void print(Text t) {
-		javafx.application.Platform.runLater( () -> logTextFlow.getChildren().add(t));
+		javafx.application.Platform.runLater(() -> logTextFlow.getChildren().add(t));
 	}
-	
+
 	// Static Components
 
 	public static ObservableList<ClientConnection> getCientsObservableList() {

@@ -95,6 +95,7 @@ public class ClientConsoleController implements Initializable {
 
 	@FXML
 	void onLogOutPressed(MouseEvent event) {
+		MainController.getMyClient().send(MessageType.INFO,"log/out",user);
 		user = null;
 		customer = null;
 		ClientView.setUpLogIn();

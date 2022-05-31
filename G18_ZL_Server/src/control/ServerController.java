@@ -94,7 +94,7 @@ public class ServerController extends ObservableServer {
 		if (!serverState)
 			return;
 		try {
-			sendToAllClients(new MyMessage(null, 0, MessageType.INFO, "/global/stop", null));
+			sendToAllClients(new MyMessage(null, 0, MessageType.INFO, "global/stop", null));
 			close();
 			serverState = false;
 			DBController.disconnectDB();
@@ -190,14 +190,25 @@ public class ServerController extends ObservableServer {
 	}
 
 	private void handleInfoMessage(MyMessage clMsg, ConnectionToClient client) {
-		if (clMsg.getInfo().startsWith("/disconnect")) {
+		
+		String[] request = clMsg.getInfo().split("/");
+		
+		if (request[0].equals("disconnect")) {
 			ServerView.print(getClass(), "Client Disconnected: " + client.toString());
 			ServerViewController.removeClient(client);
 
-		} else if (clMsg.getInfo().startsWith("/connect")) {
+		} else if (request[0].equals("connect")) {
 			ServerView.print(getClass(), "Client Connected: " + client.toString());
 
-		} else {
+		} else if(request[0].equals("log")) {
+			User u=(User) clMsg.getContent();
+			if(request[1].equals("in")) {
+				clMsg.setContent(DBController.updateLogIn(u));
+			} else if(request[1].equals("out")) {
+				clMsg.setContent(DBController.updateLogOut(u));
+			}
+		}
+		else {
 			ServerView.printErr(getClass(), "Unhandled info Message: " + clMsg.getInfo());
 		}
 	}

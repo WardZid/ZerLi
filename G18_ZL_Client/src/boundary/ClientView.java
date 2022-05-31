@@ -2,7 +2,9 @@ package boundary;
 
 import java.io.IOException;
 
+import boundary.fxmlControllers.ClientConsoleController;
 import control.MainController;
+import entity.MyMessage.MessageType;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -64,6 +66,8 @@ public class ClientView extends Application {
 	 * 
 	 */
 	public void stop() {
+		if(ClientConsoleController.getUser()!=null)
+			MainController.getMyClient().send(MessageType.INFO,"log/out",ClientConsoleController.getUser());
 		MainController.getMyClient().disconnectFromServer();
 	}
 
