@@ -144,7 +144,7 @@ public class DeliveryController implements Initializable {
 				if (chosen[0].equals("BUILD ITEM:"))
 					for (BuildItem item : selectedOrder.getBuildItems()) {
 						String string = "BUILD ITEM:" + " / " + item.getIdBuildItem() + " / "
-								+ selectedOrder.getIdOrder() + " / " + item.getName();
+								+ selectedOrder.getIdOrder();
 						if (newValue.equals(string)) {
 							itemSummaryTA.setText(item.infoString());
 							return;
@@ -245,8 +245,7 @@ public class DeliveryController implements Initializable {
 		selectedOrder = (Order) MainController.getMyClient().send(MessageType.GET, "order/fill", selectedOrder);
 
 		for (BuildItem item : selectedOrder.getBuildItems()) {
-			String string = "BUILD ITEM:" + " / " + item.getIdBuildItem() + " / " + selectedOrder.getIdOrder() + " / "
-					+ item.getName();
+			String string = "BUILD ITEM:" + " / " + item.getIdBuildItem() + " / " + selectedOrder.getIdOrder();
 			itemsLV.getItems().add(string);
 		}
 		for (OrderItem item : selectedOrder.getItems()) {

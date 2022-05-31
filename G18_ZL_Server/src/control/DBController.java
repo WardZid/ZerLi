@@ -198,9 +198,17 @@ public class DBController {
 			rs.beforeFirst(); // ---move back to first row
 			while (rs.next()) {
 
-				Item itemToAdd = new Item(rs.getInt("id_item"), rs.getInt("id_category"), rs.getString("name"),
-						rs.getDouble("price"), rs.getInt("sale"), rs.getString("color"), rs.getString("description"),
-						blobToImage(rs.getBlob("image")));
+				Item itemToAdd = new Item(
+						rs.getInt("id_item"),  
+						rs.getString("name"),
+						rs.getDouble("price"), 
+						rs.getInt("sale"),
+						rs.getString("type"),
+						rs.getString("category"),
+						rs.getString("color"),
+						rs.getString("description"),
+						blobToImage(rs.getBlob("image")))
+						;
 				orderItems.add(itemToAdd.new OrderItem(itemToAdd, rs.getInt("amount")));
 			}
 			rs.close();
@@ -220,9 +228,18 @@ public class DBController {
 			rs = statement.executeQuery("SELECT * FROM item");
 			rs.beforeFirst(); // ---move back to first row
 			while (rs.next()) {
-				items.add(new Item(rs.getInt("id_item"), rs.getInt("id_category"), rs.getString("name"),
-						rs.getDouble("price"), rs.getInt("sale"), rs.getString("color"), rs.getString("description"),
-						blobToImage(rs.getBlob("image"))));
+				items.add(
+						new Item(
+								rs.getInt("id_item"),  
+								rs.getString("name"),
+								rs.getDouble("price"), 
+								rs.getInt("sale"),
+								rs.getString("type"),
+								rs.getString("category"),
+								rs.getString("color"),
+								rs.getString("description"),
+								blobToImage(rs.getBlob("image")))
+						);
 			}
 			rs.close();
 		} catch (SQLException e) {
@@ -238,9 +255,18 @@ public class DBController {
 			rs = statement.executeQuery("SELECT * FROM item WHERE " + column + "='" + value + "'");
 			rs.beforeFirst(); // ---move back to first row
 			while (rs.next()) {
-				items.add(new Item(rs.getInt("id_item"), rs.getInt("id_category"), rs.getString("name"),
-						rs.getDouble("price"), rs.getInt("sale"), rs.getString("color"), rs.getString("description"),
-						blobToImage(rs.getBlob("image"))));
+				items.add(
+						new Item(
+								rs.getInt("id_item"),  
+								rs.getString("name"),
+								rs.getDouble("price"), 
+								rs.getInt("sale"),
+								rs.getString("type"),
+								rs.getString("category"),
+								rs.getString("color"),
+								rs.getString("description"),
+								blobToImage(rs.getBlob("image")))
+						);
 			}
 			rs.close();
 		} catch (SQLException e) {
@@ -361,9 +387,17 @@ public class DBController {
 			rs.beforeFirst(); // ---move back to first row
 			while (rs.next()) {
 				buildItem.addItem(
-						new Item(rs.getInt("id_item"), rs.getInt("id_category"), rs.getString("name"),
-								rs.getDouble("price"), rs.getInt("sale"), rs.getString("color"),
-								rs.getString("description"), blobToImage(rs.getBlob("image"))),
+						new Item(
+								rs.getInt("id_item"),  
+								rs.getString("name"),
+								rs.getDouble("price"), 
+								rs.getInt("sale"),
+								rs.getString("type"),
+								rs.getString("category"),
+								rs.getString("color"),
+								rs.getString("description"),
+								blobToImage(rs.getBlob("image")))
+						,
 						rs.getInt("amount_in_build"));
 			}
 			rs.close();
