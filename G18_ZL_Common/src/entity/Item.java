@@ -156,15 +156,15 @@ public class Item implements Serializable {
 	}
 
 	public Item(Item item) {
-		item.idItem = idItem;
-		item.name = name;
-		item.price = price;
-		item.sale = sale;
-		item.type = type;
-		item.category = category;
-		item.color = color;
-		item.description = description;
-		item.image = image;
+		this.idItem = item.idItem;
+		this.name = item.name;
+		this.price = item.price;
+		this.sale = item.sale;
+		this.type = item.type;
+		this.category = item.category;
+		this.color = item.color;
+		this.description = item.description;
+		this.image = item.image;
 	}
 
 	// Getters and setters
