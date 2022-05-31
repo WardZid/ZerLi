@@ -16,7 +16,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="boundary.fxmlControllers.DeliveryController">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="boundary.fxmlControllers.CustomerOrdersController">
    <children>
       <HBox alignment="CENTER" spacing="15.0">
          <children>
@@ -90,10 +90,10 @@
             </VBox>
             <VBox spacing="15.0">
                <children>
-                  <VBox alignment="TOP_CENTER" prefHeight="514.0" prefWidth="369.0" spacing="5.0" style="-fx-background-color: white; -fx-border-radius: 5; -fx-background-radius: 5;" VBox.vgrow="ALWAYS">
+                  <VBox alignment="TOP_CENTER" prefHeight="478.0" prefWidth="278.0" spacing="5.0" style="-fx-background-color: white; -fx-border-radius: 5; -fx-background-radius: 5;" VBox.vgrow="ALWAYS">
                      <children>
                         <Label text="Item Summary" />
-                        <ScrollPane prefHeight="459.0" prefWidth="330.0">
+                        <ScrollPane prefHeight="447.0" prefWidth="298.0">
                            <content>
                               <GridPane prefHeight="30.0" prefWidth="330.0">
                                 <rowConstraints>
