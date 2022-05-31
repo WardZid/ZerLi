@@ -3,7 +3,6 @@ package entity;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 
 import entity.Item.ItemInBuild;
 import entity.Item.OrderItem;
@@ -14,9 +13,7 @@ public class BuildItem implements Serializable {
 
 	private int idBuildItem;
 	private int idOrder;
-	private String name;
 	private int amount;
-	private int sale;
 	private String description;
 	
 	private HashMap<Integer, ItemInBuild> itemsInBuild = new HashMap<>();
@@ -50,39 +47,7 @@ public class BuildItem implements Serializable {
 		this.amount = amount;
 	}
 
-	/**
-	 * Constructor without items in build FOR CATALOG
-	 * 
-	 * @param idBuildItem
-	 * @param idOrder
-	 * @param amount
-	 */
-	public BuildItem(int idBuildItem, String name, int amount,int sale, String description) {
-		this.idBuildItem = idBuildItem;
-		this.name = name;
-		this.amount = amount;
-		this.sale=sale;
-		this.description = description;
-	}
-
-	/**
-	 * Full constructor FOR CATALOG
-	 * 
-	 * @param idBuildItem
-	 * @param idOrder
-	 * @param name
-	 * @param amount
-	 * @param description
-	 * @param items
-	 */
-	public BuildItem(int idBuildItem, String name, int amount,int sale, String description, Collection<Item> items) {
-		this.idBuildItem = idBuildItem;
-		this.name = name;
-		this.amount = amount;
-		this.sale=sale;
-		this.description = description;
-		addItemsInBuild(items);
-	}
+	
 
 	// Getters and Setters
 	public int getIdBuildItem() {
@@ -99,14 +64,6 @@ public class BuildItem implements Serializable {
 
 	public void setIdOrder(int idOrder) {
 		this.idOrder = idOrder;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
 	}
 
 	public int getAmount() {
@@ -146,7 +103,7 @@ public class BuildItem implements Serializable {
 
 	@Override
 	public String toString() {
-		return "BuildItem [idBuildItem=" + idBuildItem + ", idOrder=" + idOrder + ", name=" + name + ", amount="
+		return "BuildItem [idBuildItem=" + idBuildItem + ", idOrder=" + idOrder + ", amount="
 				+ amount + ", description=" + description + ", itemsInBuild=" + itemsInBuild + "]";
 	}
 	
@@ -156,21 +113,17 @@ public class BuildItem implements Serializable {
 		builder.append(idBuildItem);
 		builder.append("\n idOrder=");
 		builder.append(idOrder);
-		builder.append("\n name=");
-		builder.append(name);
 		builder.append("\n amount=");
 		builder.append(amount);
-		builder.append("\n sale=");
-		builder.append(sale);
 		builder.append("\n description=");
 		builder.append(description);
+		builder.append("\n price=");
+		builder.append(price);
 		builder.append("\n itemsInBuild=");
 		for (ItemInBuild item : itemsInBuild.values()) {
 			builder.append("\n\t item="+item.getName());
 			builder.append("\n\t\t amount="+item.getAmount());
 		}
-		builder.append("\n price=");
-		builder.append(price);
 		return builder.toString();
 	}
 
