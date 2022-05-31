@@ -142,6 +142,7 @@ public class DBController {
 				return new User(rs.getInt("id_user"), rs.getInt("id_user_type"), rs.getString("username"),
 						rs.getString("password"));
 			}
+			rs.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -161,6 +162,7 @@ public class DBController {
 						rs.getString("address_order"), rs.getString("greeting_order"),
 						rs.getString("description_order")));
 			}
+			rs.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -180,6 +182,7 @@ public class DBController {
 						rs.getString("address_order"), rs.getString("greeting_order"),
 						rs.getString("description_order")));
 			}
+			rs.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -188,18 +191,25 @@ public class DBController {
 
 	public static Order getOrderItemsFull(Order o) {
 		try {
-			ArrayList<OrderItem> orderItems=new ArrayList<>();
-			ResultSet rs = statement.executeQuery("SELECT * FROM order_item WHERE id_order="+o.getIdOrder());
+			ArrayList<OrderItem> orderItems = new ArrayList<>();
+			ResultSet rs = statement.executeQuery("SELECT I.* ,OI.amount FROM item I, order_item OI WHERE OI.id_order="
+					+ o.getIdOrder() + " AND OI.id_item=I.id_item");
+			System.out.println("order: " + o.toString());
 			rs.beforeFirst(); // ---move back to first row
 			while (rs.next()) {
-				Item itemToAdd=getItemsBy("id_item", rs.getInt("id_item")+"").get(0);
-				orderItems.add(itemToAdd.new OrderItem(itemToAdd,rs.getInt("amount")));
+
+				Item itemToAdd = new Item(rs.getInt("id_item"), rs.getInt("id_category"), rs.getString("name"),
+						rs.getDouble("price"), rs.getInt("sale"), rs.getString("color"), rs.getString("description"),
+						blobToImage(rs.getBlob("image")));
+				orderItems.add(itemToAdd.new OrderItem(itemToAdd, rs.getInt("amount")));
 			}
+			rs.close();
 			o.addOrderItems(orderItems);
 		} catch (Exception e) {
 			ServerView.printErr(DBController.class, "ERROR -> Unable to fetch all order items");
 		}
-		o.addBuildItems(getFullBuildItemsBy("id_order", o.getIdOrder()+""));
+		System.out.println(o.getItems().toString());
+		o.addBuildItems(getFullBuildItemsBy("id_order", o.getIdOrder() + ""));
 		return o;
 	}
 
@@ -214,6 +224,7 @@ public class DBController {
 						rs.getDouble("price"), rs.getInt("sale"), rs.getString("color"), rs.getString("description"),
 						blobToImage(rs.getBlob("image"))));
 			}
+			rs.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -231,6 +242,7 @@ public class DBController {
 						rs.getDouble("price"), rs.getInt("sale"), rs.getString("color"), rs.getString("description"),
 						blobToImage(rs.getBlob("image"))));
 			}
+			rs.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -247,6 +259,7 @@ public class DBController {
 				category.add(rs.getString("category"));
 
 			}
+			rs.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -261,6 +274,7 @@ public class DBController {
 			while (rs.next()) {
 				buildItems.add(new BuildItem(rs.getInt("id_build_item"), rs.getInt("id_order"), rs.getInt("amount")));
 			}
+			rs.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -276,6 +290,7 @@ public class DBController {
 			while (rs.next()) {
 				buildItems.add(new BuildItem(rs.getInt("id_build_item"), rs.getInt("id_order"), rs.getInt("amount")));
 			}
+			rs.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -288,11 +303,17 @@ public class DBController {
 			ResultSet rs = statement.executeQuery("SELECT * FROM build_item");
 			rs.beforeFirst(); // ---move back to first row
 			while (rs.next()) {
-				buildItems.add(getItemInBuildAll(
-						new BuildItem(rs.getInt("id_build_item"), rs.getInt("id_order"), rs.getInt("amount"))));
+//				buildItems.add(getItemInBuildAll(
+//				new BuildItem(rs.getInt("id_build_item"), rs.getInt("id_order"), rs.getInt("amount"))));
+				buildItems.add(new BuildItem(rs.getInt("id_build_item"), rs.getInt("id_order"), rs.getInt("amount")));
 			}
+			rs.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
+		}
+		// populate the build item itself
+		for (BuildItem buildItem : buildItems) {
+			buildItem = getItemInBuildAll(buildItem);
 		}
 		return buildItems;
 	}
@@ -301,7 +322,7 @@ public class DBController {
 	 * 
 	 * @param column to use in the "WHERE" clause
 	 * @param value  to use with the column
-	 * @return ArrayList<BuildItem> arralist with build ite with all its items
+	 * @return ArrayList<BuildItem> arraylist with build ite with all its items
 	 */
 	public static ArrayList<BuildItem> getFullBuildItemsBy(String column, String value) {
 		ArrayList<BuildItem> buildItems = new ArrayList<>();
@@ -310,11 +331,17 @@ public class DBController {
 			rs = statement.executeQuery("SELECT * FROM build_item WHERE " + column + "='" + value + "'");
 			rs.beforeFirst(); // ---move back to first row
 			while (rs.next()) {
-				buildItems.add(getItemInBuildAll(
-						new BuildItem(rs.getInt("id_build_item"), rs.getInt("id_order"), rs.getInt("amount"))));
+//				buildItems.add(getItemInBuildAll(
+//						new BuildItem(rs.getInt("id_build_item"), rs.getInt("id_order"), rs.getInt("amount"))));
+				buildItems.add(new BuildItem(rs.getInt("id_build_item"), rs.getInt("id_order"), rs.getInt("amount")));
 			}
+			rs.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
+		}
+		// populate the build item itself
+		for (BuildItem buildItem : buildItems) {
+			buildItem = getItemInBuildAll(buildItem);
 		}
 		return buildItems;
 	}
@@ -339,6 +366,7 @@ public class DBController {
 								rs.getString("description"), blobToImage(rs.getBlob("image"))),
 						rs.getInt("amount_in_build"));
 			}
+			rs.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -356,6 +384,7 @@ public class DBController {
 						rs.getInt("id_user"), rs.getString("name_customer"), rs.getString("email_customer"),
 						rs.getString("phone_customer"), rs.getString("card_number")));
 			}
+			rs.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -373,6 +402,7 @@ public class DBController {
 						rs.getInt("id_user"), rs.getString("name_customer"), rs.getString("email_customer"),
 						rs.getString("phone_customer"), rs.getString("card_number")));
 			}
+			rs.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -390,6 +420,7 @@ public class DBController {
 						rs.getString("status_complaint"), rs.getString("date_complaint"), rs.getDouble("refund_amount"),
 						rs.getString("complaint"), rs.getString("response")));
 			}
+			rs.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -408,6 +439,7 @@ public class DBController {
 						rs.getString("status_complaint"), rs.getString("date_complaint"), rs.getDouble("refund_amount"),
 						rs.getString("complaint"), rs.getString("response")));
 			}
+			rs.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -424,6 +456,7 @@ public class DBController {
 			while (rs.next()) {
 				stores.add(rs.getString("name_store"));
 			}
+			rs.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -439,6 +472,7 @@ public class DBController {
 			while (rs.next()) {
 				stores.add(Store.valueOf(rs.getString("name_store")));
 			}
+			rs.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -456,6 +490,7 @@ public class DBController {
 			while (rs.next()) {
 				monthsYears.add(rs.getString("month") + "/" + rs.getString("year"));
 			}
+			rs.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -481,6 +516,7 @@ public class DBController {
 			while (rs.next()) {
 				incomes.add(new DailyIncome(rs.getInt("day"), rs.getDouble("income")));
 			}
+			rs.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -505,6 +541,7 @@ public class DBController {
 			while (rs.next()) {
 				receipts.add(new Receipt(rs.getString("name"), rs.getString("date"), rs.getDouble("income")));
 			}
+			rs.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -532,6 +569,7 @@ public class DBController {
 						rs.getString("address_order"), rs.getString("greeting_order"),
 						rs.getString("description_order")));
 			}
+			rs.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -550,6 +588,7 @@ public class DBController {
 			while (rs.next()) {
 				amounts.add(new AmountItem(rs.getString("name"), rs.getInt("amount")));
 			}
+			rs.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -568,6 +607,7 @@ public class DBController {
 			ps.setString(5, c.getComplaint());
 			ps.setString(6, "");
 			ps.executeUpdate();
+			ps.close();
 		} catch (SQLException e) {
 			ServerView.printErr(DBController.class, "Unable to add new complaint: " + c.toString());
 		}
@@ -589,11 +629,12 @@ public class DBController {
 	public static ArrayList<Complaint> updateComplaint(Complaint c) {
 		try {
 			PreparedStatement ps = conn.prepareStatement(
-					"UPDATE complaint SET status_complaint='CLOSED' AND refund_amount=? AND response=? WHERE id_complaint=?");
+					"UPDATE complaint SET status_complaint='CLOSED', refund_amount=?, response=? WHERE id_complaint=?");
 			ps.setDouble(1, c.getRefund());
 			ps.setString(2, c.getResponse());
 			ps.setInt(3, c.getIdComplaint());
 			ps.executeUpdate();
+			ps.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -602,10 +643,11 @@ public class DBController {
 
 	public static ArrayList<Order> updateOrderStatus(Order o) {
 		try {
-			PreparedStatement ps = conn.prepareStatement("UPDATE order SET id_order_status=? WHERE id_order=?");
+			PreparedStatement ps = conn.prepareStatement("UPDATE assignment3.order SET id_order_status=? WHERE id_order=?");
 			ps.setInt(1, o.getIdOrderStatus());
 			ps.setInt(2, o.getIdOrder());
 			ps.executeUpdate();
+			ps.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
