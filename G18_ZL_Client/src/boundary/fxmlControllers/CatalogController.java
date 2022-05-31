@@ -23,6 +23,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
 
 public class CatalogController implements Initializable {
 
@@ -33,6 +34,18 @@ public class CatalogController implements Initializable {
 
 	@FXML
 	private Label numberItemInOrder;
+	
+    @FXML
+    private VBox vboxViewItemDescription;
+    @FXML
+    private Label descriptionLable;
+
+    @FXML
+    private Label nameItemLable;
+    
+    @FXML
+    private VBox catalogvbox;
+
 
 	private static ArrayList<Item> items;
 
@@ -56,7 +69,7 @@ public class CatalogController implements Initializable {
 				CatalogItemController catalogItemController = fXMLLoader.getController();
 				catalogItemController.setData(items.get(i), this);
 
-				if (column == 3) {
+				if (column == 4) {
 					column = 0;
 					row++;
 				}
@@ -71,6 +84,9 @@ public class CatalogController implements Initializable {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		
+		this.getvboxViewItemDescription().setVisible(false);
+		
 		setLabelNumItemInOrderText();
 
 		Category = (ArrayList<String>) MainController.getMyClient().send(MessageType.GET, "category/all", null);
@@ -89,9 +105,27 @@ public class CatalogController implements Initializable {
 
 	}
 
+	public VBox getvboxViewItemDescription() {
+		return vboxViewItemDescription;
+	}
+	public VBox getcatalogvbox() {
+		return catalogvbox;
+	}
+	
+	public Label getnameItemLable() {
+		return nameItemLable;
+	}
+	public Label getdescriptionLable() {
+		return descriptionLable;
+	}
+	 
 	public void onBuildItemPressed() {
 
 		Navigation.navigator("build-ItemsScene-View.fxml");
+	}
+	public void BackBtnFromDesToCata() {
+		getvboxViewItemDescription().setVisible(false);
+		getcatalogvbox().setDisable(false);
 	}
 
 	public void GetSelected() {
