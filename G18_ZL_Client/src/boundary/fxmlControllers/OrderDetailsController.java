@@ -104,15 +104,20 @@ public class OrderDetailsController implements Initializable {
 		storeAddress.setAll(StoreAddressName);
 		StoreAddressCombo.setItems(storeAddress);
 
-		for (int i = 0; i < 24; i++)
-			houreNum.add("" + i);
+		// fill combo box with hours
+		for (int i = 0; i < 24; i++) {
+			houreNum.add(String.format("%02d", i));
+		}
 
 		ObservableList<String> Houre = FXCollections.observableArrayList();
 		Houre.setAll(houreNum);
 		HourCombo.setItems(Houre);
 
-		for (int i = 0; i < 60; i++)
-			MinNum.add("" + i);
+		// fill combo box with Minutes
+		for (int i = 0; i < 60; i++) {
+			MinNum.add(String.format("%02d", i));
+		}
+
 		ObservableList<String> Minutes = FXCollections.observableArrayList();
 		Minutes.setAll(MinNum);
 		MinutesCombo.setItems(Minutes);
@@ -145,10 +150,11 @@ public class OrderDetailsController implements Initializable {
 			required6.setVisible(true);
 
 		} else {
-			
+
 			if (AddShippingCheckBox.isSelected() == true) {
-				System.out.println(" print inside"+AddressText.getText() + PhoneText.getText()  + NameReceiverText.getText() +"1" );
-				
+				System.out.println(" print inside" + AddressText.getText() + PhoneText.getText()
+						+ NameReceiverText.getText() + "1");
+
 				if (AddressText.getText().trim().isEmpty() || PhoneText.getText().trim().isEmpty()
 						|| NameReceiverText.getText().trim().isEmpty()) {
 					noteLable.setVisible(true);
@@ -158,13 +164,11 @@ public class OrderDetailsController implements Initializable {
 					required4.setVisible(true);
 					required5.setVisible(true);
 					required6.setVisible(true);
-						
-					 
+
 				}
-				 
-			}
-			else {
-			
+
+			} else {
+
 				noteLable.setVisible(false);
 				required1.setVisible(false);
 				required2.setVisible(false);
@@ -173,7 +177,8 @@ public class OrderDetailsController implements Initializable {
 				required5.setVisible(false);
 				required6.setVisible(false);
 				CartController.getOrderInProcess().setGreetingCard(GreetingArea.getText());
-				CartController.getOrderInProcess().setDeliveryDate(DelevireyDatePicker.getValue().toString()+" "+HourCombo.getValue()+":"+MinutesCombo.getValue()+":00");
+				CartController.getOrderInProcess().setDeliveryDate(DelevireyDatePicker.getValue().toString() + " "
+						+ HourCombo.getValue() + ":" + MinutesCombo.getValue() + ":00");
 				CartController.getOrderInProcess().setIdCustomer(ClientConsoleController.getCustomer().getIdCustomer());
 				CartController.getOrderInProcess().setDescription(DescribtionArea.getText());
 				CartController.getOrderInProcess().setIdOrderStatus(0);
@@ -183,10 +188,10 @@ public class OrderDetailsController implements Initializable {
 					CartController.getOrderInProcess().setStore(Store.valueOf(StoreAddressCombo.getValue()));
 
 				System.out.println(CartController.getOrderInProcess().toString());
-				System.out.println(DelevireyDatePicker.getValue().toString()+" "+HourCombo.getValue()+":"+MinutesCombo.getValue()+":00");
+				System.out.println(DelevireyDatePicker.getValue().toString() + " " + HourCombo.getValue() + ":"
+						+ MinutesCombo.getValue() + ":00");
 			}
 		}
- 
 
 	}
 }
