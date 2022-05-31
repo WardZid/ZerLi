@@ -146,11 +146,11 @@ public class ClientConsoleController implements Initializable {
 	private Button menuButton(String btnName, String fxml) {
 		Button btn = new Button(btnName);
 		btn.setMaxWidth(Double.MAX_VALUE);
-		btn.setPrefHeight(30);
+		btn.setPrefHeight(50);
 		btn.setOnAction((ActionEvent e) -> {
 			if (pressedBtn.equals(btn))
 				return;
-			pressedBtn.setStyle("-fx-background-color: white");
+			pressedBtn.setStyle("-fx-background-color: transparent");
 			pressedBtn = btn;
 			btn.setStyle("-fx-background-color: #BBBBBB");
 			try {
