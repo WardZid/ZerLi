@@ -13,15 +13,15 @@ public class Item implements Serializable {
 		private static final long serialVersionUID = 1L;
 		private int amount;
 
-		public OrderItem(int idItem, int idCategory, String name, double price, int sale, String color,
+		public OrderItem(int idItem, String name, double price, int sale, String type, String category, String color,
 				String description, Image image, int amount) {
-			super(idItem, idCategory, name, price, sale, color, description, image);
+			super(idItem, name, price, sale, type, category, color, description, image);
 			this.amount = amount;
 		}
+
 		public OrderItem(Item item, int amount) {
-			super(item.getIdItem(), item.getIdCategory(), item.getName(), item.getPrice(), item.getSale(),
-					item.getColor(), item.getDescription(), item.getImage());
-			this.amount=amount;
+			super(item);
+			this.amount = amount;
 		}
 
 		/**
@@ -54,9 +54,6 @@ public class Item implements Serializable {
 		public String toString() {
 			return "OrderItem [" + super.toString() + ", amount=" + amount + "]";
 		}
-		
-		
-		
 	}
 
 	public class ItemInBuild extends Item {
@@ -64,15 +61,14 @@ public class Item implements Serializable {
 		private static final long serialVersionUID = 1L;
 		private int amount;
 
-		public ItemInBuild(int idItem, int idCategory, String name, double price, int sale, String color,
+		public ItemInBuild(int idItem, String name, double price, int sale, String type, String category, String color,
 				String description, Image image, int amount) {
-			super(idItem, idCategory, name, price, sale, color, description, image);
+			super(idItem, name, price, sale, type, category, color, description, image);
 			this.amount = amount;
 		}
 
 		public ItemInBuild(Item item) {
-			super(item.getIdItem(), item.getIdCategory(), item.getName(), item.getPrice(), item.getSale(),
-					item.getColor(), item.getDescription(), item.getImage());
+			super(item);
 
 			if (item instanceof ItemInBuild)
 				amount = ((ItemInBuild) item).amount;
@@ -81,8 +77,7 @@ public class Item implements Serializable {
 		}
 
 		public ItemInBuild(Item item, int amount) {
-			super(item.getIdItem(), item.getIdCategory(), item.getName(), item.getPrice(), item.getSale(),
-					item.getColor(), item.getDescription(), item.getImage());
+			super(item);
 			this.amount = amount;
 		}
 
@@ -126,42 +121,52 @@ public class Item implements Serializable {
 
 	}
 
-	public enum Category {
-		POT, POT_FLOWER, FLOWER;
-
-		public static Category getById(int id) {
-
-			for (Category category : values()) {
-				if (category.ordinal() == id)
-					return category;
-			}
-			return null;
-		}
-	}
-
 	private int idItem;
-	private int idCategory;
 	private String name;
 	private double price;
 	private int sale;
+	private String type;
+	private String category;
 	private String color;
 	private String description;
 	private Image image;
 
-	public Item(int idItem, int idCategory, String name, double price, int sale, String color, String description,
-			Image image) {
+	/**
+	 * @param idItem
+	 * @param name
+	 * @param price
+	 * @param sale
+	 * @param type
+	 * @param category
+	 * @param color
+	 * @param description
+	 * @param image
+	 */
+	public Item(int idItem, String name, double price, int sale, String type, String category, String color,
+			String description, Image image) {
 		this.idItem = idItem;
-		this.idCategory = idCategory;
 		this.name = name;
 		this.price = price;
 		this.sale = sale;
+		this.type = type;
+		this.category = category;
 		this.color = color;
 		this.description = description;
 		this.image = image;
 	}
-	public void setPriceAfterSale(double sale) {
-		this.setPrice((this.getPrice()-((sale/100)*this.getPrice())));
-		}
+
+	public Item(Item item) {
+		item.idItem = idItem;
+		item.name = name;
+		item.price = price;
+		item.sale = sale;
+		item.type = type;
+		item.category = category;
+		item.color = color;
+		item.description = description;
+		item.image = image;
+	}
+
 	// Getters and setters
 	public int getIdItem() {
 		return idItem;
@@ -169,14 +174,6 @@ public class Item implements Serializable {
 
 	public void setIdItem(int idItem) {
 		this.idItem = idItem;
-	}
-
-	public int getIdCategory() {
-		return idCategory;
-	}
-
-	public void setIdCategory(int idCategory) {
-		this.idCategory = idCategory;
 	}
 
 	public String getName() {
@@ -203,6 +200,22 @@ public class Item implements Serializable {
 		this.sale = sale;
 	}
 
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public String getCategory() {
+		return category;
+	}
+
+	public void setCategory(String category) {
+		this.category = category;
+	}
+
 	public String getColor() {
 		return color;
 	}
@@ -227,37 +240,48 @@ public class Item implements Serializable {
 		this.image = image;
 	}
 
-	// handle category by id
-
-	public Category getCategory() {
-		return Category.getById(idCategory);
-	}
-
-	public void setCategory(Category category) {
-		idCategory = category.ordinal();
-	}
-
 	@Override
 	public String toString() {
-		return "Item [idItem=" + idItem + ", Category=(" + idCategory + ") " + getCategory() + ", name=" + name
-				+ ", price=" + price + ", sale=" + sale + ", color=" + color + ", description=" + description + "]";
+		StringBuilder builder = new StringBuilder();
+		builder.append("Item [idItem=");
+		builder.append(idItem);
+		builder.append(", name=");
+		builder.append(name);
+		builder.append(", price=");
+		builder.append(price);
+		builder.append(", sale=");
+		builder.append(sale);
+		builder.append(", type=");
+		builder.append(type);
+		builder.append(", category=");
+		builder.append(category);
+		builder.append(", color=");
+		builder.append(color);
+		builder.append(", description=");
+		builder.append(description);
+		builder.append(", image=");
+		builder.append(image);
+		builder.append("]");
+		return builder.toString();
 	}
 
 	public String infoString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("\n\t idItem=");
-		builder.append(idItem);
-		builder.append("\n\t Category=");
+		builder.append(" idItem=");
 		builder.append(getCategory());
-		builder.append("\n\t name=");
+		builder.append("\n name=");
 		builder.append(name);
-		builder.append("\n\t price=");
+		builder.append("\n price=");
 		builder.append(price);
-		builder.append("\n\t sale=");
+		builder.append("\n sale=");
 		builder.append(sale);
-		builder.append("\n\t color=");
+		builder.append("\n type=");
+		builder.append(type);
+		builder.append("\n category=");
+		builder.append(category);
+		builder.append("\n color=");
 		builder.append(color);
-		builder.append("\n\t description=");
+		builder.append("\n description=");
 		builder.append(description);
 		return builder.toString();
 	}
@@ -272,10 +296,9 @@ public class Item implements Serializable {
 			return false;
 		Item other = (Item) obj;
 		return idItem == other.idItem;
-//		return Objects.equals(color, other.color) && Objects.equals(description, other.description)
-//				&& idCategory == other.idCategory && idItem == other.idItem && Objects.equals(image, other.image)
-//				&& Objects.equals(name, other.name)
-//				&& Double.doubleToLongBits(price) == Double.doubleToLongBits(other.price) && sale == other.sale;
 	}
 
+	public void setPriceAfterSale(double sale) {
+		this.setPrice((this.getPrice() - ((sale / 100) * this.getPrice())));
+	}
 }
