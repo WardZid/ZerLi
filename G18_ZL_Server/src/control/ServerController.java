@@ -166,7 +166,7 @@ public class ServerController extends ObservableServer {
 			handleGetRequest(clMsg, client);
 			break;
 		case POST:
-
+			handlePostRequest(clMsg,client);
 			break;
 		case UPDATE:
 			handleUpdateRequest(clMsg);
@@ -292,6 +292,20 @@ public class ServerController extends ObservableServer {
 
 	}
 
+	private void handlePostRequest(MyMessage clMsg, ConnectionToClient client) {
+
+		String[] request = clMsg.getInfo().split("/");
+
+		if(request[0].equals("complaint")) {
+			Complaint complaint=(Complaint) clMsg.getContent();
+			DBController.insertComplaint(complaint);
+		}
+		else {
+			ServerView.printErr(getClass(), "Unhandled Get request: " + clMsg.getInfo());
+		}
+
+	}
+	
 	/**
 	 * handles clients' UPDATE requests
 	 * 
