@@ -23,7 +23,7 @@
             <VBox alignment="CENTER" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="200.0" spacing="15.0">
                <children>
                   <Label text="Orders" />
-                  <ComboBox fx:id="storeCB" maxWidth="1.7976931348623157E308" />
+                  <ComboBox fx:id="storeCB" maxWidth="1.7976931348623157E308" promptText="Choose Branch" />
                   <ListView fx:id="ordersLV" prefWidth="100.0" VBox.vgrow="ALWAYS" />
                </children>
             </VBox>
@@ -37,6 +37,7 @@
                     <rowConstraints>
                         <RowConstraints minHeight="20.0" vgrow="SOMETIMES" />
                       <RowConstraints minHeight="20.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="20.0" prefHeight="30.0" vgrow="SOMETIMES" />
                       <RowConstraints minHeight="20.0" vgrow="SOMETIMES" />
                       <RowConstraints minHeight="20.0" vgrow="SOMETIMES" />
                         <RowConstraints fillHeight="false" minHeight="20.0" vgrow="SOMETIMES" />
@@ -44,17 +45,19 @@
                      <children>
                         <Label text="Order Info:" underline="true" />
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Order ID:" GridPane.rowIndex="1" />
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Order Date:" GridPane.rowIndex="2" />
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Delivery Date:" GridPane.rowIndex="3" />
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Address:" GridPane.rowIndex="4" />
+                        <Text layoutX="15.0" layoutY="98.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Branch:" GridPane.rowIndex="2" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Order Date:" GridPane.rowIndex="3" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Delivery Date:" GridPane.rowIndex="4" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Address:" GridPane.rowIndex="5" />
                         <Text layoutX="15.0" layoutY="53.0" strokeType="OUTSIDE" strokeWidth="0.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                        <Text layoutX="161.0" layoutY="53.0" strokeType="OUTSIDE" strokeWidth="0.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                        <Text layoutX="161.0" layoutY="52.0" strokeType="OUTSIDE" strokeWidth="0.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                        <Text layoutX="161.0" layoutY="53.0" strokeType="OUTSIDE" strokeWidth="0.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                        <Text layoutX="161.0" layoutY="53.0" strokeType="OUTSIDE" strokeWidth="0.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                        <Text layoutX="161.0" layoutY="52.0" strokeType="OUTSIDE" strokeWidth="0.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                        <Text layoutX="161.0" layoutY="53.0" strokeType="OUTSIDE" strokeWidth="0.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
                         <TextField fx:id="orderIdTF" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                        <TextField fx:id="orderDateTF" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                        <TextField fx:id="deliveryTF" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                        <TextField fx:id="addressTF" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                        <TextField fx:id="branchTF" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <TextField fx:id="orderDateTF" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                        <TextField fx:id="deliveryTF" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                        <TextField fx:id="addressTF" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="5" />
                      </children>
                      <VBox.margin>
                         <Insets />
