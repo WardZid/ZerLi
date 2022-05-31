@@ -2,19 +2,22 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<StackPane prefHeight="110.0" prefWidth="251.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+<StackPane prefHeight="122.0" prefWidth="280.0" style="-fx-background-color: &quot;white&quot;;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="boundary.fxmlControllers.orderItemController">
    <children>
       <HBox spacing="40.0">
          <children>
-            <ImageView fitHeight="109.0" fitWidth="97.0" pickOnBounds="true" preserveRatio="true" />
-            <VBox alignment="CENTER" spacing="10.0" HBox.hgrow="ALWAYS">
+            <ImageView fitHeight="119.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../../../../Pictures/משקה%20מוגז%20טבעי%20ללא%20סוכר.png" />
+               </image></ImageView>
+            <VBox alignment="CENTER" minWidth="118.0" prefHeight="122.0" prefWidth="118.0" spacing="10.0" style="-fx-background-color: &quot;gray&quot;;" HBox.hgrow="ALWAYS">
                <children>
                   <Label fx:id="nameOrderLbl" text="name" VBox.vgrow="ALWAYS">
                      <font>
@@ -26,7 +29,7 @@
                         <Font size="15.0" />
                      </font>
                   </Label>
-                  <Label fx:id="priceLbl" text="Label">
+                  <Label fx:id="priceLbl" text="Label" VBox.vgrow="ALWAYS">
                      <font>
                         <Font size="15.0" />
                      </font>

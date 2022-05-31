@@ -1,18 +1,24 @@
 package boundary.fxmlControllers;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
+import boundary.ClientView;
 import control.MainController;
 import entity.Customer;
+import entity.Item;
 import entity.Order;
 import entity.Store;
+import entity.Item.ItemInBuild;
 import entity.MyMessage.MessageType;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -76,16 +82,37 @@ public class CustomerOrdersController implements Initializable {
   				int indexorder = (Integer.parseInt(newValue))-1;
   				selectedOrder=orders.get(indexorder);
   				previewOrder( );
-  				loadItemToVBox( );
+  				
+  				try {
+					loadItemToVBox( );
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+  				
  
 			}
 		});
 
 	}
 	
-	private void loadItemToVBox() {
+	private void loadItemToVBox() throws IOException {
 		 
+		orderItemVB.getChildren().clear();
+		selectedOrder = (Order) MainController.getMyClient().send(MessageType.GET, "order/fill", selectedOrder);
+		System.out.println(selectedOrder.getItems());
 		
+		
+		for (Item orderItem : selectedOrder.getItems()) {
+			FXMLLoader fXMLLoader = new FXMLLoader(ClientView.class.getResource("fxmls/orderItem-view.fxml"));
+			Node node = fXMLLoader.load();
+			
+			orderItemController orderItemController = fXMLLoader.getController();
+			
+			 
+			orderItemVB.getChildren().add(node );
+
+		}
 	}
 
 	private void loadOrders( ) {
