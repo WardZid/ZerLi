@@ -26,7 +26,7 @@ import javafx.scene.control.TextField;
 public class DeliveryController implements Initializable {
 
 	/**
-	 * Orders to be viewd
+	 * Orders to be viewed
 	 */
 	private ArrayList<Order> orders;
 	/**
