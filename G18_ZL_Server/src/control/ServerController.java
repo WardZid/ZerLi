@@ -14,6 +14,7 @@ import entity.Customer.CustomerStatus;
 import entity.MyMessage;
 import entity.MyMessage.MessageType;
 import entity.Order;
+import entity.Survey;
 import entity.User;
 import ocsf.server.ConnectionToClient;
 import ocsf.server.ObservableServer;
@@ -303,6 +304,9 @@ public class ServerController extends ObservableServer {
 			} else if (request[1].equals("by")) {
 				clMsg.setContent(DBController.getComplaintsBy(request[2], request[3]));
 			}
+		} else if (request[0].equals("question")) {
+			if(request[1].equals("all"))
+				clMsg.setContent(DBController.getQuestionsAll());
 		} else {
 			ServerView.printErr(getClass(), "Unhandled Get request: " + clMsg.getInfo());
 		}
@@ -315,7 +319,11 @@ public class ServerController extends ObservableServer {
 
 		if (request[0].equals("complaint")) {
 			Complaint complaint = (Complaint) clMsg.getContent();
-			DBController.insertComplaint(complaint);
+			clMsg.setContent(DBController.insertComplaint(complaint));
+			
+		} else if (request[0].equals("survey")) {
+			Survey s=(Survey) clMsg.getContent();
+			clMsg.setContent(DBController.insertSurvey(s));
 		} else {
 			ServerView.printErr(getClass(), "Unhandled POST request: " + clMsg.getInfo());
 		}
@@ -344,6 +352,9 @@ public class ServerController extends ObservableServer {
 		} else if (request[0].equals("complaint")) {
 			Complaint complaint = (Complaint) clMsg.getContent();
 			clMsg.setContent(DBController.updateComplaint(complaint));
-		}
+		} else if (serverState) {
+			
+		} else
+			ServerView.printErr(getClass(),"Unhandled Update Request: " +clMsg.getInfo());
 	}
 }
