@@ -1,11 +1,13 @@
 package control;
 
 import java.net.InetAddress;
+
 import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import boundary.ClientView;
+ 
 
 public class MainController {
 
@@ -57,6 +59,43 @@ public class MainController {
 		Date date = new Date(System.currentTimeMillis());
 		return formatter.format(date);
 	}
+	
+	public static long timeDiffSecond(String start_date, String end_date) {
+		// formats date and time  -> "yyyy-MM-dd HH:mm:ss"
+		SimpleDateFormat sdf= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        
+     
+			  
+            // parse method is used to parse
+            // the text from a string to
+            // produce the date
+            Date d1 = null ,d2 = null;
+			try {
+				 d1 = sdf.parse(start_date);
+				 d2 = sdf.parse(end_date);
+			} catch (java.text.ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+            
+  
+            // Calucalte time difference
+            // in milliseconds
+            long difference_In_Time
+                = d2.getTime() - d1.getTime();
+  
+            // Calucalte time difference in
+            // seconds, minutes, hours, years,
+            // and days
+            long difference_In_Seconds
+                = (difference_In_Time
+                   / 1000)
+                  % 60;
+   
+		
+		return difference_In_Seconds;
+	}
+	
 	
 	
 }

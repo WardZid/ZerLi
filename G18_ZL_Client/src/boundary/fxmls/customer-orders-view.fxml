@@ -24,7 +24,6 @@
                <children>
                   <Label text="Orders" />
                   <ListView fx:id="ordersLV" prefWidth="100.0" VBox.vgrow="ALWAYS" />
-                  <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" style="-fx-background-color: #ff5000;" text="Cancel Order" />
                </children>
             </VBox>
             <VBox alignment="CENTER_LEFT" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="300.0" spacing="15.0">
@@ -108,8 +107,13 @@
                   </VBox>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                      <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="You have time" />
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+                        <VBox alignment="CENTER" prefHeight="94.0" prefWidth="279.0" spacing="6.0">
+                           <children>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="You have time" />
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+                              <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" style="-fx-background-color: #ff5000;" text="Cancel Order"  onMousePressed="#onCancelOrderBtnPressed"/>
+                           </children>
+                        </VBox>
                      </children>
                   </HBox>
                </children>

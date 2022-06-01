@@ -21,10 +21,12 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
@@ -172,6 +174,23 @@ public class CustomerOrdersController implements Initializable {
 		 
 	 
 	  
+	}
+	
+	public void  onCancelOrderBtnPressed(){
+		System.out.println("cancel");
+		if(selectedOrder==null) {
+			
+			Alert errorAlert = new Alert(AlertType.ERROR);
+			errorAlert.setHeaderText(null);
+			errorAlert.setContentText("You have to pick order to cancel");
+			errorAlert.showAndWait();
+			return;
+		}
+		
+		
+		System.out.println(MainController.timeDiffSecond("2022-06-02 15:00:00", "2022-06-02 15:00:10"));
+		
+		
 	}
 	
 	
