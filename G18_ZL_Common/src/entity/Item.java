@@ -285,4 +285,7 @@ public class Item implements Serializable {
 	public double getPriceAfterSale() {
 		return (this.getPrice() - (((double)sale / 100) * this.getPrice()));
 	}
+	public double getPriceBeforeSale() {
+		return (this.getPrice()*100/(100-sale) );
+	}
 }
