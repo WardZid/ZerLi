@@ -8,8 +8,11 @@ import boundary.fxmlControllers.ClientConsoleController.Navigation;
 import control.MainController;
 import entity.Store;
 import entity.MyMessage.MessageType;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -80,9 +83,12 @@ public class OrderDetailsController implements Initializable {
 
 	@FXML
 	private Label required6;
-	
-    @FXML
-    private Label required7;
+
+	@FXML
+	private Label required7;
+
+	@FXML
+	private TextField credutCardtextfield;
 
 	private static ArrayList<String> StoreAddressName = new ArrayList<String>();
 	private static ArrayList<String> houreNum = new ArrayList<String>();
@@ -91,6 +97,47 @@ public class OrderDetailsController implements Initializable {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		credutCardtextfield.focusedProperty().addListener(new ChangeListener<Boolean>() {
+			@Override
+			public void changed(ObservableValue<? extends Boolean> arg0, Boolean oldPropertyValue,
+					Boolean newPropertyValue) {
+ 
+				if (newPropertyValue) {
+					// Textfield on focus" ;
+
+				} else {
+
+					// Textfield is null
+					if (credutCardtextfield.getText().trim().isEmpty()) {
+						credutCardtextfield.setText(0 + "");
+					}
+
+					else {
+						// Textfield is not number
+
+						if (!isNumeric(credutCardtextfield.getText())) {
+							credutCardtextfield.setText("0");
+						} else {
+							if (credutCardtextfield.getText().length()>6) {
+								credutCardtextfield.setText("0");
+
+							}
+							// Textfield ==0
+							if (Integer.parseInt(credutCardtextfield.getText()) == 0) {
+								credutCardtextfield.setText("0");
+
+							} else {
+
+								credutCardtextfield.setStyle("-fx-text-fill: black; ");
+								Integer.parseInt(credutCardtextfield.getText());
+								Integer.parseInt(credutCardtextfield.getText());
+							}
+						}
+					}
+
+				}
+			}
+		});
 
 		noteLable.setVisible(false);
 		required1.setVisible(false);
@@ -143,7 +190,8 @@ public class OrderDetailsController implements Initializable {
 
 	public void onPaymentPressed() {
 		if (DelevireyDatePicker.getValue() == null || StoreAddressCombo.getValue() == null
-				|| HourCombo.getValue() == null || MinutesCombo.getValue() == null) {
+				|| HourCombo.getValue() == null || MinutesCombo.getValue() == null
+				|| credutCardtextfield.getText().trim().isEmpty()||Integer.parseInt(credutCardtextfield.getText())==0) {
 
 			noteLable.setVisible(true);
 			required1.setVisible(true);
@@ -153,7 +201,8 @@ public class OrderDetailsController implements Initializable {
 			required5.setVisible(true);
 			required6.setVisible(true);
 			required7.setVisible(true);
-
+ 
+	
 		} else {
 
 			if (AddShippingCheckBox.isSelected() == true) {
@@ -190,14 +239,30 @@ public class OrderDetailsController implements Initializable {
 				CartController.getOrderInProcess().setIdOrderStatus(0);
 				CartController.getOrderInProcess().setAddress(AddressText.getText());
 				CartController.getOrderInProcess().addPriceForShipping();
+				CartController.getOrderInProcess().setOrderDate(MainController.currentTime()); 
 				if (StoreAddressCombo.getValue() != null)
 					CartController.getOrderInProcess().setStore(Store.valueOf(StoreAddressCombo.getValue()));
 
+				String str = credutCardtextfield.getText();
+				System.out.println(str);
 				System.out.println(CartController.getOrderInProcess().toString());
 				System.out.println(DelevireyDatePicker.getValue().toString() + " " + HourCombo.getValue() + ":"
 						+ MinutesCombo.getValue() + ":00");
 			}
+
 		}
 
+	}
+
+	public static boolean isNumeric(String strNum) {
+		if (strNum == null) {
+			return false;
+		}
+		try {
+			int d = Integer.parseInt(strNum);
+		} catch (NumberFormatException nfe) {
+			return false;
+		}
+		return true;
 	}
 }
