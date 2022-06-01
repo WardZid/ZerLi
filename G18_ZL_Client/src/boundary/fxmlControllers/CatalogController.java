@@ -42,6 +42,8 @@ public class CatalogController implements Initializable {
 
     @FXML
     private Label nameItemLable;
+    @FXML
+    private Label UserNameLable;
     
     @FXML
     private VBox catalogvbox;
@@ -85,6 +87,13 @@ public class CatalogController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		
+		
+		
+		
+		
+		
+		
+		UserNameLable.setText(ClientConsoleController.getCustomer().getName());
 		this.getvboxViewItemDescription().setVisible(false);
 		
 		setLabelNumItemInOrderText();
