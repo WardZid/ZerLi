@@ -13,9 +13,9 @@ public class Item implements Serializable {
 		private static final long serialVersionUID = 1L;
 		private int amount;
 
-		public OrderItem(int idItem, String name, double price, int sale, String type, String category, String color,
+		public OrderItem(int idItem, String name, double price, int sale, String category, String color,
 				String description, Image image, int amount) {
-			super(idItem, name, price, sale, type, category, color, description, image);
+			super(idItem, name, price, sale, category, color, description, image);
 			this.amount = amount;
 		}
 
@@ -61,9 +61,9 @@ public class Item implements Serializable {
 		private static final long serialVersionUID = 1L;
 		private int amount;
 
-		public ItemInBuild(int idItem, String name, double price, int sale, String type, String category, String color,
+		public ItemInBuild(int idItem, String name, double price, int sale, String category, String color,
 				String description, Image image, int amount) {
-			super(idItem, name, price, sale, type, category, color, description, image);
+			super(idItem, name, price, sale, category, color, description, image);
 			this.amount = amount;
 		}
 
@@ -125,7 +125,6 @@ public class Item implements Serializable {
 	private String name;
 	private double price;
 	private int sale;
-	private String type;
 	private String category;
 	private String color;
 	private String description;
@@ -136,19 +135,17 @@ public class Item implements Serializable {
 	 * @param name
 	 * @param price
 	 * @param sale
-	 * @param type
 	 * @param category
 	 * @param color
 	 * @param description
 	 * @param image
 	 */
-	public Item(int idItem, String name, double price, int sale, String type, String category, String color,
+	public Item(int idItem, String name, double price, int sale, String category, String color,
 			String description, Image image) {
 		this.idItem = idItem;
 		this.name = name;
 		this.price = price;
 		this.sale = sale;
-		this.type = type;
 		this.category = category;
 		this.color = color;
 		this.description = description;
@@ -160,7 +157,6 @@ public class Item implements Serializable {
 		this.name = item.name;
 		this.price = item.price;
 		this.sale = item.sale;
-		this.type = item.type;
 		this.category = item.category;
 		this.color = item.color;
 		this.description = item.description;
@@ -198,14 +194,6 @@ public class Item implements Serializable {
 
 	public void setSale(int sale) {
 		this.sale = sale;
-	}
-
-	public String getType() {
-		return type;
-	}
-
-	public void setType(String type) {
-		this.type = type;
 	}
 
 	public String getCategory() {
@@ -251,8 +239,6 @@ public class Item implements Serializable {
 		builder.append(price);
 		builder.append(", sale=");
 		builder.append(sale);
-		builder.append(", type=");
-		builder.append(type);
 		builder.append(", category=");
 		builder.append(category);
 		builder.append(", color=");
@@ -275,8 +261,6 @@ public class Item implements Serializable {
 		builder.append(price);
 		builder.append("\n sale=");
 		builder.append(sale);
-		builder.append("\n type=");
-		builder.append(type);
 		builder.append("\n category=");
 		builder.append(category);
 		builder.append("\n color=");
