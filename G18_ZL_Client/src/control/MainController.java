@@ -5,6 +5,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 import boundary.ClientView;
  
@@ -60,11 +61,12 @@ public class MainController {
 		return formatter.format(date);
 	}
 	
-	public static long timeDiffSecond(String start_date, String end_date) {
+	public static long timeDiffSecond(String start_date, String end_date,String ReturnType) {
 		// formats date and time  -> "yyyy-MM-dd HH:mm:ss"
 		SimpleDateFormat sdf= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         
-     
+     System.out.println(start_date);
+     System.out.println(end_date);
 			  
             // parse method is used to parse
             // the text from a string to
@@ -79,21 +81,16 @@ public class MainController {
 			}
             
   
-            // Calucalte time difference
-            // in milliseconds
-            long difference_In_Time
-                = d2.getTime() - d1.getTime();
-  
-            // Calucalte time difference in
-            // seconds, minutes, hours, years,
-            // and days
-            long difference_In_Seconds
-                = (difference_In_Time
-                   / 1000)
-                  % 60;
-   
+             long diff = d1.getTime()-d2.getTime();//as given
+             
+           if(ReturnType.equals("hour"))
+        	   return TimeUnit.MILLISECONDS.toHours(diff) ;
+           if(ReturnType.equals("second"))
+        	   return TimeUnit.MILLISECONDS.toSeconds(diff);
+           if(ReturnType.equals("min"))
+        	   return TimeUnit.MILLISECONDS.toSeconds(diff);
 		
-		return difference_In_Seconds;
+		return TimeUnit.MILLISECONDS.toSeconds(diff);
 	}
 	
 	
