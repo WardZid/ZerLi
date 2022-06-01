@@ -21,6 +21,8 @@ import entity.Item;
 import entity.Order;
 import entity.Receipt;
 import entity.Store;
+import entity.Survey;
+import entity.SurveyQuestion;
 import entity.User;
 import javafx.scene.image.Image;
 
@@ -288,6 +290,40 @@ public class DBController {
 		}
 		return category;
 	}
+	
+	public static ArrayList<String> getCategoryByType(String type) {
+		ArrayList<String> types = new ArrayList<>();
+
+		try {
+			ResultSet rs = statement.executeQuery("SELECT * FROM category WHERE typr='"+type+"'");
+			rs.beforeFirst(); // ---move back to first row
+			while (rs.next()) {
+				types.add(rs.getString("category"));
+
+			}
+			rs.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return types;
+	}
+	
+	public static ArrayList<String> getTypeAll() {
+		ArrayList<String> types = new ArrayList<>();
+
+		try {
+			ResultSet rs = statement.executeQuery("SELECT * FROM item_type");
+			rs.beforeFirst(); // ---move back to first row
+			while (rs.next()) {
+				types.add(rs.getString("type"));
+
+			}
+			rs.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return types;
+	}
 
 	public static ArrayList<BuildItem> getBuildItemsAll() {
 		ArrayList<BuildItem> buildItems = new ArrayList<>();
@@ -509,6 +545,22 @@ public class DBController {
 		return stores;
 	}
 
+	public static ArrayList<String> getQuestionsAll(){
+		ArrayList<String> questions = new ArrayList<>();
+		
+		try {
+			ResultSet rs=statement.executeQuery("Select * FROM assignment3.question");
+			rs.beforeFirst(); // ---move back to first row
+			while (rs.next()) {
+				questions.add(rs.getString("question"));
+			}
+		} catch (Exception e) {
+			ServerView.printErr(DBController.class, e.getMessage());
+		}
+		
+		return questions;
+	}
+	
 	// Report get queries
 	public static ArrayList<String> getMonthsInBranch(String idStore) {
 		ArrayList<String> monthsYears = new ArrayList<>();
@@ -627,19 +679,68 @@ public class DBController {
 
 	// INSERT QUERIES (POST)*******************************************************
 
-	public static void insertComplaint(Complaint c) {
+	public static boolean insertComplaint(Complaint c) {
+		int linesChanged=0;
 		try {
 			PreparedStatement ps = conn.prepareStatement("INSERT INTO complaint (`id_customer`, `status_complaint`, `date_complaint`, `complaint`) VALUES(?,?,?,?)");
 			ps.setInt(1, c.getIdCustomer());
 			ps.setString(2, "OPEN");
 			ps.setString(3, c.getDate());
 			ps.setString(4, c.getComplaint());
-			ps.executeUpdate();
+			linesChanged=ps.executeUpdate();
 			ps.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 			ServerView.printErr(DBController.class, "Unable to add new complaint: " + c.toString());
 		}
+		if(linesChanged==0)
+			return false;
+		return true;
+	}
+	
+	public static boolean insertSurvey(Survey s) {
+		int linesChanged=0;
+		try {
+			PreparedStatement ps = conn.prepareStatement("INSERT INTO survey (`date_survey`, `id_store`) VALUES(?,?)",Statement.RETURN_GENERATED_KEYS);
+			ps.setString(1, s.getDateSurvey());
+			ps.setInt(2, s.getIdStore());
+			linesChanged=ps.executeUpdate();
+			
+			ResultSet generatedKeys=ps.getGeneratedKeys();
+			int idSurvey=generatedKeys.getInt(0);
+			ps.close();
+			System.out.println(idSurvey);
+			for (SurveyQuestion sq : s.getQuestions()) {
+				insertSurveyAnswer(idSurvey,sq);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			ServerView.printErr(DBController.class, "Unable to add new survey: " + s.toString());
+			return false;
+		}
+		if(linesChanged==0)
+			return false;
+		return true;
+	}
+	
+	public static boolean insertSurveyAnswer(int idSurvey, SurveyQuestion sq) {
+		int linesChanged=0;
+		try {
+			PreparedStatement ps = conn.prepareStatement("INSERT INTO survey_question (`id_survey`, `id_question`,`answer`) VALUES(?,?,?)");
+			ps.setInt(1,idSurvey);
+			ps.setInt(2, sq.getIdQuestion());
+			ps.setInt(3, sq.getAnswer());
+			linesChanged=ps.executeUpdate();
+			ps.close();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			ServerView.printErr(DBController.class, "Unable to add new survey_question: " + sq.toString());
+			return false;
+		}
+		if(linesChanged==0)
+			return false;
+		return true;
 	}
 
 	// UPDATE QUERIES****************************************************

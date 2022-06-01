@@ -14,6 +14,7 @@ import entity.Customer.CustomerStatus;
 import entity.MyMessage;
 import entity.MyMessage.MessageType;
 import entity.Order;
+import entity.Survey;
 import entity.User;
 import ocsf.server.ConnectionToClient;
 import ocsf.server.ObservableServer;
@@ -166,7 +167,7 @@ public class ServerController extends ObservableServer {
 			handleGetRequest(clMsg, client);
 			break;
 		case POST:
-			handlePostRequest(clMsg,client);
+			handlePostRequest(clMsg, client);
 			break;
 		case UPDATE:
 			handleUpdateRequest(clMsg);
@@ -190,9 +191,9 @@ public class ServerController extends ObservableServer {
 	}
 
 	private void handleInfoMessage(MyMessage clMsg, ConnectionToClient client) {
-		
+
 		String[] request = clMsg.getInfo().split("/");
-		
+
 		if (request[0].equals("disconnect")) {
 			ServerView.print(getClass(), "Client Disconnected: " + client.toString());
 			ServerViewController.removeClient(client);
@@ -200,15 +201,14 @@ public class ServerController extends ObservableServer {
 		} else if (request[0].equals("connect")) {
 			ServerView.print(getClass(), "Client Connected: " + client.toString());
 
-		} else if(request[0].equals("log")) {
-			User u=(User) clMsg.getContent();
-			if(request[1].equals("in")) {
+		} else if (request[0].equals("log")) {
+			User u = (User) clMsg.getContent();
+			if (request[1].equals("in")) {
 				clMsg.setContent(DBController.updateLogIn(u));
-			} else if(request[1].equals("out")) {
+			} else if (request[1].equals("out")) {
 				clMsg.setContent(DBController.updateLogOut(u));
 			}
-		}
-		else {
+		} else {
 			ServerView.printErr(getClass(), "Unhandled info Message: " + clMsg.getInfo());
 		}
 	}
@@ -236,10 +236,10 @@ public class ServerController extends ObservableServer {
 				clMsg.setContent(DBController.getOrdersAll());
 			} else if (request[1].equals("by")) {
 				clMsg.setContent(DBController.getOrdersBy(request[2], request[3]));
-			}else if (request[1].equals("fill")) {
-				Order o=(Order)clMsg.getContent();
+			} else if (request[1].equals("fill")) {
+				Order o = (Order) clMsg.getContent();
 				clMsg.setContent(DBController.getOrderItemsFull(o));
-			}else if (request[1].equals("byBranchMonth")) {
+			} else if (request[1].equals("byBranchMonth")) {
 				clMsg.setContent(DBController.getOrdersByBranchMonthYear(request[2], request[3], request[4]));
 			} else if (request[1].equals("report")) {
 				if (request[2].equals("sale")) {
@@ -285,6 +285,13 @@ public class ServerController extends ObservableServer {
 		} else if (request[0].equals("category")) {
 			if (request[1].equals("all"))
 				clMsg.setContent(DBController.getCategoryAll());
+			else if (request[1].equals("by")) {
+				if (request[2].equals("type"))
+					clMsg.setContent(DBController.getCategoryByType(request[3]));
+			}
+		} else if (request[0].equals("type")) {
+			if (request[1].equals("all"))
+				clMsg.setContent(DBController.getTypeAll());
 		} else if (request[0].equals("customer")) {
 			if (request[1].equals("all")) {
 				clMsg.setContent(DBController.getCustomerAll());
@@ -297,6 +304,9 @@ public class ServerController extends ObservableServer {
 			} else if (request[1].equals("by")) {
 				clMsg.setContent(DBController.getComplaintsBy(request[2], request[3]));
 			}
+		} else if (request[0].equals("question")) {
+			if(request[1].equals("all"))
+				clMsg.setContent(DBController.getQuestionsAll());
 		} else {
 			ServerView.printErr(getClass(), "Unhandled Get request: " + clMsg.getInfo());
 		}
@@ -307,16 +317,19 @@ public class ServerController extends ObservableServer {
 
 		String[] request = clMsg.getInfo().split("/");
 
-		if(request[0].equals("complaint")) {
-			Complaint complaint=(Complaint) clMsg.getContent();
-			DBController.insertComplaint(complaint);
-		}
-		else {
+		if (request[0].equals("complaint")) {
+			Complaint complaint = (Complaint) clMsg.getContent();
+			clMsg.setContent(DBController.insertComplaint(complaint));
+			
+		} else if (request[0].equals("survey")) {
+			Survey s=(Survey) clMsg.getContent();
+			clMsg.setContent(DBController.insertSurvey(s));
+		} else {
 			ServerView.printErr(getClass(), "Unhandled POST request: " + clMsg.getInfo());
 		}
 
 	}
-	
+
 	/**
 	 * handles clients' UPDATE requests
 	 * 
@@ -339,6 +352,9 @@ public class ServerController extends ObservableServer {
 		} else if (request[0].equals("complaint")) {
 			Complaint complaint = (Complaint) clMsg.getContent();
 			clMsg.setContent(DBController.updateComplaint(complaint));
-		}
+		} else if (serverState) {
+			
+		} else
+			ServerView.printErr(getClass(),"Unhandled Update Request: " +clMsg.getInfo());
 	}
 }
