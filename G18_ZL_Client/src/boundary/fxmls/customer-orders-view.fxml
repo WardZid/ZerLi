@@ -78,9 +78,9 @@
                   <VBox prefHeight="366.0" prefWidth="300.0" spacing="5.0" style="-fx-background-color: white; -fx-border-radius: 5; -fx-border-color: grey;" VBox.vgrow="ALWAYS">
                      <children>
                         <Label text="Description" />
-                        <TextArea fx:id="descriptionTA" prefHeight="156.0" prefWidth="288.0" />
+                        <TextArea fx:id="descriptionTA" editable="false" prefHeight="156.0" prefWidth="288.0" />
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Greating" />
-                        <TextArea fx:id="grearingTA" prefHeight="200.0" prefWidth="200.0" />
+                        <TextArea fx:id="grearingTA" editable="false" prefHeight="200.0" prefWidth="200.0" />
                      </children>
                      <padding>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -123,7 +123,7 @@
          <children>
             <HBox alignment="TOP_RIGHT">
                <children>
-                  <Button fx:id="backBtn" mnemonicParsing="false" text="back" onMousePressed="#onbackBtnPressed">
+                  <Button fx:id="backBtn" mnemonicParsing="false" onMousePressed="#onbackBtnPressed" text="back">
                      <HBox.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </HBox.margin>
