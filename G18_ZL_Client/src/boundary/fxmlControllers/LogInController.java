@@ -41,6 +41,7 @@ public class LogInController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		errorLbl.setVisible(false);
+		logInBackgroundIV.setImage(new Image("boundary/media/login-bg.jpg"));
 		welcomeIV.setImage(new Image("boundary/media/zli-welcome.png"));
 		userIconIv.setImage(new Image("boundary/media/user-icon.png"));
 		passIconIV.setImage(new Image("boundary/media/pass-icon.png"));

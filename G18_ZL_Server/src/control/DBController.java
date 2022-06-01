@@ -295,7 +295,7 @@ public class DBController {
 		ArrayList<String> types = new ArrayList<>();
 
 		try {
-			ResultSet rs = statement.executeQuery("SELECT * FROM category WHERE typr='"+type+"'");
+			ResultSet rs = statement.executeQuery("SELECT * FROM category WHERE type='"+type+"'");
 			rs.beforeFirst(); // ---move back to first row
 			while (rs.next()) {
 				types.add(rs.getString("category"));
