@@ -16,8 +16,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.GridPane;
 
 public class BuildItemsPageController implements Initializable {
@@ -113,9 +115,16 @@ public class BuildItemsPageController implements Initializable {
 	}
 	
     public void onBuildItemPressed() {
+    	if(buildSelected.getItemsInBuild().size()!=0) {
     	 CartController.getOrderInProcess().addIBuildtemtoOrder(buildSelected);
     	 buildSelected= new BuildItem();
     	 Navigation.navigator("catalog-view.fxml");
+    	}else {
+    		Alert errorAlert = new Alert(AlertType.ERROR);
+			errorAlert.setHeaderText(null);
+			errorAlert.setContentText("You should pick item for build");
+			errorAlert.showAndWait();
+    	}
 	}
 	
 
