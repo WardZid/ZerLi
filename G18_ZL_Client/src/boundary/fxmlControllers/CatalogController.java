@@ -35,90 +35,87 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 
 public class CatalogController implements Initializable {
-    @FXML
-    private Slider SliderPrice;
-    @FXML
-    private Label priceRange;
+	@FXML
+	private Slider SliderPrice;
+	@FXML
+	private Label priceRange;
 	@FXML
 	private GridPane grid;
 	@FXML
 	private ComboBox<String> categoryCB;
 
-    @FXML
-    private ComboBox<String> typeCB;
+	@FXML
+	private ComboBox<String> typeCB;
 
 	@FXML
 	private Label numberItemInOrder;
-	
-    @FXML
-    private VBox vboxViewItemDescription;
-    @FXML
-    private Label descriptionLable;
 
-    @FXML
-    private Label nameItemLable;
-    @FXML
-    private Label UserNameLable;
-    
-    @FXML
-    private VBox catalogvbox;
-    @FXML
+	@FXML
+	private VBox vboxViewItemDescription;
+	@FXML
+	private Label descriptionLable;
+
+	@FXML
+	private Label nameItemLable;
+	@FXML
+	private Label UserNameLable;
+
+	@FXML
+	private VBox catalogvbox;
+	@FXML
 	private ImageView searchIV;
 
 	@FXML
 	private TextField searchTF;
 
-    private int PriceRangeCust;
- 
-    private static ArrayList<Item> items;
+	private int PriceRangeCust;
 
-    private ArrayList<Item> filteredItems=new ArrayList<Item>();
-    
-	private static HashMap<String, String> categoryType=new HashMap<String, String>();
-	
-	public static HashMap<String, String> getCategoryType(){
+	private static ArrayList<Item> items;
+
+	private ArrayList<Item> filteredItems = new ArrayList<Item>();
+
+	private static HashMap<String, String> categoryType = new HashMap<String, String>();
+
+	public static HashMap<String, String> getCategoryType() {
 		return categoryType;
 	}
-	
-
- 
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		
- 
+
 		UserNameLable.setText(ClientConsoleController.getCustomer().getName());
 		this.getvboxViewItemDescription().setVisible(false);
 		setLabelNumItemInOrderText();
 
-		
 		searchIV.setImage(new Image("boundary/media/search-icon.png"));
-		
+
 		typeCB.getItems().add("All Types");
 		categoryCB.getItems().add("All Categories");
-		
-		ArrayList<String> types=(ArrayList<String>) MainController.getMyClient().send(MessageType.GET, "type/all", null);
-		
+
+		ArrayList<String> types = (ArrayList<String>) MainController.getMyClient().send(MessageType.GET, "type/all",
+				null);
+
 		for (String type : types) {
 			typeCB.getItems().add(type);
-			
-			ArrayList<String> categories=(ArrayList<String>) MainController.getMyClient().send(MessageType.GET, "category/by/type/"+type, null);
+
+			ArrayList<String> categories = (ArrayList<String>) MainController.getMyClient().send(MessageType.GET,
+					"category/by/type/" + type, null);
 			for (String category : categories) {
 				categoryType.put(category, type);
 			}
 		}
-		
+
 		typeCB.getSelectionModel().selectFirst();
 		categoryCB.getSelectionModel().selectFirst();
-		
+
 		typeCB.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
 
 			@Override
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-				if(newValue==null)
+				if (newValue == null)
 					return;
-				if(newValue.equals("All Types")) {
+				if (newValue.equals("All Types")) {
 					categoryCB.getSelectionModel().selectFirst();
 					categoryCB.setDisable(true);
 				} else {
@@ -135,17 +132,28 @@ public class CatalogController implements Initializable {
 				filterItemsAndShow();
 			}
 		});
-		
+
 		categoryCB.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
 
 			@Override
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-				if(newValue==null)
+				if (newValue == null)
 					return;
 				filterItemsAndShow();
 			}
 		});
-	
+
+		/// slider fix
+		SliderPrice.valueProperty().addListener(new ChangeListener<Number>() {
+
+			@Override
+			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+				PriceRangeCust = (int) SliderPrice.getValue();
+				priceRange.setText("(0-" + PriceRangeCust + ")");
+				filterItemsAndShow();
+			}
+		});
+
 		loadAllItems();
 
 	}
@@ -153,30 +161,32 @@ public class CatalogController implements Initializable {
 	public VBox getvboxViewItemDescription() {
 		return vboxViewItemDescription;
 	}
+
 	public VBox getcatalogvbox() {
 		return catalogvbox;
 	}
-	
+
 	public Label getnameItemLable() {
 		return nameItemLable;
 	}
+
 	public Label getdescriptionLable() {
 		return descriptionLable;
 	}
-	 
+
 	public void onBuildItemPressed() {
 
 		Navigation.navigator("build-ItemsScene-View.fxml");
 	}
+
 	public void BackBtnFromDesToCata() {
 		getvboxViewItemDescription().setVisible(false);
 		getcatalogvbox().setDisable(false);
 	}
 
- 
 	@FXML
 	void onSearchEnter(KeyEvent event) {
-		if (event.getCode() == KeyCode.ENTER) 
+		if (event.getCode() == KeyCode.ENTER)
 			filterItemsAndShow();
 	}
 
@@ -184,33 +194,50 @@ public class CatalogController implements Initializable {
 	void onSearchPressed() {
 		filterItemsAndShow();
 	}
-	@SuppressWarnings("unchecked")
-	private void loadAllItems() {
-		items = (ArrayList<Item>) MainController.getMyClient().send(MessageType.GET, "item/all", null);
 
+	@SuppressWarnings("unchecked")
+
+	private void loadAllItems() {
+		double maxprice = 0;
+		items = (ArrayList<Item>) MainController.getMyClient().send(MessageType.GET, "item/all", null);
+		// active sale
+		for (Item item : items) {
+			item.setPrice(item.getPriceAfterSale());
+		}
 		filteredItems.addAll(items);
+		for (Item item : items) {
+			if (item.getPrice() > maxprice)
+				maxprice = item.getPrice();
+		}
+		SliderPrice.setMax(maxprice);
+		SliderPrice.setValue(maxprice);
+		System.out.println("maxprice=" + maxprice);
+
 		showFilteredItems();
 	}
-	
+
 	private void filterItemsAndShow() {
-		String search=searchTF.getText();
-		String type=typeCB.getSelectionModel().getSelectedItem();
-		String category=categoryCB.getSelectionModel().getSelectedItem();
-		
+		String search = searchTF.getText();
+		String type = typeCB.getSelectionModel().getSelectedItem();
+		String category = categoryCB.getSelectionModel().getSelectedItem();
+
 		filteredItems.clear();
-		
+
 		for (Item item : items) {
-			if(search==null || search.equals("") || item.getName().contains(search)) {
-				if(type.equals("All Types") || type.equals(categoryType.get(item.getCategory()))) {
-					if(category.equals("All Categories") || category.equals(item.getCategory()))
-						
-						filteredItems.add(item);
+			if (search == null || search.equals("") || item.getName().contains(search)) {
+				if (type.equals("All Types") || type.equals(categoryType.get(item.getCategory()))) {
+					if (category.equals("All Categories") || category.equals(item.getCategory())) {
+						if (item.getPrice() <= (double) PriceRangeCust)
+
+							filteredItems.add(item);
+					}
 				}
 			}
 		}
-		
+		System.out.println("PriceRangeCust=" + PriceRangeCust);
 		showFilteredItems();
 	}
+
 	private void showFilteredItems() {
 		int column = 0;
 		int row = 1;
@@ -235,20 +262,10 @@ public class CatalogController implements Initializable {
 			}
 		}
 	}
+
 	void setLabelNumItemInOrderText() {
 
 		numberItemInOrder.setText(CartController.getOrderInProcess().getItemInOrder() + "");
 	}
 
 }
-
-///// slider fix
-//
-//SliderPrice.valueProperty().addListener(new ChangeListener<Number>() {
-//
-//	@Override
-//	public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-//		PriceRangeCust=(int)SliderPrice.getValue();
-//		
-//	}
-//} );

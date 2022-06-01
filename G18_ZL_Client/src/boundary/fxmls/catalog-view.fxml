@@ -84,7 +84,7 @@
                                  </HBox.margin>
                               </TextField>
                               <ComboBox fx:id="typeCB" prefWidth="150.0" promptText="typeCB" />
-                              <ComboBox fx:id="categoryCB" prefWidth="150.0" promptText="Category">
+                              <ComboBox fx:id="categoryCB" disable="true" prefWidth="150.0" promptText="Category">
                                  <HBox.margin>
                                     <Insets />
                                  </HBox.margin>

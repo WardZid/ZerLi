@@ -38,7 +38,7 @@
                   </StackPane>
                   <HBox alignment="CENTER" spacing="5.0">
                      <children>
-                        <Text fx:id="salePriceText" strikethrough="true" strokeType="OUTSIDE" strokeWidth="0.0" text="dfgbnm,l">
+                        <Text fx:id="salePriceText" strikethrough="true" strokeType="OUTSIDE" strokeWidth="0.0" text="sale price">
                            <font>
                               <Font size="15.0" />
                            </font></Text>
