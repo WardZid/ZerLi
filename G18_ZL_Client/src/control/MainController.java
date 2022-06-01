@@ -61,12 +61,11 @@ public class MainController {
 		return formatter.format(date);
 	}
 	
-	public static long timeDiffSecond(String start_date, String end_date,String ReturnType) {
+	public static long timeDiffHour(String start_date, String end_date ) {
 		// formats date and time  -> "yyyy-MM-dd HH:mm:ss"
 		SimpleDateFormat sdf= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         
-     System.out.println(start_date);
-     System.out.println(end_date);
+       
 			  
             // parse method is used to parse
             // the text from a string to
@@ -83,14 +82,9 @@ public class MainController {
   
              long diff = d1.getTime()-d2.getTime();//as given
              
-           if(ReturnType.equals("hour"))
+         
         	   return TimeUnit.MILLISECONDS.toHours(diff) ;
-           if(ReturnType.equals("second"))
-        	   return TimeUnit.MILLISECONDS.toSeconds(diff);
-           if(ReturnType.equals("min"))
-        	   return TimeUnit.MILLISECONDS.toSeconds(diff);
-		
-		return TimeUnit.MILLISECONDS.toSeconds(diff);
+          
 	}
 	
 	

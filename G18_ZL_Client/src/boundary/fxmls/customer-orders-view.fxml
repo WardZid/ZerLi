@@ -91,7 +91,7 @@
                <children>
                   <VBox alignment="TOP_CENTER" prefHeight="478.0" prefWidth="278.0" spacing="5.0" style="-fx-background-color: white; -fx-border-radius: 5; -fx-background-radius: 5;" VBox.vgrow="ALWAYS">
                      <children>
-                        <Label text="Item Summary" />
+                        <Label text="Items" />
                         <ScrollPane prefHeight="447.0" prefWidth="298.0">
                            <content>
                               <VBox fx:id="orderItemVB" prefHeight="12.0" prefWidth="14.0" />
@@ -109,9 +109,8 @@
                      <children>
                         <VBox alignment="CENTER" prefHeight="94.0" prefWidth="279.0" spacing="6.0">
                            <children>
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="You have time" />
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
-                              <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" style="-fx-background-color: #ff5000;" text="Cancel Order"  onMousePressed="#onCancelOrderBtnPressed"/>
+                              <Text fx:id="resaonLbl" strokeType="OUTSIDE" strokeWidth="0.0" text="You have time" />
+                              <Button fx:id="cancelOrderBtn" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onMousePressed="#onCancelOrderBtnPressed" style="-fx-background-color: #ff5000;" text="Cancel Order" />
                            </children>
                         </VBox>
                      </children>
