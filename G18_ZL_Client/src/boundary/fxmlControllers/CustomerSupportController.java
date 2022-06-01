@@ -10,15 +10,11 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 import boundary.ClientView;
-import control.ClientController;
 import control.MainController;
 import entity.Complaint;
-import entity.MyMessage;
 import entity.MyMessage.MessageType;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -30,15 +26,8 @@ import javafx.scene.control.Dialog;
 import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 
 public class CustomerSupportController implements Initializable {
 	@FXML
@@ -92,7 +81,6 @@ public class CustomerSupportController implements Initializable {
 	private TextField statusT;
 	@FXML
     private Button refresh;
-	private CustomerComplaintSendViewController CCSV = new CustomerComplaintSendViewController();
 	private int selectedComplaintId;
 	private Complaint selectedComplaint;
 	public static Node finishButton;
@@ -129,7 +117,6 @@ public class CustomerSupportController implements Initializable {
 					selectedComplaintId = ComplaintL.getSelectionModel().getSelectedItem();
 					selectedComplaint = ComplaintMap.get(selectedComplaintId);
 					setTexts();
-					// descriptionT.setDisable(true);
 					setEditable(true);
 					replyT.clear();
 				}catch(NullPointerException e) {}
@@ -152,7 +139,7 @@ public class CustomerSupportController implements Initializable {
 
 
 	private void setComplaintsListView() {
-		ArrayList<Complaint> complaintsList =  ComplaintQueryFromDB(MessageType.GET,null);
+		ArrayList<Complaint> complaintsList =  (ArrayList<Complaint>)ComplaintQueryFromDB(MessageType.GET,null);
 		for(int i=0 ; i<complaintsList.size() ; i++)
 		ComplaintMap.put(complaintsList.get(i).getIdComplaint(), complaintsList.get(i));
 		ComplaintL.getItems().clear();
@@ -182,13 +169,8 @@ public class CustomerSupportController implements Initializable {
 		descriptionT.clear();
 		replyT.clear();
 	}
-	public void onRefresh(ActionEvent event) {
-		ArrayList<Complaint> complaintsList =  ComplaintQueryFromDB(MessageType.GET,null);
-		setComplaintsListView();
-	}
 	@FXML
 	public void onEnter(ActionEvent event) throws IOException {
-		ArrayList<Complaint> arraylist = null;
 		Dialog<ButtonType> dialog = LoadDialogPane();
 		Optional<ButtonType> clickedButton = dialog.showAndWait();
 		if (clickedButton.get() == ButtonType.FINISH) {
@@ -216,7 +198,7 @@ public class CustomerSupportController implements Initializable {
 		return dialog;
 	}
 	
-	private ArrayList<Complaint> ComplaintQueryFromDB(MessageType messageType, Complaint complaint){
-		return (ArrayList<Complaint>) MainController.getMyClient().send(messageType, "complaint/by/status_complaint/OPEN",complaint);
+	private Object ComplaintQueryFromDB(MessageType messageType, Complaint complaint){
+		return  MainController.getMyClient().send(messageType, "complaint/by/status_complaint/OPEN",complaint);
 	}
 }

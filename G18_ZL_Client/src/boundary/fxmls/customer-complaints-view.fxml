@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextArea?>
@@ -21,7 +22,15 @@
                   <VBox fx:id="vb2" prefHeight="494.0" prefWidth="313.0">
                      <children>
                         <Label text="Complaints history" />
-                        <ListView fx:id="ComplaintsL" prefHeight="492.0" prefWidth="313.0" />
+                        <ListView fx:id="ComplaintsL" prefHeight="492.0" prefWidth="313.0">
+                           <VBox.margin>
+                              <Insets bottom="10.0" />
+                           </VBox.margin></ListView>
+                        <Button fx:id="refreshButton" mnemonicParsing="false" onAction="#onRefresh" text="Refresh">
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                        </Button>
                      </children>
                      <padding>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />

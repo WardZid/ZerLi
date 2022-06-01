@@ -13,16 +13,16 @@
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" spacing="10.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="boundary.fxmlControllers.ExpertAnalysisController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" spacing="20.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="boundary.fxmlControllers.ExpertAnalysisController">
    <children>
       <HBox spacing="30.0">
          <children>
             <VBox>
                <children>
-                  <Label text="Survey Id" />
-                  <ComboBox fx:id="surveyIdComboBox" prefHeight="26.0" prefWidth="150.0" />
+                  <Label text="Survey Date" />
+                  <ComboBox fx:id="surveyDatesComboBox" prefHeight="26.0" prefWidth="150.0" />
                </children>
             </VBox>
             <VBox>
@@ -31,31 +31,35 @@
                   <ComboBox fx:id="questionsComboBox" prefHeight="26.0" prefWidth="150.0" />
                </children>
             </VBox>
-            <VBox>
-               <children>
-                  <Label text="Survey Date" />
-                  <ComboBox fx:id="surveyDatesComboBox" prefHeight="26.0" prefWidth="150.0" />
-               </children>
-            </VBox>
          </children>
       </HBox>
-      <HBox prefHeight="413.0" prefWidth="900.0" spacing="30.0">
+      <HBox prefHeight="450.0" prefWidth="900.0" spacing="30.0">
          <children>
             <BarChart fx:id="answersBarChart">
               <xAxis>
-                <CategoryAxis side="BOTTOM" />
+                <CategoryAxis label="Answer" prefWidth="316.0" side="BOTTOM" fx:id="x" />
               </xAxis>
               <yAxis>
-                <NumberAxis side="LEFT" />
+                <NumberAxis fx:id="y" label="Percentage" side="LEFT">
+                     <tickLabelFont>
+                        <Font size="12.0" />
+                     </tickLabelFont>
+                  </NumberAxis>
               </yAxis>
             </BarChart>
-            <VBox spacing="10.0">
+            <VBox prefHeight="190.0" prefWidth="397.0" spacing="10.0">
                <children>
-                  <TextArea fx:id="questionT" editable="false" prefHeight="200.0" prefWidth="200.0" wrapText="true" />
-                  <TableView fx:id="answersTableView" prefHeight="414.0" prefWidth="344.0">
+                  <TextArea fx:id="questionT" disable="true" editable="false" wrapText="true" />
+                  <TableView fx:id="answersTableView" minHeight="-Infinity" prefHeight="150.0" prefWidth="374.0">
                     <columns>
-                        <TableColumn fx:id="answersTableColumn" prefWidth="174.39996945858002" text="Answer" />
-                        <TableColumn fx:id="distributionTableColumn" prefWidth="170.4000244140625" text="Quantity" />
+                        <TableColumn fx:id="answersTableColumn" prefWidth="187.9999145269394" text="Answer" />
+                        <TableColumn fx:id="distributionTableColumn" maxWidth="182.0" prefWidth="207.2000732421875" text="Quantity" />
+                    </columns>
+                  </TableView>
+                  <TableView fx:id="questionSumTableView" minHeight="-Infinity" prefHeight="150.0" prefWidth="374.0">
+                    <columns>
+                      <TableColumn fx:id="questionsNumTableCol" prefWidth="192.7999633550644" text="Question number" />
+                      <TableColumn fx:id="sumTableCol" prefWidth="180.0" text="Sum of Answers" />
                     </columns>
                   </TableView>
                </children>
@@ -65,7 +69,6 @@
       <ButtonBar prefHeight="79.0" prefWidth="900.0">
         <buttons>
           <Button fx:id="sendReportButton" mnemonicParsing="false" text="Send Report" />
-            <Button mnemonicParsing="false" text="Close" />
         </buttons>
       </ButtonBar>
    </children>

@@ -69,7 +69,6 @@
             </VBox>
             <ButtonBar>
               <buttons>
-                  <Button fx:id="refresh" mnemonicParsing="false" onAction="#onRefresh" text="Refresh" />
                   <Button fx:id="sendReplyButton" mnemonicParsing="false" onAction="#onSendReply" style="-fx-background-color: #1de9b6;" text="Send Reply" />
                   <Button fx:id="enterNewComplaintButton" mnemonicParsing="false" onAction="#onEnter" text="Enter new Complaint" />
               </buttons>

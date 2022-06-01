@@ -84,6 +84,8 @@ public class CustomerComplaintsController implements Initializable {
 
 	@FXML
 	private TextField statusT;
+	@FXML
+    private Button refreshButton;
 	private int selectedComplaintId;
 	private Complaint selectedComplaint;
 	private HashMap<Integer, Complaint> complaints = new HashMap<>();
@@ -94,13 +96,18 @@ public class CustomerComplaintsController implements Initializable {
 		ComplaintsL.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Integer>() {
 			@Override
 			public void changed(ObservableValue<? extends Integer> arg0, Integer arg1, Integer arg2) {
+				try {
 				selectedComplaintId = ComplaintsL.getSelectionModel().getSelectedItem();
+				}catch(NullPointerException e) {}
 				// get complaint
 				selectedComplaint = complaints.get(selectedComplaintId);
 				fillingTexts();
 			}
 
 		});
+	}
+	public void onRefresh(ActionEvent event) {
+		initializeComplaintsList();
 	}
 	private void fillingTexts() {
 		customerIdT.setText(Integer.toString(selectedComplaint.getIdCustomer()));

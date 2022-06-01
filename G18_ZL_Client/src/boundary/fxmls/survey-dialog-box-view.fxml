@@ -11,11 +11,11 @@
 
 <DialogPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
    <content>
-      <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="265.0" prefWidth="500.0">
+      <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="204.0" prefWidth="322.0">
          <children>
-            <Label alignment="BOTTOM_RIGHT" contentDisplay="CENTER" text="Answers have been sent">
+            <Label alignment="BOTTOM_RIGHT" contentDisplay="CENTER" text="Answers have been entered">
                <VBox.margin>
-                  <Insets bottom="10.0" left="120.0" />
+                  <Insets bottom="10.0" left="20.0" />
                </VBox.margin>
                <font>
                   <Font name="System Bold" size="20.0" />
@@ -23,17 +23,12 @@
             </Label>
             <ImageView fitHeight="118.0" fitWidth="149.0" pickOnBounds="true" preserveRatio="true">
                <VBox.margin>
-                  <Insets bottom="30.0" left="175.0" />
+                  <Insets bottom="30.0" left="90.0" />
                </VBox.margin>
                <image>
-                  <Image url="@../../../../../../OneDrive/שולחן%20העבודה/successfuly.jpg" />
+                  <Image url="@../media/confirm.png" />
                </image>
             </ImageView>
-            <Label text="Do you want to Enter more Answer ?">
-               <font>
-                  <Font size="18.0" />
-               </font>
-            </Label>
          </children>
          <padding>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -41,7 +36,6 @@
       </VBox>
    </content>
    <buttonTypes>
-      <ButtonType fx:constant="YES" />
-      <ButtonType fx:constant="NO" />
+      <ButtonType fx:constant="OK" />
    </buttonTypes>
 </DialogPane>
