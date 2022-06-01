@@ -288,6 +288,40 @@ public class DBController {
 		}
 		return category;
 	}
+	
+	public static ArrayList<String> getCategoryByType(String type) {
+		ArrayList<String> types = new ArrayList<>();
+
+		try {
+			ResultSet rs = statement.executeQuery("SELECT * FROM category WHERE typr='"+type+"'");
+			rs.beforeFirst(); // ---move back to first row
+			while (rs.next()) {
+				types.add(rs.getString("category"));
+
+			}
+			rs.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return types;
+	}
+	
+	public static ArrayList<String> getTypeAll() {
+		ArrayList<String> types = new ArrayList<>();
+
+		try {
+			ResultSet rs = statement.executeQuery("SELECT * FROM item_type");
+			rs.beforeFirst(); // ---move back to first row
+			while (rs.next()) {
+				types.add(rs.getString("type"));
+
+			}
+			rs.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return types;
+	}
 
 	public static ArrayList<BuildItem> getBuildItemsAll() {
 		ArrayList<BuildItem> buildItems = new ArrayList<>();
