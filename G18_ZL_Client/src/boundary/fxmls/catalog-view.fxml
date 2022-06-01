@@ -33,9 +33,17 @@
                   </Label>
                   <HBox alignment="TOP_RIGHT" HBox.hgrow="ALWAYS">
                      <children>
-                        <Label fx:id="numberItemInOrder" text="Label">
+                        <Button fx:id="BuildItemBtn" mnemonicParsing="false" onMousePressed="#onBuildItemPressed" text="Build your item" textFill="#380d82" HBox.hgrow="ALWAYS">
                            <font>
-                              <Font size="28.0" />
+                              <Font name="System Bold Italic" size="15.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets right="20.0" />
+                           </HBox.margin>
+                        </Button>
+                        <Label fx:id="numberItemInOrder" text="Label" HBox.hgrow="ALWAYS">
+                           <font>
+                              <Font size="20.0" />
                            </font>
                            <HBox.margin>
                               <Insets left="10.0" />
@@ -69,12 +77,14 @@
                      <children>
                         <HBox spacing="10.0" style="-fx-background-color: white;">
                            <children>
-                              <TextField promptText="Serach For Item">
+                              <ImageView fx:id="searchIV" fitHeight="24.0" fitWidth="24.0" onMousePressed="#onSearchPressed" pickOnBounds="true" preserveRatio="true" />
+                              <TextField fx:id="searchTF" onKeyPressed="#onSearchEnter" promptText="Serach For Item">
                                  <HBox.margin>
                                     <Insets />
                                  </HBox.margin>
                               </TextField>
-                              <ComboBox fx:id="CategoryComboBox" onMousePressed="#GetSelected" prefWidth="150.0" promptText="Category">
+                              <ComboBox fx:id="typeCB" prefWidth="150.0" promptText="typeCB" />
+                              <ComboBox fx:id="categoryCB" prefWidth="150.0" promptText="Category">
                                  <HBox.margin>
                                     <Insets />
                                  </HBox.margin>
@@ -84,18 +94,15 @@
                               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                            </padding>
                         </HBox>
-                        <HBox alignment="CENTER_RIGHT" fillHeight="false" HBox.hgrow="ALWAYS">
+                        <HBox alignment="CENTER_RIGHT" fillHeight="false" prefHeight="38.0" prefWidth="467.0" spacing="5.0" HBox.hgrow="ALWAYS">
                            <children>
-                              <Button fx:id="BuildItemBtn" mnemonicParsing="false" onMousePressed="#onBuildItemPressed" text="Build your item" textFill="#380d82">
-                                 <font>
-                                    <Font name="System Bold Italic" size="15.0" />
-                                 </font>
-                                 <HBox.margin>
-                                    <Insets right="20.0" />
-                                 </HBox.margin>
-                              </Button>
-                              <Slider />
+                              <Label text="Price Range" />
+                              <Slider fx:id="SliderPrice" majorTickUnit="50.0" max="500.0" showTickLabels="true" showTickMarks="true" value="250.0" />
+                              <Label fx:id="priceRange" text="Label" />
                            </children>
+                           <padding>
+                              <Insets right="20.0" />
+                           </padding>
                         </HBox>
                      </children>
                      <StackPane.margin>

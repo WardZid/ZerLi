@@ -16,6 +16,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.text.Text;
 
 public class BuildItemController implements Initializable {
 
@@ -30,7 +31,11 @@ public class BuildItemController implements Initializable {
 
 	@FXML
 	private TextField quantityTextField;
-
+    @FXML
+    private Label saleLbl2;
+    
+    @FXML
+    private Text PriceWithoutSale;
 	
 	BuildItemsPageController buildItemsPageController;
 	Item presseditem;
@@ -40,11 +45,20 @@ public class BuildItemController implements Initializable {
 	public void setData(Item item, BuildItemsPageController buildItemsPageController) {
 		presseditem = item;
 		
-		//chooceItemChecBox.setText(item.getName());
 		chooceItemChecBox.setText(item.getPrice() + "");
 		namelabel.setText(item.getName());
 		this.buildItemsPageController = buildItemsPageController;
+		
+		
+		if (item.getSale() == 0) {
+			PriceWithoutSale.setText("");
+			chooceItemChecBox.setText(item.getPrice() + "");
+		} else {
+			PriceWithoutSale.setText(item.getPrice()+ "");
+ 			chooceItemChecBox.setText(item.getPriceAfterSale() + "");
+			saleLbl2.setVisible(true);
 
+		}
 	}
 
 	@Override

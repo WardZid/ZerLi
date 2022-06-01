@@ -51,8 +51,7 @@ public class CatalogItemController implements Initializable {
 			priceText.setText(item.getPrice() + "");
 		} else {
 			salePriceText.setText(item.getPrice()+ "");
-			item.setPriceAfterSale(item.getSale());
-			priceText.setText(item.getPrice() + "");
+			priceText.setText(item.getPriceAfterSale() + "");
 			saleLbl.setVisible(true);
 
 		}

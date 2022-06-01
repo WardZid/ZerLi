@@ -282,7 +282,7 @@ public class Item implements Serializable {
 		return idItem == other.idItem;
 	}
 
-	public void setPriceAfterSale(double sale) {
-		this.setPrice((this.getPrice() - ((sale / 100) * this.getPrice())));
+	public double getPriceAfterSale() {
+		return (this.getPrice() - (((double)sale / 100) * this.getPrice()));
 	}
 }
