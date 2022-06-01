@@ -30,9 +30,11 @@ public class BuildItemsPageController implements Initializable {
 	@FXML
 	private Button backBtn;
 
+	
+	
 	@FXML
-	private Label countItemInOrder;
-
+	private Label namelabel;
+	
 	@FXML
 	private GridPane grid;
 
@@ -63,7 +65,7 @@ public class BuildItemsPageController implements Initializable {
 				if (buildItemController == null)
 					System.out.println("buildItemController null");
 
-				buildItemController.setData(items.get(i), column, row, this);
+				buildItemController.setData(items.get(i) , this);
 
 				grid.add(node, column++, row);
 
@@ -83,7 +85,7 @@ public class BuildItemsPageController implements Initializable {
 	}
 
 	private void setLabelNumItemInOrderText() {
- 		countItemInOrder.setText(CartController.getOrderInProcess().getItemInOrder() + "");
+ 		//countItemInOrder.setText(CartController.getOrderInProcess().getItemInOrder() + "");
 
 	}
 

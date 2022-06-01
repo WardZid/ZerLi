@@ -24,24 +24,25 @@ public class BuildItemController implements Initializable {
 
 	@FXML
 	private Label priceLabel;
+	
+	@FXML
+	private Label namelabel;
 
 	@FXML
 	private TextField quantityTextField;
 
-	private int column, row;
-
+	
 	BuildItemsPageController buildItemsPageController;
 	Item presseditem;
 
 	OrderItem orderItem;
 
-	public void setData(Item item, int column, int row, BuildItemsPageController buildItemsPageController) {
+	public void setData(Item item, BuildItemsPageController buildItemsPageController) {
 		presseditem = item;
-		this.column = column;
-		this.row = row;
+		
 		//chooceItemChecBox.setText(item.getName());
 		chooceItemChecBox.setText(item.getPrice() + "");
-	 
+		namelabel.setText(item.getName());
 		this.buildItemsPageController = buildItemsPageController;
 
 	}
