@@ -54,16 +54,20 @@ public class CatalogManagerController implements Initializable {
 	public void initialize(URL location, ResourceBundle resources) {
 		searchIV.setImage(new Image("boundary/media/search-icon.png"));
 		
-		ArrayList<String> types=(ArrayList<String>) MainController.getMyClient().send(MessageType.GET, "type/all", null);
 		typeCB.getItems().add("All Types");
 		categoryCB.getItems().add("All Categories");
+		
+		ArrayList<String> types=(ArrayList<String>) MainController.getMyClient().send(MessageType.GET, "type/all", null);
+		
 		for (String type : types) {
-			ArrayList<String> categories=(ArrayList<String>) MainController.getMyClient().send(MessageType.GET, "category/by/type/"+type, null);
 			typeCB.getItems().add(type);
+			
+			ArrayList<String> categories=(ArrayList<String>) MainController.getMyClient().send(MessageType.GET, "category/by/type/"+type, null);
 			for (String category : categories) {
 				categoryType.put(category, type);
 			}
 		}
+		
 		typeCB.getSelectionModel().selectFirst();
 		categoryCB.getSelectionModel().selectFirst();
 		
@@ -80,11 +84,11 @@ public class CatalogManagerController implements Initializable {
 
 					categoryCB.getItems().clear();
 					categoryCB.getItems().add("All Categories");
+					categoryCB.getSelectionModel().selectFirst();
 					for (String category : categoryType.keySet()) {
 						if (categoryType.get(category).equals(newValue))
 							categoryCB.getItems().add(category);
 					}
-					categoryCB.getSelectionModel().selectFirst();
 					categoryCB.setDisable(false);
 				}
 				filterItemsAndShow();
@@ -139,7 +143,7 @@ public class CatalogManagerController implements Initializable {
 		filteredItems.clear();
 		
 		for (Item item : items) {
-			if(search==null || search.equals("") || item.getName().contains(searchTF.getText())) {
+			if(search==null || search.equals("") || item.getName().contains(search)) {
 				if(type.equals("All Types") || type.equals(categoryType.get(item.getCategory()))) {
 					if(category.equals("All Categories") || category.equals(item.getCategory()))
 						filteredItems.add(item);
