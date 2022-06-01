@@ -228,7 +228,7 @@ public class ClientConsoleController implements Initializable {
 	}
 
 	private void loadCatalogManagerConsole() {
-
+		initPage(null, "fxmls/catalog-manager-view.fxml");
 	}
 
 	public static class Navigation {
