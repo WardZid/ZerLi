@@ -2,13 +2,19 @@ package boundary.fxmlControllers;
 
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import control.DBController;
 import control.MainController;
 import control.ServerController;
 import entity.ClientConnection;
 import entity.MyMessage;
+import entity.Order;
+import entity.Order.OrderStatus;
 import entity.MyMessage.MessageType;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -125,11 +131,35 @@ public class ServerViewController implements Initializable {
 			enableButtons(false, false, true, false, true);
 
 			gridTextInputs.setDisable(true);
+
+			Trackingfunction();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	private void Trackingfunction() {
+		
+		Runnable helloRunnable = new Runnable() {
+			ArrayList<Order> Lateorders;
+			public void run() {
+				Lateorders=DBController.getLateOrderDelivery();
+				for (Order lateOrder : Lateorders) {
+					System.out.println(lateOrder.toString());
+					lateOrder.setIdOrderStatus(OrderStatus.REFUNDED.ordinal());
+					DBController.updateOrderStatus(lateOrder);
+					DBController.updatePoint(lateOrder.getIdCustomer(),lateOrder.getPrice());
+				}
+				System.out.println("11");
+
+			}
+		};
+
+		ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
+		executor.scheduleAtFixedRate(helloRunnable, 0, 3, TimeUnit.SECONDS);
+
 	}
 
 	@FXML
@@ -156,7 +186,7 @@ public class ServerViewController implements Initializable {
 
 	@FXML
 	void onLogOut() {
-		MainController.getServer().sendToAllClients(new MyMessage(null,0,MessageType.INFO,"global/logout",null));
+		MainController.getServer().sendToAllClients(new MyMessage(null, 0, MessageType.INFO, "global/logout", null));
 		DBController.logOutAll();
 	}
 

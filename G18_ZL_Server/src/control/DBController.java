@@ -198,7 +198,7 @@ public class DBController {
 		ArrayList<Order> orders = new ArrayList<>();
 		ResultSet rs;
 		try {
-			rs = statement.executeQuery("SELECT * FROM assignment3.order WHERE DATEDIFF(NOW(),date_order) >1;"); // ---get
+			rs = statement.executeQuery("SELECT * FROM assignment3.order WHERE id_order_status=2&& DATEDIFF(delivery_date_order,NOW()   ) <0;"); // ---get
 																													// all
 																													// orders
 			rs.beforeFirst(); // ---move back to first row
@@ -871,10 +871,10 @@ public class DBController {
 		return getOrdersBy("id_order", o.getIdOrder() + "");
 	}
 
-	public static boolean updatePoint(Customer c, double newPoint) {
+	public static boolean updatePoint(int idCoustmer, double newPoint) {
 		try {
 			PreparedStatement ps = conn.prepareStatement("UPDATE assignment3.customer SET point=? WHERE id_customer=?");
-			ps.setInt(1, c.getIdCustomer());
+			ps.setInt(1, idCoustmer);
 			ps.setDouble(2, newPoint);
 			ps.executeUpdate();
 			ps.close();
