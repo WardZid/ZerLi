@@ -199,7 +199,7 @@ public class CatalogController implements Initializable {
 
 	private void loadAllItems() {
 		double maxprice = 0;
-		
+		items.clear();
 		itemsGetFromDB = (ArrayList<Item>) MainController.getMyClient().send(MessageType.GET, "item/all", null);
 		for (Item item : itemsGetFromDB)
 		{

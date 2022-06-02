@@ -38,7 +38,8 @@ public class BuildItemsPageController implements Initializable {
 	@FXML
 	private GridPane grid;
 
-	private static ArrayList<Item> items;
+	private static ArrayList<Item> items=new ArrayList<Item>();
+	private static ArrayList<Item>itemsGetFromDB;
 	private static ArrayList<Item> Checkeditems;
 
 	private int numberOfColumn = 4;
@@ -52,7 +53,15 @@ public class BuildItemsPageController implements Initializable {
 		int row = 1;
 		setLabelNumItemInOrderText();
 
-		items = (ArrayList<Item>) MainController.getMyClient().send(MessageType.GET, "item/all", null);
+		itemsGetFromDB = (ArrayList<Item>) MainController.getMyClient().send(MessageType.GET, "item/all", null);
+		items.clear();
+		for (Item item : itemsGetFromDB)
+		{
+			if(item.getSale()!=0)
+				items.add(0,item);
+			else
+				items.add(item);
+		}
 		Checkeditems = new ArrayList<Item>();
 		try {
 			for (int i = 0; i < items.size(); i++) {
