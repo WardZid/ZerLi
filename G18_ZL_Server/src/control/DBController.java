@@ -134,6 +134,27 @@ public class DBController {
 	}
 
 	// SQL Query Methods ******************************
+	public static ArrayList<Survey> getAllSurves(){
+		ResultSet rs;
+		Survey surveyBuild  ;
+		ArrayList<Survey> surviesList = new ArrayList<>();
+		try {
+			rs = statement.executeQuery(
+					"SELECT * FROM assignment3.questions;");
+			while(rs.next()) {
+				surveyBuild = new Survey();
+				for(int i=2 ; i<=7 ; i++) 
+				  surveyBuild.getSurveyQuestion().getQuestion().add(rs.getString(i));
+				surviesList.add(surveyBuild);
+			}
+				
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return surviesList;
+		
+	}
 
 	public static User getUser(String username, String password) {
 		ResultSet rs;
@@ -692,6 +713,9 @@ public class DBController {
 	}
 
 	public static boolean insertSurvey(Survey s) {
+		return false;}
+	/*
+	public static boolean insertSurvey(Survey s) {
 		int linesChanged = 0;
 		try {
 			PreparedStatement ps = conn.prepareStatement("INSERT INTO survey (`date_survey`, `id_store`) VALUES(?,?)",
@@ -716,7 +740,9 @@ public class DBController {
 			return false;
 		return true;
 	}
+	*/
 
+	/*
 	public static boolean insertSurveyAnswer(int idSurvey, SurveyQuestion sq) {
 		int linesChanged = 0;
 		try {
@@ -737,6 +763,7 @@ public class DBController {
 			return false;
 		return true;
 	}
+	*/
 
 	// UPDATE QUERIES****************************************************
 
@@ -811,5 +838,6 @@ public class DBController {
 		}
 		return getOrdersBy("id_order", o.getIdOrder() + "");
 	}
+	
 
 }

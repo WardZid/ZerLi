@@ -18,217 +18,226 @@
    <children>
       <ScrollPane>
          <content>
-            <HBox spacing="15.0">
+            <VBox prefHeight="1216.0" prefWidth="752.0">
                <children>
-                  <VBox prefHeight="550.0" prefWidth="438.0">
+                  <HBox spacing="50.0">
+                     <VBox.margin>
+                        <Insets bottom="30.0" />
+                     </VBox.margin>
                      <children>
-                        <Label text="Shop" />
-                        <ComboBox fx:id="storeComboBox" prefWidth="150.0">
-                           <VBox.margin>
-                              <Insets bottom="20.0" />
-                           </VBox.margin>
-                        </ComboBox>
-                        <Label text="Questions 1">
-                           <VBox.margin>
-                              <Insets />
-                           </VBox.margin>
-                        </Label>
-                        <TextArea fx:id="question1TA" editable="false" minHeight="-Infinity" prefHeight="100.0" prefWidth="428.0" text="How much are you satisfied from the flowers that you bought from 1 - 10 ?" wrapText="true">
-                           <VBox.margin>
-                              <Insets bottom="10.0" right="10.0" top="10.0" />
-                           </VBox.margin>
-                           <font>
-                              <Font name="System Bold" size="20.0" />
-                           </font>
-                        </TextArea>
-                        <HBox spacing="15.0">
+                        <VBox prefHeight="81.0" prefWidth="150.4">
                            <children>
-                              <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup1" text="1">
-                                 <toggleGroup>
-                                    <ToggleGroup fx:id="question1TG" />
-                                 </toggleGroup>
-                              </RadioButton>
-                              <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup1" text="2" toggleGroup="$question1TG" />
-                              <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup1" text="3" toggleGroup="$question1TG" />
-                              <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup1" text="4" toggleGroup="$question1TG" />
-                              <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup1" text="5" toggleGroup="$question1TG" />
-                              <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup1" text="6" toggleGroup="$question1TG" />
-                              <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup1" text="7" toggleGroup="$question1TG" />
-                              <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup1" text="8" toggleGroup="$question1TG" />
-                              <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup1" text="9" toggleGroup="$question1TG" />
-                              <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup1" text="10" toggleGroup="$question1TG" />
+                              <Label text="Survies" />
+                              <ComboBox fx:id="surviesComB" prefHeight="26.0" prefWidth="151.0" />
                            </children>
-                           <VBox.margin>
-                              <Insets bottom="20.0" />
-                           </VBox.margin>
-                        </HBox>
-                        <Label text="Question 2" />
-                        <TextArea fx:id="question2TA" editable="false" minHeight="-Infinity" prefHeight="100.0" prefWidth="454.0" text="Rate the design of the service from 1 - 10" wrapText="true">
-                           <VBox.margin>
-                              <Insets bottom="10.0" right="10.0" top="10.0" />
-                           </VBox.margin>
-                           <font>
-                              <Font name="System Bold" size="20.0" />
-                           </font>
-                        </TextArea>
-                        <HBox spacing="15.0">
+                        </VBox>
+                        <VBox>
                            <children>
-                              <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup2" text="1">
-                                 <toggleGroup>
-                                    <ToggleGroup fx:id="question2TG" />
-                                 </toggleGroup>
-                              </RadioButton>
-                              <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup2" text="2" toggleGroup="$question2TG" />
-                              <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup2" text="3" toggleGroup="$question2TG" />
-                              <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup2" text="4" toggleGroup="$question2TG" />
-                              <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup2" text="5" toggleGroup="$question2TG" />
-                              <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup2" text="6" toggleGroup="$question2TG" />
-                              <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup2" text="7" toggleGroup="$question2TG" />
-                              <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup2" text="8" toggleGroup="$question2TG" />
-                              <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup2" text="9" toggleGroup="$question2TG" />
-                              <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup2" text="10" toggleGroup="$question2TG" />
+                              <Label text="Store" />
+                              <ComboBox fx:id="storeComboBox" prefWidth="150.0" />
                            </children>
-                           <VBox.margin>
-                              <Insets bottom="20.0" />
-                           </VBox.margin>
-                        </HBox>
-                        <Label text="Question 3" />
-                        <TextArea fx:id="question3TA" editable="false" minHeight="-Infinity" prefHeight="100.0" prefWidth="454.0" text="How much the service was complicated in your opinion from 1 - 10 ?" wrapText="true">
-                           <VBox.margin>
-                              <Insets bottom="10.0" right="10.0" top="10.0" />
-                           </VBox.margin>
-                           <font>
-                              <Font name="System Bold" size="20.0" />
-                           </font>
-                        </TextArea>
-                        <HBox spacing="15.0">
-                           <children>
-                              <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup3" text="1">
-                                 <toggleGroup>
-                                    <ToggleGroup fx:id="question3TG" />
-                                 </toggleGroup>
-                              </RadioButton>
-                              <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup3" text="2" toggleGroup="$question3TG" />
-                              <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup3" text="3" toggleGroup="$question3TG" />
-                              <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup3" text="4" toggleGroup="$question3TG" />
-                              <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup3" text="5" toggleGroup="$question3TG" />
-                              <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup3" text="6" toggleGroup="$question3TG" />
-                              <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup3" text="7" toggleGroup="$question3TG" />
-                              <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup3" text="8" toggleGroup="$question3TG" />
-                              <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup3" text="9" toggleGroup="$question3TG" />
-                              <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup3" text="10" toggleGroup="$question3TG" />
-                           </children>
-                           <VBox.margin>
-                              <Insets bottom="20.0" />
-                           </VBox.margin>
-                        </HBox>
-                        <Label text="Question 4">
-                           <VBox.margin>
-                              <Insets />
-                           </VBox.margin>
-                        </Label>
-                        <TextArea fx:id="question4TA" editable="false" minHeight="-Infinity" prefHeight="100.0" prefWidth="454.0" text="Rate the workers treatment from 1 - 10" wrapText="true">
-                           <VBox.margin>
-                              <Insets bottom="10.0" right="10.0" top="10.0" />
-                           </VBox.margin>
-                           <font>
-                              <Font name="System Bold" size="20.0" />
-                           </font>
-                        </TextArea>
-                        <HBox prefHeight="18.0" prefWidth="402.0" spacing="15.0">
-                           <children>
-                              <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup4" text="1">
-                                 <toggleGroup>
-                                    <ToggleGroup fx:id="question4TG" />
-                                 </toggleGroup>
-                              </RadioButton>
-                              <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup4" text="2" toggleGroup="$question4TG" />
-                              <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup4" text="3" toggleGroup="$question4TG" />
-                              <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup4" text="4" toggleGroup="$question4TG" />
-                              <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup4" text="5" toggleGroup="$question4TG" />
-                              <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup4" text="6" toggleGroup="$question4TG" />
-                              <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup4" text="7" toggleGroup="$question4TG" />
-                              <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup4" text="8" toggleGroup="$question4TG" />
-                              <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup4" text="9" toggleGroup="$question4TG" />
-                              <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup4" text="10" toggleGroup="$question4TG" />
-                           </children>
-                           <VBox.margin>
-                              <Insets bottom="20.0" />
-                           </VBox.margin>
-                        </HBox>
-                        <Label text="Question 5" />
-                        <TextArea fx:id="question5TA" editable="false" minHeight="-Infinity" prefHeight="100.0" prefWidth="454.0" text="Rate how much the service was comfort from 1 - 10" wrapText="true">
-                           <VBox.margin>
-                              <Insets bottom="10.0" right="10.0" top="10.0" />
-                           </VBox.margin>
-                           <font>
-                              <Font name="System Bold" size="20.0" />
-                           </font>
-                        </TextArea>
-                        <HBox spacing="15.0">
-                           <children>
-                              <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup5" text="1">
-                                 <toggleGroup>
-                                    <ToggleGroup fx:id="question5TG" />
-                                 </toggleGroup>
-                              </RadioButton>
-                              <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup5" text="2" toggleGroup="$question5TG" />
-                              <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup5" text="3" toggleGroup="$question5TG" />
-                              <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup5" text="4" toggleGroup="$question5TG" />
-                              <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup5" text="5" toggleGroup="$question5TG" />
-                              <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup5" text="6" toggleGroup="$question5TG" />
-                              <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup5" text="7" toggleGroup="$question5TG" />
-                              <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup5" text="8" toggleGroup="$question5TG" />
-                              <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup5" text="9" toggleGroup="$question5TG" />
-                              <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup5" text="10" toggleGroup="$question5TG" />
-                           </children>
-                           <VBox.margin>
-                              <Insets bottom="20.0" />
-                           </VBox.margin>
-                        </HBox>
-                        <Label text="Question 6" />
-                        <TextArea fx:id="question6TA" editable="false" minHeight="-Infinity" prefHeight="100.0" prefWidth="454.0" text="How much the service was understood to you from 1 - 10 ?" wrapText="true">
-                           <VBox.margin>
-                              <Insets bottom="10.0" right="10.0" top="10.0" />
-                           </VBox.margin>
-                           <font>
-                              <Font name="System Bold" size="20.0" />
-                           </font>
-                        </TextArea>
-                        <HBox spacing="15.0">
-                           <children>
-                              <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup6" text="1">
-                                 <toggleGroup>
-                                    <ToggleGroup fx:id="question6TG" />
-                                 </toggleGroup></RadioButton>
-                              <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup6" text="2" toggleGroup="$question6TG" />
-                              <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup6" text="3" toggleGroup="$question6TG" />
-                              <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup6" text="4" toggleGroup="$question6TG" />
-                              <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup6" text="5" toggleGroup="$question6TG" />
-                              <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup6" text="6" toggleGroup="$question6TG" />
-                              <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup6" text="7" toggleGroup="$question6TG" />
-                              <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup6" text="8" toggleGroup="$question6TG" />
-                              <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup6" text="9" toggleGroup="$question6TG" />
-                              <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup6" text="10" toggleGroup="$question6TG" />
-                           </children>
-                           <VBox.margin>
-                              <Insets bottom="30.0" />
-                           </VBox.margin>
-                        </HBox>
-                        <ButtonBar prefHeight="40.0" prefWidth="200.0">
-                           <buttons>
-                            <Button fx:id="enterSurveyButton" mnemonicParsing="false" onAction="#onEnterAnswers" style="-fx-background-color: #1de9b6;" text="Enter Answers" />
-                           </buttons>
-                        </ButtonBar>
+                        </VBox>
                      </children>
-                  </VBox>
-                  <VBox prefHeight="1200.0" prefWidth="421.0" />
+                  </HBox>
+                  <Label text="Questions 1">
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                  </Label>
+                  <TextArea fx:id="question1TA" editable="false" minHeight="-Infinity" prefHeight="100.0" prefWidth="428.0" wrapText="true">
+                     <VBox.margin>
+                        <Insets bottom="10.0" right="10.0" top="10.0" />
+                     </VBox.margin>
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </TextArea>
+                  <HBox spacing="15.0">
+                     <children>
+                        <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup1" text="1">
+                           <toggleGroup>
+                              <ToggleGroup fx:id="question1TG" />
+                           </toggleGroup>
+                        </RadioButton>
+                        <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup1" text="2" toggleGroup="$question1TG" />
+                        <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup1" text="3" toggleGroup="$question1TG" />
+                        <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup1" text="4" toggleGroup="$question1TG" />
+                        <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup1" text="5" toggleGroup="$question1TG" />
+                        <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup1" text="6" toggleGroup="$question1TG" />
+                        <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup1" text="7" toggleGroup="$question1TG" />
+                        <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup1" text="8" toggleGroup="$question1TG" />
+                        <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup1" text="9" toggleGroup="$question1TG" />
+                        <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup1" text="10" toggleGroup="$question1TG" />
+                     </children>
+                     <VBox.margin>
+                        <Insets bottom="20.0" />
+                     </VBox.margin>
+                  </HBox>
+                  <Label text="Question 2" />
+                  <TextArea fx:id="question2TA" editable="false" minHeight="-Infinity" prefHeight="100.0" prefWidth="454.0" wrapText="true">
+                     <VBox.margin>
+                        <Insets bottom="10.0" right="10.0" top="10.0" />
+                     </VBox.margin>
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </TextArea>
+                  <HBox spacing="15.0">
+                     <children>
+                        <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup2" text="1">
+                           <toggleGroup>
+                              <ToggleGroup fx:id="question2TG" />
+                           </toggleGroup>
+                        </RadioButton>
+                        <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup2" text="2" toggleGroup="$question2TG" />
+                        <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup2" text="3" toggleGroup="$question2TG" />
+                        <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup2" text="4" toggleGroup="$question2TG" />
+                        <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup2" text="5" toggleGroup="$question2TG" />
+                        <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup2" text="6" toggleGroup="$question2TG" />
+                        <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup2" text="7" toggleGroup="$question2TG" />
+                        <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup2" text="8" toggleGroup="$question2TG" />
+                        <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup2" text="9" toggleGroup="$question2TG" />
+                        <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup2" text="10" toggleGroup="$question2TG" />
+                     </children>
+                     <VBox.margin>
+                        <Insets bottom="20.0" />
+                     </VBox.margin>
+                  </HBox>
+                  <Label text="Question 3" />
+                  <TextArea fx:id="question3TA" editable="false" minHeight="-Infinity" prefHeight="100.0" prefWidth="454.0" wrapText="true">
+                     <VBox.margin>
+                        <Insets bottom="10.0" right="10.0" top="10.0" />
+                     </VBox.margin>
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </TextArea>
+                  <HBox spacing="15.0">
+                     <children>
+                        <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup3" text="1">
+                           <toggleGroup>
+                              <ToggleGroup fx:id="question3TG" />
+                           </toggleGroup>
+                        </RadioButton>
+                        <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup3" text="2" toggleGroup="$question3TG" />
+                        <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup3" text="3" toggleGroup="$question3TG" />
+                        <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup3" text="4" toggleGroup="$question3TG" />
+                        <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup3" text="5" toggleGroup="$question3TG" />
+                        <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup3" text="6" toggleGroup="$question3TG" />
+                        <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup3" text="7" toggleGroup="$question3TG" />
+                        <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup3" text="8" toggleGroup="$question3TG" />
+                        <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup3" text="9" toggleGroup="$question3TG" />
+                        <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup3" text="10" toggleGroup="$question3TG" />
+                     </children>
+                     <VBox.margin>
+                        <Insets bottom="20.0" />
+                     </VBox.margin>
+                  </HBox>
+                  <Label text="Question 4">
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                  </Label>
+                  <TextArea fx:id="question4TA" editable="false" minHeight="-Infinity" prefHeight="100.0" prefWidth="454.0" wrapText="true">
+                     <VBox.margin>
+                        <Insets bottom="10.0" right="10.0" top="10.0" />
+                     </VBox.margin>
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </TextArea>
+                  <HBox prefHeight="18.0" prefWidth="402.0" spacing="15.0">
+                     <children>
+                        <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup4" text="1">
+                           <toggleGroup>
+                              <ToggleGroup fx:id="question4TG" />
+                           </toggleGroup>
+                        </RadioButton>
+                        <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup4" text="2" toggleGroup="$question4TG" />
+                        <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup4" text="3" toggleGroup="$question4TG" />
+                        <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup4" text="4" toggleGroup="$question4TG" />
+                        <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup4" text="5" toggleGroup="$question4TG" />
+                        <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup4" text="6" toggleGroup="$question4TG" />
+                        <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup4" text="7" toggleGroup="$question4TG" />
+                        <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup4" text="8" toggleGroup="$question4TG" />
+                        <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup4" text="9" toggleGroup="$question4TG" />
+                        <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup4" text="10" toggleGroup="$question4TG" />
+                     </children>
+                     <VBox.margin>
+                        <Insets bottom="20.0" />
+                     </VBox.margin>
+                  </HBox>
+                  <Label text="Question 5" />
+                  <TextArea fx:id="question5TA" editable="false" minHeight="-Infinity" prefHeight="100.0" prefWidth="454.0" text="&#10;" wrapText="true">
+                     <VBox.margin>
+                        <Insets bottom="10.0" right="10.0" top="10.0" />
+                     </VBox.margin>
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </TextArea>
+                  <HBox spacing="15.0">
+                     <children>
+                        <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup5" text="1">
+                           <toggleGroup>
+                              <ToggleGroup fx:id="question5TG" />
+                           </toggleGroup>
+                        </RadioButton>
+                        <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup5" text="2" toggleGroup="$question5TG" />
+                        <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup5" text="3" toggleGroup="$question5TG" />
+                        <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup5" text="4" toggleGroup="$question5TG" />
+                        <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup5" text="5" toggleGroup="$question5TG" />
+                        <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup5" text="6" toggleGroup="$question5TG" />
+                        <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup5" text="7" toggleGroup="$question5TG" />
+                        <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup5" text="8" toggleGroup="$question5TG" />
+                        <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup5" text="9" toggleGroup="$question5TG" />
+                        <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup5" text="10" toggleGroup="$question5TG" />
+                     </children>
+                     <VBox.margin>
+                        <Insets bottom="20.0" />
+                     </VBox.margin>
+                  </HBox>
+                  <Label text="Question 6" />
+                  <TextArea fx:id="question6TA" editable="false" minHeight="-Infinity" prefHeight="100.0" prefWidth="454.0" wrapText="true">
+                     <VBox.margin>
+                        <Insets bottom="10.0" right="10.0" top="10.0" />
+                     </VBox.margin>
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </TextArea>
+                  <HBox spacing="15.0">
+                     <children>
+                        <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup6" text="1">
+                           <toggleGroup>
+                              <ToggleGroup fx:id="question6TG" />
+                           </toggleGroup>
+                        </RadioButton>
+                        <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup6" text="2" toggleGroup="$question6TG" />
+                        <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup6" text="3" toggleGroup="$question6TG" />
+                        <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup6" text="4" toggleGroup="$question6TG" />
+                        <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup6" text="5" toggleGroup="$question6TG" />
+                        <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup6" text="6" toggleGroup="$question6TG" />
+                        <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup6" text="7" toggleGroup="$question6TG" />
+                        <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup6" text="8" toggleGroup="$question6TG" />
+                        <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup6" text="9" toggleGroup="$question6TG" />
+                        <RadioButton mnemonicParsing="false" onAction="#onSelectedToggleGroup6" text="10" toggleGroup="$question6TG" />
+                     </children>
+                     <VBox.margin>
+                        <Insets bottom="30.0" />
+                     </VBox.margin>
+                  </HBox>
+                  <ButtonBar prefHeight="40.0" prefWidth="200.0">
+                     <buttons>
+                      <Button fx:id="enterSurveyButton" mnemonicParsing="false" onAction="#onEnterAnswers" style="-fx-background-color: #1de9b6;" text="Enter Answers" />
+                     </buttons>
+                  </ButtonBar>
                </children>
-               <padding>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-               </padding>
-            </HBox>
+            </VBox>
          </content>
+         <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </padding>
       </ScrollPane>
    </children>
 </StackPane>
