@@ -272,7 +272,7 @@ public class CustomerOrdersController implements Initializable {
 		Optional<ButtonType> result = confirmationAlert.showAndWait();
 		if (result.isPresent() && result.get() == ButtonType.OK) {
 			// press ok
-			selectedOrder.setIdOrderStatus(OrderStatus.CANCELLED.ordinal());
+			selectedOrder.setIdOrderStatus(OrderStatus.WAITING_CANCELLATION.ordinal());
 
 			MainController.getMyClient().send(MessageType.UPDATE, "order/status", selectedOrder);
 

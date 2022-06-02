@@ -93,8 +93,8 @@ public class CatalogController implements Initializable {
 		typeCB.getItems().add("All Types");
 		categoryCB.getItems().add("All Categories");
 
-		ArrayList<String> types = (ArrayList<String>) MainController.getMyClient().send(MessageType.GET, "type/all",
-				null);
+		ArrayList<String> types = (ArrayList<String>) MainController.getMyClient().send(MessageType.GET, "type/all",null);
+				
 
 		for (String type : types) {
 			typeCB.getItems().add(type);
