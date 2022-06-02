@@ -54,8 +54,9 @@ public class BuildItemController implements Initializable {
 			PriceWithoutSale.setText("");
 			chooceItemChecBox.setText(item.getPrice() + "");
 		} else {
-			PriceWithoutSale.setText(item.getPrice()+ "");
- 			chooceItemChecBox.setText(item.getPriceAfterSale() + "");
+			 
+			PriceWithoutSale.setText(item.getPriceBeforeSale() + "");
+ 			chooceItemChecBox.setText(item.getPrice()+ "");
 			saleLbl2.setVisible(true);
 
 		}

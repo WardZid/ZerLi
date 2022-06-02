@@ -69,6 +69,10 @@ public class BuildItemsPageController implements Initializable {
 				FXMLLoader fXMLLoader = new FXMLLoader(ClientView.class.getResource("fxmls/build-item-view.fxml"));
 
 				Node node = fXMLLoader.load();
+				
+				 
+				 items.get(i).setPrice(items.get(i).getPriceAfterSale());
+				 
 
 				BuildItemController buildItemController = fXMLLoader.getController();
 				if (buildItemController == null)
