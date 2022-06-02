@@ -126,7 +126,6 @@ public class CEOOrderReportsController implements Initializable {
 		initBranchesChoiceBox();
 		initTableCols();
 		this.branchsChoiceBox.setOnAction(this::afterBranchSelected);
-		monthsListView.getItems().addAll(monthsYears);
 		setActionOnListView();
 	}
 	
@@ -151,6 +150,7 @@ public class CEOOrderReportsController implements Initializable {
 		saveDate();
 		this.viewReportButton.setDisable(false);
 		getDataAfterMonthIsChosen();
+		calculateTextValues();
 		initDataForPieChart();
 		initDataForTable();
 	}
@@ -198,6 +198,7 @@ public class CEOOrderReportsController implements Initializable {
 	@SuppressWarnings("unchecked")
 	private void initMonthsListView() {
 		monthsYears = (ArrayList<String>) MainController.getMyClient().send(MessageType.GET, "order/report/sale/months/"+branchID , null);
+		monthsListView.getItems().clear();
 		monthsListView.getItems().addAll(monthsYears);
 	}
 	
@@ -280,7 +281,7 @@ public class CEOOrderReportsController implements Initializable {
 		reportPieChart.setLegendVisible(false);
 		pieChartData.clear();
 		for(AmountItem ai : amountOfItems) {
-			pieChartData.add(new PieChart.Data(ai.getName(), ai.getAmount()));
+			pieChartData.add(new PieChart.Data(ai.getName()+" - "+(ai.getAmount()/overallSoldItemsThisMonth), ai.getAmount()));
 		}
 	}
 	

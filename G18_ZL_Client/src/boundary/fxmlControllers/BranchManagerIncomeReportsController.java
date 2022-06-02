@@ -165,6 +165,7 @@ public class BranchManagerIncomeReportsController implements Initializable {
 	public void viewReportButtonAction(ActionEvent event) {
 		reportMonthText.setText("Report of "+month+"-"+year);
 		reportLineChart.setTitle("Daily Incomes Of "+month+"-"+year);
+		reportLineChart.getData().clear();
 		reportLineChart.getData().add(series);
 		totalIncomeText.setText(overallIncomeThisMonth+"");
 		averageText.setText(avg+"");

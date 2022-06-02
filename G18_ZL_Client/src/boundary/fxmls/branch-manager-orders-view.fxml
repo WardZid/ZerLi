@@ -10,7 +10,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="550.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="boundary.fxmlControllers.BranchManagerOrdersController">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="550.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="boundary.fxmlControllers.BranchManagerOrdersController">
    <children>
       <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" StackPane.alignment="CENTER">
          <children>
@@ -80,7 +80,7 @@
                         <Insets />
                      </opaqueInsets>
                   </Separator>
-                  <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+                  <VBox alignment="CENTER" prefHeight="507.0" prefWidth="135.0" HBox.hgrow="ALWAYS">
                      <children>
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Order Details">
                            <font>
@@ -99,54 +99,66 @@
                            <children>
                               <Text fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="Order Number" textAlignment="CENTER">
                                  <font>
-                                    <Font name="System Bold" size="13.0" />
+                                    <Font name="System Bold" size="18.0" />
                                  </font>
                               </Text>
                               <Text fx:id="orderIDText" strokeType="OUTSIDE" strokeWidth="0.0" text="-order number-">
                                  <VBox.margin>
                                     <Insets left="10.0" />
                                  </VBox.margin>
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
                               </Text>
                               <Text fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="Date of Order">
                                  <font>
-                                    <Font name="System Bold" size="13.0" />
+                                    <Font name="System Bold" size="18.0" />
                                  </font>
                               </Text>
                               <Text fx:id="dateOfOrderText" strokeType="OUTSIDE" strokeWidth="0.0" text="-date of order-">
                                  <VBox.margin>
                                     <Insets left="10.0" />
                                  </VBox.margin>
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
                               </Text>
                               <Text fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="Delivery Date">
                                  <font>
-                                    <Font name="System Bold" size="13.0" />
+                                    <Font name="System Bold" size="18.0" />
                                  </font>
                               </Text>
                               <Text fx:id="deliveryDateText" strokeType="OUTSIDE" strokeWidth="0.0" text="-delivery date-">
                                  <VBox.margin>
                                     <Insets left="10.0" />
                                  </VBox.margin>
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
                               </Text>
                               <Text fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="Address">
                                  <font>
-                                    <Font name="System Bold" size="13.0" />
+                                    <Font name="System Bold" size="18.0" />
                                  </font>
                               </Text>
                               <Text fx:id="addressText" fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="-address-">
                                  <VBox.margin>
                                     <Insets left="10.0" />
                                  </VBox.margin>
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
                               </Text>
                               <VBox alignment="BOTTOM_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0" VBox.vgrow="ALWAYS">
                                  <children>
                                     <Text strokeType="OUTSIDE" strokeWidth="0.0" text="To Pay">
                                        <font>
-                                          <Font name="System Bold" size="13.0" />
+                                          <Font name="System Bold" size="16.0" />
                                        </font>
                                     </Text>
                                     <Text fx:id="overallOrderToPayText" strokeType="OUTSIDE" strokeWidth="0.0" text="-to pay-">
                                        <font>
-                                          <Font name="System Bold Italic" size="18.0" />
+                                          <Font name="System Bold Italic" size="20.0" />
                                        </font>
                                     </Text>
                                  </children>

@@ -139,7 +139,6 @@ public class CEOIncomeReportsController implements Initializable {
 		initBranchesChoiceBox();
 		initTableCols();
 		this.branchsChoiceBox.setOnAction(this::afterBranchSelected);
-		monthsListView.getItems().addAll(monthsYears);
 		setActionOnListView();
 		
 	}
@@ -157,7 +156,6 @@ public class CEOIncomeReportsController implements Initializable {
 	public void afterBranchSelected(ActionEvent event) {
 		setBranchID();
 		initMonthsListView();
-		
 	}
 	
 	/**
@@ -181,6 +179,7 @@ public class CEOIncomeReportsController implements Initializable {
 	public void viewReportButtonAction(ActionEvent event) {
 		reportMonthText.setText("Report of "+month+"-"+year);
 		reportLineChart.setTitle("Daily Incomes Of "+month+"-"+year);
+		reportLineChart.getData().clear();
 		reportLineChart.getData().add(series);
 		totalIncomeText.setText(overallIncomeThisMonth+"");
 		averageText.setText(avg+"");
@@ -224,6 +223,7 @@ public class CEOIncomeReportsController implements Initializable {
 	@SuppressWarnings("unchecked")
 	private void initMonthsListView() {
 		monthsYears = (ArrayList<String>) MainController.getMyClient().send(MessageType.GET, "order/report/sale/months/"+branchID , null);
+		monthsListView.getItems().clear();
 		monthsListView.getItems().addAll(monthsYears);
 	}
 	

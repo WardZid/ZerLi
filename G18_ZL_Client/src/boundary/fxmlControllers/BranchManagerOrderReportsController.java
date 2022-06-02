@@ -7,8 +7,6 @@ import java.util.ResourceBundle;
 import control.MainController;
 import entity.AmountItem;
 import entity.MyMessage.MessageType;
-import entity.Order;
-import entity.Receipt;
 import entity.Store;
 import entity.User;
 import javafx.beans.value.ChangeListener;
@@ -260,7 +258,7 @@ public class BranchManagerOrderReportsController implements Initializable {
 		reportPieChart.setLegendVisible(false);
 		pieChartData.clear();
 		for(AmountItem ai : amountOfItems) {
-			pieChartData.add(new PieChart.Data(ai.getName(), ai.getAmount()));
+			pieChartData.add(new PieChart.Data(ai.getName()+" - "+(ai.getAmount()/overallSoldItemsThisMonth), ai.getAmount()));
 		}
 	}
 	

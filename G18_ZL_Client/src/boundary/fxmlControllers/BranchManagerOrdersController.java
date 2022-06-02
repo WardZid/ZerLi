@@ -24,7 +24,6 @@ import javafx.scene.control.DialogPane;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.text.Text;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 /* ------------------------------------------------ */
@@ -66,10 +65,10 @@ public class BranchManagerOrdersController implements Initializable {
     private Text orderIDText;
 
     @FXML
-    private ListView<Integer> ordersToApproveListView;
+    private ListView<String> ordersToApproveListView;
 
     @FXML
-    private ListView<Integer> ordersToCancelListView;
+    private ListView<String> ordersToCancelListView;
 
     @FXML
     private Text overallOrderToPayText;
@@ -127,11 +126,11 @@ public class BranchManagerOrdersController implements Initializable {
 	
     /* ArrayList to save the waiting approval orders in the ListView */
     private static ArrayList<Order> waitingApprovalOrders;
-    private static ArrayList<Integer> waitingApprovalIDs;
+    private static ArrayList<String> waitingApprovalIDs;
     
     /* ArrayList to save the waiting cancellation orders in the ListView */
     private static ArrayList<Order> waitingCancellationOrders;
-    private static ArrayList<Integer> waitingCancellationlIDs;
+    private static ArrayList<String> waitingCancellationlIDs;
     
     /* the current branch manager's branch(store) ID */
     private static int branchID;
@@ -140,7 +139,7 @@ public class BranchManagerOrdersController implements Initializable {
     private static User user = ClientConsoleController.getUser();
     
     /* the selected order's ID */
-    private static Integer selectedOrderID;
+    private static String selectedOrderID;
     
     /* the current selected order */
     private static Order currentOrder;
@@ -184,7 +183,7 @@ public class BranchManagerOrdersController implements Initializable {
 		//check if order was changed.
 		if(order.get(0).getIdOrderStatus() == 1)
 			System.out.println("Order updated successfully!");
-		else System.out.println("Error updating order!");
+		else System.out.println("Error updating order!");initListViews();
 	}
 	
 	/**
@@ -195,13 +194,14 @@ public class BranchManagerOrdersController implements Initializable {
 	@SuppressWarnings("unchecked")
 	public void rejectButtonAction(ActionEvent event) {
 		//change the current selected order status to 4 (UNAPPROVED).
-				currentOrder.setIdOrderStatus(4);
-				ArrayList<Order> order = (ArrayList<Order>)MainController.getMyClient().send(MessageType.UPDATE, "order/status", currentOrder);
-				//check if order was changed.
-				if(order.get(0).getIdOrderStatus() == 4)
-					System.out.println("Order updated successfully!");
-				else System.out.println("Error updating order!");
-
+		currentOrder.setIdOrderStatus(4);
+		ArrayList<Order> order = (ArrayList<Order>)MainController.getMyClient().send(MessageType.UPDATE, "order/status", currentOrder);
+		//check if order was changed.
+		if(order.get(0).getIdOrderStatus() == 4)
+			System.out.println("Order updated successfully!");
+		else System.out.println("Error updating order!");
+		disableAllButtons();
+		initListViews();
 	}
 	
 	/**
@@ -212,12 +212,14 @@ public class BranchManagerOrdersController implements Initializable {
 	@SuppressWarnings("unchecked")
 	public void cancelButtonAction(ActionEvent event) {
 		//change the current selected order status to 3 (CANCELED).
-				currentOrder.setIdOrderStatus(3);
-				ArrayList<Order> order = (ArrayList<Order>)MainController.getMyClient().send(MessageType.UPDATE, "order/status", currentOrder);
-				//check if order was changed.
-				if(order.get(0).getIdOrderStatus() == 3)
-					System.out.println("Order updated successfully!");
-				else System.out.println("Error updating order!");
+		currentOrder.setIdOrderStatus(3);
+		ArrayList<Order> order = (ArrayList<Order>)MainController.getMyClient().send(MessageType.UPDATE, "order/status", currentOrder);
+		//check if order was changed.
+		if(order.get(0).getIdOrderStatus() == 3)
+			System.out.println("Order updated successfully!");
+		else System.out.println("Error updating order!");
+		disableAllButtons();
+		initListViews();
 	}
 	
 	/**
@@ -269,6 +271,12 @@ public class BranchManagerOrdersController implements Initializable {
     /*                 \/ Help Methods \/               */
     /* ------------------------------------------------ */
 	
+	private void disableAllButtons() {
+		this.approveButton.setDisable(false);
+		this.rejectButton.setDisable(false);
+		this.cancelButton.setDisable(false);
+	}
+	
 	/**
 	 * Method to set the full order details in the window
 	 */
@@ -307,20 +315,19 @@ public class BranchManagerOrdersController implements Initializable {
 	private void getOrderBySelection() {
 		if(approveSelected == true) {
 			for(Order o : waitingApprovalOrders) {
-				if(selectedOrderID.equals(o.getIdOrder())) {
+				if(selectedOrderID.equals(o.getIdOrder()+"")) {
 					currentOrder = o;
-					setCorrectValues();
 				}
 			}
 		}
 		if(cancelSelected == true) {
 			for(Order o : waitingCancellationOrders) {
-				if(selectedOrderID.equals(o.getIdOrder())) {
+				if(selectedOrderID.equals(o.getIdOrder()+"")) {
 					currentOrder = o;
-					setCorrectValues();
 				}
 			}
 		}
+		setCorrectValues();
 	}
 	
 	/**
@@ -345,7 +352,14 @@ public class BranchManagerOrdersController implements Initializable {
 	 * Method to save the order ID
 	 */
 	private void saveOrderID(){
-		selectedOrderID = currentOrder.getIdOrder();
+		String[] split = null;
+		if(approveSelected == true) {
+			split = ordersToApproveListView.getSelectionModel().getSelectedItem().split(" - ");
+		}
+		if(cancelSelected == true) {
+			split = ordersToCancelListView.getSelectionModel().getSelectedItem().split(" - ");
+		}
+		selectedOrderID = split[0];
 	}
 
 	
@@ -360,11 +374,11 @@ public class BranchManagerOrdersController implements Initializable {
 	 * Method to do when an ID is selected from approve ListView
 	 */
 	private void setActionOnApprovaeListView() {
-		ordersToApproveListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Integer>() {
+		ordersToApproveListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
 
 			@Override
 			// this method has the main Action that happens when selection accrues on ListView
-			public void changed(ObservableValue<? extends Integer> arg0, Integer arg1, Integer arg2) {
+			public void changed(ObservableValue<? extends String> arg0, String arg1, String arg2) {
 				approveSelected = true;
 				cancelSelected = false;
 				monthSelectedFromApproveOrderListView();
@@ -376,10 +390,10 @@ public class BranchManagerOrdersController implements Initializable {
 	 * Method to do when an ID is selected from cancel ListView
 	 */
 	private void setActionOnCancelListView() {
-		ordersToCancelListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Integer>() {
+		ordersToCancelListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
 			@Override
 			// this method has the main Action that happens when selection accrues on ListView
-			public void changed(ObservableValue<? extends Integer> arg0, Integer arg1, Integer arg2) {
+			public void changed(ObservableValue<? extends String> arg0, String arg1, String arg2) {
 				cancelSelected = true;
 				approveSelected = false;
 				monthSelectedFromCancelOrderListView();
@@ -402,7 +416,7 @@ public class BranchManagerOrdersController implements Initializable {
 	private void initApprovalListView() {
 		waitingApprovalOrders = (ArrayList<Order>) MainController.getMyClient().send(MessageType.GET, "order/by/id_order_status/0"+branchID , null);
 		for(Order o : waitingApprovalOrders)
-			waitingApprovalIDs.add(o.getIdOrder());
+			waitingApprovalIDs.add(o.getIdOrder()+" - "+o.getIdCustomer());
 		ordersToApproveListView.getItems().addAll(waitingApprovalIDs);
 	}
 	
@@ -413,7 +427,7 @@ public class BranchManagerOrdersController implements Initializable {
 	private void initCancellationListView() {
 		waitingCancellationOrders = (ArrayList<Order>) MainController.getMyClient().send(MessageType.GET, "order/by/id_order_status/5"+branchID , null);
 		for(Order o : waitingCancellationOrders)
-			waitingCancellationlIDs.add(o.getIdOrder());
+			waitingCancellationlIDs.add(o.getIdOrder()+" - "+o.getIdCustomer());
 		ordersToCancelListView.getItems().addAll(waitingCancellationlIDs);
 	}
 	
