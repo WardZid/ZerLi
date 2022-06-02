@@ -127,33 +127,32 @@ public class DBController {
 		if (blobLength == 0)
 			return null;
 		byte[] blobAsBytes = blob.getBytes(1, blobLength);
-		
+
 		blob.free();
 		return blobAsBytes;
 
 	}
 
 	// SQL Query Methods ******************************
-	public static ArrayList<Survey> getAllSurves(){
+	public static ArrayList<Survey> getAllSurves() {
 		ResultSet rs;
-		Survey surveyBuild  ;
+		Survey surveyBuild;
 		ArrayList<Survey> surviesList = new ArrayList<>();
 		try {
-			rs = statement.executeQuery(
-					"SELECT * FROM assignment3.questions;");
-			while(rs.next()) {
+			rs = statement.executeQuery("SELECT * FROM assignment3.questions;");
+			while (rs.next()) {
 				surveyBuild = new Survey();
-				for(int i=2 ; i<=7 ; i++) 
-				  surveyBuild.getSurveyQuestion().getQuestion().add(rs.getString(i));
+				for (int i = 2; i <= 7; i++)
+					surveyBuild.getSurveyQuestion().getQuestion().add(rs.getString(i));
 				surviesList.add(surveyBuild);
 			}
-				
-		}catch(SQLException e) {
+
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+
 		return surviesList;
-		
+
 	}
 
 	public static User getUser(String username, String password) {
@@ -180,6 +179,28 @@ public class DBController {
 		ResultSet rs;
 		try {
 			rs = statement.executeQuery("SELECT * FROM order"); // ---get all orders
+			rs.beforeFirst(); // ---move back to first row
+			while (rs.next()) {
+				orders.add(new Order(rs.getInt("id_order"), rs.getInt("id_customer"), rs.getInt("id_store"),
+						rs.getInt("id_order_status"), rs.getDouble("price_order"), rs.getString("date_order"),
+						rs.getString("delivery_date_order"), rs.getString("cancel_date_order"),
+						rs.getString("address_order"), rs.getString("greeting_order"),
+						rs.getString("description_order")));
+			}
+			rs.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return orders;
+	}
+
+	public static ArrayList<Order> getLateOrderDelivery() {
+		ArrayList<Order> orders = new ArrayList<>();
+		ResultSet rs;
+		try {
+			rs = statement.executeQuery("SELECT * FROM assignment3.order WHERE DATEDIFF(NOW(),date_order) >1;"); // ---get
+																													// all
+																													// orders
 			rs.beforeFirst(); // ---move back to first row
 			while (rs.next()) {
 				orders.add(new Order(rs.getInt("id_order"), rs.getInt("id_customer"), rs.getInt("id_store"),
@@ -725,9 +746,9 @@ public class DBController {
 			int idSurvey = generatedKeys.getInt(0);
 			ps.close();
 			System.out.println(idSurvey);
-			//for (SurveyQuestion sq : s.getQuestions()) {
-				insertSurveyAnswer(idSurvey, s.getSurveyQuestion());
-			//}
+			// for (SurveyQuestion sq : s.getQuestions()) {
+			insertSurveyAnswer(idSurvey, s.getSurveyQuestion());
+			// }
 		} catch (SQLException e) {
 			e.printStackTrace();
 			ServerView.printErr(DBController.class, "Unable to add new survey: " + s.toString());
@@ -736,37 +757,24 @@ public class DBController {
 		if (linesChanged == 0)
 			return false;
 		return true;
-		
-		}
-	/*
-	public static boolean insertSurvey(Survey s) {
-		int linesChanged = 0;
-		try {
-			PreparedStatement ps = conn.prepareStatement("INSERT INTO survey (`date_survey`, `id_store`) VALUES(?,?)",
-					Statement.RETURN_GENERATED_KEYS);
-			ps.setString(1, s.getDateSurvey());
-			ps.setInt(2, s.getIdStore());
-			linesChanged = ps.executeUpdate();
 
-			ResultSet generatedKeys = ps.getGeneratedKeys();
-			int idSurvey = generatedKeys.getInt(0);
-			ps.close();
-			System.out.println(idSurvey);
-			for (SurveyQuestion sq : s.getQuestions()) {
-				insertSurveyAnswer(idSurvey, sq);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-			ServerView.printErr(DBController.class, "Unable to add new survey: " + s.toString());
-			return false;
-		}
-		if (linesChanged == 0)
-			return false;
-		return true;
 	}
-	*/
+	/*
+	 * public static boolean insertSurvey(Survey s) { int linesChanged = 0; try {
+	 * PreparedStatement ps = conn.
+	 * prepareStatement("INSERT INTO survey (`date_survey`, `id_store`) VALUES(?,?)"
+	 * , Statement.RETURN_GENERATED_KEYS); ps.setString(1, s.getDateSurvey());
+	 * ps.setInt(2, s.getIdStore()); linesChanged = ps.executeUpdate();
+	 * 
+	 * ResultSet generatedKeys = ps.getGeneratedKeys(); int idSurvey =
+	 * generatedKeys.getInt(0); ps.close(); System.out.println(idSurvey); for
+	 * (SurveyQuestion sq : s.getQuestions()) { insertSurveyAnswer(idSurvey, sq); }
+	 * } catch (SQLException e) { e.printStackTrace();
+	 * ServerView.printErr(DBController.class, "Unable to add new survey: " +
+	 * s.toString()); return false; } if (linesChanged == 0) return false; return
+	 * true; }
+	 */
 
-	
 	public static boolean insertSurveyAnswer(int idSurvey, SurveyQuestion sq) {
 		int linesChanged = 0;
 		try {
@@ -774,8 +782,8 @@ public class DBController {
 					"INSERT INTO survey_question (`id_survey`, `id_question`,`answer`) VALUES(?,?,?)");
 			ps.setInt(1, idSurvey);
 			ps.setInt(2, sq.getIdQuestion());
-			for(int i=3 ; i<9 ; i++)
-			ps.setInt(i, sq.getAnswer().get(i-3));
+			for (int i = 3; i < 9; i++)
+				ps.setInt(i, sq.getAnswer().get(i - 3));
 			linesChanged = ps.executeUpdate();
 			ps.close();
 
@@ -862,13 +870,12 @@ public class DBController {
 		}
 		return getOrdersBy("id_order", o.getIdOrder() + "");
 	}
-	
-	public static boolean updatePoint(Customer c,double newPoint) {
+
+	public static boolean updatePoint(Customer c, double newPoint) {
 		try {
-			PreparedStatement ps = conn
-					.prepareStatement("UPDATE assignment3.customer SET point=? WHERE id_customer=?");
+			PreparedStatement ps = conn.prepareStatement("UPDATE assignment3.customer SET point=? WHERE id_customer=?");
 			ps.setInt(1, c.getIdCustomer());
-			ps.setDouble(2,newPoint);
+			ps.setDouble(2, newPoint);
 			ps.executeUpdate();
 			ps.close();
 		} catch (Exception e) {
@@ -877,6 +884,5 @@ public class DBController {
 		}
 		return true;
 	}
-	
 
 }
