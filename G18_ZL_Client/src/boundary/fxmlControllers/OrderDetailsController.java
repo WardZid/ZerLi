@@ -1,6 +1,7 @@
 package boundary.fxmlControllers;
 
 import java.net.URL;
+
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
@@ -15,6 +16,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
@@ -22,9 +24,34 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 public class OrderDetailsController implements Initializable {
+
+	@FXML
+	private CheckBox DeliveryNow;
+
+	@FXML
+	private HBox refundHbox;
+	@FXML
+	private Label fillCreditCardLable;
+	@FXML
+	private VBox orderDetailsVbox;
+	@FXML
+	private VBox PaymentVbox;
+
+	@FXML
+	private Button NextBtn;
+
+	@FXML
+	private Label Note;
+	@FXML
+	private Label refundLable1;
+	@FXML
+	private Label refundLable2;
+
 	@FXML
 	private ComboBox<String> MinutesCombo;
 	@FXML
@@ -86,7 +113,8 @@ public class OrderDetailsController implements Initializable {
 
 	@FXML
 	private Label required7;
-
+	@FXML
+	private Label required8;
 	@FXML
 	private TextField credutCardtextfield;
 
@@ -97,11 +125,21 @@ public class OrderDetailsController implements Initializable {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+
+		if (ClientConsoleController.getCustomer().getPoint() >= CartController.getOrderInProcess().getPrice()) {
+			refundLable2.setText(ClientConsoleController.getCustomer().getPoint() + "");
+			Note.setVisible(true);
+			refundHbox.setVisible(true);
+		}
+
+		refundLable1.setText(ClientConsoleController.getCustomer().getPoint() + "");
+		this.getPaymentVbox().setVisible(false);
+
 		credutCardtextfield.focusedProperty().addListener(new ChangeListener<Boolean>() {
 			@Override
 			public void changed(ObservableValue<? extends Boolean> arg0, Boolean oldPropertyValue,
 					Boolean newPropertyValue) {
- 
+
 				if (newPropertyValue) {
 					// Textfield on focus" ;
 
@@ -118,7 +156,7 @@ public class OrderDetailsController implements Initializable {
 						if (!isNumeric(credutCardtextfield.getText())) {
 							credutCardtextfield.setText("0");
 						} else {
-							if (credutCardtextfield.getText().length()>6) {
+							if (credutCardtextfield.getText().length() > 6) {
 								credutCardtextfield.setText("0");
 
 							}
@@ -147,7 +185,7 @@ public class OrderDetailsController implements Initializable {
 		required5.setVisible(false);
 		required6.setVisible(false);
 		required7.setVisible(false);
-
+		required8.setVisible(false);
 		shippingVbox.setVisible(false);
 
 		StoreAddressName = (ArrayList<String>) MainController.getMyClient().send(MessageType.GET, "store/all", null);
@@ -175,6 +213,24 @@ public class OrderDetailsController implements Initializable {
 
 	}
 
+	public void change(ActionEvent event) {
+		if (DeliveryNow.isSelected() == true) {
+
+			DelevireyDatePicker.setValue(null);
+			MinutesCombo.setValue(null);
+			HourCombo.setValue(null);
+			DelevireyDatePicker.setDisable(true);
+			MinutesCombo.setDisable(true);
+			HourCombo.setDisable(true);
+
+		} else {
+			DelevireyDatePicker.setDisable(false);
+			MinutesCombo.setDisable(false);
+			HourCombo.setDisable(false);
+
+		}
+	}
+
 	public void OnBackBtnPressed() {
 		Navigation.navigator("cart-view.fxml");
 	}
@@ -188,70 +244,144 @@ public class OrderDetailsController implements Initializable {
 
 	}
 
-	public void onPaymentPressed() {
-		if (DelevireyDatePicker.getValue() == null || StoreAddressCombo.getValue() == null
-				|| HourCombo.getValue() == null || MinutesCombo.getValue() == null
-				|| credutCardtextfield.getText().trim().isEmpty()||Integer.parseInt(credutCardtextfield.getText())==0) {
+	public void SetNodeFillAllFeilds(boolean status) {
+		noteLable.setVisible(status);
+		required1.setVisible(status);
+		required2.setVisible(status);
+		required3.setVisible(status);
+		required4.setVisible(status);
+		required5.setVisible(status);
+		required7.setVisible(status);
+		required8.setVisible(status);
 
-			noteLable.setVisible(true);
-			required1.setVisible(true);
-			required2.setVisible(true);
-			required3.setVisible(true);
-			required4.setVisible(true);
-			required5.setVisible(true);
-			required6.setVisible(true);
-			required7.setVisible(true);
- 
-	
+	}
+
+	public void onPaymentPressed() {
+		if (ClientConsoleController.getCustomer().getPoint() < CartController.getOrderInProcess().getPrice()) {
+			if (credutCardtextfield.getText().trim().isEmpty()
+					|| Integer.parseInt(credutCardtextfield.getText()) == 0) {
+				required7.setVisible(true);
+				fillCreditCardLable.setVisible(true);
+			} else {
+				credutCardtextfield.setDisable(true);
+				fillCreditCardLable.setVisible(false);
+				SetOrderDetails();
+			}
+		} else {
+
+			SetOrderDetails();
+		}
+	}
+
+	public void SetOrderDetails() {
+
+		CartController.getOrderInProcess().setGreetingCard(GreetingArea.getText());
+		if (DeliveryNow.isSelected() == false)
+			CartController.getOrderInProcess().setDeliveryDate(DelevireyDatePicker.getValue().toString() + " "
+					+ HourCombo.getValue() + ":" + MinutesCombo.getValue() + ":00");
+		if (DeliveryNow.isSelected() == false)
+			CartController.getOrderInProcess().setDeliveryDate(null);
+		CartController.getOrderInProcess().setIdCustomer(ClientConsoleController.getCustomer().getIdCustomer());
+		CartController.getOrderInProcess().setDescription(DescribtionArea.getText());
+		CartController.getOrderInProcess().setIdOrderStatus(0);
+		CartController.getOrderInProcess().setAddress(AddressText.getText());
+		CartController.getOrderInProcess().setOrderDate(MainController.currentTime());
+		if (StoreAddressCombo.getValue() != null)
+			CartController.getOrderInProcess().setStore(Store.valueOf(StoreAddressCombo.getValue()));
+
+		//// for the price and refund
+
+		/// if customer added shipping
+		if (AddShippingCheckBox.isSelected() == true) {
+			if (ClientConsoleController.getCustomer().getPoint() == 0)
+				CartController.getOrderInProcess().addPriceForShipping();
+			else {
+
+				// refund > price order
+				if (ClientConsoleController.getCustomer().getPoint() >= CartController.getOrderInProcess().getPrice()) {
+					ClientConsoleController.getCustomer().setPoint(ClientConsoleController.getCustomer().getPoint()
+							- CartController.getOrderInProcess().getPrice());
+					// +update refund in DB
+				}
+				// if refund < price order
+				else {
+					System.out.println("you have to pay " + (ClientConsoleController.getCustomer().getPoint()
+							- CartController.getOrderInProcess().getPrice()));
+					ClientConsoleController.getCustomer().setPoint(0);
+					// +update refund in DB
+				}
+				CartController.getOrderInProcess().addPriceForShipping();
+			}
+			System.out.println("Refund =" + ClientConsoleController.getCustomer().getPoint());
+		}
+
+		//// without shipping
+
+		else {
+			if (ClientConsoleController.getCustomer().getPoint() != 0) {
+				// refund > price order
+				if (ClientConsoleController.getCustomer().getPoint() >= CartController.getOrderInProcess().getPrice()) {
+					ClientConsoleController.getCustomer().setPoint(ClientConsoleController.getCustomer().getPoint()
+							- CartController.getOrderInProcess().getPrice());
+					// +update refund in DB
+				}
+				// if refund < price order
+				else {
+					System.out.println("you have to pay " + (CartController.getOrderInProcess().getPrice()
+							- ClientConsoleController.getCustomer().getPoint()));
+					ClientConsoleController.getCustomer().setPoint(0);
+					// +update refund in DB
+				}
+
+			}
+			System.out.println("Refund =" + ClientConsoleController.getCustomer().getPoint());
+		}
+
+	}
+
+	public VBox getPaymentVbox() {
+		return PaymentVbox;
+	}
+
+	public VBox getorderDetailsVbox() {
+		return orderDetailsVbox;
+	}
+
+	public void OnNextBtnPressed() {
+	String delevireyDateTime =DelevireyDatePicker.getValue().toString() + " "
+			+ HourCombo.getValue() + ":" + MinutesCombo.getValue() + ":00"	;
+	if(MainController.timeDiffHour(delevireyDateTime, MainController.currentTime())<3) {
+		Alert errorAlert = new Alert(AlertType.ERROR);
+		errorAlert.setHeaderText(null);
+		errorAlert.setContentText("You should pick correct time");
+		errorAlert.showAndWait();
+	}
+	else if ((DelevireyDatePicker.getValue() == null && DeliveryNow.isSelected() == false)
+				|| StoreAddressCombo.getValue() == null
+				|| (HourCombo.getValue() == null && DeliveryNow.isSelected() == false)
+				|| (MinutesCombo.getValue() == null && DeliveryNow.isSelected() == false)) {
+			SetNodeFillAllFeilds(true);
 		} else {
 
 			if (AddShippingCheckBox.isSelected() == true) {
-				System.out.println(" print inside" + AddressText.getText() + PhoneText.getText()
-						+ NameReceiverText.getText() + "1");
 
 				if (AddressText.getText().trim().isEmpty() || PhoneText.getText().trim().isEmpty()
 						|| NameReceiverText.getText().trim().isEmpty()) {
-					noteLable.setVisible(true);
-					required1.setVisible(true);
-					required2.setVisible(true);
-					required3.setVisible(true);
-					required4.setVisible(true);
-					required5.setVisible(true);
-					required6.setVisible(true);
-					required7.setVisible(true);
+					SetNodeFillAllFeilds(true);
+				} else {
+					this.getPaymentVbox().setVisible(true);
+					getorderDetailsVbox().setDisable(true);
 				}
 
 			} else {
-
-				noteLable.setVisible(false);
-				required1.setVisible(false);
-				required2.setVisible(false);
-				required3.setVisible(false);
-				required4.setVisible(false);
-				required5.setVisible(false);
-				required6.setVisible(false);
-				required7.setVisible(false);
-				CartController.getOrderInProcess().setGreetingCard(GreetingArea.getText());
-				CartController.getOrderInProcess().setDeliveryDate(DelevireyDatePicker.getValue().toString() + " "
-						+ HourCombo.getValue() + ":" + MinutesCombo.getValue() + ":00");
-				CartController.getOrderInProcess().setIdCustomer(ClientConsoleController.getCustomer().getIdCustomer());
-				CartController.getOrderInProcess().setDescription(DescribtionArea.getText());
-				CartController.getOrderInProcess().setIdOrderStatus(0);
-				CartController.getOrderInProcess().setAddress(AddressText.getText());
-				CartController.getOrderInProcess().addPriceForShipping();
-				CartController.getOrderInProcess().setOrderDate(MainController.currentTime()); 
-				if (StoreAddressCombo.getValue() != null)
-					CartController.getOrderInProcess().setStore(Store.valueOf(StoreAddressCombo.getValue()));
-
-				String str = credutCardtextfield.getText();
-				System.out.println(str);
-				System.out.println(CartController.getOrderInProcess().toString());
-				System.out.println(DelevireyDatePicker.getValue().toString() + " " + HourCombo.getValue() + ":"
-						+ MinutesCombo.getValue() + ":00");
+				
+				
+				SetNodeFillAllFeilds(false);
+				this.getPaymentVbox().setVisible(true);
+				getorderDetailsVbox().setDisable(true);
 			}
 
 		}
-
 	}
 
 	public static boolean isNumeric(String strNum) {

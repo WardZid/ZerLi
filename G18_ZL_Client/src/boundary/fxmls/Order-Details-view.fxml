@@ -16,7 +16,7 @@
 
 <StackPane prefHeight="550.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="boundary.fxmlControllers.OrderDetailsController">
    <children>
-      <VBox alignment="CENTER" StackPane.alignment="CENTER">
+      <VBox fx:id="orderDetailsVbox" alignment="CENTER" StackPane.alignment="CENTER">
          <children>
             <Label maxWidth="1.7976931348623157E308" text="Order Details">
                <font>
@@ -50,6 +50,23 @@
                            <VBox.margin>
                               <Insets />
                            </VBox.margin>
+                           <padding>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </padding>
+                        </HBox>
+                        <HBox spacing="20.0">
+                           <children>
+                              <Label fx:id="required8" text="*" textFill="RED">
+                                 <font>
+                                    <Font size="15.0" />
+                                 </font>
+                              </Label>
+                              <CheckBox fx:id="DeliveryNow" mnemonicParsing="false" onAction="#change" text="Delivery Now">
+                                 <font>
+                                    <Font size="15.0" />
+                                 </font>
+                              </CheckBox>
+                           </children>
                            <padding>
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                            </padding>
@@ -226,39 +243,6 @@
                   </VBox>
                </children>
             </HBox>
-            <VBox prefHeight="61.0" prefWidth="850.0" spacing="7.0" VBox.vgrow="ALWAYS">
-               <children>
-                  <Label text="Enter Payment Details">
-                     <font>
-                        <Font size="17.0" />
-                     </font>
-                     <VBox.margin>
-                        <Insets />
-                     </VBox.margin>
-                     <padding>
-                        <Insets left="10.0" />
-                     </padding>
-                  </Label>
-                  <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
-                     <children>
-                        <Label fx:id="required7" text="*" textFill="RED">
-                           <font>
-                              <Font size="15.0" />
-                           </font>
-                        </Label>
-                        <Label text="Credit Card :">
-                           <font>
-                              <Font size="15.0" />
-                           </font>
-                        </Label>
-                        <TextField fx:id="credutCardtextfield" />
-                     </children>
-                  </HBox>
-               </children>
-               <padding>
-                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-               </padding>
-            </VBox>
             <HBox alignment="CENTER">
                <children>
                   <Label fx:id="noteLable" text="fill all the required fields in *" textFill="RED">
@@ -286,22 +270,101 @@
                      </padding>
                   </HBox>
                   <HBox alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
+                     <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </padding>
                      <children>
-                        <Button fx:id="PaymentBtn" mnemonicParsing="false" onMousePressed="#onPaymentPressed" text="Payment" HBox.hgrow="ALWAYS">
+                        <Button fx:id="NextBtn" mnemonicParsing="false" onMousePressed="#OnNextBtnPressed" text="Next">
                            <font>
                               <Font size="15.0" />
                            </font>
                         </Button>
                      </children>
-                     <padding>
-                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                     </padding>
                   </HBox>
                </children>
                <padding>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </padding>
             </HBox>
+         </children>
+      </VBox>
+      <VBox fx:id="PaymentVbox" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="329.0" prefWidth="488.0" spacing="10.0" style="-fx-background-color: white;">
+         <children>
+            <Label text="Enter Payment Details">
+               <font>
+                  <Font size="17.0" />
+               </font>
+               <padding>
+                  <Insets left="10.0" />
+               </padding>
+            </Label>
+            <HBox spacing="10.0">
+               <padding>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </padding>
+               <children>
+                  <Label text="you have refund : ">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="refundLable1" text="Label">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox spacing="10.0">
+               <children>
+                  <Label fx:id="required7" text="*" textFill="RED">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </Label>
+                  <Label text="Credit Card :">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="credutCardtextfield" />
+               </children>
+               <padding>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </padding>
+            </HBox>
+            <Label fx:id="Note" text="you Dont have to Enter Your Credit card" visible="false">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <HBox fx:id="refundHbox" alignment="CENTER" spacing="10.0" visible="false">
+               <children>
+                  <Label text="you have refund :">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="refundLable2" text="Label">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </Label>
+               </children>
+               <padding>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </padding>
+            </HBox>
+            <Button fx:id="PaymentBtn" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onMousePressed="#onPaymentPressed" text="Payment" VBox.vgrow="ALWAYS">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Button>
+            <Label fx:id="fillCreditCardLable" text="Fill Credit Card Information" textFill="RED" visible="false">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
          </children>
       </VBox>
    </children>
