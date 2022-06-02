@@ -168,7 +168,7 @@ public class ClientConsoleController implements Initializable {
 
 	private void initPage(Button firstBtn, String fxmlPath) {
 		if (firstBtn != null) {
-			cusCatalogBtn.setStyle("-fx-background-color: #BBBBBB");
+			firstBtn.setStyle("-fx-background-color: #BBBBBB");
 			pressedBtn = firstBtn;
 		}
 
@@ -200,10 +200,10 @@ public class ClientConsoleController implements Initializable {
 
 	private void loadBranchManagerConsole() {
 		bmOrdersBtn = menuButton("Orders", "branch-manager-orders-view.fxml");
-		bmCustomersBtn = menuButton("Customers", "branch-manager-customers-view.fxml");
+		bmCustomersBtn = menuButton("Customers", "branch-manager-accounts-view.fxml");
 		bmIReportsBtn = menuButton("Income Reports", "branch-manager-income-reports-view.fxml");
 		bmOReportsBtn = menuButton("Order Reports", "branch-manager-order-reports-view.fxml");
-
+	
 		initPage(bmOrdersBtn, "fxmls/branch-manager-orders-view.fxml");
 	}
 

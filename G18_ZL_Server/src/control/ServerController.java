@@ -350,7 +350,7 @@ public class ServerController extends ObservableServer {
 		} else if (request[0].equals("customer")) {
 			Customer c = (Customer) clMsg.getContent();
 			if (request[1].equals("status")) {
-				clMsg.setContent(DBController.updateCustomerStatusOne(c, CustomerStatus.valueOf(request[2])));
+				clMsg.setContent(DBController.updateCustomerStatusOne(c, CustomerStatus.getById(c.getIdCustomerStatus())));
 			}
 		} else if (request[0].equals("complaint")) {
 			Complaint complaint = (Complaint) clMsg.getContent();
