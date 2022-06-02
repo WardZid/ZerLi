@@ -11,6 +11,7 @@ import entity.BuildItem;
 import entity.Complaint;
 import entity.Customer;
 import entity.Customer.CustomerStatus;
+import entity.Item;
 import entity.MyMessage;
 import entity.MyMessage.MessageType;
 import entity.Order;
@@ -310,7 +311,6 @@ public class ServerController extends ObservableServer {
 		} else {
 			ServerView.printErr(getClass(), "Unhandled Get request: " + clMsg.getInfo());
 		}
-
 	}
 
 	private void handlePostRequest(MyMessage clMsg, ConnectionToClient client) {
@@ -324,7 +324,11 @@ public class ServerController extends ObservableServer {
 		} else if (request[0].equals("survey")) {
 			Survey s=(Survey) clMsg.getContent();
 			clMsg.setContent(DBController.insertSurvey(s));
-		} else {
+		} else if(request[0].equals("item")) {
+			Item i=(Item)clMsg.getContent();
+			clMsg.setContent(DBController.insertItem(i));
+		}
+		else {
 			ServerView.printErr(getClass(), "Unhandled POST request: " + clMsg.getInfo());
 		}
 

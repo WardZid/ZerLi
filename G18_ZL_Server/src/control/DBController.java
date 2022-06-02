@@ -1,5 +1,7 @@
 package control;
 
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -24,7 +26,6 @@ import entity.Store;
 import entity.Survey;
 import entity.SurveyQuestion;
 import entity.User;
-import javafx.scene.image.Image;
 
 public class DBController {
 
@@ -119,14 +120,16 @@ public class DBController {
 		return size;
 	}
 
-	private static Image blobToImage(Blob blob) {
-		try {
-			if (blob != null)
-				return new Image(blob.getBinaryStream());
-		} catch (SQLException e) {
-			ServerView.printErr(DBController.class, "Could not load blob to image from mysql");
-		}
-		return null;
+	private static byte[] blobToMyFile(Blob blob) throws SQLException {
+		if (blob == null)
+			return null;
+		int blobLength = (int) blob.length();
+		if (blobLength == 0)
+			return null;
+		byte[] blobAsBytes = blob.getBytes(1, blobLength);
+		
+		blob.free();
+		return blobAsBytes;
 
 	}
 
@@ -200,16 +203,9 @@ public class DBController {
 			rs.beforeFirst(); // ---move back to first row
 			while (rs.next()) {
 
-				Item itemToAdd = new Item(
-						rs.getInt("id_item"),  
-						rs.getString("name"),
-						rs.getDouble("price"), 
-						rs.getInt("sale"),
-						rs.getString("category"),
-						rs.getString("color"),
-						rs.getString("description"),
-						blobToImage(rs.getBlob("image")))
-						;
+				Item itemToAdd = new Item(rs.getInt("id_item"), rs.getString("name"), rs.getDouble("price"),
+						rs.getInt("sale"), rs.getString("category"), rs.getString("color"), rs.getString("description"),
+						blobToMyFile(rs.getBlob("image")));
 				orderItems.add(itemToAdd.new OrderItem(itemToAdd, rs.getInt("amount")));
 			}
 			rs.close();
@@ -229,17 +225,9 @@ public class DBController {
 			rs = statement.executeQuery("SELECT * FROM item");
 			rs.beforeFirst(); // ---move back to first row
 			while (rs.next()) {
-				items.add(
-						new Item(
-								rs.getInt("id_item"),  
-								rs.getString("name"),
-								rs.getDouble("price"), 
-								rs.getInt("sale"),
-								rs.getString("category"),
-								rs.getString("color"),
-								rs.getString("description"),
-								blobToImage(rs.getBlob("image")))
-						);
+				items.add(new Item(rs.getInt("id_item"), rs.getString("name"), rs.getDouble("price"), rs.getInt("sale"),
+						rs.getString("category"), rs.getString("color"), rs.getString("description"),
+						blobToMyFile(rs.getBlob("image"))));
 			}
 			rs.close();
 		} catch (SQLException e) {
@@ -255,17 +243,9 @@ public class DBController {
 			rs = statement.executeQuery("SELECT * FROM item WHERE " + column + "='" + value + "'");
 			rs.beforeFirst(); // ---move back to first row
 			while (rs.next()) {
-				items.add(
-						new Item(
-								rs.getInt("id_item"),  
-								rs.getString("name"),
-								rs.getDouble("price"), 
-								rs.getInt("sale"),
-								rs.getString("category"),
-								rs.getString("color"),
-								rs.getString("description"),
-								blobToImage(rs.getBlob("image")))
-						);
+				items.add(new Item(rs.getInt("id_item"), rs.getString("name"), rs.getDouble("price"), rs.getInt("sale"),
+						rs.getString("category"), rs.getString("color"), rs.getString("description"),
+						blobToMyFile(rs.getBlob("image"))));
 			}
 			rs.close();
 		} catch (SQLException e) {
@@ -290,12 +270,12 @@ public class DBController {
 		}
 		return category;
 	}
-	
+
 	public static ArrayList<String> getCategoryByType(String type) {
 		ArrayList<String> types = new ArrayList<>();
 
 		try {
-			ResultSet rs = statement.executeQuery("SELECT * FROM category WHERE type='"+type+"'");
+			ResultSet rs = statement.executeQuery("SELECT * FROM category WHERE type='" + type + "'");
 			rs.beforeFirst(); // ---move back to first row
 			while (rs.next()) {
 				types.add(rs.getString("category"));
@@ -307,7 +287,7 @@ public class DBController {
 		}
 		return types;
 	}
-	
+
 	public static ArrayList<String> getTypeAll() {
 		ArrayList<String> types = new ArrayList<>();
 
@@ -390,8 +370,6 @@ public class DBController {
 			rs = statement.executeQuery("SELECT * FROM build_item WHERE " + column + "='" + value + "'");
 			rs.beforeFirst(); // ---move back to first row
 			while (rs.next()) {
-//				buildItems.add(getItemInBuildAll(
-//						new BuildItem(rs.getInt("id_build_item"), rs.getInt("id_order"), rs.getInt("amount"))));
 				buildItems.add(new BuildItem(rs.getInt("id_build_item"), rs.getInt("id_order"), rs.getInt("amount")));
 			}
 			rs.close();
@@ -419,18 +397,9 @@ public class DBController {
 							+ buildItem.getIdBuildItem() + " AND IB.id_item=I.id_item");
 			rs.beforeFirst(); // ---move back to first row
 			while (rs.next()) {
-				buildItem.addItem(
-						new Item(
-								rs.getInt("id_item"),  
-								rs.getString("name"),
-								rs.getDouble("price"), 
-								rs.getInt("sale"),
-								rs.getString("category"),
-								rs.getString("color"),
-								rs.getString("description"),
-								blobToImage(rs.getBlob("image")))
-						,
-						rs.getInt("amount_in_build"));
+				buildItem.addItem(new Item(rs.getInt("id_item"), rs.getString("name"), rs.getDouble("price"),
+						rs.getInt("sale"), rs.getString("category"), rs.getString("color"), rs.getString("description"),
+						blobToMyFile(rs.getBlob("image"))), rs.getInt("amount_in_build"));
 			}
 			rs.close();
 		} catch (SQLException e) {
@@ -545,11 +514,11 @@ public class DBController {
 		return stores;
 	}
 
-	public static ArrayList<String> getQuestionsAll(){
+	public static ArrayList<String> getQuestionsAll() {
 		ArrayList<String> questions = new ArrayList<>();
-		
+
 		try {
-			ResultSet rs=statement.executeQuery("Select * FROM assignment3.question");
+			ResultSet rs = statement.executeQuery("Select * FROM assignment3.question");
 			rs.beforeFirst(); // ---move back to first row
 			while (rs.next()) {
 				questions.add(rs.getString("question"));
@@ -557,10 +526,10 @@ public class DBController {
 		} catch (Exception e) {
 			ServerView.printErr(DBController.class, e.getMessage());
 		}
-		
+
 		return questions;
 	}
-	
+
 	// Report get queries
 	public static ArrayList<String> getMonthsInBranch(String idStore) {
 		ArrayList<String> monthsYears = new ArrayList<>();
@@ -679,66 +648,92 @@ public class DBController {
 
 	// INSERT QUERIES (POST)*******************************************************
 
-	public static boolean insertComplaint(Complaint c) {
-		int linesChanged=0;
+	public static boolean insertItem(Item item) {
+		int linesChanged = 0;
 		try {
-			PreparedStatement ps = conn.prepareStatement("INSERT INTO complaint (`id_customer`, `status_complaint`, `date_complaint`, `complaint`) VALUES(?,?,?,?)");
+			PreparedStatement ps = conn.prepareStatement(
+					"INSERT INTO item (`name`, `price`, `sale`, `category`,`color`,`description`,`image`) VALUES(?,?,?,?,?,?,?)");
+			ps.setString(1, item.getName());
+			ps.setDouble(2, item.getPrice());
+			ps.setInt(3, item.getSale());
+			ps.setString(4, item.getCategory());
+			ps.setString(5, item.getColor());
+			ps.setString(6, item.getDescription());
+			ps.setBytes(7, item.getImageBytes());
+			linesChanged = ps.executeUpdate();
+			ps.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			ServerView.printErr(DBController.class, "Unable to add new item: " + item.toString());
+		}
+		if (linesChanged == 0)
+			return false;
+		return true;
+	}
+
+	public static boolean insertComplaint(Complaint c) {
+		int linesChanged = 0;
+		try {
+			PreparedStatement ps = conn.prepareStatement(
+					"INSERT INTO complaint (`id_customer`, `status_complaint`, `date_complaint`, `complaint`) VALUES(?,?,?,?)");
 			ps.setInt(1, c.getIdCustomer());
 			ps.setString(2, "OPEN");
 			ps.setString(3, c.getDate());
 			ps.setString(4, c.getComplaint());
-			linesChanged=ps.executeUpdate();
+			linesChanged = ps.executeUpdate();
 			ps.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 			ServerView.printErr(DBController.class, "Unable to add new complaint: " + c.toString());
 		}
-		if(linesChanged==0)
+		if (linesChanged == 0)
 			return false;
 		return true;
 	}
-	
+
 	public static boolean insertSurvey(Survey s) {
-		int linesChanged=0;
+		int linesChanged = 0;
 		try {
-			PreparedStatement ps = conn.prepareStatement("INSERT INTO survey (`date_survey`, `id_store`) VALUES(?,?)",Statement.RETURN_GENERATED_KEYS);
+			PreparedStatement ps = conn.prepareStatement("INSERT INTO survey (`date_survey`, `id_store`) VALUES(?,?)",
+					Statement.RETURN_GENERATED_KEYS);
 			ps.setString(1, s.getDateSurvey());
 			ps.setInt(2, s.getIdStore());
-			linesChanged=ps.executeUpdate();
-			
-			ResultSet generatedKeys=ps.getGeneratedKeys();
-			int idSurvey=generatedKeys.getInt(0);
+			linesChanged = ps.executeUpdate();
+
+			ResultSet generatedKeys = ps.getGeneratedKeys();
+			int idSurvey = generatedKeys.getInt(0);
 			ps.close();
 			System.out.println(idSurvey);
 			for (SurveyQuestion sq : s.getQuestions()) {
-				insertSurveyAnswer(idSurvey,sq);
+				insertSurveyAnswer(idSurvey, sq);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 			ServerView.printErr(DBController.class, "Unable to add new survey: " + s.toString());
 			return false;
 		}
-		if(linesChanged==0)
+		if (linesChanged == 0)
 			return false;
 		return true;
 	}
-	
+
 	public static boolean insertSurveyAnswer(int idSurvey, SurveyQuestion sq) {
-		int linesChanged=0;
+		int linesChanged = 0;
 		try {
-			PreparedStatement ps = conn.prepareStatement("INSERT INTO survey_question (`id_survey`, `id_question`,`answer`) VALUES(?,?,?)");
-			ps.setInt(1,idSurvey);
+			PreparedStatement ps = conn.prepareStatement(
+					"INSERT INTO survey_question (`id_survey`, `id_question`,`answer`) VALUES(?,?,?)");
+			ps.setInt(1, idSurvey);
 			ps.setInt(2, sq.getIdQuestion());
 			ps.setInt(3, sq.getAnswer());
-			linesChanged=ps.executeUpdate();
+			linesChanged = ps.executeUpdate();
 			ps.close();
-			
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 			ServerView.printErr(DBController.class, "Unable to add new survey_question: " + sq.toString());
 			return false;
 		}
-		if(linesChanged==0)
+		if (linesChanged == 0)
 			return false;
 		return true;
 	}
@@ -752,32 +747,31 @@ public class DBController {
 			ServerView.printErr(DBController.class, e.getMessage());
 		}
 	}
-	
+
 	public static boolean updateLogIn(User u) {
-		int linesChanged=0;
+		int linesChanged = 0;
 		try {
-			linesChanged=statement.executeUpdate("UPDATE user SET logged_in=TRUE WHERE id_user="+u.getIdUser());
+			linesChanged = statement.executeUpdate("UPDATE user SET logged_in=TRUE WHERE id_user=" + u.getIdUser());
 		} catch (SQLException e) {
 			ServerView.printErr(DBController.class, e.getMessage());
 		}
-		if(linesChanged==0)
+		if (linesChanged == 0)
 			return false;
 		return true;
 	}
-	
+
 	public static boolean updateLogOut(User u) {
-		int linesChanged=0;
+		int linesChanged = 0;
 		try {
-			linesChanged=statement.executeUpdate("UPDATE user SET logged_in=FALSE WHERE id_user="+u.getIdUser());
+			linesChanged = statement.executeUpdate("UPDATE user SET logged_in=FALSE WHERE id_user=" + u.getIdUser());
 		} catch (SQLException e) {
 			ServerView.printErr(DBController.class, e.getMessage());
 		}
-		if(linesChanged==0)
+		if (linesChanged == 0)
 			return false;
 		return true;
 	}
-	
-	
+
 	public static ArrayList<Customer> updateCustomerStatusOne(Customer c, CustomerStatus status) {
 
 		try {
@@ -806,7 +800,8 @@ public class DBController {
 
 	public static ArrayList<Order> updateOrderStatus(Order o) {
 		try {
-			PreparedStatement ps = conn.prepareStatement("UPDATE assignment3.order SET id_order_status=? WHERE id_order=?");
+			PreparedStatement ps = conn
+					.prepareStatement("UPDATE assignment3.order SET id_order_status=? WHERE id_order=?");
 			ps.setInt(1, o.getIdOrderStatus());
 			ps.setInt(2, o.getIdOrder());
 			ps.executeUpdate();

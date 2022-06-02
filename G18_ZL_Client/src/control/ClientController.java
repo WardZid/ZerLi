@@ -107,6 +107,7 @@ public class ClientController extends ObservableClient {
 			while (awaitResponse) {
 				try {
 					if (timeoutCounter >= 200) {
+						awaitResponse=false;
 						timeOut();
 					}
 					timeoutCounter++;
