@@ -459,7 +459,7 @@ public class DBController {
 			while (rs.next()) {
 				customers.add(new Customer(rs.getInt("id_customer"), rs.getInt("id_customer_status"),
 						rs.getInt("id_user"), rs.getString("name_customer"), rs.getString("email_customer"),
-						rs.getString("phone_customer"), rs.getString("card_number")));
+						rs.getString("phone_customer"), rs.getString("card_number"),rs.getDouble("point")));
 			}
 			rs.close();
 		} catch (SQLException e) {
@@ -477,7 +477,7 @@ public class DBController {
 			while (rs.next()) {
 				customers.add(new Customer(rs.getInt("id_customer"), rs.getInt("id_customer_status"),
 						rs.getInt("id_user"), rs.getString("name_customer"), rs.getString("email_customer"),
-						rs.getString("phone_customer"), rs.getString("card_number")));
+						rs.getString("phone_customer"), rs.getString("card_number"),rs.getDouble("point")));
 			}
 			rs.close();
 		} catch (SQLException e) {
