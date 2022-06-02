@@ -16,16 +16,16 @@ public class Customer implements Serializable {
 		}
 	}
 
-	private int idCustomer;
+	private int idCustomer; 
 	private int idCustomerStatus;
 	private int idUser;
 	private String name;
 	private String email;
 	private String phone;
 	private String card;
-
+	private double point;
 	public Customer(int idCustomer, int idCustomerStatus, int idUser, String name, String email, String phone,
-			String card) {
+			String card,double point) {
 		this.idCustomer = idCustomer;
 		this.idCustomerStatus = idCustomerStatus;
 		this.idUser = idUser;
@@ -33,6 +33,7 @@ public class Customer implements Serializable {
 		this.email = email;
 		this.phone = phone;
 		this.card = card;
+		this.point = point;
 	}
 
 	public int getIdCustomer() {
@@ -90,12 +91,19 @@ public class Customer implements Serializable {
 	public void setCard(String card) {
 		this.card = card;
 	}
+	public double getPoint() {
+		return point;
+	}
+
+	public void setPoint(double point) {
+		this.point = point;
+	}
 
 	@Override
 	public String toString() {
 		return "Customer [idCustomer=" + idCustomer + ", CustomerStatus=(" + idCustomerStatus + ") "
 				+ CustomerStatus.getById(idCustomerStatus) + ", idUser=" + idUser + ", name=" + name + ", email="
-				+ email + ", phone=" + phone + ", card=" + card + "]";
+				+ email + ", phone=" + phone + ", card=" + card +", point=" + point + "]";
 	}
 
 }
