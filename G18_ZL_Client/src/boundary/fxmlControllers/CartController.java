@@ -88,10 +88,12 @@ public class CartController implements Initializable {
 		int column = 0;
 		int row = 1;
 		BuildItems = getOrderInProcess().getBuildItems();
-		if(BuildItems==null)
+		
+		 
  		for (int i = 0; i < BuildItems.size(); i++) {
 			FXMLLoader fXMLLoader = new FXMLLoader(ClientView.class.getResource("fxmls/cart-CustomItem-view.fxml"));
 			Node node = fXMLLoader.load();
+			System.out.println("BuildItems "+BuildItems.get(i).toString() );
 
 			CartCustomItemControl cartItemControl = fXMLLoader.getController();
 			cartItemControl.setData(BuildItems.get(i), i, this);
