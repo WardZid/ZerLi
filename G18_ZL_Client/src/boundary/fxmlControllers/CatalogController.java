@@ -70,8 +70,8 @@ public class CatalogController implements Initializable {
 
 	private int PriceRangeCust;
 
-	private static ArrayList<Item> items;
-
+	private static ArrayList<Item> items=new ArrayList<Item>() ;
+	private static ArrayList<Item> itemsGetFromDB;
 	private ArrayList<Item> filteredItems = new ArrayList<Item>();
 
 	private static HashMap<String, String> categoryType = new HashMap<String, String>();
@@ -199,7 +199,15 @@ public class CatalogController implements Initializable {
 
 	private void loadAllItems() {
 		double maxprice = 0;
-		items = (ArrayList<Item>) MainController.getMyClient().send(MessageType.GET, "item/all", null);
+		
+		itemsGetFromDB = (ArrayList<Item>) MainController.getMyClient().send(MessageType.GET, "item/all", null);
+		for (Item item : itemsGetFromDB)
+		{
+			if(item.getSale()!=0)
+				items.add(0,item);
+			else
+				items.add(item);
+		}
 		// active sale
 		for (Item item : items) {
 			item.setPrice(item.getPriceAfterSale());
