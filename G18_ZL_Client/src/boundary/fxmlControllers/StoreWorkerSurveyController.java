@@ -75,20 +75,27 @@ public class StoreWorkerSurveyController implements Initializable {
 	private ToggleGroup question6TG;
 	@FXML
 	private ComboBox<Store> storeComboBox;
+	 @FXML
+	 private ComboBox<Integer> surviesComB;
+ 
 	private Survey survey;
-	private SurveyQuestion[] surveyQuestions = new SurveyQuestion[6];
 	private boolean[] isAnsweredQuestion = new boolean[6];
 	private boolean isSelectedStore;
+	private boolean isSelectedSurvey;
 	private String[] questions = { "How much the service was understood to you from 1 - 10 ?",
 			"Rate how much the service was comfort from 1 - 10 ", "Rate the workers treatment from 1 - 10",
 			"How much the service was complicated in your opinion from 1 - 10 ?\n",
 			"Rate the design of the service from 1 - 10 ",
 			"How much are you satisfied from the flowers that you bought from 1 - 10 ?\n" };
+	ArrayList<Survey> surviesList;
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
+		surviesList = (ArrayList<Survey>) MainController.getMyClient().send(MessageType.GET,"question/all", null);
+		clearSelectedItemInSurviesComboBox();
 		storeComboBox.getItems().clear();
 		storeComboBox.getItems().addAll(Store.values());
+		isSelectedStore = false;
 		isSelectedStore = false;
 		storeComboBox.getSelectionModel().selectedItemProperty().addListener( new ChangeListener<Store>(){
 
@@ -98,44 +105,60 @@ public class StoreWorkerSurveyController implements Initializable {
 				enableEnterAnswerButton();
 			}
 		});
-		for (int i = 0; i < 6; i++) {
-			surveyQuestions[i] = new SurveyQuestion(1, null, 0);
-			surveyQuestions[i].setQuestion(questions[i]);
-		}
 		for (int i = 0; i < 6; i++)
 			isAnsweredQuestion[i] = false;
 		enableEnterAnswerButton();
-		setQuestions();
+		surviesComB.getSelectionModel().selectedItemProperty().addListener( new ChangeListener<Integer>(){
+
+			@Override
+			public void changed(ObservableValue<? extends Integer> observable, Integer oldValue, Integer newValue) {
+				setQuestions(surviesComB.getValue());
+				isSelectedSurvey = true;
+				try {
+					clearSelectedToggles();
+				}catch(NullPointerException e) {}
+			}
+
+		});
 	}
 
-	private void setQuestions() {
-		question1TA.setText(surveyQuestions[0].getQuestion());
-		question2TA.setText(surveyQuestions[1].getQuestion());
-		question3TA.setText(surveyQuestions[2].getQuestion());
-		question4TA.setText(surveyQuestions[3].getQuestion());
-		question5TA.setText(surveyQuestions[4].getQuestion());
-		question6TA.setText(surveyQuestions[5].getQuestion());
+	private void clearSelectedItemInSurviesComboBox() {
+		surviesComB.getItems().clear();
+		for(int i=0 ; i<surviesList.size() ; i++)
+			surviesComB.getItems().add(i);
+	}
+
+	private void clearTextFields() {
+		question1TA.setText("");
+		question2TA.setText("");
+		question3TA.setText("");
+		question4TA.setText("");
+		question5TA.setText("");
+		question6TA.setText("");
+	}
+
+	private void setQuestions(int surveyNumber) {
+		question1TA.setText(surviesList.get(surveyNumber).getSurveyQuestion().getQuestion().get(0));
+		question2TA.setText(surviesList.get(surveyNumber).getSurveyQuestion().getQuestion().get(1));
+		question3TA.setText(surviesList.get(surveyNumber).getSurveyQuestion().getQuestion().get(2));
+		question4TA.setText(surviesList.get(surveyNumber).getSurveyQuestion().getQuestion().get(3));
+		question5TA.setText(surviesList.get(surveyNumber).getSurveyQuestion().getQuestion().get(4));
+		question6TA.setText(surviesList.get(surveyNumber).getSurveyQuestion().getQuestion().get(5));
 	}
 
 	public void onEnterAnswers(ActionEvent event) throws IOException {
 		setAnswers();
-		initializeSurvey();
-		SurveyQueryFromDB(MessageType.POST, survey);
+		surviesList.get(surviesComB.getValue()).setDateSurvey(MainController.currentTime());
+		SurveyQueryFromDB(MessageType.POST, surviesList.get(surviesComB.getValue()));
 		Dialog<ButtonType> dialog = LoadDialogPane();
 		Optional<ButtonType> clickedButton = dialog.showAndWait();
 		dialog.close();
 		initialize(null, null);
+		isSelectedSurvey = false;
+		clearTextFields();
+		clearSelectedItemInSurviesComboBox();
 		clearSelectedToggles();
 	}
-
-	private void initializeSurvey() {
-		HashSet<SurveyQuestion> sq = new HashSet<>();
-		for (int i = 0; i < 6; i++)
-			sq.add(surveyQuestions[i]);
-		survey = new Survey(MainController.currentTime(), storeComboBox.getValue().ordinal());
-		survey.setQuestions(sq);
-	}
-
 	private void clearSelectedToggles() {
 		question1TG.getSelectedToggle().setSelected(false);
 		question2TG.getSelectedToggle().setSelected(false);
@@ -143,6 +166,8 @@ public class StoreWorkerSurveyController implements Initializable {
 		question4TG.getSelectedToggle().setSelected(false);
 		question5TG.getSelectedToggle().setSelected(false);
 		question6TG.getSelectedToggle().setSelected(false);
+		for(int i=0 ; i<6 ; i++)
+			isAnsweredQuestion[i] = false;
 	}
 
 	private Dialog<ButtonType> LoadDialogPane() throws IOException {
@@ -155,50 +180,63 @@ public class StoreWorkerSurveyController implements Initializable {
 	}
 
 	private void setAnswers() {
-		surveyQuestions[0].setAnswer(Integer.parseInt(((RadioButton) question1TG.getSelectedToggle()).getText()));
-		surveyQuestions[1].setAnswer(Integer.parseInt(((RadioButton) question2TG.getSelectedToggle()).getText()));
-		surveyQuestions[2].setAnswer(Integer.parseInt(((RadioButton) question3TG.getSelectedToggle()).getText()));
-		surveyQuestions[3].setAnswer(Integer.parseInt(((RadioButton) question4TG.getSelectedToggle()).getText()));
-		surveyQuestions[4].setAnswer(Integer.parseInt(((RadioButton) question5TG.getSelectedToggle()).getText()));
-		surveyQuestions[5].setAnswer(Integer.parseInt(((RadioButton) question6TG.getSelectedToggle()).getText()));
+		ArrayList<Integer> answersList = new ArrayList<>();
+		answersList.add(Integer.parseInt(((RadioButton) question1TG.getSelectedToggle()).getText()));
+		answersList.add(Integer.parseInt(((RadioButton) question2TG.getSelectedToggle()).getText()));
+		answersList.add(Integer.parseInt(((RadioButton) question3TG.getSelectedToggle()).getText()));
+		answersList.add(Integer.parseInt(((RadioButton) question4TG.getSelectedToggle()).getText()));
+		answersList.add(Integer.parseInt(((RadioButton) question5TG.getSelectedToggle()).getText()));
+		answersList.add(Integer.parseInt(((RadioButton) question6TG.getSelectedToggle()).getText()));
+		surviesList.get(surviesComB.getValue()).getSurveyQuestion().setAnswer(answersList);
 	}
 
-	private void SurveyQueryFromDB(MessageType messageType, Survey survey) {
+	private void SurveyQueryFromDB(MessageType messageType,Survey survey) {
 		MainController.getMyClient().send(messageType, "survey/", survey);
 	}
 
 	public void onSelectedToggleGroup1(ActionEvent event) {
-		isAnsweredQuestion[0] = true;
-		enableEnterAnswerButton();
+		if(!selectToggle(0))
+			question1TG.getSelectedToggle().setSelected(false);
 	}
 
 	public void onSelectedToggleGroup2(ActionEvent event) {
-		isAnsweredQuestion[1] = true;
-		enableEnterAnswerButton();
+		if(!selectToggle(1))
+			question2TG.getSelectedToggle().setSelected(false);
 	}
 
 	public void onSelectedToggleGroup3(ActionEvent event) {
-		isAnsweredQuestion[2] = true;
-		enableEnterAnswerButton();
+		if(!selectToggle(2))
+			question3TG.getSelectedToggle().setSelected(false);
 	}
 
 	public void onSelectedToggleGroup4(ActionEvent event) {
-		isAnsweredQuestion[3] = true;
-		enableEnterAnswerButton();
+		if(!selectToggle(3))
+			question4TG.getSelectedToggle().setSelected(false);
 	}
 
 	public void onSelectedToggleGroup5(ActionEvent event) {
-		isAnsweredQuestion[4] = true;
-		enableEnterAnswerButton();
+		if(!selectToggle(4))
+			question5TG.getSelectedToggle().setSelected(false);
 	}
 
 	public void onSelectedToggleGroup6(ActionEvent event) {
-		isAnsweredQuestion[5] = true;
+		if(!selectToggle(5))
+			question6TG.getSelectedToggle().setSelected(false);
+	}
+	
+	private boolean selectToggle(int toggleGroup) {
+		if(!isSelectedSurvey)
+			return false;
+		else {
+		isAnsweredQuestion[toggleGroup] = true;
 		enableEnterAnswerButton();
+		}
+		return true;
 	}
 
 	public void enableEnterAnswerButton() {
 		enterSurveyButton.setDisable(!isAnsweredQuestion[0] || !isAnsweredQuestion[1] || !isAnsweredQuestion[2]
 				|| !isAnsweredQuestion[3] || !isAnsweredQuestion[4] || !isAnsweredQuestion[5] ||!isSelectedStore);
 	}
+
 }

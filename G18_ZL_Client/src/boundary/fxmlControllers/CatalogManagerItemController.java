@@ -16,58 +16,60 @@ import javafx.scene.text.Text;
 public class CatalogManagerItemController implements Initializable {
 
 	private Item item;
+
 	public void setItem(Item item) {
-		this.item=item;
+		this.item = item;
 		nameText.setText(item.getName());
-		idText.setText("ID: "+item.getIdItem());
-		priceText.setText("$"+item.getPrice());
-		saleText.setText(item.getSale()+"%");
+		idText.setText("ID: " + item.getIdItem());
+		priceText.setText("$" + item.getPrice());
+		saleText.setText(item.getSale() + "%");
 		typeText.setText(CatalogManagerController.getCategoryType().get(item.getCategory()));
 		categoryText.setText(item.getCategory());
 		colorText.setText(item.getColor());
 		descrptionTA.setText(item.getDescription());
+		if (item.getImage() != null)
+			itemIV.setImage(item.getImage());
 	}
-	
-    @FXML
-    private Text categoryText;
 
-    @FXML
-    private Text colorText;
+	@FXML
+	private Text categoryText;
 
-    @FXML
-    private TextArea descrptionTA;
+	@FXML
+	private Text colorText;
 
-    @FXML
-    private Text idText;
+	@FXML
+	private TextArea descrptionTA;
 
-    @FXML
-    private ImageView itemIV;
+	@FXML
+	private Text idText;
 
-    @FXML
-    private Text nameText;
+	@FXML
+	private ImageView itemIV;
 
-    @FXML
-    private Text priceText;
+	@FXML
+	private Text nameText;
 
-    @FXML
-    private Text saleText;
+	@FXML
+	private Text priceText;
 
-    @FXML
-    private Text typeText;
+	@FXML
+	private Text saleText;
 
+	@FXML
+	private Text typeText;
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		
+
 	}
 
-    @FXML
-    void onDeletePressed() {
+	@FXML
+	void onDeletePressed() {
 
-    }
+	}
 
-    @FXML
-    void onEditPressed() {
+	@FXML
+	void onEditPressed() {
 
-    }
+	}
 }

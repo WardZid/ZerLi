@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import boundary.ServerView;
 import boundary.fxmlControllers.ServerViewController;
@@ -11,6 +12,7 @@ import entity.BuildItem;
 import entity.Complaint;
 import entity.Customer;
 import entity.Customer.CustomerStatus;
+import entity.Item;
 import entity.MyMessage;
 import entity.MyMessage.MessageType;
 import entity.Order;
@@ -220,7 +222,6 @@ public class ServerController extends ObservableServer {
 	 */
 
 	private void handleGetRequest(MyMessage clMsg, ConnectionToClient client) {
-
 		String[] request = clMsg.getInfo().split("/");
 
 		if (request[0].equals("login")) {
@@ -305,12 +306,11 @@ public class ServerController extends ObservableServer {
 				clMsg.setContent(DBController.getComplaintsBy(request[2], request[3]));
 			}
 		} else if (request[0].equals("question")) {
-			if(request[1].equals("all"))
-				clMsg.setContent(DBController.getQuestionsAll());
+			if(request[1].equals("all")) 
+				clMsg.setContent(DBController.getAllSurves());
 		} else {
 			ServerView.printErr(getClass(), "Unhandled Get request: " + clMsg.getInfo());
 		}
-
 	}
 
 	private void handlePostRequest(MyMessage clMsg, ConnectionToClient client) {
@@ -324,7 +324,11 @@ public class ServerController extends ObservableServer {
 		} else if (request[0].equals("survey")) {
 			Survey s=(Survey) clMsg.getContent();
 			clMsg.setContent(DBController.insertSurvey(s));
-		} else {
+		} else if(request[0].equals("item")) {
+			Item i=(Item)clMsg.getContent();
+			clMsg.setContent(DBController.insertItem(i));
+		}
+		else {
 			ServerView.printErr(getClass(), "Unhandled POST request: " + clMsg.getInfo());
 		}
 
@@ -347,7 +351,7 @@ public class ServerController extends ObservableServer {
 		} else if (request[0].equals("customer")) {
 			Customer c = (Customer) clMsg.getContent();
 			if (request[1].equals("status")) {
-				clMsg.setContent(DBController.updateCustomerStatusOne(c, CustomerStatus.valueOf(request[2])));
+				clMsg.setContent(DBController.updateCustomerStatusOne(c, CustomerStatus.getById(c.getIdCustomerStatus())));
 			}
 		} else if (request[0].equals("complaint")) {
 			Complaint complaint = (Complaint) clMsg.getContent();

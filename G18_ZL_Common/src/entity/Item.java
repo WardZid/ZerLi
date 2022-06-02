@@ -1,5 +1,7 @@
 package entity;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.Serializable;
 
 import javafx.scene.image.Image;
@@ -14,8 +16,8 @@ public class Item implements Serializable {
 		private int amount;
 
 		public OrderItem(int idItem, String name, double price, int sale, String category, String color,
-				String description, Image image, int amount) {
-			super(idItem, name, price, sale, category, color, description, image);
+				String description, byte[] imageBytes, int amount) {
+			super(idItem, name, price, sale, category, color, description, imageBytes);
 			this.amount = amount;
 		}
 
@@ -62,8 +64,8 @@ public class Item implements Serializable {
 		private int amount;
 
 		public ItemInBuild(int idItem, String name, double price, int sale, String category, String color,
-				String description, Image image, int amount) {
-			super(idItem, name, price, sale, category, color, description, image);
+				String description, byte[] imageBytes, int amount) {
+			super(idItem, name, price, sale, category, color, description, imageBytes);
 			this.amount = amount;
 		}
 
@@ -128,9 +130,11 @@ public class Item implements Serializable {
 	private String category;
 	private String color;
 	private String description;
-	private Image image;
+	private byte[] imageBytes;
 
 	/**
+	 * Standard constructor for all the variables
+	 * 
 	 * @param idItem
 	 * @param name
 	 * @param price
@@ -140,8 +144,7 @@ public class Item implements Serializable {
 	 * @param description
 	 * @param image
 	 */
-	public Item(int idItem, String name, double price, int sale, String category, String color,
-			String description, Image image) {
+	public Item(int idItem, String name, double price, int sale, String category, String color, String description) {
 		this.idItem = idItem;
 		this.name = name;
 		this.price = price;
@@ -149,9 +152,35 @@ public class Item implements Serializable {
 		this.category = category;
 		this.color = color;
 		this.description = description;
-		this.image = image;
 	}
 
+	/**
+	 * Standard constructor for all the variables
+	 * 
+	 * @param idItem
+	 * @param name
+	 * @param price
+	 * @param sale
+	 * @param category
+	 * @param color
+	 * @param description
+	 * @param image
+	 */
+	public Item(int idItem, String name, double price, int sale, String category, String color, String description,
+			byte[] imageBytes) {
+		this.idItem = idItem;
+		this.name = name;
+		this.price = price;
+		this.sale = sale;
+		this.category = category;
+		this.color = color;
+		this.description = description;
+		this.imageBytes=imageBytes;
+	}
+
+	/*
+	 * Constructor that recieves an item and copies its variables
+	 */
 	public Item(Item item) {
 		this.idItem = item.idItem;
 		this.name = item.name;
@@ -160,7 +189,26 @@ public class Item implements Serializable {
 		this.category = item.category;
 		this.color = item.color;
 		this.description = item.description;
-		this.image = item.image;
+		this.imageBytes=item.imageBytes;
+	}
+
+	/**
+	 * Constructor for new items to be added that doesn't receive an id or image
+	 * 
+	 * @param name
+	 * @param price
+	 * @param sale
+	 * @param category
+	 * @param color
+	 * @param description
+	 */
+	public Item(String name, double price, int sale, String category, String color, String description) {
+		this.name = name;
+		this.price = price;
+		this.sale = sale;
+		this.category = category;
+		this.color = color;
+		this.description = description;
 	}
 
 	// Getters and setters
@@ -220,12 +268,11 @@ public class Item implements Serializable {
 		this.description = description;
 	}
 
-	public Image getImage() {
-		return image;
+	public void setImageBytes(byte[] imageBytes) {
+		this.imageBytes=imageBytes;
 	}
-
-	public void setImage(Image image) {
-		this.image = image;
+	public byte[] getImageBytes() {
+		return imageBytes;
 	}
 
 	@Override
@@ -245,8 +292,8 @@ public class Item implements Serializable {
 		builder.append(color);
 		builder.append(", description=");
 		builder.append(description);
-		builder.append(", image=");
-		builder.append(image);
+		builder.append(", imageBytes= ");
+		builder.append(imageBytes);
 		builder.append("]");
 		return builder.toString();
 	}
@@ -282,10 +329,25 @@ public class Item implements Serializable {
 		return idItem == other.idItem;
 	}
 
-	public double getPriceAfterSale() {
-		return (this.getPrice() - (((double)sale / 100) * this.getPrice()));
+	public Image getImage() {
+		if(imageBytes==null)
+			return null;
+		ByteArrayInputStream bais = new ByteArrayInputStream(imageBytes);
+		Image image = new Image(bais);
+		try {
+			bais.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return image;
 	}
+
+	
+	public double getPriceAfterSale() {
+		return (this.getPrice() - (((double) sale / 100) * this.getPrice()));
+	}
+
 	public double getPriceBeforeSale() {
-		return (this.getPrice()*100/(100-sale) );
+		return (this.getPrice() * 100 / (100 - sale));
 	}
 }
