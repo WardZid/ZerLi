@@ -23,6 +23,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.DialogPane;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -45,7 +46,10 @@ public class BranchManagerOrdersController implements Initializable {
 	/* ------------------------------------------------ */
     /*               \/ FXML Variables \/               */
     /* ------------------------------------------------ */
-	
+
+    @FXML
+    private VBox myVBox;
+    
 	@FXML
     private Text addressText;
 
@@ -82,6 +86,10 @@ public class BranchManagerOrdersController implements Initializable {
     /* ------------------------------------------------ */
     /*      \/ FXML Full Order Details Variables \/     */
     /* ------------------------------------------------ */
+    
+
+    @FXML
+    private VBox orderVBox;
     
     @FXML
     private Text fAddress;
@@ -125,33 +133,33 @@ public class BranchManagerOrdersController implements Initializable {
     private Scene scene;
 	
     /* ArrayList to save the waiting approval orders in the ListView */
-    private static ArrayList<Order> waitingApprovalOrders;
-    private static ArrayList<String> waitingApprovalIDs;
+    private ArrayList<Order> waitingApprovalOrders;
+    private ArrayList<String> waitingApprovalIDs=new ArrayList<>();
     
     /* ArrayList to save the waiting cancellation orders in the ListView */
-    private static ArrayList<Order> waitingCancellationOrders;
-    private static ArrayList<String> waitingCancellationlIDs;
+    private ArrayList<Order> waitingCancellationOrders;
+    private ArrayList<String> waitingCancellationlIDs=new ArrayList<>();
     
     /* the current branch manager's branch(store) ID */
-    private static int branchID;
+    private int branchID;
     
     /* to save the user info */
-    private static User user = ClientConsoleController.getUser();
+    private User user = ClientConsoleController.getUser();
     
     /* the selected order's ID */
-    private static String selectedOrderID;
+    private String selectedOrderID;
     
     /* the current selected order */
-    private static Order currentOrder;
+    private Order currentOrder;
     
     /* if an order is selected from the approve LsitView */
-    private static boolean approveSelected = false;
+    private boolean approveSelected = false;
     
     /* if an order is selected from the cancel LsitView */
-    private static boolean cancelSelected = false;
+    private boolean cancelSelected = false;
     
     /* the name of the customer with the current selected order */
-    private static Customer currentCustomer;
+    private Customer currentCustomer;
 	
 	/* ------------------------------------------------ */
     /*            \/ initialize function \/             */
@@ -175,6 +183,7 @@ public class BranchManagerOrdersController implements Initializable {
 	 * 
 	 * @param event - event handler
 	 */
+	@FXML
 	@SuppressWarnings("unchecked")
 	public void approveButtonAction(ActionEvent event) {
 		//change the current selected order status to 1 (APPROVED).
@@ -191,6 +200,7 @@ public class BranchManagerOrdersController implements Initializable {
 	 * 
 	 * @param event - event handler
 	 */
+	@FXML
 	@SuppressWarnings("unchecked")
 	public void rejectButtonAction(ActionEvent event) {
 		//change the current selected order status to 4 (UNAPPROVED).
@@ -209,6 +219,7 @@ public class BranchManagerOrdersController implements Initializable {
 	 * 
 	 * @param event - event handler
 	 */
+	@FXML
 	@SuppressWarnings("unchecked")
 	public void cancelButtonAction(ActionEvent event) {
 		//change the current selected order status to 3 (CANCELED).
@@ -217,7 +228,8 @@ public class BranchManagerOrdersController implements Initializable {
 		//check if order was changed.
 		if(order.get(0).getIdOrderStatus() == 3)
 			System.out.println("Order updated successfully!");
-		else System.out.println("Error updating order!");
+		else 
+			System.out.println("Error updating order!");
 		disableAllButtons();
 		initListViews();
 	}
@@ -225,7 +237,7 @@ public class BranchManagerOrdersController implements Initializable {
 	/**
 	 * Action when a line is selected in the approveListView. 
 	 */
-	public void monthSelectedFromApproveOrderListView() {
+	public void orderSelectedFromApproveOrderListView() {
 		this.approveButton.setDisable(false);
 		this.rejectButton.setDisable(false);
 		this.cancelButton.setDisable(true);
@@ -253,17 +265,12 @@ public class BranchManagerOrdersController implements Initializable {
 	 * 
 	 * @throws IOException 
 	 */
+	@FXML
 	public void actionOnViewFullDetailsBTN(ActionEvent event) throws IOException {
-		FXMLLoader loader = new FXMLLoader();
-		loader.setLocation(getClass().getResource("boundary/fxmls/full-order-details.fxml"));
-		DialogPane dp = loader.load();
-		BranchManagerOrdersController controller = loader.getController();
-		controller.setFullOrderDetails();
-		Stage stage = new Stage();
-		//stage.initModality(Modality.APPLICATION_MODAL);
-		stage.setScene(scene);
-		stage.setResizable(false);
-		stage.showAndWait();
+		
+		myVBox.setDisable(true);
+		orderVBox.setVisible(true);
+		setFullOrderDetails();
 	}
 	
 	
@@ -272,9 +279,10 @@ public class BranchManagerOrdersController implements Initializable {
     /* ------------------------------------------------ */
 	
 	private void disableAllButtons() {
-		this.approveButton.setDisable(false);
-		this.rejectButton.setDisable(false);
-		this.cancelButton.setDisable(false);
+		approveButton.setDisable(true);
+		rejectButton.setDisable(true);
+		cancelButton.setDisable(true);
+		viewFullDetailsButton.setDisable(true);
 	}
 	
 	/**
@@ -282,7 +290,7 @@ public class BranchManagerOrdersController implements Initializable {
 	 */
 	@SuppressWarnings("unchecked")
 	private void setFullOrderDetails() {
-		ArrayList<Customer> c = (ArrayList<Customer>) MainController.getMyClient().send(MessageType.GET, "customer/by/id_customer"+currentOrder.getIdCustomer() , null);
+		ArrayList<Customer> c = (ArrayList<Customer>) MainController.getMyClient().send(MessageType.GET, "customer/by/id_customer/"+currentOrder.getIdCustomer() , null);
 		currentCustomer = c.get(0);
 		this.fAddress.setText(currentOrder.getAddress());
 		this.fCName.setText(currentCustomer.getName());
@@ -301,7 +309,7 @@ public class BranchManagerOrdersController implements Initializable {
 	 */
 	private void setOrderDetails() {
 		getOrderBySelection();
-		saveOrderID();
+		viewFullDetailsButton.setDisable(false);
 		this.orderIDText.setText(currentOrder.getIdOrder()+"");
 		this.dateOfOrderText.setText(currentOrder.getOrderDate());
 		this.deliveryDateText.setText(currentOrder.getDeliveryDate());
@@ -381,7 +389,8 @@ public class BranchManagerOrdersController implements Initializable {
 			public void changed(ObservableValue<? extends String> arg0, String arg1, String arg2) {
 				approveSelected = true;
 				cancelSelected = false;
-				monthSelectedFromApproveOrderListView();
+				saveOrderID();
+				orderSelectedFromApproveOrderListView();
 			}
 		});
 	}
@@ -396,6 +405,7 @@ public class BranchManagerOrdersController implements Initializable {
 			public void changed(ObservableValue<? extends String> arg0, String arg1, String arg2) {
 				cancelSelected = true;
 				approveSelected = false;
+				saveOrderID();
 				monthSelectedFromCancelOrderListView();
 			}
 		});
@@ -414,7 +424,9 @@ public class BranchManagerOrdersController implements Initializable {
 	 */
 	@SuppressWarnings("unchecked")
 	private void initApprovalListView() {
-		waitingApprovalOrders = (ArrayList<Order>) MainController.getMyClient().send(MessageType.GET, "order/by/id_order_status/0"+branchID , null);
+		waitingApprovalIDs.clear();
+		ordersToApproveListView.getItems().clear();
+		waitingApprovalOrders = (ArrayList<Order>) MainController.getMyClient().send(MessageType.GET, "order/by/id_order_status/0", null);
 		for(Order o : waitingApprovalOrders)
 			waitingApprovalIDs.add(o.getIdOrder()+" - "+o.getIdCustomer());
 		ordersToApproveListView.getItems().addAll(waitingApprovalIDs);
@@ -425,7 +437,9 @@ public class BranchManagerOrdersController implements Initializable {
 	 */
 	@SuppressWarnings("unchecked")
 	private void initCancellationListView() {
-		waitingCancellationOrders = (ArrayList<Order>) MainController.getMyClient().send(MessageType.GET, "order/by/id_order_status/5"+branchID , null);
+		waitingCancellationlIDs.clear();
+		ordersToCancelListView.getItems().clear();
+		waitingCancellationOrders = (ArrayList<Order>) MainController.getMyClient().send(MessageType.GET, "order/by/id_order_status/5" , null);
 		for(Order o : waitingCancellationOrders)
 			waitingCancellationlIDs.add(o.getIdOrder()+" - "+o.getIdCustomer());
 		ordersToCancelListView.getItems().addAll(waitingCancellationlIDs);
@@ -438,6 +452,12 @@ public class BranchManagerOrdersController implements Initializable {
 	private void setBranchID() {
 		ArrayList<Store> stores = (ArrayList<Store>)MainController.getMyClient().send(MessageType.GET, "store/by/id_user/"+user.getIdUser(), null);
 		branchID = stores.get(0).ordinal();		
+	}
+	
+	@FXML
+	public void onCancelPressed() {
+		myVBox.setDisable(false);
+		orderVBox.setVisible(false);
 	}
 	
 }
