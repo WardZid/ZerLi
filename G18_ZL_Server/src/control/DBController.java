@@ -839,5 +839,20 @@ public class DBController {
 		return getOrdersBy("id_order", o.getIdOrder() + "");
 	}
 	
+	public static boolean updatePoint(Customer c,double newPoint) {
+		try {
+			PreparedStatement ps = conn
+					.prepareStatement("UPDATE assignment3.customer SET point=? WHERE id_customer=?");
+			ps.setInt(1, c.getIdCustomer());
+			ps.setDouble(2,newPoint);
+			ps.executeUpdate();
+			ps.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+	
 
 }
