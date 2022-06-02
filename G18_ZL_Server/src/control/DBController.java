@@ -713,7 +713,31 @@ public class DBController {
 	}
 
 	public static boolean insertSurvey(Survey s) {
-		return false;}
+		int linesChanged = 0;
+		try {
+			PreparedStatement ps = conn.prepareStatement("INSERT INTO survey (`date_survey`, `id_store`) VALUES(?,?)",
+					Statement.RETURN_GENERATED_KEYS);
+			ps.setString(1, s.getDateSurvey());
+			ps.setInt(2, s.getIdStore());
+			linesChanged = ps.executeUpdate();
+
+			ResultSet generatedKeys = ps.getGeneratedKeys();
+			int idSurvey = generatedKeys.getInt(0);
+			ps.close();
+			System.out.println(idSurvey);
+			//for (SurveyQuestion sq : s.getQuestions()) {
+				insertSurveyAnswer(idSurvey, s.getSurveyQuestion());
+			//}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			ServerView.printErr(DBController.class, "Unable to add new survey: " + s.toString());
+			return false;
+		}
+		if (linesChanged == 0)
+			return false;
+		return true;
+		
+		}
 	/*
 	public static boolean insertSurvey(Survey s) {
 		int linesChanged = 0;
@@ -742,7 +766,7 @@ public class DBController {
 	}
 	*/
 
-	/*
+	
 	public static boolean insertSurveyAnswer(int idSurvey, SurveyQuestion sq) {
 		int linesChanged = 0;
 		try {
@@ -750,7 +774,8 @@ public class DBController {
 					"INSERT INTO survey_question (`id_survey`, `id_question`,`answer`) VALUES(?,?,?)");
 			ps.setInt(1, idSurvey);
 			ps.setInt(2, sq.getIdQuestion());
-			ps.setInt(3, sq.getAnswer());
+			for(int i=3 ; i<9 ; i++)
+			ps.setInt(i, sq.getAnswer().get(i-3));
 			linesChanged = ps.executeUpdate();
 			ps.close();
 
@@ -763,7 +788,6 @@ public class DBController {
 			return false;
 		return true;
 	}
-	*/
 
 	// UPDATE QUERIES****************************************************
 

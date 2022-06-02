@@ -148,7 +148,8 @@ public class StoreWorkerSurveyController implements Initializable {
 
 	public void onEnterAnswers(ActionEvent event) throws IOException {
 		setAnswers();
-		SurveyQueryFromDB(MessageType.POST, survey);
+		surviesList.get(surviesComB.getValue()).setDateSurvey(MainController.currentTime());
+		SurveyQueryFromDB(MessageType.POST, surviesList.get(surviesComB.getValue()));
 		Dialog<ButtonType> dialog = LoadDialogPane();
 		Optional<ButtonType> clickedButton = dialog.showAndWait();
 		dialog.close();
@@ -179,17 +180,17 @@ public class StoreWorkerSurveyController implements Initializable {
 	}
 
 	private void setAnswers() {
-//		ArrayList<Integer> answersList = new ArrayList<>();
-//		answersList.add(Integer.parseInt(((RadioButton) question1TG.getSelectedToggle()).getText()));
-//		answersList.add(Integer.parseInt(((RadioButton) question2TG.getSelectedToggle()).getText()));
-//		answersList.add(Integer.parseInt(((RadioButton) question3TG.getSelectedToggle()).getText()));
-//		answersList.add(Integer.parseInt(((RadioButton) question4TG.getSelectedToggle()).getText()));
-//		answersList.add(Integer.parseInt(((RadioButton) question5TG.getSelectedToggle()).getText()));
-//		answersList.add(Integer.parseInt(((RadioButton) question6TG.getSelectedToggle()).getText()));
-//		surviesList.get(surviesComB.getValue()).getSurveyQuestion().setAnswer(answersList);
+		ArrayList<Integer> answersList = new ArrayList<>();
+		answersList.add(Integer.parseInt(((RadioButton) question1TG.getSelectedToggle()).getText()));
+		answersList.add(Integer.parseInt(((RadioButton) question2TG.getSelectedToggle()).getText()));
+		answersList.add(Integer.parseInt(((RadioButton) question3TG.getSelectedToggle()).getText()));
+		answersList.add(Integer.parseInt(((RadioButton) question4TG.getSelectedToggle()).getText()));
+		answersList.add(Integer.parseInt(((RadioButton) question5TG.getSelectedToggle()).getText()));
+		answersList.add(Integer.parseInt(((RadioButton) question6TG.getSelectedToggle()).getText()));
+		surviesList.get(surviesComB.getValue()).getSurveyQuestion().setAnswer(answersList);
 	}
 
-	private void SurveyQueryFromDB(MessageType messageType, Survey survey) {
+	private void SurveyQueryFromDB(MessageType messageType,Survey survey) {
 		MainController.getMyClient().send(messageType, "survey/", survey);
 	}
 
