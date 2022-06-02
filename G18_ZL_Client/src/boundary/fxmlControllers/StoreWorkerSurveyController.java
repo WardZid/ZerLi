@@ -201,4 +201,5 @@ public class StoreWorkerSurveyController implements Initializable {
 		enterSurveyButton.setDisable(!isAnsweredQuestion[0] || !isAnsweredQuestion[1] || !isAnsweredQuestion[2]
 				|| !isAnsweredQuestion[3] || !isAnsweredQuestion[4] || !isAnsweredQuestion[5] ||!isSelectedStore);
 	}
+
 }
