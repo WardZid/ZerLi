@@ -4,6 +4,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 import boundary.ClientView;
 
@@ -56,6 +57,32 @@ public class MainController {
 		SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  //formats date and time to be suitable for sql
 		Date date = new Date(System.currentTimeMillis());
 		return formatter.format(date);
+	}
+	
+	public static long timeDiffHour(String start_date, String end_date ) {
+		// formats date and time  -> "yyyy-MM-dd HH:mm:ss"
+		SimpleDateFormat sdf= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        
+       
+			  
+            // parse method is used to parse
+            // the text from a string to
+            // produce the date
+            Date d1 = null ,d2 = null;
+			try {
+				 d1 = sdf.parse(start_date);
+				 d2 = sdf.parse(end_date);
+			} catch (java.text.ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+            
+  
+             long diff = d1.getTime()-d2.getTime();//as given
+             
+         
+        	   return TimeUnit.MILLISECONDS.toHours(diff) ;
+          
 	}
 	
 	
