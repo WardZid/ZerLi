@@ -1,7 +1,5 @@
 package control;
 
-import java.io.FileInputStream;
-import java.io.InputStream;
 import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -17,9 +15,9 @@ import entity.BuildItem;
 import entity.Complaint;
 import entity.Customer;
 import entity.Customer.CustomerStatus;
-import entity.Item.OrderItem;
 import entity.DailyIncome;
 import entity.Item;
+import entity.Item.OrderItem;
 import entity.Order;
 import entity.Receipt;
 import entity.Store;
@@ -831,6 +829,36 @@ public class DBController {
 		if (linesChanged == 0)
 			return false;
 		return true;
+	}
+	
+	public static ArrayList<Item> updateEditItem(Item item){
+		try {
+			PreparedStatement ps = conn.prepareStatement(
+					"UPDATE assignment3.item "
+					+ "SET name=?, "
+					+ "price=?, "
+					+ "sale=?, "
+					+ "category=?, "
+					+ "color=?, "
+					+ "description=?, "
+					+ "image=? "
+					+ "WHERE id_item=?");
+			
+			ps.setString(1, item.getName());
+			ps.setDouble(2, item.getPrice());
+			ps.setInt(3,item.getSale());
+			ps.setString(4,item.getCategory());
+			ps.setString(5,item.getColor());
+			ps.setString(6,item.getDescription());
+			ps.setBytes(7, item.getImageBytes());
+			ps.setInt(8,item.getIdItem());
+			ps.executeUpdate();
+			ps.close();
+		} catch (SQLException e) {
+			ServerView.printErr(DBController.class, e.getMessage());
+			e.printStackTrace();
+		}
+		return getItemsBy("id_item", item.getIdItem()+"");
 	}
 
 	public static ArrayList<Customer> updateCustomerStatusOne(Customer c, CustomerStatus status) {
