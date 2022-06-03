@@ -117,6 +117,7 @@ public class OrderDetailsController implements Initializable {
 	private Label required8;
 	@FXML
 	private TextField credutCardtextfield;
+	private int flag = 0;
 
 	private static ArrayList<String> StoreAddressName = new ArrayList<String>();
 	private static ArrayList<String> houreNum = new ArrayList<String>();
@@ -215,7 +216,7 @@ public class OrderDetailsController implements Initializable {
 
 	public void change(ActionEvent event) {
 		if (DeliveryNow.isSelected() == true) {
-
+			flag = 0;
 			DelevireyDatePicker.setValue(null);
 			MinutesCombo.setValue(null);
 			HourCombo.setValue(null);
@@ -224,11 +225,13 @@ public class OrderDetailsController implements Initializable {
 			HourCombo.setDisable(true);
 
 		} else {
+
 			DelevireyDatePicker.setDisable(false);
 			MinutesCombo.setDisable(false);
 			HourCombo.setDisable(false);
 
 		}
+
 	}
 
 	public void OnBackBtnPressed() {
@@ -348,15 +351,22 @@ public class OrderDetailsController implements Initializable {
 	}
 
 	public void OnNextBtnPressed() {
-	String delevireyDateTime =DelevireyDatePicker.getValue().toString() + " "
-			+ HourCombo.getValue() + ":" + MinutesCombo.getValue() + ":00"	;
-	if(MainController.timeDiffHour(delevireyDateTime, MainController.currentTime())<3) {
-		Alert errorAlert = new Alert(AlertType.ERROR);
-		errorAlert.setHeaderText(null);
-		errorAlert.setContentText("You should pick correct time");
-		errorAlert.showAndWait();
-	}
-	else if ((DelevireyDatePicker.getValue() == null && DeliveryNow.isSelected() == false)
+		if (DelevireyDatePicker.getValue() != null && HourCombo.getValue() != null && MinutesCombo.getValue() != null)
+			flag = 1;
+		if (flag == 1) {
+			String delevireyDateTime = DelevireyDatePicker.getValue().toString() + " " + HourCombo.getValue() + ":"
+					+ MinutesCombo.getValue() + ":00";
+			if (MainController.timeDiffHour(delevireyDateTime, MainController.currentTime()) < 3) {
+				Alert errorAlert = new Alert(AlertType.ERROR);
+				errorAlert.setHeaderText(null);
+				errorAlert.setContentText("You should pick correct time");
+				errorAlert.showAndWait();
+
+			} else
+				flag = 0;
+		}
+
+		if ((DelevireyDatePicker.getValue() == null && DeliveryNow.isSelected() == false)
 				|| StoreAddressCombo.getValue() == null
 				|| (HourCombo.getValue() == null && DeliveryNow.isSelected() == false)
 				|| (MinutesCombo.getValue() == null && DeliveryNow.isSelected() == false)) {
@@ -369,16 +379,18 @@ public class OrderDetailsController implements Initializable {
 						|| NameReceiverText.getText().trim().isEmpty()) {
 					SetNodeFillAllFeilds(true);
 				} else {
-					this.getPaymentVbox().setVisible(true);
-					getorderDetailsVbox().setDisable(true);
+					if (flag == 0) {
+						this.getPaymentVbox().setVisible(true);
+						getorderDetailsVbox().setDisable(true);
+					}
 				}
 
 			} else {
-				
-				
-				SetNodeFillAllFeilds(false);
-				this.getPaymentVbox().setVisible(true);
-				getorderDetailsVbox().setDisable(true);
+				if (flag == 0) {
+					SetNodeFillAllFeilds(false);
+					this.getPaymentVbox().setVisible(true);
+					getorderDetailsVbox().setDisable(true);
+				}
 			}
 
 		}
