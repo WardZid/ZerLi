@@ -308,7 +308,12 @@ public class ServerController extends ObservableServer {
 		} else if (request[0].equals("question")) {
 			if(request[1].equals("all")) 
 				clMsg.setContent(DBController.getAllSurves());
-		} else {
+		}
+		else if(request[0].equals("survey_question")) {
+			if(request[1].equals("all"))
+				clMsg.setContent(DBController.getAllSurviesQuestion());
+		}
+		else {
 			ServerView.printErr(getClass(), "Unhandled Get request: " + clMsg.getInfo());
 		}
 	}
