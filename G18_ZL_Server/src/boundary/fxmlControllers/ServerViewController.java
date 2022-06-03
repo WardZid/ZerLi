@@ -11,6 +11,7 @@ import java.util.concurrent.TimeUnit;
 import control.DBController;
 import control.MainController;
 import control.ServerController;
+import control.ThreadController;
 import entity.ClientConnection;
 import entity.MyMessage;
 import entity.Order;
@@ -132,7 +133,7 @@ public class ServerViewController implements Initializable {
 
 			gridTextInputs.setDisable(true);
 
-			Trackingfunction();
+			ThreadController.Trackingfunction();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} catch (Exception e) {
@@ -140,27 +141,7 @@ public class ServerViewController implements Initializable {
 		}
 	}
 	
-	private void Trackingfunction() {
-		
-		Runnable helloRunnable = new Runnable() {
-			ArrayList<Order> Lateorders;
-			public void run() {
-				Lateorders=DBController.getLateOrderDelivery();
-				for (Order lateOrder : Lateorders) {
-					System.out.println(lateOrder.toString());
-					lateOrder.setIdOrderStatus(OrderStatus.REFUNDED.ordinal());
-					DBController.updateOrderStatus(lateOrder);
-					DBController.updatePoint(lateOrder.getIdCustomer(),lateOrder.getPrice());
-				}
-				System.out.println("11");
-
-			}
-		};
-
-		ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
-		executor.scheduleAtFixedRate(helloRunnable, 0, 3, TimeUnit.SECONDS);
-
-	}
+ 
 
 	@FXML
 	public void onDisconnect() {

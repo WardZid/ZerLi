@@ -871,11 +871,11 @@ public class DBController {
 		return getOrdersBy("id_order", o.getIdOrder() + "");
 	}
 
-	public static boolean updatePoint(int idCoustmer, double newPoint) {
+	public static boolean updatePoint(int idCustomer, double newPoint) {
 		try {
-			PreparedStatement ps = conn.prepareStatement("UPDATE assignment3.customer SET point=? WHERE id_customer=?");
-			ps.setInt(1, idCoustmer);
-			ps.setDouble(2, newPoint);
+			PreparedStatement ps = conn.prepareStatement("UPDATE assignment3.customer SET point=?+point WHERE id_customer=?");
+			ps.setDouble(1, newPoint);
+			ps.setInt(2, idCustomer);
 			ps.executeUpdate();
 			ps.close();
 		} catch (Exception e) {
