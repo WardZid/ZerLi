@@ -232,7 +232,7 @@ public class ClientConsoleController implements Initializable {
 	}
 
 	private void loadSupportSpecialistConsole() {
-
+		initPage(null,  "fxmls/expert-survey-view.fxml");
 	}
 
 	private void loadCatalogManagerConsole() {
