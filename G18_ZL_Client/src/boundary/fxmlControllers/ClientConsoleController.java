@@ -83,6 +83,9 @@ public class ClientConsoleController implements Initializable {
 
 	// CEO MENU
 
+	private Button ceoIReportsBtn;
+	private Button ceoOReportsBtn;
+	private Button ceoCReportsBtn;
 	// Store worker
 
 	// delivery worker
@@ -209,6 +212,11 @@ public class ClientConsoleController implements Initializable {
 
 	private void loadCEOConsole() {
 
+		ceoIReportsBtn= menuButton("Income Reports", "ceo-income-reports-view.fxml");
+		ceoOReportsBtn= menuButton("Order Reports", "ceo-order-reports-view.fxml");
+		ceoCReportsBtn= menuButton("Complaint Reports", "ceo-complaint-reports-view.fxml");
+		
+		initPage(ceoIReportsBtn, "fxmls/ceo-income-reports-view.fxml");
 	}
 
 	private void loadStoreWorkerConsole() {
