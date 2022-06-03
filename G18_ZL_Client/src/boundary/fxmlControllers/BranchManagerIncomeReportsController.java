@@ -40,7 +40,7 @@ import javafx.scene.text.Text;
 
 /**
  * @author hamza
- *
+ * 
  */
 public class BranchManagerIncomeReportsController implements Initializable {
 
@@ -76,7 +76,8 @@ public class BranchManagerIncomeReportsController implements Initializable {
     private ListView<String> monthsListView;
 
     @FXML
-    private LineChart<Integer, Double> reportLineChart;
+    private LineChart<String, Double> reportLineChart;
+
 
     @FXML
     private Text reportMonthText;
@@ -89,7 +90,7 @@ public class BranchManagerIncomeReportsController implements Initializable {
     /* ------------------------------------------------ */
     
     /* XYChart series to insert values in the line chart */
-    XYChart.Series<Integer, Double> series = new XYChart.Series<Integer, Double>();
+    XYChart.Series<String, Double> series = new XYChart.Series<String, Double>();
     
     /* ArrayList to save in the ListView */
     private static ArrayList<String> monthsYears;
@@ -134,6 +135,8 @@ public class BranchManagerIncomeReportsController implements Initializable {
     
     @Override
 	public void initialize(URL location, ResourceBundle resources) {
+    	reportLineChart.setLegendVisible(false);
+    	
     	initHelpVariables();
 		setBranchID();
 		initMonthsListView();
@@ -152,9 +155,8 @@ public class BranchManagerIncomeReportsController implements Initializable {
 	public void monthSelectedFromListView() {
 		saveDate();
 		this.viewReportButton.setDisable(false);
-		getDataAfterMonthIsChosen();
-		calculateTextValues();
-		initLineChartVars();
+		
+		 
 	}
 	
 	/**
@@ -163,15 +165,24 @@ public class BranchManagerIncomeReportsController implements Initializable {
 	 * @param event
 	 */
 	public void viewReportButtonAction(ActionEvent event) {
+	 
+		series= new XYChart.Series<String, Double>(); 
+		reportLineChart.getData().clear();
+		 
+		getDataAfterMonthIsChosen();
+		 initLineChartVars();
+		 calculateTextValues();
+		
 		reportMonthText.setText("Report of "+month+"-"+year);
 		reportLineChart.setTitle("Daily Incomes Of "+month+"-"+year);
-		reportLineChart.getData().clear();
+		 
 		reportLineChart.getData().add(series);
 		totalIncomeText.setText(overallIncomeThisMonth+"");
-		averageText.setText(avg+"");
+		averageText.setText(String.format("%.2f", avg) );
 		minText.setText(min+"");
-		maxText.setText(max+"");
+		maxText.setText(max+""); 
 		fillReceiptsTable();
+ 
 	}
     
     /* ------------------------------------------------ */
@@ -201,10 +212,12 @@ public class BranchManagerIncomeReportsController implements Initializable {
 	 */
 	private void setActionOnListView() {
 		monthsListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+
 			@Override
 			// this method has the main Action that happens when selection accrues on ListView
 			public void changed(ObservableValue<? extends String> arg0, String arg1, String arg2) {
-				monthSelectedFromListView();
+
+				 monthSelectedFromListView();
 			}
 		});
 	}
@@ -233,9 +246,12 @@ public class BranchManagerIncomeReportsController implements Initializable {
 	 */
 	@SuppressWarnings("unchecked")
 	private void getDataAfterMonthIsChosen() {
+
 		ordersArray = (ArrayList<Order>)MainController.getMyClient().send(MessageType.GET,"order/byBranchMonth/"+branchID+"/"+month+"/"+year, null);
 		dailyIncomesOfMonth = (ArrayList<DailyIncome>)MainController.getMyClient().send(MessageType.GET,"order/report/sum/income/"+branchID+"/"+month+"/"+year, null);
 		receiptsOfTheMonth = (ArrayList<Receipt>)MainController.getMyClient().send(MessageType.GET,"order/report/incomebycustomer/"+branchID+"/"+month+"/"+year, null);
+	
+	      
 	}
 	
 	/**
@@ -245,6 +261,7 @@ public class BranchManagerIncomeReportsController implements Initializable {
 		String[] splitedDate = monthsListView.getSelectionModel().getSelectedItem().split("/");
 		month = splitedDate[0];
 		year = splitedDate[1];
+		 
 	}
 	
 	/**
@@ -295,9 +312,10 @@ public class BranchManagerIncomeReportsController implements Initializable {
 			double income = dailyIncomesOfMonth.get(j).getIncome();
 			incomesOfMonth.set(dayIndex, incomesOfMonth.get(dayIndex)+income);
 		}
+		
 		int d=0;
 		for(Double income : incomesOfMonth) {
-			series.getData().add(new XYChart.Data<Integer, Double>(d, income));
+			series.getData().add(new XYChart.Data<String, Double>(d+"", income));
 			d++;
 		}
 		

@@ -1,6 +1,8 @@
 package entity;
 
-public class DailyIncome {
+import java.io.Serializable;
+
+public class DailyIncome implements Serializable, Cloneable {
 	
 	private int day;
 	private double income;
@@ -25,6 +27,12 @@ public class DailyIncome {
 	public void setIncome(double income) {
 		this.income = income;
 	}
+
+	@Override
+	public String toString() {
+		return "DailyIncome [day=" + day + ", income=" + income + "]";
+	}
+	
 	
 	
 	

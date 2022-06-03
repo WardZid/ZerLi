@@ -590,31 +590,8 @@ public class DBController {
 		return monthsYears;
 	}
 
-	/**
-	 * @param branch_id
-	 * @param month
-	 * @param year
-	 * @return ArrayList of the daily income of a specific store in a month of the
-	 *         year
-	 */
-	public static ArrayList<DailyIncome> getSumOfDailyIncome(String branch_id, String month, String year) {
-		ArrayList<DailyIncome> incomes = new ArrayList<>();
-		ResultSet rs;
-		try {
-			rs = statement.executeQuery(
-					"SELECT day(O.date_order) as day , sum(O.price_order) as income FROM assignment3.order O WHERE O.id_store ="
-							+ branch_id + "AND Month(O.date_order) = " + month + " AND Year(O.date_order) =" + year
-							+ "GROUP BY Day(O.date_order) ORDER BY day");
-			rs.beforeFirst(); // ---move back to first row
-			while (rs.next()) {
-				incomes.add(new DailyIncome(rs.getInt("day"), rs.getDouble("income")));
-			}
-			rs.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return incomes;
-	}
+	
+	 
 
 	/**
 	 * @param branch_id
@@ -626,10 +603,9 @@ public class DBController {
 		ArrayList<Receipt> receipts = new ArrayList<>();
 		ResultSet rs;
 		try {
-			rs = statement.executeQuery(
-					"SELECT day(O.date_order) as day , sum(O.price_order) as income FROM assignment3.order O WHERE O.id_store ="
-							+ branch_id + "AND Month(O.date_order) = " + month + " AND Year(O.date_order) =" + year
-							+ "GROUP BY Day(O.date_order) ORDER BY day");
+			rs = statement.executeQuery(" SELECT name_customer as name, O.date_order  as date ,  (O.price_order) as income FROM assignment3.order O , assignment3.customer C  WHERE O.id_store ="+branch_id+" AND Month(O.date_order) = "+month+" AND Year(O.date_order) ="+year+"  and  O.id_customer=  C.id_customer ");
+					
+					 
 			rs.beforeFirst(); // ---move back to first row
 			while (rs.next()) {
 				receipts.add(new Receipt(rs.getString("name"), rs.getString("date"), rs.getDouble("income")));
@@ -642,6 +618,7 @@ public class DBController {
 	}
 
 	/**
+		/**
 	 * @param branch
 	 * @param month
 	 * @param year
@@ -649,6 +626,7 @@ public class DBController {
 	 *         year.
 	 */
 	public static ArrayList<Order> getOrdersByBranchMonthYear(String branch, String month, String year) {
+	 
 		ArrayList<Order> orders = new ArrayList<>();
 		ResultSet rs;
 		try {
@@ -668,7 +646,31 @@ public class DBController {
 		}
 		return orders;
 	}
-
+	/**
+	 * @param branch_id
+	 * @param month
+	 * @param year
+	 * @return ArrayList of the daily income of a specific store in a month of the
+	 *         year
+	 */
+	public static ArrayList<DailyIncome> getSumOfDailyIncome(String branch_id, String month, String year) {
+ 
+		
+		ArrayList<DailyIncome> incomes = new ArrayList<>();
+		ResultSet rs;
+		try {
+			rs = statement.executeQuery( "SELECT day(date_order) as day , sum(price_order) as income FROM assignment3.order  WHERE id_store ="+branch_id +" AND Month(date_order) = "+month +"  AND Year(date_order) ="+year +"  GROUP BY Day(date_order) ORDER BY day "); 
+ 					
+			rs.beforeFirst(); // ---move back to first row
+			while (rs.next()) {
+				incomes.add(new DailyIncome(rs.getInt("day"), rs.getDouble("income")));
+			}
+			rs.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return incomes;
+	}
 	public static ArrayList<AmountItem> getAmountOfEveryItem(String branchID, String month, String year) {
 		ArrayList<AmountItem> amounts = new ArrayList<>();
 		ResultSet rs;

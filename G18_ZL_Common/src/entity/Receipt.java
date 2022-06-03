@@ -1,7 +1,10 @@
 package entity;
 
-public class Receipt {
-	
+import java.io.Serializable;
+
+public class Receipt implements Serializable, Cloneable{
+
+	private static final long serialVersionUID = 7473241707950981161L;
 	private String name;
 	private String date;
 	private double income;
@@ -9,7 +12,7 @@ public class Receipt {
 	public Receipt(String name, String date, double income) {
 		this.name = name;
 		this.date = date;
-		this.income = income;
+		this.income = income;  
 	}
 
 	public String getName() {
@@ -35,6 +38,12 @@ public class Receipt {
 	public void setIncome(double income) {
 		this.income = income;
 	}
+
+	@Override
+	public String toString() {
+		return "Receipt [name=" + name + ", date=" + date + ", income=" + income + "]";
+	}
+	
 	
 	
 }
