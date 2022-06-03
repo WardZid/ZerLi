@@ -140,7 +140,7 @@ public class BranchManagerIncomeReportsController implements Initializable {
     	initHelpVariables();
 		setBranchID();
 		initMonthsListView();
-		initTableCols();
+		initTableCols(); 
 		setActionOnListView();
 		
 	}
