@@ -16,10 +16,12 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
 
 public class BuildItemController implements Initializable {
-
+	   @FXML
+	    private ImageView itemIV;
 	@FXML
 	private CheckBox chooceItemChecBox;
 
@@ -47,6 +49,10 @@ public class BuildItemController implements Initializable {
 		
 		chooceItemChecBox.setText(item.getPrice() + "");
 		namelabel.setText(item.getName());
+		
+		if(item.getImage()!=null)
+			itemIV.setImage(item.getImage());
+		
 		this.buildItemsPageController = buildItemsPageController;
 		
 		

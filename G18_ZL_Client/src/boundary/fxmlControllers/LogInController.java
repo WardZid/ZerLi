@@ -42,6 +42,7 @@ public class LogInController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		CartController.NewOrder();
 		errorLbl.setVisible(false);
 		logInBackgroundIV.setImage(new Image("boundary/media/login-bg.jpg"));
 		welcomeIV.setImage(new Image("boundary/media/zli-welcome.png"));

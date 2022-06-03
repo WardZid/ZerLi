@@ -273,6 +273,7 @@ public class OrderDetailsController implements Initializable {
 		} else {
 
 			SetOrderDetails();
+			
 		}
 	}
 
@@ -338,8 +339,10 @@ public class OrderDetailsController implements Initializable {
 
 			}
 			System.out.println("Refund =" + ClientConsoleController.getCustomer().getPoint());
+			
 		}
-
+		CartController.NewOrder();
+		Navigation.navigator("catalog-view.fxml");
 	}
 
 	public VBox getPaymentVbox() {

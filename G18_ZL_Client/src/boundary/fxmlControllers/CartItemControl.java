@@ -10,11 +10,14 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 
 public class CartItemControl implements Initializable {
 	@FXML
     private Button addBtn;
 
+    @FXML
+    private ImageView itemIV;
     @FXML
     private Label amountLabel;
 
@@ -38,6 +41,8 @@ public class CartItemControl implements Initializable {
 		priceLabel.setText(item.getPrice()+"");
 		amountLabel.setText(item.getAmount()+"");
 		this.cartController=cartController;
+		if(item.getImage()!=null)
+		itemIV.setImage(item.getImage());
 	}
     public void onAdditemPressed() {
 

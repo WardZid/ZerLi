@@ -10,12 +10,14 @@ import entity.Item.OrderItem;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 public class CatalogItemController implements Initializable {
-
+	   @FXML
+	    private ImageView itemIV;
 	private Item PressedItem;
 
 	@FXML
@@ -45,6 +47,8 @@ public class CatalogItemController implements Initializable {
 		 
 		PressedItem = item;
 		namelabel.setText(item.getName());
+		if(item.getImage()!=null)
+			itemIV.setImage(item.getImage());
 		this.catalogController = catalogController;
 		if (item.getSale() == 0) {
 			salePriceText.setText("");

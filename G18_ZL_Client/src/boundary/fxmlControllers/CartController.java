@@ -15,9 +15,11 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 
@@ -178,6 +180,17 @@ public class CartController implements Initializable {
  		Navigation.navigator("Order-Details-view.fxml");
  		
 		}
+		else {
+			Alert errorAlert = new Alert(AlertType.ERROR);
+			errorAlert.setHeaderText(null);
+			errorAlert.setContentText("You should select Items first");
+			errorAlert.showAndWait();
+		}
+	}
+
+	public static void NewOrder() {
+		orderInProcess = new Order();
+		
 	}
 
 }
