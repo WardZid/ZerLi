@@ -1,15 +1,12 @@
 package boundary.fxmlControllers;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ResourceBundle;
 
-import boundary.ClientView;
 import control.MainController;
 import entity.Item;
 import entity.MyMessage.MessageType;
@@ -37,7 +34,7 @@ public class CatalogManagerAddController implements Initializable {
 	private byte[] imageBytes;
 
 	@FXML
-	private ComboBox<String> catogryCB;
+	private ComboBox<String> categoryCB;
 
 	@FXML
 	private TextField colorTF;
@@ -65,7 +62,7 @@ public class CatalogManagerAddController implements Initializable {
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		catogryCB.getItems().addAll(CatalogManagerController.getCategoryType().keySet());
+		categoryCB.getItems().addAll(CatalogManagerController.getCategoryType().keySet());
 	}
 
 	@FXML
@@ -74,52 +71,54 @@ public class CatalogManagerAddController implements Initializable {
 		fc.getExtensionFilters().add(new ExtensionFilter("PNG Images", "*.png"));
 		File f = fc.showOpenDialog(null);
 
+		if (f == null)
+			return;
 		try {
-			imageBytes=Files.readAllBytes(Paths.get(f.getPath()));
+			imageBytes = Files.readAllBytes(Paths.get(f.getPath()));
+			image = new Image(f.toURI().toString());
+			imageIV.setImage(image);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		image = new Image(f.toURI().toString());
-		imageIV.setImage(image);
 
 	}
 
 	@FXML
 	void onCancelPressed() {
-		cmc.closeOverlayAdd();
+		cmc.cancelOverlay();
 	}
 
 	@FXML
 	void onConfirmPressed() {
 		boolean allGood = true;
-		nameTF.setStyle("-fx-text-fill: black");
-		priceTF.setStyle("-fx-text-fill: black");
-		saleTF.setStyle("-fx-text-fill: black");
-		colorTF.setStyle("-fx-text-fill: black");
-		catogryCB.setStyle("-fx-text-fill: black");
+		nameTF.setStyle("-fx-background-color: 1de9b6");
+		priceTF.setStyle("-fx-background-color: 1de9b6");
+		saleTF.setStyle("-fx-background-color: 1de9b6");
+		colorTF.setStyle("-fx-background-color: 1de9b6");
+		categoryCB.setStyle("-fx-background-color: 1de9b6");
 
 		String name = nameTF.getText();
 		String price = priceTF.getText();
 		String sale = saleTF.getText();
 		String color = colorTF.getText();
-		String category = catogryCB.getValue();
+		String category = categoryCB.getValue();
 		String description = descriptionTA.getText();
 
 		if (!isValid(name)) {
 			allGood = false;
-			nameTF.setStyle("-fx-text-fill: red");
+			nameTF.setStyle("-fx-background-color: #ff5000");
 		}
 
 		if (!isValid(price)) {
 			allGood = false;
-			nameTF.setStyle("-fx-text-fill: red");
+			nameTF.setStyle("-fx-background-color: #ff5000");
 		}
 		double priceD = 0.0;
 		try {
 			priceD = Double.parseDouble(price);
 		} catch (NumberFormatException e) {
 			allGood = false;
-			priceTF.setStyle("-fx-text-fill: red");
+			priceTF.setStyle("-fx-background-color: #ff5000");
 		}
 
 		int saleInt = 0;
@@ -130,30 +129,38 @@ public class CatalogManagerAddController implements Initializable {
 			}
 		} catch (NumberFormatException e) {
 			allGood = false;
-			saleTF.setStyle("-fx-text-fill: red");
+			saleTF.setStyle("-fx-background-color: #ff5000");
 		}
 
 		if (!isValid(color)) {
 			allGood = false;
-			colorTF.setStyle("-fx-text-fill: red");
+			colorTF.setStyle("-fx-background-color: #ff5000");
 		}
 
 		if (category == null) {
 			allGood = false;
-			catogryCB.setStyle("-fx-text-fill: red");
+			categoryCB.setStyle("-fx-background-color: #ff5000");
 		}
 
 		if (allGood) {
 			Item item = new Item(name, priceD, saleInt, category, color, description);
 			item.setImageBytes(imageBytes);
 			if ((boolean) MainController.getMyClient().send(MessageType.POST, "item", item)) {
-				cmc.closeOverlayAdd();
+				cmc.closeOverlay();
 			}
 		} else {
 			requiredText.setVisible(true);
 		}
 
 	}
+
+	// HELPER METHODS
+	/**
+	 * Checks if an input is good enough to continue
+	 * 
+	 * @param s String to check
+	 * @return false id the string is null or empty
+	 */
 
 	private boolean isValid(String s) {
 		if (s == null || s.equals(""))

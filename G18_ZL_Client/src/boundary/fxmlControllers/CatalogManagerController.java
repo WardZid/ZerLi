@@ -175,7 +175,7 @@ public class CatalogManagerController implements Initializable {
 						ClientView.class.getResource("fxmls/catalog-manager-item-view.fxml"));
 				Node node = loader.load();
 				CatalogManagerItemController cmiCtrl = loader.getController();
-				cmiCtrl.setItem(item);
+				cmiCtrl.setCtrlAndItem(this,item);
 				itemsVBox.getChildren().add(node);
 			} catch (IOException ex) {
 				ex.printStackTrace();
@@ -194,14 +194,31 @@ public class CatalogManagerController implements Initializable {
 		} catch (Exception e) {
 			ClientView.printErr(getClass(), e.getMessage());
 		}
-
+	}
+	public void openOverlayEdit(Item itemForEdit) {
+		try {
+			mainVBox.setDisable(true);
+			FXMLLoader loader = new FXMLLoader(ClientView.class.getResource("fxmls/catalog-manager-edit-view.fxml"));
+			overlay = loader.load();
+			CatalogManagerEditController cmeCtrl = loader.getController();
+			cmeCtrl.setCatManCtrl(this,itemForEdit);
+			mySP.getChildren().add(overlay);
+		} catch (Exception e) {
+			ClientView.printErr(getClass(), e.getMessage());
+		}
 	}
 
-	public void closeOverlayAdd() {
+	public void closeOverlay() {
 		mySP.getChildren().remove(overlay);
 		overlay=null;
 		mainVBox.setDisable(false);
 		loadAllItems();
+	}
+	
+	public void cancelOverlay() {
+		mySP.getChildren().remove(overlay);
+		overlay=null;
+		mainVBox.setDisable(false);
 	}
 
 }
