@@ -178,7 +178,7 @@
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </VBox.margin>
                   </Label>
-                  <ScrollPane fx:id="logSP" prefHeight="350.0" vbarPolicy="ALWAYS">
+                  <ScrollPane fx:id="logSP" prefHeight="350.0" style="-fx-background-color: white;" vbarPolicy="ALWAYS">
                      <content>
                         <TextFlow fx:id="logTextFlow" lineSpacing="5.0" maxHeight="1.7976931348623157E308" style="-fx-background-color: white;" />
                      </content>
