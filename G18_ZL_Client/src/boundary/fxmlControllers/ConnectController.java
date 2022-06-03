@@ -25,7 +25,7 @@ public class ConnectController implements Initializable {
 	 * inits textfield with ip
 	 */
 	public void initialize(URL location, ResourceBundle resources) {
-		txtIP.setText(MainController.getIpAddress());
+		txtIP.setText("localhost");
 	}
 
 	@FXML
