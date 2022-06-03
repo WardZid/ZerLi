@@ -7,19 +7,21 @@ import control.MainController;
 import entity.MyMessage.MessageType;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 public class ClientView extends Application {
 
-	// Screen size properties
-//	private static double width;
-//	private static double height;
-//
-//	private static double centerW;
-//	private static double centerH;
+//	 Screen size properties
+	private static double width;
+	private static double height;
+
+	private static double centerW;
+	private static double centerH;
 
 	public static Parent connect = null;
 	public static Parent logIn = null;
@@ -41,12 +43,12 @@ public class ClientView extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		try {
-//
-//			Rectangle2D screenBounds = Screen.getPrimary().getBounds();
-//			width = screenBounds.getWidth();
-//			height = screenBounds.getHeight();
-//			centerW = width / 2;
-//			centerH = height / 2;
+
+			Rectangle2D screenBounds = Screen.getPrimary().getBounds();
+			width = screenBounds.getWidth();
+			height = screenBounds.getHeight();
+			centerW = width / 2;
+			centerH = height / 2;
 
 			ClientView.primaryStage = primaryStage;
 
@@ -96,6 +98,7 @@ public class ClientView extends Application {
 
 		primaryScene.setRoot(connect);
 		primaryStage.sizeToScene();
+		polishStage();
 	}
 
 	public static void setUpLogIn() {
@@ -105,6 +108,7 @@ public class ClientView extends Application {
 
 			primaryScene.setRoot(logIn);
 			primaryStage.sizeToScene();
+			polishStage();
 		} catch (IOException e) {
 			ClientView.printErr(ClientView.class, "Could not fetch 'log in' FXML");
 		}
@@ -116,10 +120,17 @@ public class ClientView extends Application {
 
 			primaryScene.setRoot(clientConsole);
 			primaryStage.sizeToScene();
+			polishStage();
 		} catch (IOException e) {
 			ClientView.print(ClientView.class, "Could not fetch 'client console' FXML");
 		}
 
+	}
+	
+	private static void polishStage() {
+		primaryStage.sizeToScene();
+		primaryStage.setX(centerW - (primaryScene.getWidth() / 2));
+		primaryStage.setY(centerH - (primaryScene.getHeight() / 2));
 	}
 	
 	/**

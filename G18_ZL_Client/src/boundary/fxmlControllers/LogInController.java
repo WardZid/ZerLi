@@ -14,6 +14,8 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 
 public class LogInController implements Initializable {
 
@@ -47,14 +49,25 @@ public class LogInController implements Initializable {
 		passIconIV.setImage(new Image("boundary/media/pass-icon.png"));
 
 	}
+	
+    @FXML
+    void onLogInKeyPressed(KeyEvent event) {
+    	if (event.getCode() == KeyCode.ENTER)
+    		logIn();
+    }
 
+	
+	public void onLogInPressed() {
+		logIn();
+	}
+	
 	/**
 	 * checks that the fields arent empty. fetches user with appropriate username
 	 * AND pass, if non is found then something is incorrect.
 	 * Makes sure the user can't log in if he is logged in somewhere else
 	 * 
 	 */
-	public void onLogInPressed() {
+	private void logIn() {
 		if (usernameTF.getText().isEmpty() || passwordPF.getText().isEmpty()) {
 			errorLbl.setVisible(true);
 			errorLbl.setText("*Please fill the missing fields");
