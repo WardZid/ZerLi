@@ -262,6 +262,8 @@ public class ServerController extends ObservableServer {
 				clMsg.setContent(DBController.getItemsBy(request[2], request[3]));
 			} else if (request[1].equals("amount")) {
 				clMsg.setContent(DBController.getAmountOfEveryItem(request[2], request[3], request[4]));
+			}else if(request[1].equals("complete")) {
+				clMsg.setContent(DBController.getItemsComplete());
 			}
 		} else if (request[0].equals("build_item")) {
 			if (request[1].equals("all")) {
@@ -310,8 +312,8 @@ public class ServerController extends ObservableServer {
 				clMsg.setContent(DBController.getAllSurves());
 		}
 		else if(request[0].equals("survey_question")) {
-			if(request[1].equals("all"))
-				clMsg.setContent(DBController.getAllSurviesQuestion());
+			if(request[1].equals("all"));
+//				clMsg.setContent(DBController.getAllSurvisesQuestion());
 		}
 		else {
 			ServerView.printErr(getClass(), "Unhandled Get request: " + clMsg.getInfo());
@@ -361,8 +363,14 @@ public class ServerController extends ObservableServer {
 		} else if (request[0].equals("complaint")) {
 			Complaint complaint = (Complaint) clMsg.getContent();
 			clMsg.setContent(DBController.updateComplaint(complaint));
-		} else if (serverState) {
-			
+		} else if (request[0].equals("item")) {
+			Item i=(Item)clMsg.getContent();
+			if(request[1].equals("edit")) {
+				clMsg.setContent(DBController.updateEditItem(i));
+			} else if(request[1].equals("status")) {
+				clMsg.setContent(DBController.updateItemStatus(i));
+			}
+
 		} else
 			ServerView.printErr(getClass(),"Unhandled Update Request: " +clMsg.getInfo());
 	}

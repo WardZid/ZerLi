@@ -140,7 +140,7 @@ public class CatalogManagerController implements Initializable {
 
 	@SuppressWarnings("unchecked")
 	private void loadAllItems() {
-		items = (ArrayList<Item>) MainController.getMyClient().send(MessageType.GET, "item/all", null);
+		items = (ArrayList<Item>) MainController.getMyClient().send(MessageType.GET, "item/complete", null);
 
 		filteredItems.clear();
 		filteredItems.addAll(items);

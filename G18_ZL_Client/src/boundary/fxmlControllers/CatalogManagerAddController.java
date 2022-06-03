@@ -69,6 +69,7 @@ public class CatalogManagerAddController implements Initializable {
 	void onImagePressed() {
 		FileChooser fc = new FileChooser();
 		fc.getExtensionFilters().add(new ExtensionFilter("PNG Images", "*.png"));
+		fc.getExtensionFilters().add(new ExtensionFilter("JPG Images", "*.jpg"));
 		File f = fc.showOpenDialog(null);
 
 		if (f == null)

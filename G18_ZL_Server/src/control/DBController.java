@@ -196,9 +196,10 @@ public class DBController {
 		ArrayList<Order> orders = new ArrayList<>();
 		ResultSet rs;
 		try {
-			rs = statement.executeQuery("SELECT * FROM assignment3.order WHERE id_order_status=2&& DATEDIFF(delivery_date_order,NOW()   ) <0;"); // ---get
-																													// all
-																													// orders
+			rs = statement.executeQuery(
+					"SELECT * FROM assignment3.order WHERE id_order_status=2&& DATEDIFF(delivery_date_order,NOW()   ) <0;"); // ---get
+			// all
+			// orders
 			rs.beforeFirst(); // ---move back to first row
 			while (rs.next()) {
 				orders.add(new Order(rs.getInt("id_order"), rs.getInt("id_customer"), rs.getInt("id_store"),
@@ -245,7 +246,7 @@ public class DBController {
 
 				Item itemToAdd = new Item(rs.getInt("id_item"), rs.getString("name"), rs.getDouble("price"),
 						rs.getInt("sale"), rs.getString("category"), rs.getString("color"), rs.getString("description"),
-						blobToMyFile(rs.getBlob("image")));
+						rs.getString("status"), blobToMyFile(rs.getBlob("image")));
 				orderItems.add(itemToAdd.new OrderItem(itemToAdd, rs.getInt("amount")));
 			}
 			rs.close();
@@ -262,12 +263,12 @@ public class DBController {
 		ArrayList<Item> items = new ArrayList<>();
 		ResultSet rs;
 		try {
-			rs = statement.executeQuery("SELECT * FROM item");
+			rs = statement.executeQuery("SELECT * FROM item WHERE status='SHOWN'");
 			rs.beforeFirst(); // ---move back to first row
 			while (rs.next()) {
 				items.add(new Item(rs.getInt("id_item"), rs.getString("name"), rs.getDouble("price"), rs.getInt("sale"),
 						rs.getString("category"), rs.getString("color"), rs.getString("description"),
-						blobToMyFile(rs.getBlob("image"))));
+						rs.getString("status"), blobToMyFile(rs.getBlob("image"))));
 			}
 			rs.close();
 		} catch (SQLException e) {
@@ -285,7 +286,25 @@ public class DBController {
 			while (rs.next()) {
 				items.add(new Item(rs.getInt("id_item"), rs.getString("name"), rs.getDouble("price"), rs.getInt("sale"),
 						rs.getString("category"), rs.getString("color"), rs.getString("description"),
-						blobToMyFile(rs.getBlob("image"))));
+						rs.getString("status"), blobToMyFile(rs.getBlob("image"))));
+			}
+			rs.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return items;
+	}
+	
+	public static ArrayList<Item> getItemsComplete() {
+		ArrayList<Item> items = new ArrayList<>();
+		ResultSet rs;
+		try {
+			rs = statement.executeQuery("SELECT * FROM item");
+			rs.beforeFirst(); // ---move back to first row
+			while (rs.next()) {
+				items.add(new Item(rs.getInt("id_item"), rs.getString("name"), rs.getDouble("price"), rs.getInt("sale"),
+						rs.getString("category"), rs.getString("color"), rs.getString("description"),
+						rs.getString("status"), blobToMyFile(rs.getBlob("image"))));
 			}
 			rs.close();
 		} catch (SQLException e) {
@@ -437,9 +456,11 @@ public class DBController {
 							+ buildItem.getIdBuildItem() + " AND IB.id_item=I.id_item");
 			rs.beforeFirst(); // ---move back to first row
 			while (rs.next()) {
-				buildItem.addItem(new Item(rs.getInt("id_item"), rs.getString("name"), rs.getDouble("price"),
-						rs.getInt("sale"), rs.getString("category"), rs.getString("color"), rs.getString("description"),
-						blobToMyFile(rs.getBlob("image"))), rs.getInt("amount_in_build"));
+				buildItem.addItem(
+						new Item(rs.getInt("id_item"), rs.getString("name"), rs.getDouble("price"), rs.getInt("sale"),
+								rs.getString("category"), rs.getString("color"), rs.getString("description"),
+								rs.getString("status"), blobToMyFile(rs.getBlob("image"))),
+						rs.getInt("amount_in_build"));
 			}
 			rs.close();
 		} catch (SQLException e) {
@@ -457,7 +478,7 @@ public class DBController {
 			while (rs.next()) {
 				customers.add(new Customer(rs.getInt("id_customer"), rs.getInt("id_customer_status"),
 						rs.getInt("id_user"), rs.getString("name_customer"), rs.getString("email_customer"),
-						rs.getString("phone_customer"), rs.getString("card_number"),rs.getDouble("point")));
+						rs.getString("phone_customer"), rs.getString("card_number"), rs.getDouble("point")));
 			}
 			rs.close();
 		} catch (SQLException e) {
@@ -475,7 +496,7 @@ public class DBController {
 			while (rs.next()) {
 				customers.add(new Customer(rs.getInt("id_customer"), rs.getInt("id_customer_status"),
 						rs.getInt("id_user"), rs.getString("name_customer"), rs.getString("email_customer"),
-						rs.getString("phone_customer"), rs.getString("card_number"),rs.getDouble("point")));
+						rs.getString("phone_customer"), rs.getString("card_number"), rs.getDouble("point")));
 			}
 			rs.close();
 		} catch (SQLException e) {
@@ -588,9 +609,6 @@ public class DBController {
 		return monthsYears;
 	}
 
-	
-	 
-
 	/**
 	 * @param branch_id
 	 * @param month
@@ -601,9 +619,11 @@ public class DBController {
 		ArrayList<Receipt> receipts = new ArrayList<>();
 		ResultSet rs;
 		try {
-			rs = statement.executeQuery(" SELECT name_customer as name, O.date_order  as date ,  (O.price_order) as income FROM assignment3.order O , assignment3.customer C  WHERE O.id_store ="+branch_id+" AND Month(O.date_order) = "+month+" AND Year(O.date_order) ="+year+"  and  O.id_customer=  C.id_customer ");
-					
-					 
+			rs = statement.executeQuery(
+					" SELECT name_customer as name, O.date_order  as date ,  (O.price_order) as income FROM assignment3.order O , assignment3.customer C  WHERE O.id_store ="
+							+ branch_id + " AND Month(O.date_order) = " + month + " AND Year(O.date_order) =" + year
+							+ "  and  O.id_customer=  C.id_customer ");
+
 			rs.beforeFirst(); // ---move back to first row
 			while (rs.next()) {
 				receipts.add(new Receipt(rs.getString("name"), rs.getString("date"), rs.getDouble("income")));
@@ -616,7 +636,8 @@ public class DBController {
 	}
 
 	/**
-		/**
+	 * /**
+	 * 
 	 * @param branch
 	 * @param month
 	 * @param year
@@ -624,7 +645,7 @@ public class DBController {
 	 *         year.
 	 */
 	public static ArrayList<Order> getOrdersByBranchMonthYear(String branch, String month, String year) {
-	 
+
 		ArrayList<Order> orders = new ArrayList<>();
 		ResultSet rs;
 		try {
@@ -644,6 +665,7 @@ public class DBController {
 		}
 		return orders;
 	}
+
 	/**
 	 * @param branch_id
 	 * @param month
@@ -652,13 +674,15 @@ public class DBController {
 	 *         year
 	 */
 	public static ArrayList<DailyIncome> getSumOfDailyIncome(String branch_id, String month, String year) {
- 
-		
+
 		ArrayList<DailyIncome> incomes = new ArrayList<>();
 		ResultSet rs;
 		try {
-			rs = statement.executeQuery( "SELECT day(date_order) as day , sum(price_order) as income FROM assignment3.order  WHERE id_store ="+branch_id +" AND Month(date_order) = "+month +"  AND Year(date_order) ="+year +"  GROUP BY Day(date_order) ORDER BY day "); 
- 					
+			rs = statement.executeQuery(
+					"SELECT day(date_order) as day , sum(price_order) as income FROM assignment3.order  WHERE id_store ="
+							+ branch_id + " AND Month(date_order) = " + month + "  AND Year(date_order) =" + year
+							+ "  GROUP BY Day(date_order) ORDER BY day ");
+
 			rs.beforeFirst(); // ---move back to first row
 			while (rs.next()) {
 				incomes.add(new DailyIncome(rs.getInt("day"), rs.getDouble("income")));
@@ -669,6 +693,7 @@ public class DBController {
 		}
 		return incomes;
 	}
+
 	public static ArrayList<AmountItem> getAmountOfEveryItem(String branchID, String month, String year) {
 		ArrayList<AmountItem> amounts = new ArrayList<>();
 		ResultSet rs;
@@ -830,34 +855,41 @@ public class DBController {
 			return false;
 		return true;
 	}
-	
-	public static ArrayList<Item> updateEditItem(Item item){
+
+	public static ArrayList<Item> updateEditItem(Item item) {
 		try {
-			PreparedStatement ps = conn.prepareStatement(
-					"UPDATE assignment3.item "
-					+ "SET name=?, "
-					+ "price=?, "
-					+ "sale=?, "
-					+ "category=?, "
-					+ "color=?, "
-					+ "description=?, "
-					+ "image=? "
-					+ "WHERE id_item=?");
-			
+			PreparedStatement ps = conn.prepareStatement("UPDATE assignment3.item " + "SET name=?, " + "price=?, "
+					+ "sale=?, " + "category=?, " + "color=?, " + "description=?, " + "image=? " + "WHERE id_item=?");
+
 			ps.setString(1, item.getName());
 			ps.setDouble(2, item.getPrice());
-			ps.setInt(3,item.getSale());
-			ps.setString(4,item.getCategory());
-			ps.setString(5,item.getColor());
-			ps.setString(6,item.getDescription());
+			ps.setInt(3, item.getSale());
+			ps.setString(4, item.getCategory());
+			ps.setString(5, item.getColor());
+			ps.setString(6, item.getDescription());
 			ps.setBytes(7, item.getImageBytes());
-			ps.setInt(8,item.getIdItem());
+			ps.setInt(8, item.getIdItem());
 			ps.executeUpdate();
 			ps.close();
 		} catch (SQLException e) {
 			ServerView.printErr(DBController.class, e.getMessage());
 			e.printStackTrace();
 		}
+		return getItemsBy("id_item", item.getIdItem() + "");
+	}
+	
+	public static ArrayList<Item> updateItemStatus(Item item) {
+		try {
+			PreparedStatement ps=conn.prepareStatement("UPDATE assignment3.item SET status=? WHERE id_item=?");
+			ps.setString(1, item.getStatus());
+			ps.setInt(2, item.getIdItem());
+			
+			ps.executeUpdate();
+			ps.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
 		return getItemsBy("id_item", item.getIdItem()+"");
 	}
 
@@ -903,7 +935,8 @@ public class DBController {
 
 	public static boolean updatePoint(int idCustomer, double newPoint) {
 		try {
-			PreparedStatement ps = conn.prepareStatement("UPDATE assignment3.customer SET point=?+point WHERE id_customer=?");
+			PreparedStatement ps = conn
+					.prepareStatement("UPDATE assignment3.customer SET point=?+point WHERE id_customer=?");
 			ps.setDouble(1, newPoint);
 			ps.setInt(2, idCustomer);
 			ps.executeUpdate();
@@ -914,5 +947,7 @@ public class DBController {
 		}
 		return true;
 	}
+
+	
 
 }

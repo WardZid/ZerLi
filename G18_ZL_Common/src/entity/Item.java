@@ -16,8 +16,8 @@ public class Item implements Serializable {
 		private int amount;
 
 		public OrderItem(int idItem, String name, double price, int sale, String category, String color,
-				String description, byte[] imageBytes, int amount) {
-			super(idItem, name, price, sale, category, color, description, imageBytes);
+				String description,String status, byte[] imageBytes, int amount) {
+			super(idItem, name, price, sale, category, color, description,status, imageBytes);
 			this.amount = amount;
 		}
 
@@ -64,8 +64,8 @@ public class Item implements Serializable {
 		private int amount;
 
 		public ItemInBuild(int idItem, String name, double price, int sale, String category, String color,
-				String description, byte[] imageBytes, int amount) {
-			super(idItem, name, price, sale, category, color, description, imageBytes);
+				String description,String status, byte[] imageBytes, int amount) {
+			super(idItem, name, price, sale, category, color, description,status, imageBytes);
 			this.amount = amount;
 		}
 
@@ -130,10 +130,11 @@ public class Item implements Serializable {
 	private String category;
 	private String color;
 	private String description;
+	private String status;
 	private byte[] imageBytes;
 
 	/**
-	 * Standard constructor for all the variables
+	 * Standard constructor for some variables (not image)
 	 * 
 	 * @param idItem
 	 * @param name
@@ -144,7 +145,7 @@ public class Item implements Serializable {
 	 * @param description
 	 * @param image
 	 */
-	public Item(int idItem, String name, double price, int sale, String category, String color, String description) {
+	public Item(int idItem, String name, double price, int sale, String category, String color, String description,String status) {
 		this.idItem = idItem;
 		this.name = name;
 		this.price = price;
@@ -152,6 +153,7 @@ public class Item implements Serializable {
 		this.category = category;
 		this.color = color;
 		this.description = description;
+		this.status=status;
 	}
 
 	/**
@@ -166,7 +168,7 @@ public class Item implements Serializable {
 	 * @param description
 	 * @param image
 	 */
-	public Item(int idItem, String name, double price, int sale, String category, String color, String description,
+	public Item(int idItem, String name, double price, int sale, String category, String color, String description,String status,
 			byte[] imageBytes) {
 		this.idItem = idItem;
 		this.name = name;
@@ -175,6 +177,7 @@ public class Item implements Serializable {
 		this.category = category;
 		this.color = color;
 		this.description = description;
+		this.status=status;
 		this.imageBytes=imageBytes;
 	}
 
@@ -189,11 +192,13 @@ public class Item implements Serializable {
 		this.category = item.category;
 		this.color = item.color;
 		this.description = item.description;
+		this.status=item.status;
 		this.imageBytes=item.imageBytes;
 	}
 
 	/**
-	 * Constructor for new items to be added that doesn't receive an id or image
+	 * Constructor for new items to be added that doesn't receive an id,status, or image
+	 * new items always start as unavailable
 	 * 
 	 * @param name
 	 * @param price
@@ -268,6 +273,20 @@ public class Item implements Serializable {
 		this.description = description;
 	}
 
+	/**
+	 * @return the status
+	 */
+	public String getStatus() {
+		return status;
+	}
+
+	/**
+	 * @param status the status to set
+	 */
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
 	public void setImageBytes(byte[] imageBytes) {
 		this.imageBytes=imageBytes;
 	}
@@ -292,6 +311,8 @@ public class Item implements Serializable {
 		builder.append(color);
 		builder.append(", description=");
 		builder.append(description);
+		builder.append(", status=");
+		builder.append(status);
 		builder.append(", imageBytes= ");
 		builder.append(imageBytes);
 		builder.append("]");
