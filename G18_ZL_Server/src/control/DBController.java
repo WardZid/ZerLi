@@ -600,6 +600,47 @@ public class DBController {
 
 	}
 
+	public static ArrayList<String> getComplaintYears() {
+		ArrayList<String> years = new ArrayList<>();
+		ResultSet rs;
+		try {
+			rs = statement.executeQuery("SELECT distinct Year(date_complaint) as year FROM assignment3.complaint order by Year(date_complaint)");
+			rs.beforeFirst(); // ---move back to first row
+			System.out.println("sql ok");
+			while (rs.next()) {
+				years.add(rs.getString("year")+"");
+			}
+			rs.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return years;
+
+	}
+	
+	
+	public static ArrayList<Integer> getCountComplaintsInQuarter(String year, String firstMonthInQuarter) {
+		ArrayList<Integer> countOfComplaints = new ArrayList<>();
+		ResultSet rs;
+		int monthForSearch;
+		try {
+			for(int i = 0 ; i<3 ; i++) {
+				monthForSearch=Integer.parseInt((firstMonthInQuarter))+i;
+				rs = statement.executeQuery("SELECT count(month(date_complaint)) as count FROM assignment3.complaint WHERE year(date_complaint) = "+year+" and month(date_complaint) = "+monthForSearch);
+				rs.beforeFirst(); // ---move back to first row
+				while (rs.next()) {
+					System.out.println(rs.getString("count"));
+					countOfComplaints.add(rs.getInt("count"));
+				}
+				rs.close();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return countOfComplaints;
+
+	}
+	
 	public static ArrayList<String> getStoreAll() {
 		ArrayList<String> stores = new ArrayList<>();
 		ResultSet rs;

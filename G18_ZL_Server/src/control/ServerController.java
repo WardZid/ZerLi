@@ -317,7 +317,13 @@ public class ServerController extends ObservableServer {
 				clMsg.setContent(DBController.getComplaintsAll());
 			} else if (request[1].equals("by")) {
 				clMsg.setContent(DBController.getComplaintsBy(request[2], request[3]));
-			}
+			} else if(request[1].equals("years")) {
+				System.out.println("here");
+				clMsg.setContent(DBController.getComplaintYears());
+			} else if(request[1].equals("count")) {
+				if(request[2].equals("inQuarter")) {
+					clMsg.setContent(DBController.getCountComplaintsInQuarter(request[3],request[4]));
+				}
 		} else if (request[0].equals("questions")) {
 			if (request[1].equals("all"))
 				clMsg.setContent(DBController.getAllSurves());

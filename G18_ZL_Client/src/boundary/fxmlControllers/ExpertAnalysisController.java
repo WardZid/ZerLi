@@ -107,8 +107,7 @@ public class ExpertAnalysisController implements Initializable {
 				// surveyYearComboBox.getValue(), null);
 				vb.setVisible(true);
 				surveyIdQuestionsComboBox.getItems().clear();
-				surveyIdQuestionsComboBox.getItems()
-						.addAll(yearIdQuestionsHashMap.get(surveyYearComboBox.getValue()).keySet());
+				surveyIdQuestionsComboBox.getItems().addAll(yearIdQuestionsHashMap.get(surveyYearComboBox.getValue()).keySet());
 				answersBarChart.getData().clear();
 			}
 		});
@@ -119,9 +118,7 @@ public class ExpertAnalysisController implements Initializable {
 				try {
 					answersBarChart.getData().clear();
 					setQuestions();
-					SurveySumAnswers surveySumAnswers = (SurveySumAnswers) MainController.getMyClient()
-							.send(MessageType.GET, "survey/by/date_survey && id_question_average/"
-									+ surveyIdQuestionsComboBox.getValue() + "/" + surveyYearComboBox.getValue(), null);
+					SurveySumAnswers surveySumAnswers = (SurveySumAnswers) MainController.getMyClient().send(MessageType.GET, "survey/by/date_survey && id_question_average/"+ surveyIdQuestionsComboBox.getValue() + "/" + surveyYearComboBox.getValue(), null);
 					XYChart.Series<String, Double> set1 = new XYChart.Series<>();
 					for (int i = 0; i < 6; i++)
 						set1.getData().add(new XYChart.Data(i + 1 + "", surveySumAnswers.getAvgAnswers().get(i)));

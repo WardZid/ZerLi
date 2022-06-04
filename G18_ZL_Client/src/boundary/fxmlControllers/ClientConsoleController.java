@@ -216,7 +216,7 @@ public class ClientConsoleController implements Initializable {
 		ceoOReportsBtn= menuButton("Order Reports", "ceo-order-reports-view.fxml");
 		ceoCReportsBtn= menuButton("Complaint Reports", "ceo-complaint-reports-view.fxml");
 		
-		initPage(ceoIReportsBtn, "fxmls/ceo-income-reports-view.fxml");
+		initPage(ceoIReportsBtn, "fxmls/ceo-complaint-reports-view.fxml");
 	}
 
 	private void loadStoreWorkerConsole() {
