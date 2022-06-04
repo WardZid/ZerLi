@@ -12,6 +12,7 @@ import entity.MyMessage.MessageType;
 import entity.Order;
 import entity.Order.OrderStatus;
 import entity.Store;
+import entity.User;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
@@ -225,8 +226,11 @@ public class DeliveryController implements Initializable {
 		ArrayList<Customer> customers = (ArrayList<Customer>) MainController.getMyClient().send(MessageType.GET,
 				"customer/by/id_customer/" + selectedOrder.getIdCustomer(), null);
 
-		custNameTF.setText(customers.get(0).getName());
-		custNumTF.setText(customers.get(0).getPhone());
+		User u = (User) MainController.getMyClient().send(MessageType.GET,
+				"user/by/id_user/" + customers.get(0).getIdUser(), null);
+		
+		custNameTF.setText(u.getName());
+		custNumTF.setText(u.getPhone());
 
 		loadItems();
 		confirmBtn.setDisable(false);

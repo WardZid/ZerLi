@@ -164,8 +164,38 @@ public class DBController {
 				return null;
 			rs.beforeFirst(); // ---move back to first row
 			while (rs.next()) {
-				return new User(rs.getInt("id_user"), rs.getInt("id_user_type"), rs.getString("username"),
-						rs.getString("password"));
+				return new User(
+						rs.getInt("id_user"),
+						rs.getInt("id_user_type"),
+						rs.getString("username"),
+						rs.getString("password"),
+						rs.getString("name"),
+						rs.getString("email"),
+						rs.getString("phone"));
+			}
+			rs.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	public static User getUserBy(String column, String value) {
+		ResultSet rs;
+		try {
+			rs = statement.executeQuery(
+					"SELECT * FROM user WHERE "+column+" = "+value);
+			if (resultSetSize(rs) == 0)
+				return null;
+			rs.beforeFirst(); // ---move back to first row
+			while (rs.next()) {
+				return new User(
+						rs.getInt("id_user"),
+						rs.getInt("id_user_type"),
+						rs.getString("username"),
+						rs.getString("password"),
+						rs.getString("name"),
+						rs.getString("email"),
+						rs.getString("phone"));
 			}
 			rs.close();
 		} catch (SQLException e) {
@@ -498,9 +528,12 @@ public class DBController {
 			rs = statement.executeQuery("SELECT * FROM customer");
 			rs.beforeFirst(); // ---move back to first row
 			while (rs.next()) {
-				customers.add(new Customer(rs.getInt("id_customer"), rs.getInt("id_customer_status"),
-						rs.getInt("id_user"), rs.getString("name_customer"), rs.getString("email_customer"),
-						rs.getString("phone_customer"), rs.getString("card_number"), rs.getDouble("point")));
+				customers.add(new Customer(
+						rs.getInt("id_customer"),
+						rs.getInt("id_customer_status"),
+						rs.getInt("id_user"),
+						rs.getString("card_number"),
+						rs.getDouble("point")));
 			}
 			rs.close();
 		} catch (SQLException e) {
@@ -517,8 +550,7 @@ public class DBController {
 			rs.beforeFirst(); // ---move back to first row
 			while (rs.next()) {
 				customers.add(new Customer(rs.getInt("id_customer"), rs.getInt("id_customer_status"),
-						rs.getInt("id_user"), rs.getString("name_customer"), rs.getString("email_customer"),
-						rs.getString("phone_customer"), rs.getString("card_number"), rs.getDouble("point")));
+						rs.getInt("id_user"), rs.getString("card_number"), rs.getDouble("point")));
 			}
 			rs.close();
 		} catch (SQLException e) {

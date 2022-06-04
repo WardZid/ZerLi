@@ -232,12 +232,20 @@ public class ServerController extends ObservableServer {
 			} else if (request[1].equals("customer")) {
 				clMsg.setContent(DBController.getCustomerBy("id_user", user.getIdUser() + ""));
 			}
-		} else if (request[0].equals("order")) {
+		} else if (request[0].equals("user")) {
+			User user = (User) clMsg.getContent();
+			if(request[1].equals("all")) {
+				
+			} else if(request[1].equals("by"))
+				clMsg.setContent(DBController.getUserBy(request[2], request[3]));
+		}
+
+		else if (request[0].equals("order")) {
 			if (request[1].equals("all")) {
 				clMsg.setContent(DBController.getOrdersAll());
-			} else if(request[1].equals("income")) {
-				if(request[2].equals("quarter")) {
-					clMsg.setContent(DBController.getIncomesInQuarter(request[3],request[4],request[5]));
+			} else if (request[1].equals("income")) {
+				if (request[2].equals("quarter")) {
+					clMsg.setContent(DBController.getIncomesInQuarter(request[3], request[4], request[5]));
 				}
 			} else if (request[1].equals("by")) {
 				clMsg.setContent(DBController.getOrdersBy(request[2], request[3]));
@@ -266,7 +274,7 @@ public class ServerController extends ObservableServer {
 				clMsg.setContent(DBController.getItemsBy(request[2], request[3]));
 			} else if (request[1].equals("amount")) {
 				clMsg.setContent(DBController.getAmountOfEveryItem(request[2], request[3], request[4]));
-			}else if(request[1].equals("complete")) {
+			} else if (request[1].equals("complete")) {
 				clMsg.setContent(DBController.getItemsComplete());
 			}
 		} else if (request[0].equals("build_item")) {
@@ -312,11 +320,10 @@ public class ServerController extends ObservableServer {
 				clMsg.setContent(DBController.getComplaintsBy(request[2], request[3]));
 			}
 		} else if (request[0].equals("questions")) {
-			if(request[1].equals("all")) 
+			if (request[1].equals("all"))
 				clMsg.setContent(DBController.getAllSurves());
-		}
-		else if(request[0].equals("survey")) {
-			if(request[1].equals("date_survey"))
+		} else if (request[0].equals("survey")) {
+			if (request[1].equals("date_survey"))
 				clMsg.setContent(DBController.getAllSurvesYears());
 		}
 //		else if (request[0].equals("questions")) {
@@ -339,15 +346,14 @@ public class ServerController extends ObservableServer {
 		if (request[0].equals("complaint")) {
 			Complaint complaint = (Complaint) clMsg.getContent();
 			clMsg.setContent(DBController.insertComplaint(complaint));
-			
+
 		} else if (request[0].equals("survey")) {
-			Survey s=(Survey) clMsg.getContent();
+			Survey s = (Survey) clMsg.getContent();
 			clMsg.setContent(DBController.insertSurvey(s));
-		} else if(request[0].equals("item")) {
-			Item i=(Item)clMsg.getContent();
+		} else if (request[0].equals("item")) {
+			Item i = (Item) clMsg.getContent();
 			clMsg.setContent(DBController.insertItem(i));
-		}
-		else {
+		} else {
 			ServerView.printErr(getClass(), "Unhandled POST request: " + clMsg.getInfo());
 		}
 
@@ -370,20 +376,21 @@ public class ServerController extends ObservableServer {
 		} else if (request[0].equals("customer")) {
 			Customer c = (Customer) clMsg.getContent();
 			if (request[1].equals("status")) {
-				clMsg.setContent(DBController.updateCustomerStatusOne(c, CustomerStatus.getById(c.getIdCustomerStatus())));
+				clMsg.setContent(
+						DBController.updateCustomerStatusOne(c, CustomerStatus.getById(c.getIdCustomerStatus())));
 			}
 		} else if (request[0].equals("complaint")) {
 			Complaint complaint = (Complaint) clMsg.getContent();
 			clMsg.setContent(DBController.updateComplaint(complaint));
 		} else if (request[0].equals("item")) {
-			Item i=(Item)clMsg.getContent();
-			if(request[1].equals("edit")) {
+			Item i = (Item) clMsg.getContent();
+			if (request[1].equals("edit")) {
 				clMsg.setContent(DBController.updateEditItem(i));
-			} else if(request[1].equals("status")) {
+			} else if (request[1].equals("status")) {
 				clMsg.setContent(DBController.updateItemStatus(i));
 			}
 
 		} else
-			ServerView.printErr(getClass(),"Unhandled Update Request: " +clMsg.getInfo());
+			ServerView.printErr(getClass(), "Unhandled Update Request: " + clMsg.getInfo());
 	}
 }
