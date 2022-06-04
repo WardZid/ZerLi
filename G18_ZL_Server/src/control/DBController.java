@@ -24,6 +24,7 @@ import entity.Receipt;
 import entity.Store;
 import entity.Survey;
 import entity.SurveyQuestion;
+import entity.SurveyReport;
 import entity.SurveySumAnswers;
 import entity.User;
 
@@ -911,8 +912,27 @@ public class DBController {
 		if (linesChanged == 0)
 			return false;
 		return true;
-
 	}
+	
+	public static boolean insertReportPDF(SurveyReport sr) {
+		int linesChanged = 0;
+		try {
+			PreparedStatement ps = conn.prepareStatement(
+					"INSERT INTO reports (`id_question`, `year_report`, `pdf_report`,) VALUES(?,?,?)");
+			ps.setInt(1, sr.getIdQuestion());
+			ps.setString(2, sr.getYear()+"-00-00");
+			ps.setBytes(3, sr.getReportBytes());
+			linesChanged = ps.executeUpdate();
+			ps.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			ServerView.printErr(DBController.class, "Unable to add new report: " + sr.toString());
+		}
+		if (linesChanged == 0)
+			return false;
+		return true;
+	}
+	
 	/*
 	 * public static boolean insertSurvey(Survey s) { int linesChanged = 0; try {
 	 * PreparedStatement ps = conn.
