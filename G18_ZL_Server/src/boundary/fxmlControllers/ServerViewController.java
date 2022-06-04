@@ -125,7 +125,7 @@ public class ServerViewController implements Initializable {
 
 			enableButtons(false, false, true, false, true);
 
-			gridTextInputs.setDisable(true);
+			gridTextInputs.setDisable(true); 
 
 		 	//ThreadController.Trackingfunction();
 		} catch (SQLException e) {
