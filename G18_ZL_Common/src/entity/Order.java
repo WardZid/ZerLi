@@ -375,6 +375,17 @@ public class Order implements Serializable, Cloneable {
 		this.setPrice(this.getPrice()+20);
 
 	}
+	
+	public double getCalculatedPrice() {
+		double fullPrice=0;
+		for (BuildItem buildItem : buildItems) {
+			fullPrice+=buildItem.getFullPrice();
+		}
+		for (OrderItem item : items) {
+			fullPrice+=item.getCalculatedPrice();
+		}
+		return fullPrice;
+	}
 
 	@Override
 	public String toString() {

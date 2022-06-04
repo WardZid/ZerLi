@@ -100,6 +100,13 @@ public class BuildItem implements Serializable {
 		return price;
 	}
 	
+	public double getFullPrice() {
+		double fullPrice=0;
+		for (ItemInBuild iInB : itemsInBuild.values()) {
+			fullPrice+=iInB.getCalculatedPrice();
+		}
+		return fullPrice;
+	}
 
 	@Override
 	public String toString() {
