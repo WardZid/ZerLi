@@ -8,12 +8,10 @@
 <?import javafx.scene.control.ButtonBar?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-
+<?import javafx.scene.text.Font?>
 
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" spacing="10.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="boundary.fxmlControllers.ExpertAnalysisController">
    <children>
@@ -21,20 +19,14 @@
          <children>
             <VBox>
                <children>
-                  <Label text="Survey Id" />
-                  <ComboBox fx:id="surveyIdComboBox" prefHeight="26.0" prefWidth="150.0" />
+                  <Label text="Year" />
+                  <ComboBox fx:id="surveyYearComboBox" prefHeight="26.0" prefWidth="150.0" />
                </children>
             </VBox>
-            <VBox>
+            <VBox fx:id="vb" layoutX="10.0" layoutY="10.0" visible="false">
                <children>
-                  <Label text="Question" />
-                  <ComboBox fx:id="questionsComboBox" prefHeight="26.0" prefWidth="150.0" />
-               </children>
-            </VBox>
-            <VBox>
-               <children>
-                  <Label text="Survey Date" />
-                  <ComboBox fx:id="surveyDatesComboBox" prefHeight="26.0" prefWidth="150.0" />
+                  <Label text="Survey" />
+                  <ComboBox fx:id="surveyIdQuestionsComboBox" prefHeight="26.0" prefWidth="150.0" />
                </children>
             </VBox>
          </children>
@@ -43,21 +35,28 @@
          <children>
             <BarChart fx:id="answersBarChart">
               <xAxis>
-                <CategoryAxis side="BOTTOM" />
+                <CategoryAxis animated="false" side="BOTTOM" fx:id="x" />
               </xAxis>
               <yAxis>
-                <NumberAxis side="LEFT" />
+                <NumberAxis fx:id="y" animated="false" side="LEFT" />
               </yAxis>
             </BarChart>
-            <VBox spacing="10.0">
+            <VBox prefHeight="414.0" prefWidth="350.0" spacing="10.0">
                <children>
-                  <TextArea fx:id="questionT" editable="false" prefHeight="200.0" prefWidth="200.0" wrapText="true" />
-                  <TableView fx:id="answersTableView" prefHeight="414.0" prefWidth="344.0">
-                    <columns>
-                        <TableColumn fx:id="answersTableColumn" prefWidth="174.39996945858002" text="Answer" />
-                        <TableColumn fx:id="distributionTableColumn" prefWidth="170.4000244140625" text="Quantity" />
-                    </columns>
-                  </TableView>
+                  <Label text="Questions">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                     <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </padding>
+                  </Label>
+                  <TextArea fx:id="q1T" prefHeight="50.0" prefWidth="200.0" wrapText="true" />
+                  <TextArea fx:id="q2T" layoutX="10.0" layoutY="63.0" prefHeight="50.0" prefWidth="200.0" wrapText="true" />
+                  <TextArea fx:id="q3T" layoutX="10.0" layoutY="124.0" prefHeight="50.0" prefWidth="200.0" wrapText="true" />
+                  <TextArea fx:id="q4T" layoutX="10.0" layoutY="184.0" prefHeight="50.0" prefWidth="200.0" wrapText="true" />
+                  <TextArea fx:id="q5T" layoutX="10.0" layoutY="245.0" prefHeight="50.0" prefWidth="200.0" wrapText="true" />
+                  <TextArea fx:id="q6T" layoutX="10.0" layoutY="306.0" prefHeight="50.0" prefWidth="200.0" wrapText="true" />
                </children>
             </VBox>
          </children>

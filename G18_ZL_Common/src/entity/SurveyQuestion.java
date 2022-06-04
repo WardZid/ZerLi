@@ -9,15 +9,12 @@ public class SurveyQuestion implements Serializable{
 	
 	private int idQuestion;
 	private ArrayList<String> questions;
-	private ArrayList<Integer>  answers;
 	public SurveyQuestion(int idQuestion, ArrayList<String> question, ArrayList<Integer> answer) {
 		this.idQuestion = idQuestion;
 		this.questions = question;
-		this.answers = answer;
 	}
 	public SurveyQuestion() {
 		questions = new ArrayList<String>();
-		answers = new ArrayList<Integer>();
 		}
 	public int getIdQuestion() {
 		return idQuestion;
@@ -31,15 +28,9 @@ public class SurveyQuestion implements Serializable{
 	public void setQuestion(String question) {
 		this.questions = questions;
 	}
-	public ArrayList<Integer> getAnswer() {
-		return answers;
-	}
-	public void setAnswer(ArrayList<Integer> answer) {
-		this.answers = answers;
-	}
 	@Override
 	public String toString() {
-		return "SurveyQuestion [idQuestion=" + idQuestion + ", question=" + questions.toString() + ", answer=" + answers.toString() + "]";
+		return "SurveyQuestion [idQuestion=" + idQuestion + ", question=" + questions.toString()  + "]";
 	}
 
 	

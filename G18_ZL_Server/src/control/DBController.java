@@ -24,6 +24,7 @@ import entity.Receipt;
 import entity.Store;
 import entity.Survey;
 import entity.SurveyQuestion;
+import entity.SurveySumAnswers;
 import entity.User;
 
 public class DBController {
@@ -644,34 +645,78 @@ public class DBController {
 
 		return questions;
 	}
-
+	// Report get queries
+	public static SurveySumAnswers getAverage(String idQuestion , String year) {
+		SurveySumAnswers ssa = new SurveySumAnswers();
+		try {
+			PreparedStatement ps = conn.prepareStatement("select avg(S.answer1),avg(S.answer2),avg(S.answer3),avg(S.answer4),avg(S.answer5),avg(S.answer6) from survey S where year(S.date_survey)= ? AND S.id_question= ?");
+			ps.setString(1, year);
+			ps.setInt(2, Integer.parseInt(idQuestion));
+			ResultSet rs = ps.executeQuery();
+		 while(rs.next()) {
+				ssa.getAvgAnswers().add(rs.getDouble(1));
+				ssa.getAvgAnswers().add(rs.getDouble(2));
+				ssa.getAvgAnswers().add(rs.getDouble(3));
+				ssa.getAvgAnswers().add(rs.getDouble(4));
+				ssa.getAvgAnswers().add(rs.getDouble(5));
+				ssa.getAvgAnswers().add(rs.getDouble(6));
+				}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println(ssa.getAvgAnswers().get(0) + " abcde");
+		return ssa;
+	}
 	public static HashMap<String,HashMap<Integer,SurveyQuestion>> getAllSurvesYears(){
 		HashMap<String,HashMap<Integer,SurveyQuestion>> yearsIdQuestions = new HashMap<String,HashMap<Integer,SurveyQuestion>>();
 		SurveyQuestion sq;
 		try {
 			ResultSet rs  = statement.executeQuery(
-					"SELECT year(s.date_survey) as year, q.id_question, q.question1, q.question2, q.question3, q.question4, q.question5, q.question6 FROM assignment3.survey s, assignment3.questions q"
+					"SELECT year(s.date_survey) as year,s.id_question, q.id_question, q.question1, q.question2, q.question3, q.question4, q.question5, q.question6 FROM assignment3.survey s, assignment3.questions q WHERE s.id_question = q.id_question"
 							);
 			while(rs.next()) {
 				sq = new SurveyQuestion();
-				System.out.println(rs.getString(0) + "aziz");
-				System.out.println(rs.getString(1) + "hamed");
 				if(yearsIdQuestions.get(rs.getString(1))==null)
-				if(yearsIdQuestions.get(rs.getString(1)).get(rs.getInt(2))==null) {
-				for(int i=0 ; i<6 ; i++)
-					sq.getQuestion().add(rs.getString(i+3));
-				HashMap<Integer,SurveyQuestion> idQuestion = new HashMap<Integer, SurveyQuestion>();
-				idQuestion.put(rs.getInt(2), sq);
-				yearsIdQuestions.put(rs.getString(1),idQuestion);
+				{
+					sq.getQuestion().add(rs.getString("question1"));
+					sq.getQuestion().add(rs.getString("question2"));
+					sq.getQuestion().add(rs.getString("question3"));
+					sq.getQuestion().add(rs.getString("question4"));
+					sq.getQuestion().add(rs.getString("question5"));
+					sq.getQuestion().add(rs.getString("question6"));
+					HashMap<Integer,SurveyQuestion> idQuestion = new HashMap<Integer, SurveyQuestion>();
+					idQuestion.put(rs.getInt("id_question"), sq);
+					yearsIdQuestions.put(rs.getString("year"),idQuestion);
 				}
+				else
+					if(yearsIdQuestions.get(rs.getString(1)).get(rs.getInt(2))==null) {
+						if(rs.getString("question1")==null)
+							sq.getQuestion().add("");
+							sq.getQuestion().add(rs.getString("question1"));
+							if(rs.getString("question1")==null)
+								sq.getQuestion().add("");
+							sq.getQuestion().add(rs.getString("question2"));
+							if(rs.getString("question2")==null)
+								sq.getQuestion().add("");
+							sq.getQuestion().add(rs.getString("question3"));
+							if(rs.getString("question3")==null)
+								sq.getQuestion().add("");
+							sq.getQuestion().add(rs.getString("question4"));
+							if(rs.getString("question4")==null)
+								sq.getQuestion().add("");
+							sq.getQuestion().add(rs.getString("question5"));
+							if(rs.getString("question5")==null)
+								sq.getQuestion().add("");
+							sq.getQuestion().add(rs.getString("question6"));
+						yearsIdQuestions.get(rs.getString("year")).put(rs.getInt("id_question"), sq);
+					}
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return yearsIdQuestions;
 	}
-	
-	// Report get queries
 	public static ArrayList<String> getMonthsInBranch(String idStore) {
 		ArrayList<String> monthsYears = new ArrayList<>();
 		try {
