@@ -111,7 +111,7 @@ public class CartController implements Initializable {
 	public void setLabelsInCartText() {
 
 		numItems.setText(getOrderInProcess().getItemInOrder() + "");
-		TotalPrice.setText(getOrderInProcess().getPrice() + "");
+		TotalPrice.setText( String.format("%.2f", getOrderInProcess().getPrice()));
 
 	}
 
@@ -156,7 +156,7 @@ public class CartController implements Initializable {
 	}
 
 	public void SetTotalPrice() {
-		TotalPrice.setText(orderInProcess.getPrice() + "");
+		TotalPrice.setText(String.format("%.2f", orderInProcess.getPrice())  );
 		numItems.setText(orderInProcess.getItemInOrder() + "");
 	}
 

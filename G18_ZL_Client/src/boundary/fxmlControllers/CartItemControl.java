@@ -40,7 +40,7 @@ public class CartItemControl implements Initializable {
 		PressedItem=item;
 		System.out.println("here setData"+item);
 		nameItemLabel.setText(item.getName());
-		priceLabel.setText(item.getPrice()+"");
+		priceLabel.setText(    item.getPrice()+"");
 		amountLabel.setText(item.getAmount()+"");
 		this.cartController=cartController;
 		if(item.getImage()!=null)
