@@ -61,7 +61,7 @@ public class MainController {
 	
 	public static long timeDiffHour(String startDate, String endDate ) {
 		
-		if(isValidDate(startDate) || isValidDate(endDate))
+		if(!isValidDate(startDate) || !isValidDate(endDate))
 			return 0;
 		
 		// formats date and time  -> "yyyy-MM-dd HH:mm:ss"
