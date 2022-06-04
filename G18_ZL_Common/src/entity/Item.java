@@ -51,6 +51,10 @@ public class Item implements Serializable {
 		public void setAmount(int amount) {
 			this.amount = amount;
 		}
+		
+		public double getCalculatedPrice() {
+			return amount*getPriceAfterSale();
+		}
 
 		@Override
 		public String toString() {
@@ -114,6 +118,10 @@ public class Item implements Serializable {
 
 		public void setAmount(int amount) {
 			this.amount = amount;
+		}
+		
+		public double getCalculatedPrice() {
+			return amount*getPriceAfterSale();
 		}
 
 		@Override

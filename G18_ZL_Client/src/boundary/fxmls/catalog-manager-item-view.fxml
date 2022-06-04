@@ -16,28 +16,28 @@
          <children>
             <ImageView fx:id="itemIV" fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" />
             <Separator layoutX="180.0" layoutY="10.0" orientation="VERTICAL" prefHeight="200.0" />
-            <VBox alignment="CENTER" maxWidth="-Infinity" prefWidth="80.0">
+            <VBox alignment="CENTER" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="80.0">
                <children>
                   <Text fx:id="nameText" strokeType="OUTSIDE" strokeWidth="0.0" text="name" />
                   <Text fx:id="idText" strokeType="OUTSIDE" strokeWidth="0.0" text="ID" />
                </children>
             </VBox>
             <Separator orientation="VERTICAL" prefHeight="200.0" />
-            <VBox alignment="CENTER" maxWidth="-Infinity" prefWidth="80.0">
+            <VBox alignment="CENTER" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="80.0">
                <children>
                   <Text fx:id="priceText" strokeType="OUTSIDE" strokeWidth="0.0" text="PRICE" />
                   <Text fx:id="saleText" strokeType="OUTSIDE" strokeWidth="0.0" text="SALE" />
                </children>
             </VBox>
             <Separator layoutX="115.0" layoutY="10.0" orientation="VERTICAL" prefHeight="200.0" />
-            <VBox alignment="CENTER" layoutX="137.0" layoutY="10.0" maxWidth="-Infinity" prefWidth="80.0">
+            <VBox alignment="CENTER" layoutX="137.0" layoutY="10.0" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="80.0">
                <children>
                   <Text fx:id="typeText" strokeType="OUTSIDE" strokeWidth="0.0" text="TYPE" />
                   <Text fx:id="categoryText" strokeType="OUTSIDE" strokeWidth="0.0" text="Category" />
                </children>
             </VBox>
             <Separator layoutX="173.0" layoutY="10.0" orientation="VERTICAL" prefHeight="200.0" />
-            <VBox alignment="CENTER" maxWidth="-Infinity" prefWidth="50.0">
+            <VBox alignment="CENTER" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="50.0">
                <children>
                   <Text fx:id="colorText" strokeType="OUTSIDE" strokeWidth="0.0" text="COLOR" />
                </children>

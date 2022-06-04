@@ -145,10 +145,7 @@ public class BranchManagerOrderReportsController implements Initializable {
 	public void monthSelectedFromListView() {
 		saveDate();
 		this.viewReportButton.setDisable(false);
-		getDataAfterMonthIsChosen();
-		calculateTextValues();
-		initDataForPieChart();
-		initDataForTable();
+		 
 	}
 	
 	/**
@@ -159,6 +156,11 @@ public class BranchManagerOrderReportsController implements Initializable {
 	 * @param event
 	 */
 	public void viewReportButtonAction(ActionEvent event) {
+		getDataAfterMonthIsChosen();
+		calculateTextValues();
+		initDataForPieChart();
+		initDataForTable();
+		System.out.println(overallSoldItemsThisMonth+" "+avg+" "+max+" "+min);
 		reportMonthText.setText(month+"-"+year+" Report");
 		reportTableView.setItems(tableData);
 		reportPieChart.setData(pieChartData);
@@ -258,7 +260,8 @@ public class BranchManagerOrderReportsController implements Initializable {
 		reportPieChart.setLegendVisible(false);
 		pieChartData.clear();
 		for(AmountItem ai : amountOfItems) {
-			pieChartData.add(new PieChart.Data(ai.getName()+" - "+(ai.getAmount()/overallSoldItemsThisMonth), ai.getAmount()));
+			double persent=(ai.getAmount()/overallSoldItemsThisMonth)*100;
+			pieChartData.add(new PieChart.Data(ai.getName()+" - "+  String.format("%.2f", persent)+"%"  , ai.getAmount()));
 		}
 	}
 	

@@ -8,7 +8,6 @@ import java.util.ResourceBundle;
 import boundary.ClientView;
 import boundary.fxmlControllers.ClientConsoleController.Navigation;
 import entity.BuildItem;
-import entity.Item;
 import entity.Item.OrderItem;
 import entity.Order;
 import javafx.fxml.FXML;
@@ -31,11 +30,11 @@ public class CartController implements Initializable {
 	@FXML
 	private Label TotalPrice;
 
-	@FXML
-	private GridPane gridCustom;
+    @FXML
+    private VBox customVBox;
 
-	@FXML
-	private GridPane gridItem;
+    @FXML
+    private VBox itemVBox;
 
 	@FXML
 	private Label numItems;
@@ -64,9 +63,7 @@ public class CartController implements Initializable {
 	private ArrayList<BuildItem> BuildItems;
 
 	public void LoadCartItem() throws IOException {
-		int column = 0;
-		int row = 1;
-		gridItem.getChildren().clear();
+		itemVBox.getChildren().clear();
 
 		items = orderInProcess.getItems();
 		for (int i = 0; i < items.size(); i++) {
@@ -75,20 +72,14 @@ public class CartController implements Initializable {
 
 			CartItemControl cartItemControl = fXMLLoader.getController();
 			cartItemControl.setData(items.get(i), this);
-			if (column == 1) {
-				column = 0;
-				row++;
-			}
-
-			gridItem.add(node, column++, row);
+			
+			itemVBox.getChildren().add(node);
 		}
 
 	}
 
 	public void LoadCartBuildItem() throws IOException {
-		gridCustom.getChildren().clear();
-		int column = 0;
-		int row = 1;
+		customVBox.getChildren().clear();
 		BuildItems = getOrderInProcess().getBuildItems();
 		
 		 
@@ -99,12 +90,8 @@ public class CartController implements Initializable {
 
 			CartCustomItemControl cartItemControl = fXMLLoader.getController();
 			cartItemControl.setData(BuildItems.get(i), i, this);
-			if (column == 1) {
-				column = 0;
-				row++;
-			}
-
-			gridCustom.add(node, column++, row);
+			
+			customVBox.getChildren().add(node);
 		}
 	}
 

@@ -155,8 +155,6 @@ public class BranchManagerIncomeReportsController implements Initializable {
 	public void monthSelectedFromListView() {
 		saveDate();
 		this.viewReportButton.setDisable(false);
-		
-		 
 	}
 	
 	/**
@@ -182,7 +180,6 @@ public class BranchManagerIncomeReportsController implements Initializable {
 		minText.setText(min+"");
 		maxText.setText(max+""); 
 		fillReceiptsTable();
- 
 	}
     
     /* ------------------------------------------------ */

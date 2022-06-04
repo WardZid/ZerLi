@@ -59,7 +59,11 @@ public class MainController {
 		return formatter.format(date);
 	}
 	
-	public static long timeDiffHour(String start_date, String end_date ) {
+	public static long timeDiffHour(String startDate, String endDate ) {
+		
+		if(isValidDate(startDate) || isValidDate(endDate))
+			return 0;
+		
 		// formats date and time  -> "yyyy-MM-dd HH:mm:ss"
 		SimpleDateFormat sdf= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         
@@ -70,8 +74,8 @@ public class MainController {
             // produce the date
             Date d1 = null ,d2 = null;
 			try {
-				 d1 = sdf.parse(start_date);
-				 d2 = sdf.parse(end_date);
+				 d1 = sdf.parse(startDate);
+				 d2 = sdf.parse(endDate);
 			} catch (java.text.ParseException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -85,5 +89,9 @@ public class MainController {
           
 	}
 	
-	
+	private static boolean isValidDate(String date) {
+		if(date==null || date.equals(""))
+			return false;
+		return true;
+	}
 }

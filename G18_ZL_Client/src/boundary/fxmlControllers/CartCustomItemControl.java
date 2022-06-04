@@ -26,6 +26,8 @@ public class CartCustomItemControl implements Initializable {
 	private Button deleteBtn;
 
 	@FXML
+	private Button DeleteTheItemBtn;
+	@FXML
 	private Label nameItemLabel;
 
 	@FXML
@@ -37,7 +39,18 @@ public class CartCustomItemControl implements Initializable {
 	private BuildItem PressedItem;
 
 	private CartController cartController;
-
+	
+	 public void OnDeleteBtnPressed() {
+//	    	CartController.getOrderInProcess().DeleteItemFromScroll(PressedItem);
+//	    	cartController.setLabelsInCartText();
+//	    	try {
+//				cartController.LoadCartBuildItem();
+//			} catch (IOException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+	    }
+	 
 	public void onAdditemPressed() {
 		CartController.getOrderInProcess().addItemtoOrder(PressedItem);
 		setLabelsIncustomItemCartText();
@@ -67,7 +80,7 @@ public class CartCustomItemControl implements Initializable {
 
 		loadCustomItemToVBox();
 	} 
-
+	  
 	public void loadCustomItemToVBox() throws IOException {
 		cartController.getViewItemInBuildVBox().getChildren().clear();
 
@@ -92,7 +105,8 @@ public class CartCustomItemControl implements Initializable {
 		this.cartController = cartController;
 
 	}
-
+	
+ 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 
