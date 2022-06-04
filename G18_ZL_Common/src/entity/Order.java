@@ -155,7 +155,7 @@ public class Order implements Serializable, Cloneable {
 		buildItems.add(buildItem);
 		ItemInOrder++;
 		price += buildItem.getPrice();
-
+		System.out.println("OrderPrice="+getPrice());
 	}
 
 	public void DeleteItemtoOrder(BuildItem buildItem) {
@@ -189,8 +189,37 @@ public class Order implements Serializable, Cloneable {
 		}
 		setPrice(getPrice() - buildItem.getPrice());
 		buildItems.remove(buildItem);
-
+		System.out.println("OrderPrice="+getPrice());
 	}
+	public void DeleteItemFromScroll(OrderItem item) {
+		System.out.println("items========"+items);
+		if(items.size()==0)
+			return;
+		if(items==null)
+			return;
+		
+		
+		setPrice(getPrice() - (item.getPrice()*item.getAmount()));
+		ItemInOrder=ItemInOrder-item.getAmount();
+		System.out.println("OrderPrice="+getPrice());
+			
+		items.remove(item);
+	}
+	
+//	public void DeleteItemFromScroll(BuildItem item) {
+//		System.out.println("build items"+buildItems);
+//		if(buildItems.size()==0)
+//			return;
+//		if(items==null)
+//			return;
+//	
+//	
+//		setPrice(getPrice() - (item.getPrice()*item.getAmount()));
+//		ItemInOrder=ItemInOrder-item.getAmount();
+//		System.out.println("OrderPrice="+getPrice());
+//	
+//		buildItems.remove(item);	
+//	}
 
 	// Getters and Setters
 	public int getIdOrder() {

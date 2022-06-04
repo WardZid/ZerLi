@@ -28,7 +28,7 @@
                         <Insets />
                      </VBox.margin>
                      <children>
-                        <ImageView fitHeight="150.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="itemIV" fitHeight="150.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" />
                         <Label fx:id="saleLbl" alignment="CENTER" maxWidth="1.7976931348623157E308" style="-fx-background-color: red;" text="SALE" textFill="WHITE" visible="false" StackPane.alignment="BOTTOM_CENTER">
                            <font>
                               <Font name="System Bold Italic" size="12.0" />

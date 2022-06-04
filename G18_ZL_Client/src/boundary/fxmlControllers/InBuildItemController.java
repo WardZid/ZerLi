@@ -53,48 +53,47 @@ public class InBuildItemController implements Initializable {
 		cartCustomItemControl.getCartController().setLabelsInCartText();
 	}
 
-	  
 	public void onPressedDelete() throws IOException {
 
-		// item in build have Amount above 1  
+		// item in build have Amount above 1
 		if (itemInBuild.getAmount() > 1) {
 			cartCustomItemControl.getPressedItem().deleteItem(itemInBuild);
-			CartController.getOrderInProcess().deletePrice(itemInBuild.getPrice(),cartCustomItemControl.getPressedItem());
-			
-		}
-		else
-		{
-			//delete all custom item
-			if(cartCustomItemControl.getPressedItem().getItemsInBuild().size() == 1 )
-			{
-				cartCustomItemControl.getCartController().getOrderInProcess().DeleteItemtoOrder(cartCustomItemControl.getPressedItem());
+			CartController.getOrderInProcess().deletePrice(itemInBuild.getPrice(),
+					cartCustomItemControl.getPressedItem());
+
+		} else {
+			// delete all custom item
+			if (cartCustomItemControl.getPressedItem().getItemsInBuild().size() == 1) {
+				cartCustomItemControl.getCartController().getOrderInProcess()
+						.DeleteItemtoOrder(cartCustomItemControl.getPressedItem());
 				cartCustomItemControl.getCartController().onPressedbacktoCart();
-			}
-			else
-			//if item have 1 Amount remove from Vbox inbuildItem
+			} else
+			// if item have 1 Amount remove from Vbox inbuildItem
 			{
-			cartCustomItemControl.getPressedItem().deleteItem(itemInBuild);
-			CartController.getOrderInProcess().deletePrice(itemInBuild.getPrice(),cartCustomItemControl.getPressedItem());
-			
+				cartCustomItemControl.getPressedItem().deleteItem(itemInBuild);
+				CartController.getOrderInProcess().deletePrice(itemInBuild.getPrice(),
+						cartCustomItemControl.getPressedItem());
+
 			}
 			cartCustomItemControl.loadCustomItemToVBox();
-			
-			
-			
-			
+
 		}
-		
+
 		cartCustomItemControl.getCartController().LoadCartBuildItem();
 		setLabelsInBuildItem();
 		cartCustomItemControl.getCartController().setLabelsInCartText();
 	}
-
 
 	private void setLabelsInBuildItem() {
 
 		amountLabel.setText(itemInBuild.getAmount() + "");
 		priceLabel.setText(itemInBuild.getPrice() + "");
 		nameLabel.setText(itemInBuild.getName() + "");
+	}
+
+	@FXML
+	void onDeleteItemFromBuild() {
+
 	}
 
 }

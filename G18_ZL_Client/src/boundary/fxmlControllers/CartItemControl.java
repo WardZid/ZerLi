@@ -11,11 +11,13 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.StackPane;
 
 public class CartItemControl implements Initializable {
 	@FXML
     private Button addBtn;
-
+    @FXML
+    private StackPane stackPaneforItem;
     @FXML
     private ImageView itemIV;
     @FXML
@@ -65,6 +67,17 @@ public class CartItemControl implements Initializable {
     
 
     }
+    public void OnDeleteBtnPressed() {
+    	CartController.getOrderInProcess().DeleteItemFromScroll(PressedItem);
+    	cartController.setLabelsInCartText();
+    	try {
+			cartController.LoadCartItem();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+     }
+    
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		// TODO Auto-generated method stub
