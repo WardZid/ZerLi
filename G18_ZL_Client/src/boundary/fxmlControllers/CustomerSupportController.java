@@ -2,28 +2,19 @@ package boundary.fxmlControllers;
 
 import java.io.IOException;
 import java.net.URL;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.concurrent.TimeUnit;
 
 import boundary.ClientView;
-import control.ClientController;
 import control.MainController;
 import entity.Complaint;
-import entity.MyMessage;
 import entity.MyMessage.MessageType;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -35,18 +26,10 @@ import javafx.scene.control.Dialog;
 import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
-import sendEmail.Java_Send_Mail;
 
-public class CustomerSupportController implements Initializable,Runnable {
+public class CustomerSupportController implements Initializable{
 	@FXML
 	private Label ComplaintIdL;
 
@@ -105,7 +88,6 @@ public class CustomerSupportController implements Initializable,Runnable {
 	private static HashMap<Integer, Complaint> ComplaintMap = new HashMap<>();
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		startThread();
 		setComplaintsListView();
 		setEditable(false);
 		sendReplyButton.setDisable(true);
@@ -227,35 +209,4 @@ public class CustomerSupportController implements Initializable,Runnable {
 		return (ArrayList<Complaint>) MainController.getMyClient().send(messageType, "complaint/by/status_complaint/OPEN",complaint);
 	}
 
-	@Override
-	public void run() {
-		ArrayList<Complaint> openComplaints = ComplaintQueryFromDB(MessageType.GET,null);
-		for(int i=0 ; i<openComplaints.size() ; i++)
-		{
-			SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy", Locale.ENGLISH);
-		    Date firstDate;
-			try {
-				firstDate = sdf.parse(sdf.format(System.currentTimeMillis()));
-				 Date secondDate = sdf.parse(openComplaints.get(i).getDate());
-				    long diffInMillies = Math.abs(secondDate.getTime() - firstDate.getTime());
-				    long diff = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
-					if(diffInMillies > 3000) {
-						Java_Send_Mail.sendMail();
-					}
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-	public static void startThread() {
-		Thread t = new Thread(new CustomerSupportController());
-	    while(true) {
-	    	t.start();
-	    	try {
-				t.sleep(2000);
-				t.interrupt();
-			} catch (InterruptedException e) {
-			}
-	    }
-	}
 }

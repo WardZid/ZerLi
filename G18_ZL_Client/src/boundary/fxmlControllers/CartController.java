@@ -86,10 +86,8 @@ public class CartController implements Initializable {
  		for (int i = 0; i < BuildItems.size(); i++) {
 			FXMLLoader fXMLLoader = new FXMLLoader(ClientView.class.getResource("fxmls/cart-CustomItem-view.fxml"));
 			Node node = fXMLLoader.load();
-			System.out.println("BuildItems "+BuildItems.get(i).toString() );
-
-			CartCustomItemControl cartItemControl = fXMLLoader.getController();
-			cartItemControl.setData(BuildItems.get(i), i, this);
+			CartCustomItemControl cartCustomItemControl = fXMLLoader.getController();
+			cartCustomItemControl.setData(BuildItems.get(i), i, this);
 			
 			customVBox.getChildren().add(node);
 		}
@@ -113,7 +111,7 @@ public class CartController implements Initializable {
 	public void setLabelsInCartText() {
 
 		numItems.setText(getOrderInProcess().getItemInOrder() + "");
-		TotalPrice.setText(getOrderInProcess().getPrice() + "");
+		TotalPrice.setText( String.format("%.2f", getOrderInProcess().getPrice()));
 
 	}
 
@@ -158,7 +156,7 @@ public class CartController implements Initializable {
 	}
 
 	public void SetTotalPrice() {
-		TotalPrice.setText(orderInProcess.getPrice() + "");
+		TotalPrice.setText(String.format("%.2f", orderInProcess.getPrice())  );
 		numItems.setText(orderInProcess.getItemInOrder() + "");
 	}
 

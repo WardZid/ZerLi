@@ -114,7 +114,7 @@ public class ClientConsoleController implements Initializable {
 			return;
 
 		consoleLbl.setText(user.getUserType().toString().replace('_', ' ') + " CONSOLE");
-		nameText.setText(user.getUsername());
+		nameText.setText(user.getName());
 
 		switch (user.getUserType()) {
 		case CUSTOMER:

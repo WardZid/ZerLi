@@ -41,28 +41,35 @@ public class CartCustomItemControl implements Initializable {
 	private CartController cartController;
 	
 	 public void OnDeleteBtnPressed() {
-//	    	CartController.getOrderInProcess().DeleteItemFromScroll(PressedItem);
-//	    	cartController.setLabelsInCartText();
-//	    	try {
-//				cartController.LoadCartBuildItem();
-//			} catch (IOException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
+		 int AmountForDelete=PressedItem.getAmount();
+			try {
+
+				CartController.getOrderInProcess().DeleteItemtoOrder(PressedItem,AmountForDelete);
+				cartController.LoadCartBuildItem();
+				setLabelsIncustomItemCartText();
+				cartController.setLabelsInCartText();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 	    }
 	 
 	public void onAdditemPressed() {
 		CartController.getOrderInProcess().addItemtoOrder(PressedItem);
+		 
 		setLabelsIncustomItemCartText();
 
 		cartController.setLabelsInCartText();
+		amountLabel.setText(PressedItem.getAmount() + "");
+		 
+		
 	}
 
 	public void onDeletePressed() {
-
+         int AmountForDelete=1;
 		try {
 
-			CartController.getOrderInProcess().DeleteItemtoOrder(PressedItem);
+			CartController.getOrderInProcess().DeleteItemtoOrder(PressedItem,AmountForDelete);
 			cartController.LoadCartBuildItem();
 			setLabelsIncustomItemCartText();
 			cartController.setLabelsInCartText();
@@ -79,6 +86,8 @@ public class CartCustomItemControl implements Initializable {
 		cartController.getCartItemStackPace().setDisable(true);
 
 		loadCustomItemToVBox();
+		
+		
 	} 
 	  
 	public void loadCustomItemToVBox() throws IOException {
@@ -100,6 +109,7 @@ public class CartCustomItemControl implements Initializable {
 	public void setData(BuildItem buildItem, int i, CartController cartController) {
 		System.out.println("coustom item " + i + " Price " + buildItem.getPrice() + "");
 		PressedItem = buildItem;
+		PressedItem.setIdBuildItem(i);
 		nameItemLabel.setText("coustom item " + i);
 		setLabelsIncustomItemCartText();
 		this.cartController = cartController;

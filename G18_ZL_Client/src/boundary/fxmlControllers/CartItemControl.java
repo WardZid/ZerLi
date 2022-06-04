@@ -40,7 +40,7 @@ public class CartItemControl implements Initializable {
 		PressedItem=item;
 		System.out.println("here setData"+item);
 		nameItemLabel.setText(item.getName());
-		priceLabel.setText(item.getPrice()+"");
+		priceLabel.setText(    item.getPrice()+"");
 		amountLabel.setText(item.getAmount()+"");
 		this.cartController=cartController;
 		if(item.getImage()!=null)
@@ -56,7 +56,7 @@ public class CartItemControl implements Initializable {
     public void onAddDeletePressed() {
     	
     	 try {
-    		 CartController.getOrderInProcess().DeleteItemtoOrder(PressedItem);
+    		   CartController.getOrderInProcess().DeleteItemtoOrder(PressedItem,1);
     	    	amountLabel.setText(PressedItem.getAmount()+"");	
     	    	cartController.SetTotalPrice();
 			cartController.LoadCartItem();

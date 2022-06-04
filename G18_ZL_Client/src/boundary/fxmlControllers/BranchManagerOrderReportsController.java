@@ -114,10 +114,13 @@ public class BranchManagerOrderReportsController implements Initializable {
     private String year;
     
     /* To save the overall income of the selected month */
-    private double overallSoldItemsThisMonth;
+    private int overallSoldItemsThisMonth;
     
     /* to save the values that will be set in Text */
-    private double max,min,avg;
+    private int max,min;
+    
+    // the average of the selected items in the selected month
+    private double avg;
     
     /* names of the max and min sold items */
     private String maxI,minI;
@@ -260,7 +263,7 @@ public class BranchManagerOrderReportsController implements Initializable {
 		reportPieChart.setLegendVisible(false);
 		pieChartData.clear();
 		for(AmountItem ai : amountOfItems) {
-			double persent=(ai.getAmount()/overallSoldItemsThisMonth)*100;
+			double persent=(ai.getAmount()/(double)overallSoldItemsThisMonth)*100;
 			pieChartData.add(new PieChart.Data(ai.getName()+" - "+  String.format("%.2f", persent)+"%"  , ai.getAmount()));
 		}
 	}

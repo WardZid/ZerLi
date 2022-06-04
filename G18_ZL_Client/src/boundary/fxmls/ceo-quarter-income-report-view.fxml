@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.chart.BarChart?>
 <?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.StackedBarChart?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
@@ -74,18 +75,31 @@
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </padding>
                   </HBox>
+                  <VBox alignment="CENTER">
+                     <children>
+                        <Text fx:id="error1" fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" text="Can't compare same options!" visible="false">
+                           <font>
+                              <Font size="13.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets bottom="5.0" />
+                           </VBox.margin>
+                        </Text>
+                        <Separator prefWidth="200.0" />
+                     </children>
+                  </VBox>
                </children>
             </VBox>
             <HBox VBox.vgrow="ALWAYS">
                <children>
-                  <BarChart fx:id="barChartIncome" HBox.hgrow="ALWAYS">
+                  <StackedBarChart fx:id="barChartIncome" animated="false" HBox.hgrow="ALWAYS">
                     <xAxis>
                       <CategoryAxis animated="false" side="BOTTOM" />
                     </xAxis>
                     <yAxis>
                       <NumberAxis animated="false" side="LEFT" upperBound="500.0" />
                     </yAxis>
-                  </BarChart>
+                  </StackedBarChart>
                </children>
             </HBox>
          </children>

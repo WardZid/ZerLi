@@ -11,7 +11,7 @@ public class Order implements Serializable, Cloneable {
 	private static final long serialVersionUID = -3217273749865937459L;
 
 	public enum OrderStatus {
-		WAITING_APPROVAL, PROCESSING, DELIVERED, CANCELLED, UNAPPROVED, WAITING_CANCELLATION,REFUNDED;
+		WAITING_APPROVAL, PROCESSING, DELIVERED, CANCELLED, UNAPPROVED, WAITING_CANCELLATION, REFUNDED;
 
 		public static OrderStatus getById(int id) {
 
@@ -37,15 +37,15 @@ public class Order implements Serializable, Cloneable {
 	private String greetingCard;
 
 	private int ItemInOrder;
-	
+
 	public int getItemInOrder() {
 		return ItemInOrder;
 	}
 
 	// Products in the order are enetered on request only as to minimize load to the
 	// server
-	private ArrayList<BuildItem> buildItems=new ArrayList<>();
-	private ArrayList<OrderItem> items=new ArrayList<>();
+	private ArrayList<BuildItem> buildItems = new ArrayList<>();
+	private ArrayList<OrderItem> items = new ArrayList<>();
 
 	// main Constructor
 	public Order(int idOrder, int idCustomer, int idStore, int idOrderStatus, double price, String orderDate,
@@ -101,17 +101,18 @@ public class Order implements Serializable, Cloneable {
 
 	}
 
-	public void DeleteItemtoOrder(OrderItem item) {
-
-		int amount;
-		ItemInOrder--;
-		amount = item.getAmount();
+	public void DeleteItemtoOrder(OrderItem item,  int amountForDelete) {
+ 
+		ItemInOrder-=amountForDelete;
+		int amount = item.getAmount();
 		for (OrderItem orderItem : items) {
 			if (orderItem.getIdItem() == item.getIdItem()) {
-				if (amount > 1) {
-					item.setAmount(amount--);
-					orderItem.setAmount(amount--);
-					setPrice(getPrice() - item.getPrice());
+				if (amount - amountForDelete > 1 || amount - amountForDelete == 0) {
+					item.setAmount(amount - amountForDelete);
+					orderItem.setAmount(amount - amountForDelete);
+					setPrice(getPrice() - ((orderItem.getPrice()) * amountForDelete));
+					if (amount == amountForDelete  )
+						items.remove(orderItem);
 					return;
 				} else {
 					break;
@@ -128,38 +129,8 @@ public class Order implements Serializable, Cloneable {
 
 	}
 
-	// add build item to cart
-
-	// add item to Order (to Cart)
-	public void addItemtoOrder(BuildItem buildItem) {
-		int Amount = 0;
-		for (BuildItem searchItem : buildItems) {
-			Amount = buildItem.getAmount();
-			System.out.println("amout " + Amount);
-			if (searchItem.getIdBuildItem() == buildItem.getIdBuildItem()) {
-				buildItem.setAmount(Amount++);
-				searchItem.setAmount(Amount++);
-				System.out.println("new amount " + searchItem.getAmount());
-				setPrice(getPrice() + buildItem.getPrice());
-				buildItem.setPrice(buildItem.getPrice());
-				return;
-			}
-		}
-
-	}
-
-	// create build item and add it to arr-> build item-view
-	public void addIBuildtemtoOrder(BuildItem buildItem) {
-		if(buildItem==null)
-			System.out.println("sssssssssssssssssss");
-		buildItems.add(buildItem);
-		ItemInOrder++;
-		price += buildItem.getPrice();
-		System.out.println("OrderPrice="+getPrice());
-	}
-
-	public void DeleteItemtoOrder(BuildItem buildItem) {
-		ItemInOrder--;
+	public void DeleteItemtoOrder(BuildItem buildItem, int amountForDelete) {
+		ItemInOrder-=amountForDelete;
 
 		if (buildItems.size() == 0) {
 			return;
@@ -170,14 +141,18 @@ public class Order implements Serializable, Cloneable {
 		if (buildItem == null) {
 			return;
 		}
-		int Amount = buildItem.getAmount();
+
 		for (BuildItem searchItem : buildItems) {
 			if (searchItem.getIdBuildItem() == buildItem.getIdBuildItem()) {
+				int amount = searchItem.getAmount();
 
-				if (Amount > 1) {
-					buildItem.setAmount(Amount--);
-					searchItem.setAmount(Amount--);
-					setPrice(getPrice() - buildItem.getPrice());
+			 	if (amount - amountForDelete > 1 || amount - amountForDelete == 0) {
+					buildItem.setAmount(amount - amountForDelete);
+					searchItem.setAmount(amount - amountForDelete);
+					setPrice(getPrice() - ((buildItem.getPrice()) * amountForDelete));
+					
+					if (amount == amountForDelete  )
+						buildItems.remove(buildItem);
 
 					return;
 				} else {
@@ -187,39 +162,60 @@ public class Order implements Serializable, Cloneable {
 
 			}
 		}
+		ItemInOrder-=amountForDelete;
 		setPrice(getPrice() - buildItem.getPrice());
 		buildItems.remove(buildItem);
-		System.out.println("OrderPrice="+getPrice());
+		 
 	}
+
+	// add build item to cart
+
+	// add item to Order (to Cart)
+	public void addItemtoOrder(BuildItem buildItem) {
+		ItemInOrder++;
+		int amount = 0;
+		for (BuildItem searchItem : buildItems) {
+
+			if (searchItem.getIdBuildItem() == buildItem.getIdBuildItem()) {
+				amount = searchItem.getAmount();
+				buildItem.setAmount(amount++);
+				searchItem.setAmount(amount++);
+
+				setPrice(getPrice() + buildItem.getPrice());
+				buildItem.setPrice(buildItem.getPrice());
+
+				return;
+			}
+
+		}
+
+	}
+
+	// create build item and add it to arr-> build item-view
+	public void addIBuildtemtoOrder(BuildItem buildItem) {
+		 
+		buildItems.add(buildItem);
+		ItemInOrder++;
+		price += buildItem.getPrice();
+		System.out.println("OrderPrice=" + getPrice());
+	}
+
+	
 	public void DeleteItemFromScroll(OrderItem item) {
-		System.out.println("items========"+items);
-		if(items.size()==0)
+		System.out.println("items========" + items);
+		if (items.size() == 0)
 			return;
-		if(items==null)
+		if (items == null)
 			return;
-		
-		
-		setPrice(getPrice() - (item.getPrice()*item.getAmount()));
-		ItemInOrder=ItemInOrder-item.getAmount();
-		System.out.println("OrderPrice="+getPrice());
-			
+
+		setPrice(getPrice() - (item.getPrice() * item.getAmount()));
+		ItemInOrder = ItemInOrder - item.getAmount();
+		System.out.println("OrderPrice=" + getPrice());
+
 		items.remove(item);
 	}
-	
-//	public void DeleteItemFromScroll(BuildItem item) {
-//		System.out.println("build items"+buildItems);
-//		if(buildItems.size()==0)
-//			return;
-//		if(items==null)
-//			return;
-//	
-//	
-//		setPrice(getPrice() - (item.getPrice()*item.getAmount()));
-//		ItemInOrder=ItemInOrder-item.getAmount();
-//		System.out.println("OrderPrice="+getPrice());
-//	
-//		buildItems.remove(item);	
-//	}
+
+ 
 
 	// Getters and Setters
 	public int getIdOrder() {
@@ -326,15 +322,16 @@ public class Order implements Serializable, Cloneable {
 		this.items = items;
 	}
 
-	//adding full item arrays
-	
+	// adding full item arrays
+
 	public void addOrderItems(ArrayList<OrderItem> orderItems) {
 		this.items.addAll(orderItems);
 	}
-	
+
 	public void addBuildItems(ArrayList<BuildItem> buildItems) {
 		this.buildItems.addAll(buildItems);
 	}
+
 	// handling id as enum
 	public Store getStore() {
 		return Store.getById(idStore);
@@ -371,18 +368,19 @@ public class Order implements Serializable, Cloneable {
 		this.setPrice(this.getPrice() - (price2));
 
 	}
-	public void addPriceForShipping( ) {
-		this.setPrice(this.getPrice()+20);
+
+	public void addPriceForShipping() {
+		this.setPrice(this.getPrice() + 20);
 
 	}
-	
+
 	public double getCalculatedPrice() {
-		double fullPrice=0;
+		double fullPrice = 0;
 		for (BuildItem buildItem : buildItems) {
-			fullPrice+=buildItem.getFullPrice();
+			fullPrice += buildItem.getFullPrice();
 		}
 		for (OrderItem item : items) {
-			fullPrice+=item.getCalculatedPrice();
+			fullPrice += item.getCalculatedPrice();
 		}
 		return fullPrice;
 	}
