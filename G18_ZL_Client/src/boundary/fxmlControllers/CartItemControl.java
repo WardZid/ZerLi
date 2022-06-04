@@ -56,7 +56,7 @@ public class CartItemControl implements Initializable {
     public void onAddDeletePressed() {
     	
     	 try {
-    		 CartController.getOrderInProcess().DeleteItemtoOrder(PressedItem);
+    		   CartController.getOrderInProcess().DeleteItemtoOrder(PressedItem);
     	    	amountLabel.setText(PressedItem.getAmount()+"");	
     	    	cartController.SetTotalPrice();
 			cartController.LoadCartItem();
