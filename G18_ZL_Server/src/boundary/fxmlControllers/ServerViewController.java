@@ -7,6 +7,7 @@ import java.util.ResourceBundle;
 import control.DBController;
 import control.MainController;
 import control.ServerController;
+import control.ThreadController;
 import entity.ClientConnection;
 import entity.MyMessage;
 import entity.MyMessage.MessageType;
@@ -126,7 +127,7 @@ public class ServerViewController implements Initializable {
 
 			gridTextInputs.setDisable(true);
 
-		//	ThreadController.Trackingfunction();
+		 	ThreadController.Trackingfunction();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} catch (Exception e) {
@@ -139,6 +140,7 @@ public class ServerViewController implements Initializable {
 	@FXML
 	public void onDisconnect() {
 
+		ThreadController.CloseTrackingfunction();
 		MainController.getServer().stopServer();
 		clientsObservableList.clear();
 

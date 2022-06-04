@@ -1054,9 +1054,10 @@ public class DBController {
 					.prepareStatement("UPDATE assignment3.order SET id_order_status=? WHERE id_order=?");
 			ps.setInt(1, o.getIdOrderStatus());
 			ps.setInt(2, o.getIdOrder());
+			System.out.println("o.getIdOrder() "+o.getIdOrder()+"o.getIdOrderStatus() "+o.getIdOrderStatus());
 			ps.executeUpdate();
 			ps.close();
-		} catch (Exception e) {
+		} catch (Exception e) { 
 			e.printStackTrace();
 		}
 		return getOrdersBy("id_order", o.getIdOrder() + "");
