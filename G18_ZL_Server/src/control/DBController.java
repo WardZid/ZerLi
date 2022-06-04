@@ -217,6 +217,26 @@ public class DBController {
 		return orders;
 	}
 
+	public static ArrayList<Double> getIncomesInQuarter(String branch, String month, String year) {
+		ArrayList<Double> allIncomesInQuarter = new ArrayList<>();
+		ResultSet rs;
+		try {
+			
+			for(int i=0;i<3;i++) {
+				int currenIntegertMonth = Integer.parseInt(month)+i;
+				rs = statement.executeQuery("SELECT sum(O.price_order) as sum FROM assignment3.order O WHERE Month(O.date_order) = "+currenIntegertMonth+" AND Year(O.date_order) ="+year+" AND O.id_store = "+branch);
+				rs.beforeFirst(); // ---move back to first row
+				while (rs.next()) {
+					allIncomesInQuarter.add(new Double(rs.getDouble("sum")));
+				}
+				rs.close();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return allIncomesInQuarter;
+	}
+	
 	public static ArrayList<Order> getOrdersBy(String column, String value) {
 		ArrayList<Order> orders = new ArrayList<>();
 		ResultSet rs;

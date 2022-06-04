@@ -235,6 +235,10 @@ public class ServerController extends ObservableServer {
 		} else if (request[0].equals("order")) {
 			if (request[1].equals("all")) {
 				clMsg.setContent(DBController.getOrdersAll());
+			} else if(request[1].equals("income")) {
+				if(request[2].equals("quarter")) {
+					clMsg.setContent(DBController.getIncomesInQuarter(request[3],request[4],request[5]));
+				}
 			} else if (request[1].equals("by")) {
 				clMsg.setContent(DBController.getOrdersBy(request[2], request[3]));
 			} else if (request[1].equals("fill")) {
