@@ -1,6 +1,8 @@
 package boundary.fxmlControllers;
 
 import java.net.URL;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
@@ -154,7 +156,7 @@ public class CEOComplaintReportController implements Initializable {
 
     
     // array list of survey IDs
-    private ArrayList<String> surveyIDsArrayList;
+    private ArrayList<SurveyQuestion> questionsArrayList;
     
     // the months in the selected quarter
     private int m1=1,m2=2,m3=3;
@@ -164,9 +166,10 @@ public class CEOComplaintReportController implements Initializable {
     
     // the selected quarter
     private Quarters Q;
+    private String quarter;
     
-    // the selected survey ID
-    private String surveyID;
+    // the selected question ID
+    private String questionID;
     
     // the store of the survey
     private String store;
@@ -174,8 +177,9 @@ public class CEOComplaintReportController implements Initializable {
     // array list of all the answers of the survey in every question
     private ArrayList<SurveyQuestion> sq;
     
-    // counters for every answer in survey question
-    private int a1,a2,a3,a4,a5,a6,a7,a8,a9,a10;
+    private ArrayList<Integer> AnswersQ1,AnswersQ2,AnswersQ3,AnswersQ4,AnswersQ5,AnswersQ6;
+    
+    private ArrayList<String> questionsSelected;
     
     // the average answer of every question
     private double avg1,avg2,avg3,avg4,avg5,avg6;
@@ -183,7 +187,6 @@ public class CEOComplaintReportController implements Initializable {
     // array list of the survey's question IDs
     private ArrayList<Integer> q;
     
-    private ArrayList<String> questions;
     
     /* ------------------------------------------------ */
     /*            \/ initialize function \/             */
@@ -192,11 +195,55 @@ public class CEOComplaintReportController implements Initializable {
     @Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
     	initChoiceBoxes();
+    	choiceBoxSurveyID.setOnAction(this::onQuestionIDSelection);
+    	choiceBoxYear.setOnAction(this::onYearSelection);
+    	choiceBoxQuarters.setOnAction(this::onQuarterSelection);
 	}
     
     /* ------------------------------------------------ */
     /*               \/ Action Methods \/               */
     /* ------------------------------------------------ */
+    
+    /**
+     * Method to do when questions choice box has a selection
+     * 
+     * @param event 
+     */
+    public void onQuestionIDSelection(ActionEvent event) {
+    	questionID = choiceBoxSurveyID.getSelectionModel().getSelectedItem();
+    	for(SurveyQuestion sq : questionsArrayList) {
+    		if(questionID.equals(sq.getIdQuestion())) {
+    			for(int i = 0 ; i<6 ; i++) {
+    				questionsSelected.add(sq.getQuestion().get(i));
+    			}
+    		}
+    	}
+    	buttonQuestions.setDisable(false);
+    }
+    
+    /**
+     * Method to do when years choice has a selection 
+     * 
+     * @param event
+     */
+    public void onYearSelection(ActionEvent event) {
+    	year = choiceBoxYear.getSelectionModel().getSelectedItem();
+    	if(!choiceBoxQuarters.getSelectionModel().isEmpty()) {
+    		buttonComplaints.setDisable(false);
+    	}
+    }
+    
+    /**
+     * Method to do when quarters choice box has a selection
+     * 
+     * @param event
+     */
+    public void onQuarterSelection(ActionEvent event) {
+    	quarter = choiceBoxQuarters.getSelectionModel().getSelectedItem();
+    	if(!choiceBoxYear.getSelectionModel().isEmpty()) {
+    		buttonComplaints.setDisable(false);
+    	}
+    }
     
     @SuppressWarnings("unchecked")
 	@FXML
@@ -206,14 +253,6 @@ public class CEOComplaintReportController implements Initializable {
      * @param event
      */
     private void buttonComplaintsAction(ActionEvent event) {
-    	if(this.choiceBoxYear.getSelectionModel().isEmpty() || this.choiceBoxQuarters.getSelectionModel().isEmpty()) {
-    		// if not all the needed choice boxes are pressed
-    		hideErrorMessages();
-    		error1.setVisible(true);
-    	}
-    	else {
-    		// if the choice boxes are selected as they must
-    		hideErrorMessages();
     		calcMonthsInQuarter();
     		clearBarChart();
     		year = this.choiceBoxYear.getSelectionModel().getSelectedItem();
@@ -225,7 +264,6 @@ public class CEOComplaintReportController implements Initializable {
     		this.barChartComplaints.setTitle("Number of complaints in every month in "+year+"-"+Q);
     		this.barChartComplaints.getData().add(series);
     		// comment -1-
-    	}
     }
     
     @SuppressWarnings("unchecked")
@@ -236,33 +274,7 @@ public class CEOComplaintReportController implements Initializable {
      * @param event
      */
     private void buttonQuestions(ActionEvent event) {
-    	if(this.choiceBoxSurveyID.getSelectionModel().isEmpty()) {
-    		// if survey id is not selected
-    		hideErrorMessages();
-    		error2.setVisible(true);
-    	}
-    	else {
-    		// if a survey id is selected
-    		hideErrorMessages();
-    		calcMonthsInQuarter();
-    		clearPieCharts();
-    		getStoreBySurvey();
-    		sq = (ArrayList<SurveyQuestion>)MainController.getMyClient().send(MessageType.GET, "survey_question/by/id_survey/"+surveyID, null);
-    		findQuestions();
-    		initSeries1();
-    		initSeries2();
-    		initSeries3();
-    		initSeries4();
-    		initSeries5();
-    		initSeries6();
-    		calcAverages();
-    		getQuestions();
-    		setPieChartTitles();
-    		hidePieChartsLegend();
-    		setAllTexts();
-    		setAllPieCharts();
-    		// comment -3-
-    	}
+    	
     }
     
     /* ------------------------------------------------ */
@@ -281,444 +293,444 @@ public class CEOComplaintReportController implements Initializable {
     	this.pieChart6.setLegendVisible(false);
     }
     
-    /**
-     * Method to set the questions as the title of every pie chart
-     */
-    private void setPieChartTitles() {
-    	this.pieChart1.setTitle(questions.get(0));
-    	this.pieChart2.setTitle(questions.get(1));
-    	this.pieChart3.setTitle(questions.get(2));
-    	this.pieChart4.setTitle(questions.get(3));
-    	this.pieChart5.setTitle(questions.get(4));
-    	this.pieChart6.setTitle(questions.get(5));
-    }
-    
-    @SuppressWarnings("unchecked")
-	private void getQuestions() {
-    	questions.add(((ArrayList<String>)MainController.getMyClient().send(MessageType.GET, "question/by/"+q.get(0), null)).get(0));
-    	questions.add(((ArrayList<String>)MainController.getMyClient().send(MessageType.GET, "question/by/"+q.get(1), null)).get(0));
-    	questions.add(((ArrayList<String>)MainController.getMyClient().send(MessageType.GET, "question/by/"+q.get(2), null)).get(0));
-    	questions.add(((ArrayList<String>)MainController.getMyClient().send(MessageType.GET, "question/by/"+q.get(3), null)).get(0));
-    	questions.add(((ArrayList<String>)MainController.getMyClient().send(MessageType.GET, "question/by/"+q.get(4), null)).get(0));
-    	questions.add(((ArrayList<String>)MainController.getMyClient().send(MessageType.GET, "question/by/"+q.get(5), null)).get(0));
-    	// comment -4-
-    }
-    
-    /**
-     * Method to initialize the averages
-     */
-    private void initAverages() {
-    	avg1=0;
-    	avg2=0;
-    	avg3=0;
-    	avg4=0;
-    	avg5=0;
-    	avg6=0;
-    }
-    
-    /**
-     * Method to calculate the average answer of every question
-     */
-    private void calcAverages() {
-    	initAverages();
-    	for(PieChart.Data d : pc1Data) {
-    		avg1 += d.getPieValue();
-    	}
-    }
-    
-    /**
-     * Method to set all the texts
-     */
-    private void setAllTexts() {
-    	clearAllTexts();
-    	this.textQ1.setText(avg1+"");
-    	this.textQ2.setText(avg2+"");
-    	this.textQ3.setText(avg3+"");
-    	this.textQ4.setText(avg4+"");
-    	this.textQ5.setText(avg5+"");
-    	this.textQ6.setText(avg6+"");
-    	this.textStoreName.setText(store);
-    }
-    
-    /**
-     * Method to clear all the texts
-     */
-    private void clearAllTexts() {
-    	this.textQ1.setText("N/A");
-    	this.textQ2.setText("N/A");
-    	this.textQ3.setText("N/A");
-    	this.textQ4.setText("N/A");
-    	this.textQ5.setText("N/A");
-    	this.textQ6.setText("N/A");
-    	this.textStoreName.setText("N/A");
-    }
-    
-    /**
-     * Method to set all the pie charts
-     */
-    private void setAllPieCharts() {
-    	clearPieCharts();
-    	pieChart1.getData().addAll(pc1Data);
-    	pieChart2.getData().addAll(pc2Data);
-    	pieChart3.getData().addAll(pc3Data);
-    	pieChart4.getData().addAll(pc4Data);
-    	pieChart5.getData().addAll(pc5Data);
-    	pieChart6.getData().addAll(pc6Data);
-    }
-    
-    private void initACounters() {
-    	a1=0;
-    	a2=0;
-    	a3=0;
-    	a4=0;
-    	a5=0;
-    	a6=0;
-    	a7=0;
-    	a8=0;
-    	a9=0;
-    	a10=0;
-    }
-    
-    /**
-     * Method to save all the questions id in the selected survey
-     */
-    private void findQuestions() {
-    	for(SurveyQuestion s : sq) {
-    		if(!q.contains(s.getIdQuestion())) {
-    			q.add(s.getIdQuestion());
-    		}
-    	}
-    }
-    
-    /**
-     * Method to initialize the series of question 1
-     */
-    private void initSeries1() {
-    	int counter = 0;
-    	initACounters();
-    	for(SurveyQuestion s : sq) {
-    		if(s.getIdQuestion() == q.get(0)) {
-    			counter++;
-    			switch(s.getAnswer()) {
-    			case 1:
-    				a1++;
-    				break;
-    			case 2:
-    				a2++;
-    				break;
-    			case 3:
-    				a3++;
-    				break;
-    			case 4:
-    				a4++;
-    				break;
-    			case 5:
-    				a5++;
-    				break;
-    			case 6:
-    				a6++;
-    				break;
-    			case 7:
-    				a7++;
-    				break;
-    			case 8:
-    				a8++;
-    				break;
-    			case 9:
-    				a9++;
-    				break;
-    			case 10:
-    				a10++;
-    				break;
-    			}
-    		}
-    	}
-    	pc1Data.add(new PieChart.Data("1 - ("+(a1/counter)*100+"%)", a1));
-    	pc1Data.add(new PieChart.Data("2 - ("+(a1/counter)*100+"%)", a2));
-    	pc1Data.add(new PieChart.Data("3 - ("+(a1/counter)*100+"%)", a3));
-    	pc1Data.add(new PieChart.Data("4 - ("+(a1/counter)*100+"%)", a4));
-    	pc1Data.add(new PieChart.Data("5 - ("+(a1/counter)*100+"%)", a5));
-    	pc1Data.add(new PieChart.Data("6 - ("+(a1/counter)*100+"%)", a6));
-    	pc1Data.add(new PieChart.Data("7 - ("+(a1/counter)*100+"%)", a7));
-    	pc1Data.add(new PieChart.Data("8 - ("+(a1/counter)*100+"%)", a8));
-    	pc1Data.add(new PieChart.Data("9 - ("+(a1/counter)*100+"%)", a9));
-    	pc1Data.add(new PieChart.Data("10 - ("+(a1/counter)*100+"%)", a10));
-    }
-    /**
-     * Method to initialize the series of question 2
-     */
-    private void initSeries2() {
-    	int counter = 0;
-    	initACounters();
-    	for(SurveyQuestion s : sq) {
-    		if(s.getIdQuestion() == q.get(1)) {
-    			counter++;
-    			switch(s.getAnswer()) {
-    			case 1:
-    				a1++;
-    				break;
-    			case 2:
-    				a2++;
-    				break;
-    			case 3:
-    				a3++;
-    				break;
-    			case 4:
-    				a4++;
-    				break;
-    			case 5:
-    				a5++;
-    				break;
-    			case 6:
-    				a6++;
-    				break;
-    			case 7:
-    				a7++;
-    				break;
-    			case 8:
-    				a8++;
-    				break;
-    			case 9:
-    				a9++;
-    				break;
-    			case 10:
-    				a10++;
-    				break;
-    			}
-    		}
-    	}
-    	pc2Data.add(new PieChart.Data("1 - ("+(a1/counter)*100+"%)", a1));
-    	pc2Data.add(new PieChart.Data("2 - ("+(a1/counter)*100+"%)", a2));
-    	pc2Data.add(new PieChart.Data("3 - ("+(a1/counter)*100+"%)", a3));
-    	pc2Data.add(new PieChart.Data("4 - ("+(a1/counter)*100+"%)", a4));
-    	pc2Data.add(new PieChart.Data("5 - ("+(a1/counter)*100+"%)", a5));
-    	pc2Data.add(new PieChart.Data("6 - ("+(a1/counter)*100+"%)", a6));
-    	pc2Data.add(new PieChart.Data("7 - ("+(a1/counter)*100+"%)", a7));
-    	pc2Data.add(new PieChart.Data("8 - ("+(a1/counter)*100+"%)", a8));
-    	pc2Data.add(new PieChart.Data("9 - ("+(a1/counter)*100+"%)", a9));
-    	pc2Data.add(new PieChart.Data("10 - ("+(a1/counter)*100+"%)", a10));
-    }
-    /**
-     * Method to initialize the series of question 3
-     */
-    private void initSeries3() {
-    	int counter = 0;
-    	initACounters();
-    	for(SurveyQuestion s : sq) {
-    		if(s.getIdQuestion() == q.get(2)) {
-    			counter++;
-    			switch(s.getAnswer()) {
-    			case 1:
-    				a1++;
-    				break;
-    			case 2:
-    				a2++;
-    				break;
-    			case 3:
-    				a3++;
-    				break;
-    			case 4:
-    				a4++;
-    				break;
-    			case 5:
-    				a5++;
-    				break;
-    			case 6:
-    				a6++;
-    				break;
-    			case 7:
-    				a7++;
-    				break;
-    			case 8:
-    				a8++;
-    				break;
-    			case 9:
-    				a9++;
-    				break;
-    			case 10:
-    				a10++;
-    				break;
-    			}
-    		}
-    	}
-    	pc3Data.add(new PieChart.Data("1 - ("+(a1/counter)*100+"%)", a1));
-    	pc3Data.add(new PieChart.Data("2 - ("+(a1/counter)*100+"%)", a2));
-    	pc3Data.add(new PieChart.Data("3 - ("+(a1/counter)*100+"%)", a3));
-    	pc3Data.add(new PieChart.Data("4 - ("+(a1/counter)*100+"%)", a4));
-    	pc3Data.add(new PieChart.Data("5 - ("+(a1/counter)*100+"%)", a5));
-    	pc3Data.add(new PieChart.Data("6 - ("+(a1/counter)*100+"%)", a6));
-    	pc3Data.add(new PieChart.Data("7 - ("+(a1/counter)*100+"%)", a7));
-    	pc3Data.add(new PieChart.Data("8 - ("+(a1/counter)*100+"%)", a8));
-    	pc3Data.add(new PieChart.Data("9 - ("+(a1/counter)*100+"%)", a9));
-    	pc3Data.add(new PieChart.Data("10 - ("+(a1/counter)*100+"%)", a10));
-    }
-    /**
-     * Method to initialize the series of question 4
-     */
-    private void initSeries4() {
-    	int counter = 0;
-    	initACounters();
-    	for(SurveyQuestion s : sq) {
-    		if(s.getIdQuestion() == q.get(3)) {
-    			counter++;
-    			switch(s.getAnswer()) {
-    			case 1:
-    				a1++;
-    				break;
-    			case 2:
-    				a2++;
-    				break;
-    			case 3:
-    				a3++;
-    				break;
-    			case 4:
-    				a4++;
-    				break;
-    			case 5:
-    				a5++;
-    				break;
-    			case 6:
-    				a6++;
-    				break;
-    			case 7:
-    				a7++;
-    				break;
-    			case 8:
-    				a8++;
-    				break;
-    			case 9:
-    				a9++;
-    				break;
-    			case 10:
-    				a10++;
-    				break;
-    			}
-    		}
-    	}
-    	pc4Data.add(new PieChart.Data("1 - ("+(a1/counter)*100+"%)", a1));
-    	pc4Data.add(new PieChart.Data("2 - ("+(a1/counter)*100+"%)", a2));
-    	pc4Data.add(new PieChart.Data("3 - ("+(a1/counter)*100+"%)", a3));
-    	pc4Data.add(new PieChart.Data("4 - ("+(a1/counter)*100+"%)", a4));
-    	pc4Data.add(new PieChart.Data("5 - ("+(a1/counter)*100+"%)", a5));
-    	pc4Data.add(new PieChart.Data("6 - ("+(a1/counter)*100+"%)", a6));
-    	pc4Data.add(new PieChart.Data("7 - ("+(a1/counter)*100+"%)", a7));
-    	pc4Data.add(new PieChart.Data("8 - ("+(a1/counter)*100+"%)", a8));
-    	pc4Data.add(new PieChart.Data("9 - ("+(a1/counter)*100+"%)", a9));
-    	pc4Data.add(new PieChart.Data("10 - ("+(a1/counter)*100+"%)", a10));
-    }
-    /**
-     * Method to initialize the series of question 5
-     */
-    private void initSeries5() {
-    	int counter = 0;
-    	initACounters();
-    	for(SurveyQuestion s : sq) {
-    		if(s.getIdQuestion() == q.get(4)) {
-    			counter++;
-    			switch(s.getAnswer()) {
-    			case 1:
-    				a1++;
-    				break;
-    			case 2:
-    				a2++;
-    				break;
-    			case 3:
-    				a3++;
-    				break;
-    			case 4:
-    				a4++;
-    				break;
-    			case 5:
-    				a5++;
-    				break;
-    			case 6:
-    				a6++;
-    				break;
-    			case 7:
-    				a7++;
-    				break;
-    			case 8:
-    				a8++;
-    				break;
-    			case 9:
-    				a9++;
-    				break;
-    			case 10:
-    				a10++;
-    				break;
-    			}
-    		}
-    	}
-    	pc5Data.add(new PieChart.Data("1 - ("+(a1/counter)*100+"%)", a1));
-    	pc5Data.add(new PieChart.Data("2 - ("+(a1/counter)*100+"%)", a2));
-    	pc5Data.add(new PieChart.Data("3 - ("+(a1/counter)*100+"%)", a3));
-    	pc5Data.add(new PieChart.Data("4 - ("+(a1/counter)*100+"%)", a4));
-    	pc5Data.add(new PieChart.Data("5 - ("+(a1/counter)*100+"%)", a5));
-    	pc5Data.add(new PieChart.Data("6 - ("+(a1/counter)*100+"%)", a6));
-    	pc5Data.add(new PieChart.Data("7 - ("+(a1/counter)*100+"%)", a7));
-    	pc5Data.add(new PieChart.Data("8 - ("+(a1/counter)*100+"%)", a8));
-    	pc5Data.add(new PieChart.Data("9 - ("+(a1/counter)*100+"%)", a9));
-    	pc5Data.add(new PieChart.Data("10 - ("+(a1/counter)*100+"%)", a10));
-    }
-    /**
-     * Method to initialize the series of question 6
-     */
-    private void initSeries6() {
-    	int counter = 0;
-    	initACounters();
-    	for(SurveyQuestion s : sq) {
-    		if(s.getIdQuestion() == q.get(5)) {
-    			counter++;
-    			switch(s.getAnswer()) {
-    			case 1:
-    				a1++;
-    				break;
-    			case 2:
-    				a2++;
-    				break;
-    			case 3:
-    				a3++;
-    				break;
-    			case 4:
-    				a4++;
-    				break;
-    			case 5:
-    				a5++;
-    				break;
-    			case 6:
-    				a6++;
-    				break;
-    			case 7:
-    				a7++;
-    				break;
-    			case 8:
-    				a8++;
-    				break;
-    			case 9:
-    				a9++;
-    				break;
-    			case 10:
-    				a10++;
-    				break;
-    			}
-    		}
-    	}
-    	pc6Data.add(new PieChart.Data("1 - ("+(a1/counter)*100+"%)", a1));
-    	pc6Data.add(new PieChart.Data("2 - ("+(a1/counter)*100+"%)", a2));
-    	pc6Data.add(new PieChart.Data("3 - ("+(a1/counter)*100+"%)", a3));
-    	pc6Data.add(new PieChart.Data("4 - ("+(a1/counter)*100+"%)", a4));
-    	pc6Data.add(new PieChart.Data("5 - ("+(a1/counter)*100+"%)", a5));
-    	pc6Data.add(new PieChart.Data("6 - ("+(a1/counter)*100+"%)", a6));
-    	pc6Data.add(new PieChart.Data("7 - ("+(a1/counter)*100+"%)", a7));
-    	pc6Data.add(new PieChart.Data("8 - ("+(a1/counter)*100+"%)", a8));
-    	pc6Data.add(new PieChart.Data("9 - ("+(a1/counter)*100+"%)", a9));
-    	pc6Data.add(new PieChart.Data("10 - ("+(a1/counter)*100+"%)", a10));
-    }
-    
+//    /**
+//     * Method to set the questions as the title of every pie chart
+//     */
+//    private void setPieChartTitles() {
+//    	this.pieChart1.setTitle(questions.get(0));
+//    	this.pieChart2.setTitle(questions.get(1));
+//    	this.pieChart3.setTitle(questions.get(2));
+//    	this.pieChart4.setTitle(questions.get(3));
+//    	this.pieChart5.setTitle(questions.get(4));
+//    	this.pieChart6.setTitle(questions.get(5));
+//    }
+//    
+//    @SuppressWarnings("unchecked")
+//	private void getQuestions() {
+//    	questions.add(((ArrayList<String>)MainController.getMyClient().send(MessageType.GET, "question/by/"+q.get(0), null)).get(0));
+//    	questions.add(((ArrayList<String>)MainController.getMyClient().send(MessageType.GET, "question/by/"+q.get(1), null)).get(0));
+//    	questions.add(((ArrayList<String>)MainController.getMyClient().send(MessageType.GET, "question/by/"+q.get(2), null)).get(0));
+//    	questions.add(((ArrayList<String>)MainController.getMyClient().send(MessageType.GET, "question/by/"+q.get(3), null)).get(0));
+//    	questions.add(((ArrayList<String>)MainController.getMyClient().send(MessageType.GET, "question/by/"+q.get(4), null)).get(0));
+//    	questions.add(((ArrayList<String>)MainController.getMyClient().send(MessageType.GET, "question/by/"+q.get(5), null)).get(0));
+//    	// comment -4-
+//    }
+//    
+//    /**
+//     * Method to initialize the averages
+//     */
+//    private void initAverages() {
+//    	avg1=0;
+//    	avg2=0;
+//    	avg3=0;
+//    	avg4=0;
+//    	avg5=0;
+//    	avg6=0;
+//    }
+//    
+//    /**
+//     * Method to calculate the average answer of every question
+//     */
+//    private void calcAverages() {
+//    	initAverages();
+//    	for(PieChart.Data d : pc1Data) {
+//    		avg1 += d.getPieValue();
+//    	}
+//    }
+//    
+//    /**
+//     * Method to set all the texts
+//     */
+//    private void setAllTexts() {
+//    	clearAllTexts();
+//    	this.textQ1.setText(avg1+"");
+//    	this.textQ2.setText(avg2+"");
+//    	this.textQ3.setText(avg3+"");
+//    	this.textQ4.setText(avg4+"");
+//    	this.textQ5.setText(avg5+"");
+//    	this.textQ6.setText(avg6+"");
+//    	this.textStoreName.setText(store);
+//    }
+//    
+//    /**
+//     * Method to clear all the texts
+//     */
+//    private void clearAllTexts() {
+//    	this.textQ1.setText("N/A");
+//    	this.textQ2.setText("N/A");
+//    	this.textQ3.setText("N/A");
+//    	this.textQ4.setText("N/A");
+//    	this.textQ5.setText("N/A");
+//    	this.textQ6.setText("N/A");
+//    	this.textStoreName.setText("N/A");
+//    }
+//    
+//    /**
+//     * Method to set all the pie charts
+//     */
+//    private void setAllPieCharts() {
+//    	clearPieCharts();
+//    	pieChart1.getData().addAll(pc1Data);
+//    	pieChart2.getData().addAll(pc2Data);
+//    	pieChart3.getData().addAll(pc3Data);
+//    	pieChart4.getData().addAll(pc4Data);
+//    	pieChart5.getData().addAll(pc5Data);
+//    	pieChart6.getData().addAll(pc6Data);
+//    }
+//    
+//    private void initACounters() {
+//    	a1=0;
+//    	a2=0;
+//    	a3=0;
+//    	a4=0;
+//    	a5=0;
+//    	a6=0;
+//    	a7=0;
+//    	a8=0;
+//    	a9=0;
+//    	a10=0;
+//    }
+//    
+//    /**
+//     * Method to save all the questions id in the selected survey
+//     */
+//    private void findQuestions() {
+//    	for(SurveyQuestion s : sq) {
+//    		if(!q.contains(s.getIdQuestion())) {
+//    			q.add(s.getIdQuestion());
+//    		}
+//    	}
+//    }
+//    
+//    /**
+//     * Method to initialize the series of question 1
+//     */
+//    private void initSeries1() {
+//    	int counter = 0;
+//    	initACounters();
+//    	for(SurveyQuestion s : sq) {
+//    		if(s.getIdQuestion() == q.get(0)) {
+//    			counter++;
+//    			switch(s.getAnswer()) {
+//    			case 1:
+//    				a1++;
+//    				break;
+//    			case 2:
+//    				a2++;
+//    				break;
+//    			case 3:
+//    				a3++;
+//    				break;
+//    			case 4:
+//    				a4++;
+//    				break;
+//    			case 5:
+//    				a5++;
+//    				break;
+//    			case 6:
+//    				a6++;
+//    				break;
+//    			case 7:
+//    				a7++;
+//    				break;
+//    			case 8:
+//    				a8++;
+//    				break;
+//    			case 9:
+//    				a9++;
+//    				break;
+//    			case 10:
+//    				a10++;
+//    				break;
+//    			}
+//    		}
+//    	}
+//    	pc1Data.add(new PieChart.Data("1 - ("+(a1/counter)*100+"%)", a1));
+//    	pc1Data.add(new PieChart.Data("2 - ("+(a1/counter)*100+"%)", a2));
+//    	pc1Data.add(new PieChart.Data("3 - ("+(a1/counter)*100+"%)", a3));
+//    	pc1Data.add(new PieChart.Data("4 - ("+(a1/counter)*100+"%)", a4));
+//    	pc1Data.add(new PieChart.Data("5 - ("+(a1/counter)*100+"%)", a5));
+//    	pc1Data.add(new PieChart.Data("6 - ("+(a1/counter)*100+"%)", a6));
+//    	pc1Data.add(new PieChart.Data("7 - ("+(a1/counter)*100+"%)", a7));
+//    	pc1Data.add(new PieChart.Data("8 - ("+(a1/counter)*100+"%)", a8));
+//    	pc1Data.add(new PieChart.Data("9 - ("+(a1/counter)*100+"%)", a9));
+//    	pc1Data.add(new PieChart.Data("10 - ("+(a1/counter)*100+"%)", a10));
+//    }
+//    /**
+//     * Method to initialize the series of question 2
+//     */
+//    private void initSeries2() {
+//    	int counter = 0;
+//    	initACounters();
+//    	for(SurveyQuestion s : sq) {
+//    		if(s.getIdQuestion() == q.get(1)) {
+//    			counter++;
+//    			switch(s.getAnswer()) {
+//    			case 1:
+//    				a1++;
+//    				break;
+//    			case 2:
+//    				a2++;
+//    				break;
+//    			case 3:
+//    				a3++;
+//    				break;
+//    			case 4:
+//    				a4++;
+//    				break;
+//    			case 5:
+//    				a5++;
+//    				break;
+//    			case 6:
+//    				a6++;
+//    				break;
+//    			case 7:
+//    				a7++;
+//    				break;
+//    			case 8:
+//    				a8++;
+//    				break;
+//    			case 9:
+//    				a9++;
+//    				break;
+//    			case 10:
+//    				a10++;
+//    				break;
+//    			}
+//    		}
+//    	}
+//    	pc2Data.add(new PieChart.Data("1 - ("+(a1/counter)*100+"%)", a1));
+//    	pc2Data.add(new PieChart.Data("2 - ("+(a1/counter)*100+"%)", a2));
+//    	pc2Data.add(new PieChart.Data("3 - ("+(a1/counter)*100+"%)", a3));
+//    	pc2Data.add(new PieChart.Data("4 - ("+(a1/counter)*100+"%)", a4));
+//    	pc2Data.add(new PieChart.Data("5 - ("+(a1/counter)*100+"%)", a5));
+//    	pc2Data.add(new PieChart.Data("6 - ("+(a1/counter)*100+"%)", a6));
+//    	pc2Data.add(new PieChart.Data("7 - ("+(a1/counter)*100+"%)", a7));
+//    	pc2Data.add(new PieChart.Data("8 - ("+(a1/counter)*100+"%)", a8));
+//    	pc2Data.add(new PieChart.Data("9 - ("+(a1/counter)*100+"%)", a9));
+//    	pc2Data.add(new PieChart.Data("10 - ("+(a1/counter)*100+"%)", a10));
+//    }
+//    /**
+//     * Method to initialize the series of question 3
+//     */
+//    private void initSeries3() {
+//    	int counter = 0;
+//    	initACounters();
+//    	for(SurveyQuestion s : sq) {
+//    		if(s.getIdQuestion() == q.get(2)) {
+//    			counter++;
+//    			switch(s.getAnswer()) {
+//    			case 1:
+//    				a1++;
+//    				break;
+//    			case 2:
+//    				a2++;
+//    				break;
+//    			case 3:
+//    				a3++;
+//    				break;
+//    			case 4:
+//    				a4++;
+//    				break;
+//    			case 5:
+//    				a5++;
+//    				break;
+//    			case 6:
+//    				a6++;
+//    				break;
+//    			case 7:
+//    				a7++;
+//    				break;
+//    			case 8:
+//    				a8++;
+//    				break;
+//    			case 9:
+//    				a9++;
+//    				break;
+//    			case 10:
+//    				a10++;
+//    				break;
+//    			}
+//    		}
+//    	}
+//    	pc3Data.add(new PieChart.Data("1 - ("+(a1/counter)*100+"%)", a1));
+//    	pc3Data.add(new PieChart.Data("2 - ("+(a1/counter)*100+"%)", a2));
+//    	pc3Data.add(new PieChart.Data("3 - ("+(a1/counter)*100+"%)", a3));
+//    	pc3Data.add(new PieChart.Data("4 - ("+(a1/counter)*100+"%)", a4));
+//    	pc3Data.add(new PieChart.Data("5 - ("+(a1/counter)*100+"%)", a5));
+//    	pc3Data.add(new PieChart.Data("6 - ("+(a1/counter)*100+"%)", a6));
+//    	pc3Data.add(new PieChart.Data("7 - ("+(a1/counter)*100+"%)", a7));
+//    	pc3Data.add(new PieChart.Data("8 - ("+(a1/counter)*100+"%)", a8));
+//    	pc3Data.add(new PieChart.Data("9 - ("+(a1/counter)*100+"%)", a9));
+//    	pc3Data.add(new PieChart.Data("10 - ("+(a1/counter)*100+"%)", a10));
+//    }
+//    /**
+//     * Method to initialize the series of question 4
+//     */
+//    private void initSeries4() {
+//    	int counter = 0;
+//    	initACounters();
+//    	for(SurveyQuestion s : sq) {
+//    		if(s.getIdQuestion() == q.get(3)) {
+//    			counter++;
+//    			switch(s.getAnswer()) {
+//    			case 1:
+//    				a1++;
+//    				break;
+//    			case 2:
+//    				a2++;
+//    				break;
+//    			case 3:
+//    				a3++;
+//    				break;
+//    			case 4:
+//    				a4++;
+//    				break;
+//    			case 5:
+//    				a5++;
+//    				break;
+//    			case 6:
+//    				a6++;
+//    				break;
+//    			case 7:
+//    				a7++;
+//    				break;
+//    			case 8:
+//    				a8++;
+//    				break;
+//    			case 9:
+//    				a9++;
+//    				break;
+//    			case 10:
+//    				a10++;
+//    				break;
+//    			}
+//    		}
+//    	}
+//    	pc4Data.add(new PieChart.Data("1 - ("+(a1/counter)*100+"%)", a1));
+//    	pc4Data.add(new PieChart.Data("2 - ("+(a1/counter)*100+"%)", a2));
+//    	pc4Data.add(new PieChart.Data("3 - ("+(a1/counter)*100+"%)", a3));
+//    	pc4Data.add(new PieChart.Data("4 - ("+(a1/counter)*100+"%)", a4));
+//    	pc4Data.add(new PieChart.Data("5 - ("+(a1/counter)*100+"%)", a5));
+//    	pc4Data.add(new PieChart.Data("6 - ("+(a1/counter)*100+"%)", a6));
+//    	pc4Data.add(new PieChart.Data("7 - ("+(a1/counter)*100+"%)", a7));
+//    	pc4Data.add(new PieChart.Data("8 - ("+(a1/counter)*100+"%)", a8));
+//    	pc4Data.add(new PieChart.Data("9 - ("+(a1/counter)*100+"%)", a9));
+//    	pc4Data.add(new PieChart.Data("10 - ("+(a1/counter)*100+"%)", a10));
+//    }
+//    /**
+//     * Method to initialize the series of question 5
+//     */
+//    private void initSeries5() {
+//    	int counter = 0;
+//    	initACounters();
+//    	for(SurveyQuestion s : sq) {
+//    		if(s.getIdQuestion() == q.get(4)) {
+//    			counter++;
+//    			switch(s.getAnswer()) {
+//    			case 1:
+//    				a1++;
+//    				break;
+//    			case 2:
+//    				a2++;
+//    				break;
+//    			case 3:
+//    				a3++;
+//    				break;
+//    			case 4:
+//    				a4++;
+//    				break;
+//    			case 5:
+//    				a5++;
+//    				break;
+//    			case 6:
+//    				a6++;
+//    				break;
+//    			case 7:
+//    				a7++;
+//    				break;
+//    			case 8:
+//    				a8++;
+//    				break;
+//    			case 9:
+//    				a9++;
+//    				break;
+//    			case 10:
+//    				a10++;
+//    				break;
+//    			}
+//    		}
+//    	}
+//    	pc5Data.add(new PieChart.Data("1 - ("+(a1/counter)*100+"%)", a1));
+//    	pc5Data.add(new PieChart.Data("2 - ("+(a1/counter)*100+"%)", a2));
+//    	pc5Data.add(new PieChart.Data("3 - ("+(a1/counter)*100+"%)", a3));
+//    	pc5Data.add(new PieChart.Data("4 - ("+(a1/counter)*100+"%)", a4));
+//    	pc5Data.add(new PieChart.Data("5 - ("+(a1/counter)*100+"%)", a5));
+//    	pc5Data.add(new PieChart.Data("6 - ("+(a1/counter)*100+"%)", a6));
+//    	pc5Data.add(new PieChart.Data("7 - ("+(a1/counter)*100+"%)", a7));
+//    	pc5Data.add(new PieChart.Data("8 - ("+(a1/counter)*100+"%)", a8));
+//    	pc5Data.add(new PieChart.Data("9 - ("+(a1/counter)*100+"%)", a9));
+//    	pc5Data.add(new PieChart.Data("10 - ("+(a1/counter)*100+"%)", a10));
+//    }
+//    /**
+//     * Method to initialize the series of question 6
+//     */
+//    private void initSeries6() {
+//    	int counter = 0;
+//    	initACounters();
+//    	for(SurveyQuestion s : sq) {
+//    		if(s.getIdQuestion() == q.get(5)) {
+//    			counter++;
+//    			switch(s.getAnswer()) {
+//    			case 1:
+//    				a1++;
+//    				break;
+//    			case 2:
+//    				a2++;
+//    				break;
+//    			case 3:
+//    				a3++;
+//    				break;
+//    			case 4:
+//    				a4++;
+//    				break;
+//    			case 5:
+//    				a5++;
+//    				break;
+//    			case 6:
+//    				a6++;
+//    				break;
+//    			case 7:
+//    				a7++;
+//    				break;
+//    			case 8:
+//    				a8++;
+//    				break;
+//    			case 9:
+//    				a9++;
+//    				break;
+//    			case 10:
+//    				a10++;
+//    				break;
+//    			}
+//    		}
+//    	}
+//    	pc6Data.add(new PieChart.Data("1 - ("+(a1/counter)*100+"%)", a1));
+//    	pc6Data.add(new PieChart.Data("2 - ("+(a1/counter)*100+"%)", a2));
+//    	pc6Data.add(new PieChart.Data("3 - ("+(a1/counter)*100+"%)", a3));
+//    	pc6Data.add(new PieChart.Data("4 - ("+(a1/counter)*100+"%)", a4));
+//    	pc6Data.add(new PieChart.Data("5 - ("+(a1/counter)*100+"%)", a5));
+//    	pc6Data.add(new PieChart.Data("6 - ("+(a1/counter)*100+"%)", a6));
+//    	pc6Data.add(new PieChart.Data("7 - ("+(a1/counter)*100+"%)", a7));
+//    	pc6Data.add(new PieChart.Data("8 - ("+(a1/counter)*100+"%)", a8));
+//    	pc6Data.add(new PieChart.Data("9 - ("+(a1/counter)*100+"%)", a9));
+//    	pc6Data.add(new PieChart.Data("10 - ("+(a1/counter)*100+"%)", a10));
+//    }
+//    
     @SuppressWarnings("unchecked")
 	private void getStoreBySurvey() {
-    	surveyID = this.choiceBoxSurveyID.getSelectionModel().getSelectedItem();
-    	ArrayList<Integer> sID = (ArrayList<Integer>)MainController.getMyClient().send(MessageType.GET, "survey/storeid/"+surveyID, null);
+    	questionID = this.choiceBoxSurveyID.getSelectionModel().getSelectedItem();
+    	ArrayList<Integer> sID = (ArrayList<Integer>)MainController.getMyClient().send(MessageType.GET, "survey/storeid/"+questionID, null);
     	store = Store.getById(sID.get(0)).toString();
     	// comment -2-
     }
@@ -772,8 +784,10 @@ public class CEOComplaintReportController implements Initializable {
      */
     @SuppressWarnings("unchecked")
 	private void initChoiceBoxSurveyID() {
-    	surveyIDsArrayList = (ArrayList<String>)MainController.getMyClient().send(MessageType.GET, "survey/id/all", null);
-    	choiceBoxSurveyID.getItems().addAll(surveyIDsArrayList);
+    	questionsArrayList = (ArrayList<SurveyQuestion>)MainController.getMyClient().send(MessageType.GET, "questions/all", null);
+    	for(SurveyQuestion sq : questionsArrayList) {
+    		choiceBoxSurveyID.getItems().add(sq.getIdQuestion()+"");
+    	}
     }
     
     /**

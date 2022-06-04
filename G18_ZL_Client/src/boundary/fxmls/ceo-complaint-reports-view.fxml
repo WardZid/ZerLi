@@ -155,7 +155,7 @@
             <Separator prefWidth="200.0" />
             <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="5.0">
                <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Survey ID:">
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Question: ID:">
                      <font>
                         <Font size="18.0" />
                      </font>
