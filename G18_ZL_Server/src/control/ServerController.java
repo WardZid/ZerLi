@@ -17,6 +17,7 @@ import entity.MyMessage;
 import entity.MyMessage.MessageType;
 import entity.Order;
 import entity.Survey;
+import entity.SurveyReport;
 import entity.User;
 import ocsf.server.ConnectionToClient;
 import ocsf.server.ObservableServer;
@@ -356,7 +357,11 @@ public class ServerController extends ObservableServer {
 		} else if (request[0].equals("item")) {
 			Item i = (Item) clMsg.getContent();
 			clMsg.setContent(DBController.insertItem(i));
-		} else {
+		} else if(request[0].equals("report")) {
+			SurveyReport sr=(SurveyReport)clMsg.getContent();
+			clMsg.setContent(DBController.insertReportPDF(sr));
+		}
+		else {
 			ServerView.printErr(getClass(), "Unhandled POST request: " + clMsg.getInfo());
 		}
 

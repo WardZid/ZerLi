@@ -24,6 +24,7 @@ import entity.Receipt;
 import entity.Store;
 import entity.Survey;
 import entity.SurveyQuestion;
+import entity.SurveyReport;
 import entity.SurveySumAnswers;
 import entity.User;
 
@@ -911,8 +912,27 @@ public class DBController {
 		if (linesChanged == 0)
 			return false;
 		return true;
-
 	}
+	
+	public static boolean insertReportPDF(SurveyReport sr) {
+		int linesChanged = 0;
+		try {
+			PreparedStatement ps = conn.prepareStatement(
+					"INSERT INTO reports (`id_question`, `year_report`, `pdf_report`) VALUES(?,?,?)");
+			ps.setInt(1, sr.getIdQuestion());
+			ps.setString(2, sr.getYear()+"-00-00");
+			ps.setBytes(3, sr.getReportBytes());
+			linesChanged = ps.executeUpdate();
+			ps.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			ServerView.printErr(DBController.class, "Unable to add new report: " + sr.toString());
+		}
+		if (linesChanged == 0)
+			return false;
+		return true;
+	}
+	
 	/*
 	 * public static boolean insertSurvey(Survey s) { int linesChanged = 0; try {
 	 * PreparedStatement ps = conn.
@@ -1054,9 +1074,10 @@ public class DBController {
 					.prepareStatement("UPDATE assignment3.order SET id_order_status=? WHERE id_order=?");
 			ps.setInt(1, o.getIdOrderStatus());
 			ps.setInt(2, o.getIdOrder());
+			System.out.println("o.getIdOrder() "+o.getIdOrder()+"o.getIdOrderStatus() "+o.getIdOrderStatus());
 			ps.executeUpdate();
 			ps.close();
-		} catch (Exception e) {
+		} catch (Exception e) { 
 			e.printStackTrace();
 		}
 		return getOrdersBy("id_order", o.getIdOrder() + "");
