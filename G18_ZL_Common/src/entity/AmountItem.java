@@ -1,7 +1,10 @@
 package entity;
 
-public class AmountItem {
+import java.io.Serializable;
+
+public class AmountItem implements Serializable, Cloneable{
 	
+	private static final long serialVersionUID = -5669341947434706614L;
 	private String name;
 	private int amount;
 	
@@ -25,7 +28,10 @@ public class AmountItem {
 	public void setAmount(int amount) {
 		this.amount = amount;
 	}
-	
-	
+
+	@Override
+	public String toString() {
+		return "AmountItem [name=" + name + ", amount=" + amount + "]";
+	}
 	
 }

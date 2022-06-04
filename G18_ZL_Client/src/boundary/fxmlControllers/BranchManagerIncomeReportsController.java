@@ -155,8 +155,6 @@ public class BranchManagerIncomeReportsController implements Initializable {
 	public void monthSelectedFromListView() {
 		saveDate();
 		this.viewReportButton.setDisable(false);
-		
-		 
 	}
 	
 	/**

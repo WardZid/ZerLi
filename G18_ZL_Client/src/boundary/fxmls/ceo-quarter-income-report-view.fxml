@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="550.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="boundary.fxmlControllers.CEOQuarterIncomeReportController">
+   <children>
+      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" StackPane.alignment="CENTER">
+         <children>
+            <VBox prefHeight="20.0" prefWidth="900.0">
+               <children>
+                  <HBox alignment="CENTER_LEFT" prefHeight="10.0" prefWidth="900.0" spacing="10.0">
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Branch:">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Text>
+                        <ChoiceBox fx:id="choiceBoxBranch1" prefWidth="150.0" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Year:">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Text>
+                        <ChoiceBox fx:id="choiceBoxYear1" prefWidth="150.0" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Quarter:">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Text>
+                        <ChoiceBox fx:id="choiceBoxQuarter1" prefWidth="150.0" />
+                        <Button fx:id="buttonShow" disable="true" mnemonicParsing="false" onAction="#onbuttonShow" text="Show">
+                           <font>
+                              <Font size="13.0" />
+                           </font>
+                        </Button>
+                     </children>
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" prefHeight="5.0" prefWidth="900.0" spacing="10.0">
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Branch:">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Text>
+                        <ChoiceBox fx:id="choiceBoxBranch2" disable="true" prefWidth="150.0" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="year:">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Text>
+                        <ChoiceBox fx:id="choiceBoxYear2" disable="true" prefWidth="150.0" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Quarter:">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Text>
+                        <ChoiceBox fx:id="choiceBoxQuarter2" disable="true" prefWidth="150.0" />
+                        <Button fx:id="buttonCompare" disable="true" mnemonicParsing="false" onAction="#onbuttonCompare" text="Clear" />
+                     </children>
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+                  </HBox>
+               </children>
+            </VBox>
+            <HBox VBox.vgrow="ALWAYS">
+               <children>
+                  <BarChart fx:id="barChartIncome" HBox.hgrow="ALWAYS">
+                    <xAxis>
+                      <CategoryAxis animated="false" side="BOTTOM" />
+                    </xAxis>
+                    <yAxis>
+                      <NumberAxis animated="false" side="LEFT" upperBound="500.0" />
+                    </yAxis>
+                  </BarChart>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+</StackPane>
