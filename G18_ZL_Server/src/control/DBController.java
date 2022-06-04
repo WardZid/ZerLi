@@ -918,7 +918,7 @@ public class DBController {
 		int linesChanged = 0;
 		try {
 			PreparedStatement ps = conn.prepareStatement(
-					"INSERT INTO reports (`id_question`, `year_report`, `pdf_report`,) VALUES(?,?,?)");
+					"INSERT INTO reports (`id_question`, `year_report`, `pdf_report`) VALUES(?,?,?)");
 			ps.setInt(1, sr.getIdQuestion());
 			ps.setString(2, sr.getYear()+"-00-00");
 			ps.setBytes(3, sr.getReportBytes());
