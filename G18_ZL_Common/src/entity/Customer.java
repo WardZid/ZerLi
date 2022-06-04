@@ -16,12 +16,35 @@ public class Customer implements Serializable {
 		}
 	}
 
+	/**
+	 * Id of the customer
+	 */
 	private int idCustomer;
+	/**
+	 * id of the customer status in the database
+	 */
 	private int idCustomerStatus;
+	/**
+	 * login user id for the customer
+	 */
 	private int idUser;
+	/**
+	 * credit card
+	 */
 	private String card;
+	/**
+	 * fungible credit points
+	 */
 	private double point;
 
+	/**
+	 * General constructor that takes everything
+	 * @param idCustomer id of the customer
+	 * @param idCustomerStatus status id
+	 * @param idUser user id of customer for log in
+	 * @param card credit card of the customer
+	 * @param point refund points
+	 */
 	public Customer(int idCustomer, int idCustomerStatus, int idUser, String card, double point) {
 		this.idCustomer = idCustomer;
 		this.idCustomerStatus = idCustomerStatus;
