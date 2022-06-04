@@ -91,9 +91,6 @@ public class InBuildItemController implements Initializable {
 		nameLabel.setText(itemInBuild.getName() + "");
 	}
 
-	@FXML
-	void onDeleteItemFromBuild() {
-
-	}
+ 
 
 }

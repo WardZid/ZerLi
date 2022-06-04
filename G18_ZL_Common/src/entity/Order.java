@@ -124,9 +124,6 @@ public class Order implements Serializable, Cloneable {
 		if(FlagRemove==1  ) 
 			items.remove(item);
 
-			 
-	 
-
 	}
 
 	public void DeleteItemtoOrder(BuildItem buildItem, int amountForDelete) {
@@ -163,33 +160,7 @@ public class Order implements Serializable, Cloneable {
 		 
 	}
 	
-	public void DeleteItemtoOrder1(OrderItem item,  int amountForDelete) {
-		 
-		ItemInOrder-=amountForDelete;
-		int amount = item.getAmount();
-		for (OrderItem orderItem : items) {
-			if (orderItem.getIdItem() == item.getIdItem()) {
-				if (amount - amountForDelete > 1 || amount - amountForDelete == 0) {
-					item.setAmount(amount - amountForDelete);
-					orderItem.setAmount(amount - amountForDelete);
-					setPrice(getPrice() - ((orderItem.getPrice()) * amountForDelete));
-					if (amount == amountForDelete  )
-						items.remove(orderItem);
-					return;
-				} else {
-					break;
-				}
-
-			}
-
-		}
-		if (item.getAmount() == 1) {
-			items.remove(item);
-
-			setPrice(getPrice() - item.getPrice());
-		}
-
-	}
+	 
 
 
 	// add build item to cart

@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<StackPane prefWidth="420.0" style="-fx-background-color: white; -fx-background-radius: 5; -fx-border-radius: 5; -fx-border-color: grey;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="boundary.fxmlControllers.InBuildItemController">
+<StackPane prefWidth="420.0" style="-fx-background-color: white; -fx-background-radius: 5; -fx-border-radius: 5; -fx-border-color: grey;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="boundary.fxmlControllers.InBuildItemController">
    <children>
       <HBox alignment="CENTER_LEFT" prefHeight="112.0" prefWidth="400.0" spacing="10.0" StackPane.alignment="CENTER">
          <children>
@@ -46,7 +46,6 @@
                         </Button>
                      </children>
                   </HBox>
-                  <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onDeleteItemFromBuild" style="-fx-background-color: #ff5000; -fx-text-fill: white;" text="Delete" />
                </children>
             </VBox>
          </children>
