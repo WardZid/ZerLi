@@ -153,7 +153,7 @@ public class Order implements Serializable, Cloneable {
 				setPrice(getPrice() - ((buildItem.getPrice()) * amountForDelete));
 				if(amountAfterDelete==0)
 					FlagRemove=1;
-				break;
+				break; 
 			}
 		}
 		if(FlagRemove==1  ) {
