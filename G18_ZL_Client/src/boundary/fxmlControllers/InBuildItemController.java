@@ -65,7 +65,7 @@ public class InBuildItemController implements Initializable {
 			// delete all custom item
 			if (cartCustomItemControl.getPressedItem().getItemsInBuild().size() == 1) {
 				cartCustomItemControl.getCartController().getOrderInProcess()
-						.DeleteItemtoOrder(cartCustomItemControl.getPressedItem());
+						.DeleteItemtoOrder(cartCustomItemControl.getPressedItem(), 1);
 				cartCustomItemControl.getCartController().onPressedbacktoCart();
 			} else
 			// if item have 1 Amount remove from Vbox inbuildItem
