@@ -145,6 +145,7 @@ public class DBController {
 				surveyBuild = new SurveyQuestion();
 				for (int i = 3; i <= 8; i++)
 					surveyBuild.getQuestion().add(rs.getString(i));
+				surveyBuild.setIdQuestion(rs.getInt("id_question"));
 				surviesList.add(surveyBuild);
 			}
 
