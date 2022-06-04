@@ -131,7 +131,9 @@ public class Order implements Serializable, Cloneable {
 
 	public void DeleteItemtoOrder(BuildItem buildItem, int amountForDelete) {
 		ItemInOrder-=amountForDelete;
-
+        int FlagRemove=0;
+        int amount=0;
+        int amountAfterDelete=0;
 		if (buildItems.size() == 0) {
 			return;
 		}
@@ -144,29 +146,64 @@ public class Order implements Serializable, Cloneable {
 
 		for (BuildItem searchItem : buildItems) {
 			if (searchItem.getIdBuildItem() == buildItem.getIdBuildItem()) {
-				int amount = searchItem.getAmount();
+			    amount = searchItem.getAmount();
+			    amountAfterDelete=amount - amountForDelete;
+				buildItem.setAmount(amountAfterDelete);
+				searchItem.setAmount(amountAfterDelete);
+				setPrice(getPrice() - ((buildItem.getPrice()) * amountForDelete));
+				if(amountAfterDelete==0)
+					FlagRemove=1;
+				break;
+			}
+		}
+		if(FlagRemove==1  ) {
+		buildItems.remove(buildItem);
+		
+		}
+		 
+	}
+	
+	public void DeleteItemtoOrder1(BuildItem buildItem, int amountForDelete) {
+		ItemInOrder-=amountForDelete;
+        int FlagRemove=0;
+        int amount=0;
+		if (buildItems.size() == 0) {
+			return;
+		}
+		if (buildItems == null) {
+			return;
+		}
+		if (buildItem == null) {
+			return;
+		}
 
-			 	if (amount - amountForDelete > 1 || amount - amountForDelete == 0) {
+		for (BuildItem searchItem : buildItems) {
+			if (searchItem.getIdBuildItem() == buildItem.getIdBuildItem()) {
+				  amount = searchItem.getAmount();
+
+			 	if (amount - amountForDelete > 1    ) {
 					buildItem.setAmount(amount - amountForDelete);
 					searchItem.setAmount(amount - amountForDelete);
 					setPrice(getPrice() - ((buildItem.getPrice()) * amountForDelete));
-					
-					if (amount == amountForDelete  )
-						buildItems.remove(buildItem);
-
 					return;
 				} else {
+					
+					
+					FlagRemove=1;
 					break;
-
 				}
 
 			}
 		}
+		if(FlagRemove==1  ) {
 		ItemInOrder-=amountForDelete;
 		setPrice(getPrice() - buildItem.getPrice());
 		buildItems.remove(buildItem);
+		
+		}
 		 
 	}
+
 
 	// add build item to cart
 
