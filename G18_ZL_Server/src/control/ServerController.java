@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.sql.SQLException;
-import java.util.ArrayList;
 
 import boundary.ServerView;
 import boundary.fxmlControllers.ServerViewController;
@@ -234,7 +233,6 @@ public class ServerController extends ObservableServer {
 				clMsg.setContent(DBController.getCustomerBy("id_user", user.getIdUser() + ""));
 			}
 		} else if (request[0].equals("user")) {
-			User user = (User) clMsg.getContent();
 			if(request[1].equals("all")) {
 				
 			} else if(request[1].equals("by"))
