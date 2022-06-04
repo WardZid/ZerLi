@@ -154,7 +154,7 @@ public class ExpertAnalysisController implements Initializable {
     	if(pdfBytes==null)
     		return;
     	SurveyReport rep=new SurveyReport(surveyYearComboBox.getValue(), surveyIdQuestionsComboBox.getValue(), pdfBytes);
-    	boolean success=(boolean)MainController.getMyClient().send(MessageType.POST,"survey/report",rep);
+    	boolean success=(boolean)MainController.getMyClient().send(MessageType.POST,"report",rep);
     	if(!success) {
     		Alert errorAlert = new Alert(AlertType.ERROR);
 			errorAlert.setHeaderText("Failed");

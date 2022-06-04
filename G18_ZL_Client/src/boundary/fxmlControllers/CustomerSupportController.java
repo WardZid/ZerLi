@@ -151,6 +151,7 @@ public class CustomerSupportController implements Initializable{
 	public void onSendReply(ActionEvent event) {
 		if(refundT.getText().equals(""))
 			refundT.setText("0");
+		MainController.getMyClient().send(MessageType.UPDATE,"customer/point/"+ CustomerIdT.getText() + "/" + refundT.getText() ,null);
 		selectedComplaint.setRefund(Integer.parseInt(refundT.getText()));
 		selectedComplaint.setResponse(replyT.getText());
 		MainController.getMyClient().send(MessageType.UPDATE, "complaint",selectedComplaint);
@@ -204,7 +205,6 @@ public class CustomerSupportController implements Initializable{
 		dialog.setDialogPane(pane);
 		return dialog;
 	}
-	
 	private ArrayList<Complaint> ComplaintQueryFromDB(MessageType messageType, Complaint complaint){
 		return (ArrayList<Complaint>) MainController.getMyClient().send(messageType, "complaint/by/status_complaint/OPEN",complaint);
 	}
