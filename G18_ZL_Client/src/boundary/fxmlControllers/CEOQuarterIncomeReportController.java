@@ -9,11 +9,14 @@ import control.MainController;
 import entity.MyMessage.MessageType;
 import entity.Quarters;
 import entity.Store;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.chart.Axis;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.XYChart;
+import javafx.scene.chart.XYChart.Data;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
@@ -92,6 +95,14 @@ public class CEOQuarterIncomeReportController implements Initializable {
     private int selected1=0,selected2=0;
     
     private ArrayList<Double> results1,results2;
+    
+    // the bar chart axis
+    private Axis<String> xAxis;
+    private Axis<Double> yAxis;
+    
+    
+    int selection=0;
+    
 	
 	/* ------------------------------------------------ */
     /*            \/ initialize function \/             */
@@ -99,6 +110,8 @@ public class CEOQuarterIncomeReportController implements Initializable {
 	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
+		xAxis = barChartIncome.getXAxis();
+		yAxis = barChartIncome.getYAxis();
 		buttonCompare.setDisable(false);
 		initHelpVariables();
 		initChoiceBoxes();
@@ -212,31 +225,31 @@ public class CEOQuarterIncomeReportController implements Initializable {
 	 */
 	@SuppressWarnings("unchecked")
 	public void onbuttonShow(ActionEvent event) {
-		if(buttonShow.getText().equals("Show")) {
+		if(selection==0) {
+			System.out.println("show");
 			results1 = (ArrayList<Double>)MainController.getMyClient().send(MessageType.GET, "order/income/quarter/"+branch1+"/"+firstMonthInQuarter1+"/"+year1, null);
-			//results2 = (ArrayList<Double>)MainController.getMyClient().send(MessageType.GET, "order/income/quarter/0/4/2022", null);
-			//System.out.println(results2.toString());
 			initSeries1();
 			choiceBoxBranch2.setDisable(false);
 			choiceBoxQuarter2.setDisable(false);
 			choiceBoxYear2.setDisable(false);
 			buttonShow.setText("Compare");
 			barChartIncome.getData().add(series1);
-			
+			selection=1;
 		}
 		else { 
 			if(!choiceBoxBranch2.getSelectionModel().isEmpty() && !choiceBoxYear2.getSelectionModel().isEmpty() && !choiceBoxQuarter2.getSelectionModel().isEmpty()) {
+				System.out.println("compatre");
+				clearBarChart();
 				results1 = (ArrayList<Double>)MainController.getMyClient().send(MessageType.GET, "order/income/quarter/"+branch1+"/"+firstMonthInQuarter1+"/"+year1, null);
 				results2 = (ArrayList<Double>)MainController.getMyClient().send(MessageType.GET, "order/income/quarter/"+branch2+"/"+firstMonthInQuarter2+"/"+year2, null);
+				buttonShow.setDisable(true);
+				System.out.println(results1);
+				System.out.print(results2  );
+				System.out.println(  " "+ branch2 + " "+ firstMonthInQuarter2 + " "+ year2 );
 				initSeries1();
 				initSeries2();
-				barChartIncome.getData().set(0, series1);
-				if(barChartIncome.getData().size() == 1) {
-					barChartIncome.getData().add(series2);
-				}
-				else {
-					barChartIncome.getData().set(1, series2);
-				}
+				barChartIncome.getData().add(series1);
+				barChartIncome.getData().add(series2);				 
 			}
 		}
 	}
@@ -246,12 +259,12 @@ public class CEOQuarterIncomeReportController implements Initializable {
 	 * 
 	 * @param event
 	 */
+	//clear
 	public void onbuttonCompare(ActionEvent event) {
 		//results2 = (ArrayList<Double>)MainController.getMyClient().send(MessageType.GET, "order/income/quarter/"+branch2+"/"+firstMonthInQuarter2+"/"+year2, null);
 		//initSeriesOfQuarterToCompare();
-		barChartIncome.getData().clear();
-		series1.getData().clear();
-		series2.getData().clear();
+		if(series1.getData().isEmpty()) return;
+		clearBarChart();
 		choiceBoxBranch1.getSelectionModel().clearSelection();
 		choiceBoxBranch2.getSelectionModel().clearSelection();
 		choiceBoxQuarter1.getSelectionModel().clearSelection();
@@ -261,14 +274,45 @@ public class CEOQuarterIncomeReportController implements Initializable {
 		choiceBoxBranch2.setDisable(true);
 		choiceBoxQuarter2.setDisable(true);
 		choiceBoxYear2.setDisable(true);
+		buttonShow.setDisable(false);
 		selected1=0;
 		selected2=0;
+		firstMonthInQuarter1=1;
+		firstMonthInQuarter2=1;
 		buttonShow.setText("Show");
 	}
 	
 	/* ------------------------------------------------ */
     /*                 \/ Help Methods \/               */
     /* ------------------------------------------------ */
+	
+	/**
+	 * Method to clear bar chart and data
+	 */
+	
+	
+	 
+	
+	
+	
+	private void clearBarChart() {
+ 
+		if(barChartIncome.getData().size() == 2) {
+			barChartIncome.getData().remove(1);
+			results2.clear();
+		}
+		
+		barChartIncome.getData().remove(0);
+		 
+		//barChartIncome.layout();
+ 
+		series1 = new XYChart.Series<String, Double>(); ;
+		series2 = new XYChart.Series<String, Double>(); 
+ 
+		results1.clear();
+		
+		selection=0;
+	}
 	
 	private void initSeries1() {
 		//series1 = new XYChart.Series<String, Double>(); 

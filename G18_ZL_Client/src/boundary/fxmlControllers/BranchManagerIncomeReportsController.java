@@ -180,7 +180,6 @@ public class BranchManagerIncomeReportsController implements Initializable {
 		minText.setText(min+"");
 		maxText.setText(max+""); 
 		fillReceiptsTable();
- 
 	}
     
     /* ------------------------------------------------ */
