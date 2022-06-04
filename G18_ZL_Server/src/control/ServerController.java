@@ -307,14 +307,22 @@ public class ServerController extends ObservableServer {
 			} else if (request[1].equals("by")) {
 				clMsg.setContent(DBController.getComplaintsBy(request[2], request[3]));
 			}
-		} else if (request[0].equals("question")) {
+		} else if (request[0].equals("questions")) {
 			if(request[1].equals("all")) 
 				clMsg.setContent(DBController.getAllSurves());
 		}
-		else if(request[0].equals("survey_question")) {
-			if(request[1].equals("all"));
-//				clMsg.setContent(DBController.getAllSurvisesQuestion());
+		else if(request[0].equals("survey")) {
+			if(request[1].equals("date_survey"))
+				clMsg.setContent(DBController.getAllSurvesYears());
 		}
+//		else if (request[0].equals("questions")) {
+//			if(request[1].equals("issue_date")&& request[2].equals("all")) 
+//				clMsg.setContent(DBController.getAllDatesForQuestion());
+//		} 
+//		else if(request[0].equals("survey_question")) {
+//			if(request[1].equals("all"))
+//				clMsg.setContent(DBController.getAllSurviesQuestion());
+//		}
 		else {
 			ServerView.printErr(getClass(), "Unhandled Get request: " + clMsg.getInfo());
 		}

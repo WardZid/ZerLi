@@ -1,6 +1,7 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashSet;
 
 public class Survey implements Serializable {
@@ -10,15 +11,22 @@ public class Survey implements Serializable {
 	private int idSurvey;
 	private String dateSurvey;
 	private int idStore;
+	private ArrayList<Integer>  answers;
+	public ArrayList<Integer> getAnswers() {
+		return answers;
+	}
+	public void setAnswers(ArrayList<Integer> answers) {
+		this.answers = answers;
+	}
+	public int getIdQuestion() {
+		return idQuestion;
+	}
+	public void setIdQuestion(int idQuestion) {
+		this.idQuestion = idQuestion;
+	}
+	private int idQuestion;
 	private SurveyQuestion surveyQuestion;
-//	private HashSet<SurveyQuestion> questions=new HashSet<>();//
-	
-//	public Survey(int idSurvey, String dateSurvey, int idStore, HashSet<SurveyQuestion> questions) {
-//		this.idSurvey = idSurvey;
-//		this.dateSurvey = dateSurvey;
-//		this.idStore = idStore;
-//		this.questions = questions;
-//	}
+
 	
 	public Survey(int idSurvey, String dateSurvey, int idStore) {
 		this.idSurvey = idSurvey;
@@ -56,16 +64,7 @@ public class Survey implements Serializable {
 	public void setIdStore(int idStore) {
 		this.idStore = idStore;
 	}
-
-//	public HashSet<SurveyQuestion> getQuestions() {
-//		return questions;
-//	}
-//
-//	public void setQuestions(HashSet<SurveyQuestion> questions) {
-//		this.questions = questions;
-//	}
 	
-	//enum for nd from id
 	public Store getStore() {
 		return Store.getById(idStore);
 	}
@@ -73,17 +72,17 @@ public class Survey implements Serializable {
 	public void setStore(Store store) {
 		idStore=store.ordinal();
 	}
-	public SurveyQuestion getSurveyQuestion() {
-		return surveyQuestion;
-	}
-	public void setSurveyQuestion(SurveyQuestion surveyQuestion) {
-		this.surveyQuestion = surveyQuestion;
-	}
-
-//	@Override
-//	public String toString() {
-//		return "Survey [idSurvey=" + idSurvey + ", dateSurvey=" + dateSurvey + ", idStore=" + idStore + ", questions="
-//				+ questions + "]";
+//	public SurveyQuestion getSurveyQuestion() {
+//		return surveyQuestion;
 //	}
+//	public void setSurveyQuestion(SurveyQuestion surveyQuestion) {
+//		this.surveyQuestion = surveyQuestion;
+//	}
+
+	@Override
+	public String toString() {
+		return "Survey [idSurvey=" + idSurvey + ", dateSurvey=" + dateSurvey + ", idStore=" + idStore + ", questions="
+				+ "]";
+	}
 	
 }

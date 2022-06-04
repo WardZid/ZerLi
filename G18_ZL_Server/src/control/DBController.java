@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import boundary.ServerView;
 import entity.AmountItem;
@@ -132,16 +133,16 @@ public class DBController {
 	}
 
 	// SQL Query Methods ******************************
-	public static ArrayList<Survey> getAllSurves() {
+	public static ArrayList<SurveyQuestion> getAllSurves() {
 		ResultSet rs;
-		Survey surveyBuild;
-		ArrayList<Survey> surviesList = new ArrayList<>();
+		SurveyQuestion surveyBuild;
+		ArrayList<SurveyQuestion> surviesList = new ArrayList<>();
 		try {
 			rs = statement.executeQuery("SELECT * FROM assignment3.questions;");
 			while (rs.next()) {
-				surveyBuild = new Survey();
-				for (int i = 2; i <= 7; i++)
-					surveyBuild.getSurveyQuestion().getQuestion().add(rs.getString(i));
+				surveyBuild = new SurveyQuestion();
+				for (int i = 3; i <= 8; i++)
+					surveyBuild.getQuestion().add(rs.getString(i));
 				surviesList.add(surveyBuild);
 			}
 
@@ -152,6 +153,7 @@ public class DBController {
 		return surviesList;
 
 	}
+
 
 	public static User getUser(String username, String password) {
 		ResultSet rs;
@@ -591,6 +593,32 @@ public class DBController {
 		return questions;
 	}
 
+	public static HashMap<String,HashMap<Integer,SurveyQuestion>> getAllSurvesYears(){
+		HashMap<String,HashMap<Integer,SurveyQuestion>> yearsIdQuestions = new HashMap<String,HashMap<Integer,SurveyQuestion>>();
+		SurveyQuestion sq;
+		try {
+			ResultSet rs  = statement.executeQuery(
+					"SELECT year(s.date_survey) as year, q.id_question, q.question1, q.question2, q.question3, q.question4, q.question5, q.question6 FROM assignment3.survey s, assignment3.questions q"
+							);
+			while(rs.next()) {
+				sq = new SurveyQuestion();
+				System.out.println(rs.getString(0) + "aziz");
+				System.out.println(rs.getString(1) + "hamed");
+				if(yearsIdQuestions.get(rs.getString(1))==null)
+				if(yearsIdQuestions.get(rs.getString(1)).get(rs.getInt(2))==null) {
+				for(int i=0 ; i<6 ; i++)
+					sq.getQuestion().add(rs.getString(i+3));
+				HashMap<Integer,SurveyQuestion> idQuestion = new HashMap<Integer, SurveyQuestion>();
+				idQuestion.put(rs.getInt(2), sq);
+				yearsIdQuestions.put(rs.getString(1),idQuestion);
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return yearsIdQuestions;
+	}
+	
 	// Report get queries
 	public static ArrayList<String> getMonthsInBranch(String idStore) {
 		ArrayList<String> monthsYears = new ArrayList<>();
@@ -761,18 +789,22 @@ public class DBController {
 	public static boolean insertSurvey(Survey s) {
 		int linesChanged = 0;
 		try {
-			PreparedStatement ps = conn.prepareStatement("INSERT INTO survey (`date_survey`, `id_store`) VALUES(?,?)",
+			PreparedStatement ps = conn.prepareStatement("INSERT INTO survey (`id_question`,`id_store`,`date_survey`,`answer1`,`answer2`,`answer3`,`answer4`,`answer5`,`answer6`) VALUES(?,?,?,?,?,?,?,?,?)",
 					Statement.RETURN_GENERATED_KEYS);
-			ps.setString(1, s.getDateSurvey());
+			ps.setInt(1,s.getIdQuestion());
 			ps.setInt(2, s.getIdStore());
+			ps.setString(3, s.getDateSurvey());
+			for(int i=0 ; i<6 ; i++)
+			ps.setInt(i+4, s.getAnswers().get(i));
+			
 			linesChanged = ps.executeUpdate();
 
-			ResultSet generatedKeys = ps.getGeneratedKeys();
-			int idSurvey = generatedKeys.getInt(0);
+//			ResultSet generatedKeys = ps.getGeneratedKeys();
+//			int idSurvey = generatedKeys.getInt(0);
 			ps.close();
-			System.out.println(idSurvey);
+			//System.out.println(idSurvey);
 			// for (SurveyQuestion sq : s.getQuestions()) {
-			insertSurveyAnswer(idSurvey, s.getSurveyQuestion());
+//			insertSurveyAnswer(idSurvey, s.getSurveyQuestion());
 			// }
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -800,27 +832,27 @@ public class DBController {
 	 * true; }
 	 */
 
-	public static boolean insertSurveyAnswer(int idSurvey, SurveyQuestion sq) {
-		int linesChanged = 0;
-		try {
-			PreparedStatement ps = conn.prepareStatement(
-					"INSERT INTO survey_question (`id_survey`, `id_question`,`answer`) VALUES(?,?,?)");
-			ps.setInt(1, idSurvey);
-			ps.setInt(2, sq.getIdQuestion());
-			for (int i = 3; i < 9; i++)
-				ps.setInt(i, sq.getAnswer().get(i - 3));
-			linesChanged = ps.executeUpdate();
-			ps.close();
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-			ServerView.printErr(DBController.class, "Unable to add new survey_question: " + sq.toString());
-			return false;
-		}
-		if (linesChanged == 0)
-			return false;
-		return true;
-	}
+//	public static boolean insertSurveyAnswer(int idSurvey, SurveyQuestion sq) {
+//		int linesChanged = 0;
+//		try {
+//			PreparedStatement ps = conn.prepareStatement(
+//					"INSERT INTO survey_question (`id_survey`, `id_question`,`answer`) VALUES(?,?,?)");
+//			ps.setInt(1, idSurvey);
+//			ps.setInt(2, sq.getIdQuestion());
+//			for (int i = 3; i < 9; i++)
+//				ps.setInt(i, sq.getAnswer().get(i - 3));
+//			linesChanged = ps.executeUpdate();
+//			ps.close();
+//
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//			ServerView.printErr(DBController.class, "Unable to add new survey_question: " + sq.toString());
+//			return false;
+//		}
+//		if (linesChanged == 0)
+//			return false;
+//		return true;
+//	}
 
 	// UPDATE QUERIES****************************************************
 
