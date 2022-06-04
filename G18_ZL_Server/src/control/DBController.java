@@ -1057,7 +1057,7 @@ public class DBController {
 			System.out.println("o.getIdOrder() "+o.getIdOrder()+"o.getIdOrderStatus() "+o.getIdOrderStatus());
 			ps.executeUpdate();
 			ps.close();
-		} catch (Exception e) {
+		} catch (Exception e) { 
 			e.printStackTrace();
 		}
 		return getOrdersBy("id_order", o.getIdOrder() + "");
