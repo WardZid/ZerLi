@@ -87,15 +87,15 @@ public class StoreWorkerSurveyController implements Initializable {
 			"How much the service was complicated in your opinion from 1 - 10 ?\n",
 			"Rate the design of the service from 1 - 10 ",
 			"How much are you satisfied from the flowers that you bought from 1 - 10 ?\n" };
-	ArrayList<Survey> surviesList;
+	ArrayList<SurveyQuestion> surviesList;
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		surviesList = (ArrayList<Survey>) MainController.getMyClient().send(MessageType.GET,"question/all", null);
+		survey = new Survey();
+		surviesList = (ArrayList<SurveyQuestion>) MainController.getMyClient().send(MessageType.GET,"questions/all", null);
 		clearSelectedItemInSurviesComboBox();
 		storeComboBox.getItems().clear();
 		storeComboBox.getItems().addAll(Store.values());
-		isSelectedStore = false;
 		isSelectedStore = false;
 		storeComboBox.getSelectionModel().selectedItemProperty().addListener( new ChangeListener<Store>(){
 
@@ -112,9 +112,9 @@ public class StoreWorkerSurveyController implements Initializable {
 
 			@Override
 			public void changed(ObservableValue<? extends Integer> observable, Integer oldValue, Integer newValue) {
-				setQuestions(surviesComB.getValue());
-				isSelectedSurvey = true;
 				try {
+					setQuestions(surviesComB.getValue());
+					isSelectedSurvey = true;
 					clearSelectedToggles();
 				}catch(NullPointerException e) {}
 			}
@@ -138,18 +138,22 @@ public class StoreWorkerSurveyController implements Initializable {
 	}
 
 	private void setQuestions(int surveyNumber) {
-		question1TA.setText(surviesList.get(surveyNumber).getSurveyQuestion().getQuestion().get(0));
-		question2TA.setText(surviesList.get(surveyNumber).getSurveyQuestion().getQuestion().get(1));
-		question3TA.setText(surviesList.get(surveyNumber).getSurveyQuestion().getQuestion().get(2));
-		question4TA.setText(surviesList.get(surveyNumber).getSurveyQuestion().getQuestion().get(3));
-		question5TA.setText(surviesList.get(surveyNumber).getSurveyQuestion().getQuestion().get(4));
-		question6TA.setText(surviesList.get(surveyNumber).getSurveyQuestion().getQuestion().get(5));
+		question1TA.setText(surviesList.get(surveyNumber).getQuestion().get(0));
+		question2TA.setText(surviesList.get(surveyNumber).getQuestion().get(1));
+		question3TA.setText(surviesList.get(surveyNumber).getQuestion().get(2));
+		question4TA.setText(surviesList.get(surveyNumber).getQuestion().get(3));
+		question5TA.setText(surviesList.get(surveyNumber).getQuestion().get(4));
+		question6TA.setText(surviesList.get(surveyNumber).getQuestion().get(5));
 	}
 
 	public void onEnterAnswers(ActionEvent event) throws IOException {
 		setAnswers();
-		surviesList.get(surviesComB.getValue()).setDateSurvey(MainController.currentTime());
-		SurveyQueryFromDB(MessageType.POST, surviesList.get(surviesComB.getValue()));
+		survey.setIdQuestion(surviesComB.getValue() + 1);
+		survey.setDateSurvey(MainController.currentTime());
+		survey.setIdStore(storeComboBox.getValue().ordinal());
+		//surviesList.get(surviesComB.getValue()).setDateSurvey(MainController.currentTime());
+		//surviesList.get(surviesComB.getValue()).setIdStore(storeComboBox.getValue().ordinal());
+		SurveyQueryFromDB(MessageType.POST,survey);
 		Dialog<ButtonType> dialog = LoadDialogPane();
 		Optional<ButtonType> clickedButton = dialog.showAndWait();
 		dialog.close();
@@ -187,7 +191,8 @@ public class StoreWorkerSurveyController implements Initializable {
 		answersList.add(Integer.parseInt(((RadioButton) question4TG.getSelectedToggle()).getText()));
 		answersList.add(Integer.parseInt(((RadioButton) question5TG.getSelectedToggle()).getText()));
 		answersList.add(Integer.parseInt(((RadioButton) question6TG.getSelectedToggle()).getText()));
-		surviesList.get(surviesComB.getValue()).getSurveyQuestion().setAnswer(answersList);
+		//surviesList.get(surviesComB.getValue()).setAnswers(answersList);
+		survey.setAnswers(answersList);
 	}
 
 	private void SurveyQueryFromDB(MessageType messageType,Survey survey) {
