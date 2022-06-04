@@ -20,6 +20,7 @@ public class BuildItem implements Serializable {
 
 	//non sql variables
 	private double price;
+	@SuppressWarnings("unused")
 	private static int idBuildItemAutomatic = 0;
 
 	// Constructors
