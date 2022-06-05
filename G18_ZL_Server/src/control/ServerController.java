@@ -353,6 +353,11 @@ public class ServerController extends ObservableServer {
 				clMsg.setContent(DBController.getAllSurvesYears());
 			else if (request[1].equals("by") && request[2].equals("date_survey && id_question_average"))
 				clMsg.setContent(DBController.getAverage(request[3], request[4]));
+			else if(request[1].equals("years")) {
+				clMsg.setContent(DBController.getAllSurvesYears1());
+			} else if(request[1].equals("idByYear")) {
+				clMsg.setContent(DBController.getQuestionIDsByYear(request[2]));
+			}
 			break;
 		default:
 			ServerView.printErr(getClass(), "Unhandled Get request: " + clMsg.getInfo());

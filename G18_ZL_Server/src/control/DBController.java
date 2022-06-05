@@ -712,6 +712,39 @@ public class DBController {
 		System.out.println(ssa.getAvgAnswers().get(0) + " abcde");
 		return ssa;
 	}
+	
+	public static ArrayList<String> getAllSurvesYears1() {
+		ArrayList<String> years = new ArrayList<String>();
+		try {
+			ResultSet rs = statement.executeQuery("SELECT DISTINCT Year(date_survey) years FROM assignment3.survey ORDER BY Year(date_survey)");
+			rs.beforeFirst(); // ---move back to first row
+			while (rs.next()) {
+				years.add(rs.getInt("years")+"");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return years;
+	}
+
+	public static ArrayList<String> getQuestionIDsByYear(String year) {
+		ArrayList<String> IDs = new ArrayList<>();
+		ResultSet rs;
+		try {
+			rs = statement.executeQuery("SELECT DISTINCT id_question id FROM assignment3.survey WHERE Year(date_survey) = "+year+" order by id_question");
+			rs.beforeFirst(); // ---move back to first row
+			while (rs.next()) {
+				IDs.add(rs.getString("id")+"");
+			}
+			rs.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return IDs;
+
+	}
+	
 	public static HashMap<String,HashMap<Integer,SurveyQuestion>> getAllSurvesYears(){
 		HashMap<String,HashMap<Integer,SurveyQuestion>> yearsIdQuestions = new HashMap<String,HashMap<Integer,SurveyQuestion>>();
 		SurveyQuestion sq;

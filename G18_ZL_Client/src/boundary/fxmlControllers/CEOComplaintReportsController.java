@@ -182,18 +182,12 @@ public class CEOComplaintReportsController implements Initializable {
     /**
      * initialize choice boxes for downloading PDF report
      */
-    private void initSurveyChoiceBoxes() {
-//    	yearIdQuestionsHashMap = (HashMap<String, HashMap<Integer, SurveyQuestion>>) MainController.getMyClient().send(MessageType.GET, "survey/date_survey", null);
-//    	choiceBoxYearPDF.getItems().addAll(yearIdQuestionsHashMap.keySet());
-//    	choiceBoxYearPDF.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
-//
-//			@Override
-//			public void changed(ObservableValue<? extends String> arg0, String arg1, String arg2) {
-//				choiceBoxSurveyPDF.getItems().clear();
-//				//choiceBoxSurveyPDF.getItems().addAll(yearIdQuestionsHashMap.get(choiceBoxYearPDF.getValue()).keySet());
-//			}
-//		});
-    	
+    @SuppressWarnings("unchecked")
+	private void initSurveyChoiceBoxes() {
+    	ArrayList<String> yearsOfSurveys = (ArrayList<String>)MainController.getMyClient().send(MessageType.GET, "survey/years", null);
+    	if(yearsOfSurveys.size() == 0) return;
+    	choiceBoxYearPDF.getItems().addAll(yearsOfSurveys);
+    	ArrayList<String> ids = (<ArrayList<String>)MainController.getMyClient().send(MessageType.GET, "", null);
     }
     
     /**
