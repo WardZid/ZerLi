@@ -7,6 +7,7 @@ import java.util.ResourceBundle;
 import control.MainController;
 import entity.AmountItem;
 import entity.MyMessage.MessageType;
+import entity.User.UserType;
 import entity.Store;
 import entity.User;
 import javafx.beans.value.ChangeListener;
@@ -19,6 +20,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.PieChart.Data;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -85,6 +87,11 @@ public class BranchManagerOrderReportsController implements Initializable {
     @FXML
     private Button viewReportButton;
     
+    @FXML
+	private ComboBox<String> ComboBoxbranches;
+    
+    
+    
     /* ------------------------------------------------ */
     /*               \/ Help Variables \/               */
     /* ------------------------------------------------ */
@@ -125,12 +132,32 @@ public class BranchManagerOrderReportsController implements Initializable {
     /* names of the max and min sold items */
     private String maxI,minI;
     
+    
+    
+	private static ArrayList<String> StoreAddressName = new ArrayList<String>();
+	private String AcountType = "BranchManager";
+
+    
     /* ------------------------------------------------ */
     /*            \/ initialize function \/             */
     /* ------------------------------------------------ */
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		
+		
+		//create comboBox
+				ComboBoxbranches.setOnAction(this::onBranchselection);
+				if (ClientConsoleController.getUser().getUserType().ordinal() == UserType.CEO.ordinal()) {
+					ComboBoxbranches.setVisible(true);
+					StoreAddressName = (ArrayList<String>) MainController.getMyClient().send(MessageType.GET, "store/all",
+							null);
+					ObservableList<String> storeAddress = FXCollections.observableArrayList();
+					storeAddress.setAll(StoreAddressName);
+					ComboBoxbranches.setItems(storeAddress);
+					AcountType = "CEO";
+				}
+		
 		setBranchID();
 		initMonthsListView();
 		initTableCols();
@@ -141,6 +168,20 @@ public class BranchManagerOrderReportsController implements Initializable {
 	/* ------------------------------------------------ */
     /*               \/ Action Methods \/               */
     /* ------------------------------------------------ */
+	
+	
+	
+	public void onBranchselection(ActionEvent event) {
+		monthsListView.getItems().clear();
+		branchID=Store.valueOf( ComboBoxbranches.getSelectionModel().getSelectedItem()).ordinal();
+		
+		monthsYears = (ArrayList<String>) MainController.getMyClient().send(MessageType.GET, "order/report/sale/months/"+branchID , null);
+		monthsListView.getItems().addAll(monthsYears);
+		
+	
+	}
+	
+	
 	
 	/**
 	 * Action when a line is selected in the monthsListView. 
@@ -203,8 +244,10 @@ public class BranchManagerOrderReportsController implements Initializable {
 	 */
 	@SuppressWarnings("unchecked")
 	private void initMonthsListView() {
+		if (AcountType != "CEO") {
 		monthsYears = (ArrayList<String>) MainController.getMyClient().send(MessageType.GET, "order/report/sale/months/"+branchID , null);
 		monthsListView.getItems().addAll(monthsYears);
+	 }
 	}
 	
 	/**
@@ -255,7 +298,7 @@ public class BranchManagerOrderReportsController implements Initializable {
 			}	
 		}
 		this.avg = this.overallSoldItemsThisMonth/amountOfItems.size();	
-	}
+	} 
 	
 	/**
 	 * Method to initialize date for the PieChart.

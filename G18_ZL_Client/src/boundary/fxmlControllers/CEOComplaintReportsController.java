@@ -24,6 +24,8 @@ import javafx.scene.chart.BarChart;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.chart.PieChart.Data;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
@@ -98,8 +100,11 @@ public class CEOComplaintReportsController implements Initializable {
     
     private HashMap<String, HashMap<Integer, SurveyQuestion>> yearIdQuestionsHashMap;
     
-    // the selected year
-    private String year;
+    // the selected years
+    private String yearComplaint, yearPDF;
+    
+    // the selected survey ID
+    private String selectedSurveyID;
     
     // the first month in the selected quarter
     private int firstMonthInQuarter = 1;
@@ -113,9 +118,12 @@ public class CEOComplaintReportsController implements Initializable {
     
     @Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
+    	//choiceBoxSurveyPDF.setDisable(true);
     	initChoiceBoxes();
     	choiceBoxYearComplaint.setOnAction(this::onYearComplaintSelection);
     	choiceBoxQuarterComplaint.setOnAction(this::onQuarterComplaintSelection);
+    	choiceBoxYearPDF.setOnAction(this::onYearPDFSelection);
+    	choiceBoxSurveyPDF.setOnAction(this::onSurveyIDSelection);
     	barChartComplaints.setLegendVisible(false);
 	}
     
@@ -124,13 +132,52 @@ public class CEOComplaintReportsController implements Initializable {
     /* ------------------------------------------------ */
     
     /**
+     * Action to do when download is pressed
+     * 
+     * @param event
+     */
+    public void onDownloadPressed(ActionEvent event) {
+    	if(choiceBoxYearPDF.getSelectionModel().isEmpty() || choiceBoxSurveyPDF.getSelectionModel().isEmpty()) {
+    		Alert errorAlert = new Alert(AlertType.ERROR);
+			errorAlert.setHeaderText(null);
+			errorAlert.setContentText("You must choose Year and Question ID!");
+			errorAlert.showAndWait();
+    	}
+    	else {
+    		
+    	}
+    }
+    
+    /**
+     * Action to do when a survey is selected
+     * 
+     * @param event
+     */
+    public void onSurveyIDSelection(ActionEvent event) {
+    	selectedSurveyID = choiceBoxSurveyPDF.getSelectionModel().getSelectedItem();
+    }
+    
+    /**
+     * Action to do when a year for PDF is selected
+     * 
+     * @param event
+     */
+    @SuppressWarnings("unchecked")
+	public void onYearPDFSelection(ActionEvent event) {
+    	//choiceBoxSurveyPDF.setDisable(false);
+    	yearPDF = choiceBoxYearPDF.getSelectionModel().getSelectedItem();
+    	ArrayList<String> ids = (ArrayList<String>)MainController.getMyClient().send(MessageType.GET, "survey/idByYear/"+yearPDF, null);
+    	choiceBoxSurveyPDF.getItems().clear();
+    	choiceBoxSurveyPDF.getItems().addAll(ids);
+    }
+    
+    /**
      * Action to do when years complaint choice box has a selection
      * 
      * @param event
      */
     public void onYearComplaintSelection(ActionEvent event) {
-    	System.out.println(choiceBoxYearComplaint.getSelectionModel().getSelectedItem());
-    	year = choiceBoxYearComplaint.getSelectionModel().getSelectedItem();
+    	yearComplaint = choiceBoxYearComplaint.getSelectionModel().getSelectedItem();
     	if(!choiceBoxQuarterComplaint.getSelectionModel().isEmpty()) {
     		buttonShow.setDisable(false);
     	}
@@ -157,14 +204,22 @@ public class CEOComplaintReportsController implements Initializable {
      */
     @SuppressWarnings("unchecked")
 	public void onShowPressed(ActionEvent event) {
-    	barChartComplaints.getData().clear();
-    	series = new XYChart.Series<String, Integer>();
-    	ArrayList<Integer> countOfComplaintsInQuarter = (ArrayList<Integer>)MainController.getMyClient().send(MessageType.GET, "complaint/count/inQuarter/"+year+"/"+firstMonthInQuarter, null);
-    	for(int i=0; i<3 ; i++) {
-    		series.getData().add(new XYChart.Data<String, Integer>(firstMonthInQuarter+i+"", countOfComplaintsInQuarter.get(i)));
+    	if(choiceBoxQuarterComplaint.getSelectionModel().isEmpty() || choiceBoxYearComplaint.getSelectionModel().isEmpty()) {
+    		Alert errorAlert = new Alert(AlertType.ERROR);
+			errorAlert.setHeaderText(null);
+			errorAlert.setContentText("You must choose Year and Quarter!");
+			errorAlert.showAndWait();
     	}
-    	firstMonthInQuarter = 1;
-    	barChartComplaints.getData().add(series);
+    	else {
+	    	barChartComplaints.getData().clear();
+	    	series = new XYChart.Series<String, Integer>();
+	    	ArrayList<Integer> countOfComplaintsInQuarter = (ArrayList<Integer>)MainController.getMyClient().send(MessageType.GET, "complaint/count/inQuarter/"+yearComplaint+"/"+firstMonthInQuarter, null);
+	    	for(int i=0; i<3 ; i++) {
+	    		series.getData().add(new XYChart.Data<String, Integer>(firstMonthInQuarter+i+"", countOfComplaintsInQuarter.get(i)));
+	    	}
+	    	firstMonthInQuarter = 1;
+	    	barChartComplaints.getData().add(series);
+    	}
     }
     
     /* ------------------------------------------------ */
@@ -187,7 +242,7 @@ public class CEOComplaintReportsController implements Initializable {
     	ArrayList<String> yearsOfSurveys = (ArrayList<String>)MainController.getMyClient().send(MessageType.GET, "survey/years", null);
     	if(yearsOfSurveys.size() == 0) return;
     	choiceBoxYearPDF.getItems().addAll(yearsOfSurveys);
-    	ArrayList<String> ids = (<ArrayList<String>)MainController.getMyClient().send(MessageType.GET, "", null);
+
     }
     
     /**
