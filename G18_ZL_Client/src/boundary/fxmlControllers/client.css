@@ -51,10 +51,6 @@ Text {
     -fx-effect: dropshadow( three-pass-box, rgba(0,0,0,0.8), 3, 0, 2, 2);
 }
 
-.button:pressed {
-    -fx-background-color: #dee2e6;
-}
-
 .text-field {
     -fx-background-color: #e5e5e5,#FFFFFF ;
     -fx-background-insets: 0, 0 0 1 0 ;
@@ -78,6 +74,13 @@ Text {
 
 }
 .combo-box{
+	-fx-font-size:  14px;
+    -fx-background-color: white ;
+ 	-fx-border-color: grey;
+    -fx-border-width: 1; 
+    -fx-border-radius: 5;
+}
+.choice-box{
 	-fx-font-size:  14px;
     -fx-background-color: white ;
  	-fx-border-color: grey;
