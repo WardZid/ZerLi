@@ -22,7 +22,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -129,9 +128,6 @@ public class BranchManagerIncomeReportsController implements Initializable {
     /* the incomes of a month */
     private ArrayList<Double> incomesOfMonth = new ArrayList<>();
     
-    @FXML
-    private ComboBox<String> comboBoxBranches;
-    
     
     /* ------------------------------------------------ */
     /*            \/ initialize function \/             */
@@ -146,9 +142,6 @@ public class BranchManagerIncomeReportsController implements Initializable {
 		initMonthsListView();
 		initTableCols(); 
 		setActionOnListView();
-		
-		comboBoxBranches.setVisible(true);
-		
 		
 	}
     
@@ -241,6 +234,7 @@ public class BranchManagerIncomeReportsController implements Initializable {
 	@SuppressWarnings("unchecked")
 	public void setBranchID() {
 		ArrayList<Store> stores = (ArrayList<Store>)MainController.getMyClient().send(MessageType.GET, "store/by/id_user/"+user.getIdUser(), null);
+		if(stores.size()!=0)
 		branchID = stores.get(0).ordinal();
 	}
 	
