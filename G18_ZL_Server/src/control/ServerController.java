@@ -355,6 +355,8 @@ public class ServerController extends ObservableServer {
 				clMsg.setContent(DBController.getAverage(request[3], request[4]));
 			else if(request[1].equals("years")) {
 				clMsg.setContent(DBController.getAllSurvesYears1());
+			} else if(request[1].equals("idByYear")) {
+				clMsg.setContent(DBController.getQuestionIDsByYear(request[2]));
 			}
 			break;
 		default:

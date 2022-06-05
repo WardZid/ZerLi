@@ -187,6 +187,7 @@ public class CEOComplaintReportsController implements Initializable {
     	ArrayList<String> yearsOfSurveys = (ArrayList<String>)MainController.getMyClient().send(MessageType.GET, "survey/years", null);
     	if(yearsOfSurveys.size() == 0) return;
     	choiceBoxYearPDF.getItems().addAll(yearsOfSurveys);
+    	ArrayList<String> ids = (<ArrayList<String>)MainController.getMyClient().send(MessageType.GET, "", null);
     }
     
     /**
