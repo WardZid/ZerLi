@@ -239,7 +239,7 @@ public class OrderDetailsController implements Initializable {
 		for (int i = 0; i < 60; i++) {
 			MinNum.add(String.format("%02d", i));
 		}
-
+		
 		ObservableList<String> Minutes = FXCollections.observableArrayList();
 		Minutes.setAll(MinNum);
 		MinutesCombo.setItems(Minutes);
@@ -338,14 +338,14 @@ public class OrderDetailsController implements Initializable {
 				if (ClientConsoleController.getCustomer().getPoint() >= CartController.getOrderInProcess().getPrice()) {
 					ClientConsoleController.getCustomer().setPoint(ClientConsoleController.getCustomer().getPoint()
 							- CartController.getOrderInProcess().getPrice());
-					// +update refund in DB
+					MainController.getMyClient().send(MessageType.UPDATE, "customer/point/"+ClientConsoleController.getCustomer().getIdCustomer()+"/"+-CartController.getOrderInProcess().getPrice(), null);
 				}
 				// if refund < price order
 				else {
 					System.out.println("you have to pay " + (ClientConsoleController.getCustomer().getPoint()
 							- CartController.getOrderInProcess().getPrice()));
 					ClientConsoleController.getCustomer().setPoint(0);
-					// +update refund in DB
+					MainController.getMyClient().send(MessageType.UPDATE, "customer/point/"+ClientConsoleController.getCustomer().getIdCustomer()+"/"+-ClientConsoleController.getCustomer().getPoint(), null);
 				}
 				CartController.getOrderInProcess().addPriceForShipping();
 			}
@@ -360,14 +360,14 @@ public class OrderDetailsController implements Initializable {
 				if (ClientConsoleController.getCustomer().getPoint() >= CartController.getOrderInProcess().getPrice()) {
 					ClientConsoleController.getCustomer().setPoint(ClientConsoleController.getCustomer().getPoint()
 							- CartController.getOrderInProcess().getPrice());
-					// +update refund in DB
+					MainController.getMyClient().send(MessageType.UPDATE, "customer/point/"+ClientConsoleController.getCustomer().getIdCustomer()+"/"+-CartController.getOrderInProcess().getPrice(), null);
 				}
 				// if refund < price order
 				else {
 					System.out.println("you have to pay " + (CartController.getOrderInProcess().getPrice()
 							- ClientConsoleController.getCustomer().getPoint()));
 					ClientConsoleController.getCustomer().setPoint(0);
-					// +update refund in DB
+					MainController.getMyClient().send(MessageType.UPDATE, "customer/point/"+ClientConsoleController.getCustomer().getIdCustomer()+"/"+-ClientConsoleController.getCustomer().getPoint(), null);
 				}
 
 			}
