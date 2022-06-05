@@ -7,6 +7,7 @@ import java.util.ResourceBundle;
 import control.MainController;
 import entity.BuildItem;
 import entity.Customer;
+import entity.Email;
 import entity.Item.OrderItem;
 import entity.MyMessage.MessageType;
 import entity.Order;
@@ -33,6 +34,10 @@ public class DeliveryController implements Initializable {
 	 * Currently selected order
 	 */
 	private Order selectedOrder;
+	/**
+	 * the user account of the customer of selected order
+	 */
+	private User buyingUser;
 
 	// FXML Components
 	/**
@@ -191,6 +196,7 @@ public class DeliveryController implements Initializable {
 
 		ordersLV.getItems().clear();
 		selectedOrder = null;
+		buyingUser=null;
 
 		orderIdTF.clear();
 		branchTF.clear();
@@ -226,11 +232,11 @@ public class DeliveryController implements Initializable {
 		ArrayList<Customer> customers = (ArrayList<Customer>) MainController.getMyClient().send(MessageType.GET,
 				"customer/by/id_customer/" + selectedOrder.getIdCustomer(), null);
 
-		User u = (User) MainController.getMyClient().send(MessageType.GET,
+		buyingUser = (User) MainController.getMyClient().send(MessageType.GET,
 				"user/by/id_user/" + customers.get(0).getIdUser(), null);
 		
-		custNameTF.setText(u.getName());
-		custNumTF.setText(u.getPhone());
+		custNameTF.setText(buyingUser.getName());
+		custNumTF.setText(buyingUser.getPhone());
 
 		loadItems();
 		confirmBtn.setDisable(false);
@@ -256,6 +262,7 @@ public class DeliveryController implements Initializable {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@FXML
 	/**
 	 * updates an order status in the server to be set as DELIVERED
@@ -265,8 +272,12 @@ public class DeliveryController implements Initializable {
 			return;
 
 		selectedOrder.setOrderStatus(OrderStatus.DELIVERED);
-		MainController.getMyClient().send(MessageType.UPDATE, "order/status", selectedOrder);
-
+		ArrayList<Order> orders=(ArrayList<Order>) MainController.getMyClient().send(MessageType.UPDATE, "order/status", selectedOrder);
+		if(orders.size()!=0 && orders.get(0).getIdOrderStatus()==selectedOrder.getIdOrderStatus()) {
+			Email email=new Email(buyingUser.getEmail(), "Order number ["+selectedOrder.getIdOrder()+"] has been delivered!", "Your order has been delivered\nOrder Summary:\n"+selectedOrder.toString());
+			MainController.getMyClient().send(MessageType.SEND, "email", email);
+		}
+			
 
 		storeCB.getSelectionModel().select(-1);
 		loadOrders(null);
