@@ -212,6 +212,9 @@ public class BranchManagerOrdersController implements Initializable {
 		else System.out.println("Error updating order!");
 		disableAllButtons();
 		initListViews();
+		
+		MainController.getMyClient().send(MessageType.UPDATE, "customer/point/"+currentOrder.getIdCustomer()+"/"+currentOrder.getPrice(), null);
+		
 	}
 	
 	/**
