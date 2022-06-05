@@ -208,10 +208,14 @@ public class BranchManagerOrdersController implements Initializable {
 		ArrayList<Order> order = (ArrayList<Order>)MainController.getMyClient().send(MessageType.UPDATE, "order/status", currentOrder);
 		//check if order was changed.
 		if(order.get(0).getIdOrderStatus() == 4)
+			
 			System.out.println("Order updated successfully!");
 		else System.out.println("Error updating order!");
 		disableAllButtons();
-		initListViews();
+		initListViews(); 
+		 
+		MainController.getMyClient().send(MessageType.UPDATE, "customer/point/"+currentOrder.getIdCustomer()+"/"+currentOrder.getPrice(), null);
+		  
 	}
 	
 	/**
@@ -232,6 +236,8 @@ public class BranchManagerOrdersController implements Initializable {
 			System.out.println("Error updating order!");
 		disableAllButtons();
 		initListViews();
+		MainController.getMyClient().send(MessageType.UPDATE, "customer/point/"+currentOrder.getIdCustomer()+"/"+currentOrder.getPrice(), null);
+		  
 	}
 	
 	/**
