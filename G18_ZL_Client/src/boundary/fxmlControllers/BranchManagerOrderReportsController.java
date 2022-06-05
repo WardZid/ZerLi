@@ -19,11 +19,13 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.PieChart.Data;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.text.Text;
 
@@ -142,6 +144,7 @@ public class BranchManagerOrderReportsController implements Initializable {
     /*            \/ initialize function \/             */
     /* ------------------------------------------------ */
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		
@@ -150,8 +153,7 @@ public class BranchManagerOrderReportsController implements Initializable {
 				ComboBoxbranches.setOnAction(this::onBranchselection);
 				if (ClientConsoleController.getUser().getUserType().ordinal() == UserType.CEO.ordinal()) {
 					ComboBoxbranches.setVisible(true);
-					StoreAddressName = (ArrayList<String>) MainController.getMyClient().send(MessageType.GET, "store/all",
-							null);
+					StoreAddressName = (ArrayList<String>) MainController.getMyClient().send(MessageType.GET, "store/all",null);
 					ObservableList<String> storeAddress = FXCollections.observableArrayList();
 					storeAddress.setAll(StoreAddressName);
 					ComboBoxbranches.setItems(storeAddress);
@@ -171,6 +173,7 @@ public class BranchManagerOrderReportsController implements Initializable {
 	
 	
 	
+	@SuppressWarnings("unchecked")
 	public void onBranchselection(ActionEvent event) {
 		monthsListView.getItems().clear();
 		branchID=Store.valueOf( ComboBoxbranches.getSelectionModel().getSelectedItem()).ordinal();
@@ -200,6 +203,12 @@ public class BranchManagerOrderReportsController implements Initializable {
 	 * @param event
 	 */
 	public void viewReportButtonAction(ActionEvent event) {
+		if(monthsListView.getSelectionModel().isEmpty()) {
+			Alert errorAlert = new Alert(AlertType.ERROR);
+			errorAlert.setHeaderText(null);
+			errorAlert.setContentText("You must select a month and year!");
+			errorAlert.showAndWait();
+		}
 		getDataAfterMonthIsChosen();
 		calculateTextValues();
 		initDataForPieChart();
