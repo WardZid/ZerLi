@@ -134,7 +134,6 @@ public class OrderDetailsController implements Initializable {
 			refundHbox.setVisible(true);
 		}
 
-		refundLable1.setText(ClientConsoleController.getCustomer().getPoint() + "");
 		this.getPaymentVbox().setVisible(false);
 
 		PhoneText.focusedProperty().addListener(new ChangeListener<Boolean>() {
@@ -401,7 +400,8 @@ public class OrderDetailsController implements Initializable {
 	}
 
 	public void OnNextBtnPressed() {
-	
+		int point = (int) MainController.getMyClient().send(MessageType.GET, "customer/points/"+ClientConsoleController.getCustomer().getIdCustomer(),null);
+		refundLable1.setText(point + "");
 		if (DelevireyDatePicker.getValue() != null && HourCombo.getValue() != null && MinutesCombo.getValue() != null)
 			flag = 1;
 		if (flag == 1) {
