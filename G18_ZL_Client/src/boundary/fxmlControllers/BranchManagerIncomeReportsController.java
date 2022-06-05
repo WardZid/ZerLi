@@ -22,6 +22,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -128,6 +129,9 @@ public class BranchManagerIncomeReportsController implements Initializable {
     /* the incomes of a month */
     private ArrayList<Double> incomesOfMonth = new ArrayList<>();
     
+    @FXML
+    private ComboBox<String> comboBoxBranches;
+    
     
     /* ------------------------------------------------ */
     /*            \/ initialize function \/             */
@@ -142,6 +146,9 @@ public class BranchManagerIncomeReportsController implements Initializable {
 		initMonthsListView();
 		initTableCols(); 
 		setActionOnListView();
+		
+		comboBoxBranches.setVisible(true);
+		
 		
 	}
     
