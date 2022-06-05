@@ -10,6 +10,7 @@ import entity.Order;
 import entity.Receipt;
 import entity.Store;
 import entity.User;
+import entity.User.UserType;
 import entity.DailyIncome;
 import entity.MyMessage.MessageType;
 import javafx.beans.value.ChangeListener;
@@ -22,6 +23,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -85,6 +87,8 @@ public class BranchManagerIncomeReportsController implements Initializable {
     @FXML
     private Button viewReportButton;
     
+    @FXML
+    private ComboBox<String> ComboBoxbranches;
     /* ------------------------------------------------ */
     /*               \/ Help Variables \/               */
     /* ------------------------------------------------ */
@@ -135,6 +139,12 @@ public class BranchManagerIncomeReportsController implements Initializable {
     
     @Override
 	public void initialize(URL location, ResourceBundle resources) {
+    	
+    	 if(ClientConsoleController.getUser().getUserType().ordinal()==UserType.CEO.ordinal()) {
+    		 ComboBoxbranches.setVisible(true);
+    		System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAa"); 
+    	 }
+    	 
     	reportLineChart.setLegendVisible(false);
     	
     	initHelpVariables();
