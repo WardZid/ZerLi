@@ -9,6 +9,7 @@ import boundary.fxmlControllers.ClientConsoleController.Navigation;
 import control.MainController;
 import entity.Store;
 import entity.MyMessage.MessageType;
+import entity.Order;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -136,6 +137,44 @@ public class OrderDetailsController implements Initializable {
 		refundLable1.setText(ClientConsoleController.getCustomer().getPoint() + "");
 		this.getPaymentVbox().setVisible(false);
 
+		PhoneText.focusedProperty().addListener(new ChangeListener<Boolean>() {
+			@Override
+			public void changed(ObservableValue<? extends Boolean> arg0, Boolean oldPropertyValue,
+					Boolean newPropertyValue) {
+				if (newPropertyValue) {
+					// Textfield on focus" ;
+
+				} else {
+
+					// Textfield is null
+					if ((AddShippingCheckBox.isSelected() == true && PhoneText.getText().trim().isEmpty())) {
+						PhoneText.setText(0 + "");
+					}
+
+					else {
+						// Textfield is not number
+
+						if ( (AddShippingCheckBox.isSelected() == true && !isNumeric(PhoneText.getText()))) {
+							PhoneText.setText(0 + "");
+						} else {
+							if ( (AddShippingCheckBox.isSelected() == true
+									&& (PhoneText.getText().length() > 10 || PhoneText.getText().length() < 10))) {
+								PhoneText.setText(0 + "");
+							}
+							// Textfield ==0
+							if ( (AddShippingCheckBox.isSelected() == true
+											&& Integer.parseInt(PhoneText.getText()) == 0)) {
+								PhoneText.setText(0 + "");
+							} else {
+								PhoneText.setStyle("-fx-text-fill: black; ");
+								Integer.parseInt(PhoneText.getText());
+							}
+						}
+					}
+
+				}
+			}
+		});
 		credutCardtextfield.focusedProperty().addListener(new ChangeListener<Boolean>() {
 			@Override
 			public void changed(ObservableValue<? extends Boolean> arg0, Boolean oldPropertyValue,
@@ -155,20 +194,19 @@ public class OrderDetailsController implements Initializable {
 						// Textfield is not number
 
 						if (!isNumeric(credutCardtextfield.getText())) {
+								
 							credutCardtextfield.setText("0");
+							
 						} else {
-							if (credutCardtextfield.getText().length() > 6) {
+							if (credutCardtextfield.getText().length() > 6 ) {
 								credutCardtextfield.setText("0");
-
 							}
 							// Textfield ==0
 							if (Integer.parseInt(credutCardtextfield.getText()) == 0) {
 								credutCardtextfield.setText("0");
-
+								
 							} else {
-
 								credutCardtextfield.setStyle("-fx-text-fill: black; ");
-								Integer.parseInt(credutCardtextfield.getText());
 								Integer.parseInt(credutCardtextfield.getText());
 							}
 						}
@@ -178,15 +216,9 @@ public class OrderDetailsController implements Initializable {
 			}
 		});
 
-		noteLable.setVisible(false);
-		required1.setVisible(false);
-		required2.setVisible(false);
-		required3.setVisible(false);
-		required4.setVisible(false);
-		required5.setVisible(false);
-		required6.setVisible(false);
+		SetNodeFillAllFeilds(false);
 		required7.setVisible(false);
-		required8.setVisible(false);
+		
 		shippingVbox.setVisible(false);
 
 		StoreAddressName = (ArrayList<String>) MainController.getMyClient().send(MessageType.GET, "store/all", null);
@@ -254,15 +286,15 @@ public class OrderDetailsController implements Initializable {
 		required3.setVisible(status);
 		required4.setVisible(status);
 		required5.setVisible(status);
-		required7.setVisible(status);
+		required6.setVisible(status);
 		required8.setVisible(status);
 
 	}
 
 	public void onPaymentPressed() {
 		if (ClientConsoleController.getCustomer().getPoint() < CartController.getOrderInProcess().getPrice()) {
-			if (credutCardtextfield.getText().trim().isEmpty()
-					|| Integer.parseInt(credutCardtextfield.getText()) == 0) {
+			if (credutCardtextfield.getText().trim().isEmpty() || Integer.parseInt(credutCardtextfield.getText()) == 0)
+					 {
 				required7.setVisible(true);
 				fillCreditCardLable.setVisible(true);
 			} else {
@@ -270,9 +302,9 @@ public class OrderDetailsController implements Initializable {
 				fillCreditCardLable.setVisible(false);
 				SetOrderDetailsAndSend();
 			}
-		} else 
+		} else
 			SetOrderDetailsAndSend();
-		
+
 	}
 
 	public void SetOrderDetailsAndSend() {
@@ -288,9 +320,9 @@ public class OrderDetailsController implements Initializable {
 		CartController.getOrderInProcess().setIdOrderStatus(0);
 		CartController.getOrderInProcess().setAddress(AddressText.getText());
 		CartController.getOrderInProcess().setOrderDate(MainController.currentTime());
-		
+
 		System.out.println(CartController.getOrderInProcess());
-		
+
 		if (StoreAddressCombo.getValue() != null)
 			CartController.getOrderInProcess().setStore(Store.valueOf(StoreAddressCombo.getValue()));
 
@@ -342,10 +374,22 @@ public class OrderDetailsController implements Initializable {
 			System.out.println("Refund =" + ClientConsoleController.getCustomer().getPoint());
 
 		}
-		System.out.println(CartController.getOrderInProcess());
+		@SuppressWarnings("unchecked")
+		ArrayList<Order> orderForFirstTime = (ArrayList<Order>) MainController.getMyClient().send(MessageType.GET,
+				"order/by/id_customer/" + ClientConsoleController.getCustomer().getIdCustomer(), null);
+		if (orderForFirstTime.size() == 0) {
+			CartController.getOrderInProcess().setPrice(CartController.getOrderInProcess().getPrice() * 0.8);
+			System.out.println("order size= " + orderForFirstTime.size());
+		}
+		System.out.println("ordder==" + CartController.getOrderInProcess());
 		MainController.getMyClient().send(MessageType.POST, "order", CartController.getOrderInProcess());
 		CartController.NewOrder();
 		Navigation.navigator("catalog-view.fxml");
+	}
+
+	public void CancelBtnPressed() {
+		PaymentVbox.setVisible(false);
+		getorderDetailsVbox().setDisable(false);
 	}
 
 	public VBox getPaymentVbox() {
@@ -357,6 +401,7 @@ public class OrderDetailsController implements Initializable {
 	}
 
 	public void OnNextBtnPressed() {
+	
 		if (DelevireyDatePicker.getValue() != null && HourCombo.getValue() != null && MinutesCombo.getValue() != null)
 			flag = 1;
 		if (flag == 1) {
@@ -368,22 +413,33 @@ public class OrderDetailsController implements Initializable {
 				errorAlert.setContentText("You should pick correct time");
 				errorAlert.showAndWait();
 
-			} else
+			}
+			
+			
+			else
 				flag = 0;
 		}
-
+		
 		if ((DelevireyDatePicker.getValue() == null && DeliveryNow.isSelected() == false)
 				|| StoreAddressCombo.getValue() == null
 				|| (HourCombo.getValue() == null && DeliveryNow.isSelected() == false)
 				|| (MinutesCombo.getValue() == null && DeliveryNow.isSelected() == false)) {
 			SetNodeFillAllFeilds(true);
+	
 		} else {
-
+		
 			if (AddShippingCheckBox.isSelected() == true) {
-
+				
+				 if (PhoneText.getText().trim().isEmpty() || Integer.parseInt(PhoneText.getText()) == 0) {
+						Alert errorAlert = new Alert(AlertType.ERROR);
+						errorAlert.setHeaderText(null);
+						errorAlert.setContentText("uncorrect Phone Number");
+						errorAlert.showAndWait();}
+				 
 				if (AddressText.getText().trim().isEmpty() || PhoneText.getText().trim().isEmpty()
-						|| NameReceiverText.getText().trim().isEmpty()) {
+						|| NameReceiverText.getText().trim().isEmpty()|| Integer.parseInt(PhoneText.getText()) == 0) {
 					SetNodeFillAllFeilds(true);
+					 
 				} else {
 					if (flag == 0) {
 						this.getPaymentVbox().setVisible(true);
@@ -400,6 +456,8 @@ public class OrderDetailsController implements Initializable {
 			}
 
 		}
+
+	
 	}
 
 	public static boolean isNumeric(String strNum) {
