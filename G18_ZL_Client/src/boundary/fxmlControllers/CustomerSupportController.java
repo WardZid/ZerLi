@@ -28,69 +28,96 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-
+/** 
+ * This class overrides initialize method 
+ * @author Aziz Hamed
+ * This class is used in order to give add new complaint and sending reply to complaints functionalities
+ */
 public class CustomerSupportController implements Initializable{
-	@FXML
-	private Label ComplaintIdL;
-
+	/**
+	 * The complaint ID textField to show the complaint ID
+	 */
 	@FXML
 	private TextField ComplaintIdT;
+	/**
+	 * The complaints listView this list view contains complaints ID
+	 */
 
 	@FXML
 	private ListView<Integer> ComplaintL;
-
-	@FXML
-	private Label CustomerIdL;
+	/**
+	 * The customer ID textField to show the customer ID
+	 */
 
 	@FXML
 	private TextField CustomerIdT;
-
-	@FXML
-	private Label StatusL;
-
-	@FXML
-	private Label dateL;
+	/**
+	 * Enter new Complaint button is used to open new dialog box which there the store worker can enter new Complaint for specific customer
+	 */
 	@FXML
     private Button enterNewComplaintButton;
+	/**
+	 * The date textField to show the complaint date
+	 */
 
 	@FXML
 	private TextField dateT;
-
-	@FXML
-	private Label descriptionL;
+	/**
+	 * The description textFeild to show the complaint (what the customer says)
+	 */
 
 	@FXML
 	private TextArea descriptionT;
-
-	@FXML
-	private Label refundL;
+	/**
+	 * refund textArea is used to enter refund if the service worker decided to refund the customer
+	 */
 
 	@FXML
 	private TextField refundT;
-
-	@FXML
-	private Label replyL;
+	/**
+	 * The reply textField to enter the reply on the complaint 
+	 */
 
 	@FXML
 	private TextArea replyT;
-
+	/**
+	 * Send Reply Button is used to send reply to the customer
+	 */
 	@FXML
 	private Button sendReplyButton;
+	/**
+	 * Status textField is used to show the status of the complaint
+	 */
 
 	@FXML
 	private TextField statusT;
-	@FXML
-    private Button refresh;
-	private CustomerComplaintSendViewController CCSV = new CustomerComplaintSendViewController();
+	/**
+	 * selectedComplaintId contains the current complaint id that the store worker choose from the list view
+	 */
 	private int selectedComplaintId;
+	/**
+	 * selectedComplaint contains the current complaint that the store worker choose from the list
+	 */
 	private Complaint selectedComplaint;
+	/**
+	 * The finish button is placed in the dialog box and is used to send the new complaint to the server
+	 */
 	public static Node finishButton;
+	/**
+	 * complaint map is used to contain the complaints ID and the complaints itself (each Complaint ID point on the suit complaint object)
+	 */
 	private static HashMap<Integer, Complaint> ComplaintMap = new HashMap<>();
+	/**
+	 * initialize function is used to show the complaints ID on the list view and to create many listeners
+	 */
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		setComplaintsListView();
 		setEditable(false);
 		sendReplyButton.setDisable(true);
+		/**
+		 * change listener on the reply text field to disable reply button if there is no text in the reply text field
+		 */
 		replyT.textProperty().addListener(new ChangeListener<String>() {
 		    @Override
 		    public void changed(ObservableValue<? extends String> observable, String oldValue, 
@@ -101,6 +128,9 @@ public class CustomerSupportController implements Initializable{
 		    	   sendReplyButton.setDisable(true);
 		    }
 		});
+		/**
+		 * Listener on refund text field is used to prevent the store worker to enter letters 
+		 */
 		refundT.textProperty().addListener(new ChangeListener<String>() {
 		    @Override
 		    public void changed(ObservableValue<? extends String> observable, String oldValue, 
@@ -110,6 +140,9 @@ public class CustomerSupportController implements Initializable{
 		        }
 		    }
 		});
+		/**
+		 * complaints list view Listener is used to show the suitable information of the chosen complaint id in the text fields
+		 */
 		ComplaintL.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Integer>() {
 			@Override
 			public void changed(ObservableValue<? extends Integer> arg0, Integer arg1, Integer arg2) {
@@ -118,7 +151,6 @@ public class CustomerSupportController implements Initializable{
 					selectedComplaintId = ComplaintL.getSelectionModel().getSelectedItem();
 					selectedComplaint = ComplaintMap.get(selectedComplaintId);
 					setTexts();
-					// descriptionT.setDisable(true);
 					setEditable(true);
 					replyT.clear();
 				}catch(NullPointerException e) {}
@@ -126,11 +158,18 @@ public class CustomerSupportController implements Initializable{
 				}
 		});
 	}
+	/**
+	 * This function is used to make the refund text field and the reply text field editable if currently the store worker point on specific complaint id
+	 * @param toEdit  toEdit = true if the store worker point on complaint id and false if not
+	 */
 
 	private void setEditable(boolean toEdit) {
 		refundT.setEditable(toEdit);
 		replyT.setEditable(toEdit);
 	}
+	/**
+	 * This function is used to set the suitable texts in the text fields according to the complaint id that choosed
+	 */
 	private void setTexts() {
 		ComplaintIdT.setText(Integer.toString(selectedComplaintId));
 		CustomerIdT.setText(Integer.toString(selectedComplaint.getIdCustomer()));
@@ -138,15 +177,20 @@ public class CustomerSupportController implements Initializable{
 		dateT.setText(selectedComplaint.getDate());
 		descriptionT.setText(selectedComplaint.getComplaint());
 	}
-
-
+	/**
+	 * This function is used to initialize the complaints list view (ask the server for all open complaints and enter the ID of all the returned complaints to the list view
+	 */
 	private void setComplaintsListView() {
-		ArrayList<Complaint> complaintsList =  ComplaintQueryFromDB(MessageType.GET,null);
+		ArrayList<Complaint> complaintsList =  (ArrayList<Complaint>)ComplaintQueryFromDB(MessageType.GET,null);
 		for(int i=0 ; i<complaintsList.size() ; i++)
 		ComplaintMap.put(complaintsList.get(i).getIdComplaint(), complaintsList.get(i));
 		ComplaintL.getItems().clear();
 		ComplaintL.getItems().addAll(ComplaintMap.keySet());
 	}
+	/**
+	 * This function is start when the store worker click on send reply button (set the reply in the suit complaint object and send the this object to the server)
+	 * @param event 
+	 */
 
 	public void onSendReply(ActionEvent event) {
 		if(refundT.getText().equals(""))
@@ -172,13 +216,14 @@ public class CustomerSupportController implements Initializable{
 		descriptionT.clear();
 		replyT.clear();
 	}
-	public void onRefresh(ActionEvent event) {
-		ArrayList<Complaint> complaintsList =  ComplaintQueryFromDB(MessageType.GET,null);
-		setComplaintsListView();
-	}
+	/**
+	 * This function will start when the store worker click on Enter new Complaint button then will open dialog box to enter the new Complaint information
+	 * @param event
+	 * @throws IOException is thrown if the load of the dialog box failed
+	 */
+	
 	@FXML
 	public void onEnter(ActionEvent event) throws IOException {
-		ArrayList<Complaint> arraylist = null;
 		Dialog<ButtonType> dialog = LoadDialogPane();
 		Optional<ButtonType> clickedButton = dialog.showAndWait();
 		if (clickedButton.get() == ButtonType.FINISH) {
@@ -186,7 +231,7 @@ public class CustomerSupportController implements Initializable{
 			LocalDateTime now = LocalDateTime.now();
 			Complaint newComplaint = new Complaint(CustomerComplaintSendViewController.getCustomerID(),
 					dtf.format(now), CustomerComplaintSendViewController.getComplaint());
-			ComplaintQueryFromDB(MessageType.POST, newComplaint);
+		 ComplaintQueryFromDB(MessageType.POST, newComplaint);
 			initialize(null,null);
 			dialog.close();
 		}
@@ -194,6 +239,11 @@ public class CustomerSupportController implements Initializable{
 			dialog.close();
 		
 	}
+	/**
+	 * This function is used to load the dialog box and open it
+	 * @return the dialog pane 
+	 * @throws IOException is thrown if the load of the dialog box failed
+	 */
 	private Dialog<ButtonType> LoadDialogPane() throws IOException {
 		FXMLLoader fxmlLoader = new FXMLLoader(
 		ClientView.class.getResource("/boundary/fxmls/customer-complaints-send-view.fxml"));
@@ -205,8 +255,14 @@ public class CustomerSupportController implements Initializable{
 		dialog.setDialogPane(pane);
 		return dialog;
 	}
-	private ArrayList<Complaint> ComplaintQueryFromDB(MessageType messageType, Complaint complaint){
-		return (ArrayList<Complaint>) MainController.getMyClient().send(messageType, "complaint/by/status_complaint/OPEN",complaint);
+	/**
+	 * This function is used to ask for some specific queries
+	 * @param messageType what we want from the server to do with the data base (UPDATE,POST,GET,INFO)
+	 * @param complaint the complaint that we want to post, update or get
+	 * @return Object from the data base
+	 */
+	private Object ComplaintQueryFromDB(MessageType messageType, Complaint complaint){
+		return  MainController.getMyClient().send(messageType, "complaint/by/status_complaint/OPEN",complaint);
 	}
 
 }
