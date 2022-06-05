@@ -451,6 +451,7 @@ public class BranchManagerOrdersController implements Initializable {
 	@SuppressWarnings("unchecked")
 	private void setBranchID() {
 		ArrayList<Store> stores = (ArrayList<Store>)MainController.getMyClient().send(MessageType.GET, "store/by/id_user/"+user.getIdUser(), null);
+		if(stores.size()!=0)
 		branchID = stores.get(0).ordinal();		
 	}
 	
