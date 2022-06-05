@@ -12,7 +12,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="550.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="boundary.fxmlControllers.BranchManagerOrdersController">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="550.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="boundary.fxmlControllers.BranchManagerOrdersController">
    <children>
       <VBox fx:id="myVBox" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" StackPane.alignment="CENTER">
          <children>
@@ -113,7 +113,7 @@
                                     <Font name="System Bold" size="18.0" />
                                  </font>
                               </Text>
-                              <Text fx:id="orderIDText" strokeType="OUTSIDE" strokeWidth="0.0" text="-order number-">
+                              <Text fx:id="orderIDText" strokeType="OUTSIDE" strokeWidth="0.0">
                                  <VBox.margin>
                                     <Insets left="10.0" />
                                  </VBox.margin>
@@ -126,7 +126,7 @@
                                     <Font name="System Bold" size="18.0" />
                                  </font>
                               </Text>
-                              <Text fx:id="dateOfOrderText" strokeType="OUTSIDE" strokeWidth="0.0" text="-date of order-">
+                              <Text fx:id="dateOfOrderText" strokeType="OUTSIDE" strokeWidth="0.0">
                                  <VBox.margin>
                                     <Insets left="10.0" />
                                  </VBox.margin>
@@ -139,7 +139,7 @@
                                     <Font name="System Bold" size="18.0" />
                                  </font>
                               </Text>
-                              <Text fx:id="deliveryDateText" strokeType="OUTSIDE" strokeWidth="0.0" text="-delivery date-">
+                              <Text fx:id="deliveryDateText" strokeType="OUTSIDE" strokeWidth="0.0">
                                  <VBox.margin>
                                     <Insets left="10.0" />
                                  </VBox.margin>
@@ -152,7 +152,7 @@
                                     <Font name="System Bold" size="18.0" />
                                  </font>
                               </Text>
-                              <Text fx:id="addressText" fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="-address-">
+                              <Text fx:id="addressText" fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0">
                                  <VBox.margin>
                                     <Insets left="10.0" />
                                  </VBox.margin>
@@ -209,9 +209,9 @@
                         <Insets right="5.0" />
                      </HBox.margin>
                      <children>
-                        <Text fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="Customer Name :">
+                        <Text fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="Customer Name :" underline="true">
                            <font>
-                              <Font name="System Bold" size="14.0" />
+                              <Font name="System Bold" size="18.0" />
                            </font>
                         </Text>
                         <Text fx:id="fCName" strokeType="OUTSIDE" strokeWidth="0.0" text="-customer name-">
@@ -219,9 +219,9 @@
                               <Insets left="15.0" />
                            </VBox.margin>
                         </Text>
-                        <Text fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="Customer ID :">
+                        <Text fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="Customer ID :" underline="true">
                            <font>
-                              <Font name="System Bold" size="14.0" />
+                              <Font name="System Bold" size="18.0" />
                            </font>
                         </Text>
                         <Text fx:id="fCID" strokeType="OUTSIDE" strokeWidth="0.0" text="-customer id-">
@@ -229,9 +229,9 @@
                               <Insets left="15.0" />
                            </VBox.margin>
                         </Text>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Order Number :">
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Order Number :" underline="true">
                            <font>
-                              <Font name="System Bold" size="14.0" />
+                              <Font name="System Bold" size="18.0" />
                            </font>
                         </Text>
                         <Text fx:id="fONumber" strokeType="OUTSIDE" strokeWidth="0.0" text="-order number-">
@@ -239,9 +239,9 @@
                               <Insets left="15.0" />
                            </VBox.margin>
                         </Text>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Order Status :">
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Order Status :" underline="true">
                            <font>
-                              <Font name="System Bold" size="14.0" />
+                              <Font name="System Bold" size="18.0" />
                            </font>
                         </Text>
                         <Text fx:id="fOStatus" strokeType="OUTSIDE" strokeWidth="0.0" text="-order status-">
@@ -256,9 +256,9 @@
                         <Insets top="5.0" />
                      </HBox.margin>
                      <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Address :">
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Address :" underline="true">
                            <font>
-                              <Font name="System Bold" size="14.0" />
+                              <Font name="System Bold" size="18.0" />
                            </font>
                         </Text>
                         <Text fx:id="fAddress" strokeType="OUTSIDE" strokeWidth="0.0" text="-address-">
@@ -266,9 +266,9 @@
                               <Insets left="15.0" />
                            </VBox.margin>
                         </Text>
-                        <Text fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="Order Date :">
+                        <Text fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="Order Date :" underline="true">
                            <font>
-                              <Font name="System Bold" size="14.0" />
+                              <Font name="System Bold" size="18.0" />
                            </font>
                         </Text>
                         <Text fx:id="fOdate" strokeType="OUTSIDE" strokeWidth="0.0" text="-order date-">
@@ -276,9 +276,9 @@
                               <Insets left="15.0" />
                            </VBox.margin>
                         </Text>
-                        <Text fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="Delivery Date :">
+                        <Text fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="Delivery Date :" underline="true">
                            <font>
-                              <Font name="System Bold" size="14.0" />
+                              <Font name="System Bold" size="18.0" />
                            </font>
                         </Text>
                         <Text fx:id="fODDate" strokeType="OUTSIDE" strokeWidth="0.0" text="-delivery date-">
@@ -286,9 +286,9 @@
                               <Insets left="15.0" />
                            </VBox.margin>
                         </Text>
-                        <Text fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="Cancel Date :">
+                        <Text fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="Cancel Date :" underline="true">
                            <font>
-                              <Font name="System Bold" size="14.0" />
+                              <Font name="System Bold" size="18.0" />
                            </font>
                         </Text>
                         <Text fx:id="fOCDate" strokeType="OUTSIDE" strokeWidth="0.0" text="-cancel date-">
@@ -303,21 +303,21 @@
                         <Insets left="5.0" />
                      </HBox.margin>
                      <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Description :">
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Description :" underline="true">
                            <font>
-                              <Font name="System Bold" size="14.0" />
+                              <Font name="System Bold" size="18.0" />
                            </font>
                         </Text>
                         <TextArea fx:id="fDescription" editable="false" prefHeight="200.0" prefWidth="200.0" />
-                        <Text fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="Greeting :">
+                        <Text fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="Greeting :" underline="true">
                            <font>
-                              <Font name="System Bold" size="14.0" />
+                              <Font name="System Bold" size="18.0" />
                            </font>
                         </Text>
                         <TextArea fx:id="fGreeting" editable="false" prefHeight="200.0" prefWidth="200.0" />
                         <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0">
                            <children>
-                              <Text fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="Overall To Pay :">
+                              <Text fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="Overall To Pay :" underline="true">
                                  <font>
                                     <Font name="System Bold" size="14.0" />
                                  </font>

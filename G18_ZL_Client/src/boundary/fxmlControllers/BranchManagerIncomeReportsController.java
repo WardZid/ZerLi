@@ -338,8 +338,7 @@ public class BranchManagerIncomeReportsController implements Initializable {
 			if (d < min)
 				min = d;
 		}
-		this.avg = this.overallIncomeThisMonth / incomesOfMonth.size();
-
+		this.avg = this.overallIncomeThisMonth / (double)daysOfMonth.get(month);
 	}
 
 	/**
