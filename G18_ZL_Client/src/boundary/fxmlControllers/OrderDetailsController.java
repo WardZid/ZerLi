@@ -268,28 +268,29 @@ public class OrderDetailsController implements Initializable {
 			} else {
 				credutCardtextfield.setDisable(true);
 				fillCreditCardLable.setVisible(false);
-				SetOrderDetails();
+				SetOrderDetailsAndSend();
 			}
-		} else {
-
-			SetOrderDetails();
-			
-		}
+		} else 
+			SetOrderDetailsAndSend();
+		
 	}
 
-	public void SetOrderDetails() {
+	public void SetOrderDetailsAndSend() {
 
-		CartController.getOrderInProcess().setGreetingCard(GreetingArea.getText());
 		if (DeliveryNow.isSelected() == false)
 			CartController.getOrderInProcess().setDeliveryDate(DelevireyDatePicker.getValue().toString() + " "
 					+ HourCombo.getValue() + ":" + MinutesCombo.getValue() + ":00");
-		if (DeliveryNow.isSelected() == false)
+		if (DeliveryNow.isSelected() == true)
 			CartController.getOrderInProcess().setDeliveryDate(null);
 		CartController.getOrderInProcess().setIdCustomer(ClientConsoleController.getCustomer().getIdCustomer());
+		CartController.getOrderInProcess().setGreetingCard(GreetingArea.getText());
 		CartController.getOrderInProcess().setDescription(DescribtionArea.getText());
 		CartController.getOrderInProcess().setIdOrderStatus(0);
 		CartController.getOrderInProcess().setAddress(AddressText.getText());
 		CartController.getOrderInProcess().setOrderDate(MainController.currentTime());
+		
+		System.out.println(CartController.getOrderInProcess());
+		
 		if (StoreAddressCombo.getValue() != null)
 			CartController.getOrderInProcess().setStore(Store.valueOf(StoreAddressCombo.getValue()));
 
@@ -339,8 +340,10 @@ public class OrderDetailsController implements Initializable {
 
 			}
 			System.out.println("Refund =" + ClientConsoleController.getCustomer().getPoint());
-			
+
 		}
+		System.out.println(CartController.getOrderInProcess());
+		MainController.getMyClient().send(MessageType.POST, "order", CartController.getOrderInProcess());
 		CartController.NewOrder();
 		Navigation.navigator("catalog-view.fxml");
 	}

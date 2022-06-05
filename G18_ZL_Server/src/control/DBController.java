@@ -18,6 +18,7 @@ import entity.Customer;
 import entity.Customer.CustomerStatus;
 import entity.DailyIncome;
 import entity.Item;
+import entity.Item.ItemInBuild;
 import entity.Item.OrderItem;
 import entity.Order;
 import entity.Receipt;
@@ -883,6 +884,94 @@ public class DBController {
 
 	// INSERT QUERIES (POST)*******************************************************
 
+	
+	public static boolean insertOrder(Order order) {
+
+		int linesChanged = 0;
+		try {
+			PreparedStatement ps = conn.prepareStatement(
+					"INSERT INTO assignment3.order (`id_customer`,`id_store`,`id_order_status`,`price_order`,`date_order`,`delivery_date_order`,`address_order`,`greeting_order`,`description_order`) VALUES (?,?,?,?,?,?,?,?,?)",
+					Statement.RETURN_GENERATED_KEYS);
+			ps.setInt(1, order.getIdCustomer());
+			ps.setInt(2, order.getIdStore());
+			ps.setInt(3, order.getIdOrderStatus());
+			ps.setDouble(4, order.getPrice());
+			ps.setString(5, order.getOrderDate());
+			ps.setString(6, order.getDeliveryDate());
+			ps.setString(7, order.getAddress());
+			ps.setString(8, order.getGreetingCard());
+			ps.setString(9, order.getDescription());
+			linesChanged = ps.executeUpdate();
+			if (linesChanged == 0) {
+				ps.close();
+				return false;
+			}
+
+			ResultSet rs = ps.getGeneratedKeys();
+
+			rs.next();
+			System.out.println("RS->order->ID: "+rs.getInt(1));
+			order.setIdOrder(rs.getInt(1));
+			rs.close();
+			ps.close();
+
+			for (OrderItem item : order.getItems()) {
+				ps = conn.prepareStatement(
+						"INSERT INTO assignment3.order_item (`id_order`,`id_item`,`amount`) VALUES (?,?,?)");
+				ps.setInt(1, order.getIdOrder());
+				ps.setInt(2, item.getIdItem());
+				ps.setInt(3, item.getAmount());
+				linesChanged = ps.executeUpdate();
+				if (linesChanged == 0) {
+					ps.close();
+					return false;
+				}
+				ps.close();
+			}
+
+			for (BuildItem buildItem : order.getBuildItems()) {
+				ps = conn.prepareStatement("INSERT INTO assignment3.build_item (`id_order`,`amount`) VALUES (?,?)",
+						Statement.RETURN_GENERATED_KEYS);
+				ps.setInt(1,order.getIdOrder());
+				ps.setInt(2,buildItem.getAmount());
+				linesChanged = ps.executeUpdate();
+				if (linesChanged == 0) {
+					ps.close();
+					return false;
+				}
+				rs = ps.getGeneratedKeys();
+
+				rs.next();
+				System.out.println("RS->buildItem->ID: "+rs.getInt(1));
+				buildItem.setIdBuildItem(rs.getInt(1));
+				rs.close();
+				ps.close();
+				
+				for (ItemInBuild itemInBuild : buildItem.getItemsInBuild().values()) {
+					ps = conn.prepareStatement(
+							"INSERT INTO assignment3.item_in_build (`id_item`,`id_build_item`,`amount_in_build`) VALUES (?,?,?)");
+					ps.setInt(1, itemInBuild.getIdItem());
+					ps.setInt(2, buildItem.getIdBuildItem());
+					ps.setInt(3, itemInBuild.getAmount());
+					linesChanged = ps.executeUpdate();
+					if (linesChanged == 0) {
+						ps.close();
+						return false;
+					}
+					ps.close();
+				}
+			}
+
+		} catch (SQLException e) {
+			ServerView.printErr(DBController.class, "Inserting new order failed: " + order.toString());
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+
+
+	
 	public static boolean insertItem(Item item) {
 		int linesChanged = 0;
 		try {

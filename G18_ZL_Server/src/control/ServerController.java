@@ -216,15 +216,17 @@ public class ServerController extends ObservableServer {
 	}
 
 	/**
-	 * handles clients' GET requests
+	 * handles clients' GET requests in http style
+	 * messages look loke: "order/by/id_order/xxx"
 	 * 
 	 * @param MyMessage Contains GET request
 	 */
 
 	private void handleGetRequest(MyMessage clMsg, ConnectionToClient client) {
 		String[] request = clMsg.getInfo().split("/");
-
-		if (request[0].equals("login")) {
+		
+		switch (request[0]) {
+		case "login":
 			User user = (User) clMsg.getContent();
 			if (request[1].equals("user")) {
 				clMsg.setContent(DBController.getUser(user.getUsername(), user.getPassword()));
@@ -232,14 +234,14 @@ public class ServerController extends ObservableServer {
 			} else if (request[1].equals("customer")) {
 				clMsg.setContent(DBController.getCustomerBy("id_user", user.getIdUser() + ""));
 			}
-		} else if (request[0].equals("user")) {
-			if(request[1].equals("all")) {
-				
-			} else if(request[1].equals("by"))
-				clMsg.setContent(DBController.getUserBy(request[2], request[3]));
-		}
+			break;
+		case "user":
+			if (request[1].equals("all")) {
 
-		else if (request[0].equals("order")) {
+			} else if (request[1].equals("by"))
+				clMsg.setContent(DBController.getUserBy(request[2], request[3]));
+			break;
+		case "order":
 			if (request[1].equals("all")) {
 				clMsg.setContent(DBController.getOrdersAll());
 			} else if (request[1].equals("income")) {
@@ -266,7 +268,8 @@ public class ServerController extends ObservableServer {
 					clMsg.setContent(DBController.getReceiptsOfMonth(request[3], request[4], request[5]));
 				}
 			}
-		} else if (request[0].equals("item")) {
+			break;
+		case "item":
 			if (request[1].equals("all")) {
 				clMsg.setContent(DBController.getItemsAll());
 			} else if (request[1].equals("by")) {
@@ -276,7 +279,8 @@ public class ServerController extends ObservableServer {
 			} else if (request[1].equals("complete")) {
 				clMsg.setContent(DBController.getItemsComplete());
 			}
-		} else if (request[0].equals("build_item")) {
+			break;
+		case "build_item":
 			if (request[1].equals("all")) {
 				clMsg.setContent(DBController.getBuildItemsAll());
 			} else if (request[1].equals("by")) {
@@ -288,70 +292,195 @@ public class ServerController extends ObservableServer {
 					clMsg.setContent(DBController.getFullBuildItemsBy(request[3], request[4]));
 				}
 			}
-		} else if (request[0].equals("item_in_build")) {
+			break;
+		case "item_in_build":
 			clMsg.setContent(DBController.getItemInBuildAll((BuildItem) clMsg.getContent()));
-		} else if (request[0].equals("store")) {
+			break;
+		case "store":
 			if (request[1].equals("all")) {
 				clMsg.setContent(DBController.getStoreAll());
 			} else if (request[1].equals("by")) {
 				clMsg.setContent(DBController.getStoreBy(request[2], request[3]));
 			}
-		} else if (request[0].equals("category")) {
+			break;
+		case "category":
 			if (request[1].equals("all"))
 				clMsg.setContent(DBController.getCategoryAll());
 			else if (request[1].equals("by")) {
 				if (request[2].equals("type"))
 					clMsg.setContent(DBController.getCategoryByType(request[3]));
 			}
-		} else if (request[0].equals("type")) {
+			break;
+		case "type":
 			if (request[1].equals("all"))
 				clMsg.setContent(DBController.getTypeAll());
-		} else if (request[0].equals("customer")) {
+			break;
+		case "customer":
 			if (request[1].equals("all")) {
 				clMsg.setContent(DBController.getCustomerAll());
 			} else if (request[1].equals("by")) {
 				clMsg.setContent(DBController.getCustomerBy(request[2], request[3]));
 			}
-		} else if (request[0].equals("complaint")) {
+			break;
+		case "complaint":
 			if (request[1].equals("all")) {
 				clMsg.setContent(DBController.getComplaintsAll());
 			} else if (request[1].equals("by")) {
 				clMsg.setContent(DBController.getComplaintsBy(request[2], request[3]));
-			} else if(request[1].equals("years")) {
+			} else if (request[1].equals("years")) {
 				System.out.println("here");
 				clMsg.setContent(DBController.getComplaintYears());
-			} else if(request[1].equals("count")) {
-				if(request[2].equals("inQuarter")) {
-					clMsg.setContent(DBController.getCountComplaintsInQuarter(request[3],request[4]));
+			} else if (request[1].equals("count")) {
+				if (request[2].equals("inQuarter")) {
+					clMsg.setContent(DBController.getCountComplaintsInQuarter(request[3], request[4]));
 				}
-		} else if (request[0].equals("questions")) {
-			if (request[1].equals("all"))
-				clMsg.setContent(DBController.getAllSurves());
-		} else if (request[0].equals("survey")) {
-			if (request[1].equals("date_survey"))
-				clMsg.setContent(DBController.getAllSurvesYears());
-			else
-				if(request[1].equals("by") && request[2].equals("date_survey && id_question_average")) 
-					clMsg.setContent(DBController.getAverage(request[3],request[4]));
-		}
-//		else if (request[0].equals("questions")) {
-//			if(request[1].equals("issue_date")&& request[2].equals("all")) 
-//				clMsg.setContent(DBController.getAllDatesForQuestion());
-//		} 
-//		else if(request[0].equals("survey_question")) {
-//			if(request[1].equals("all"))
-//				clMsg.setContent(DBController.getAllSurviesQuestion());
-//		}
-		else {
+			} else if (request[0].equals("questions")) {
+				if (request[1].equals("all"))
+					clMsg.setContent(DBController.getAllSurves());
+			} else if (request[0].equals("survey")) {
+				if (request[1].equals("date_survey"))
+					clMsg.setContent(DBController.getAllSurvesYears());
+				else if (request[1].equals("by") && request[2].equals("date_survey && id_question_average"))
+					clMsg.setContent(DBController.getAverage(request[3], request[4]));
+			}
+			break;
+		default:
 			ServerView.printErr(getClass(), "Unhandled Get request: " + clMsg.getInfo());
+			break;
 		}
+//
+//		if (request[0].equals("login")) {
+//			User user = (User) clMsg.getContent();
+//			if (request[1].equals("user")) {
+//				clMsg.setContent(DBController.getUser(user.getUsername(), user.getPassword()));
+//
+//			} else if (request[1].equals("customer")) {
+//				clMsg.setContent(DBController.getCustomerBy("id_user", user.getIdUser() + ""));
+//			}
+//		} else if (request[0].equals("user")) {
+//			if (request[1].equals("all")) {
+//
+//			} else if (request[1].equals("by"))
+//				clMsg.setContent(DBController.getUserBy(request[2], request[3]));
+//		}
+//
+//		else if (request[0].equals("order")) {
+//			if (request[1].equals("all")) {
+//				clMsg.setContent(DBController.getOrdersAll());
+//			} else if (request[1].equals("income")) {
+//				if (request[2].equals("quarter")) {
+//					clMsg.setContent(DBController.getIncomesInQuarter(request[3], request[4], request[5]));
+//				}
+//			} else if (request[1].equals("by")) {
+//				clMsg.setContent(DBController.getOrdersBy(request[2], request[3]));
+//			} else if (request[1].equals("fill")) {
+//				Order o = (Order) clMsg.getContent();
+//				clMsg.setContent(DBController.getOrderItemsFull(o));
+//			} else if (request[1].equals("byBranchMonth")) {
+//				clMsg.setContent(DBController.getOrdersByBranchMonthYear(request[2], request[3], request[4]));
+//			} else if (request[1].equals("report")) {
+//				if (request[2].equals("sale")) {
+//					if (request[3].equals("months")) {
+//						clMsg.setContent(DBController.getMonthsInBranch(request[4]));
+//					}
+//				} else if (request[2].equals("sum")) {
+//					if (request[3].equals("income")) {
+//						clMsg.setContent(DBController.getSumOfDailyIncome(request[4], request[5], request[6]));
+//					}
+//				} else if (request[2].equals("incomebycustomer")) {
+//					clMsg.setContent(DBController.getReceiptsOfMonth(request[3], request[4], request[5]));
+//				}
+//			}
+//		} else if (request[0].equals("item")) {
+//			if (request[1].equals("all")) {
+//				clMsg.setContent(DBController.getItemsAll());
+//			} else if (request[1].equals("by")) {
+//				clMsg.setContent(DBController.getItemsBy(request[2], request[3]));
+//			} else if (request[1].equals("amount")) {
+//				clMsg.setContent(DBController.getAmountOfEveryItem(request[2], request[3], request[4]));
+//			} else if (request[1].equals("complete")) {
+//				clMsg.setContent(DBController.getItemsComplete());
+//			}
+//		} else if (request[0].equals("build_item")) {
+//			if (request[1].equals("all")) {
+//				clMsg.setContent(DBController.getBuildItemsAll());
+//			} else if (request[1].equals("by")) {
+//				clMsg.setContent(DBController.getBuildItemsBy(request[2], request[3]));
+//			} else if (request[1].equals("full")) {
+//				if (request[2].equals("all")) {
+//					clMsg.setContent(DBController.getFullBuildItemsAll());
+//				} else if (request[2].equals("by")) {
+//					clMsg.setContent(DBController.getFullBuildItemsBy(request[3], request[4]));
+//				}
+//			}
+//		} else if (request[0].equals("item_in_build")) {
+//			clMsg.setContent(DBController.getItemInBuildAll((BuildItem) clMsg.getContent()));
+//		} else if (request[0].equals("store")) {
+//			if (request[1].equals("all")) {
+//				clMsg.setContent(DBController.getStoreAll());
+//			} else if (request[1].equals("by")) {
+//				clMsg.setContent(DBController.getStoreBy(request[2], request[3]));
+//			}
+//		} else if (request[0].equals("category")) {
+//			if (request[1].equals("all"))
+//				clMsg.setContent(DBController.getCategoryAll());
+//			else if (request[1].equals("by")) {
+//				if (request[2].equals("type"))
+//					clMsg.setContent(DBController.getCategoryByType(request[3]));
+//			}
+//		} else if (request[0].equals("type")) {
+//			if (request[1].equals("all"))
+//				clMsg.setContent(DBController.getTypeAll());
+//		} else if (request[0].equals("customer")) {
+//			if (request[1].equals("all")) {
+//				clMsg.setContent(DBController.getCustomerAll());
+//			} else if (request[1].equals("by")) {
+//				clMsg.setContent(DBController.getCustomerBy(request[2], request[3]));
+//			}
+//		} else if (request[0].equals("complaint")) {
+//			if (request[1].equals("all")) {
+//				clMsg.setContent(DBController.getComplaintsAll());
+//			} else if (request[1].equals("by")) {
+//				clMsg.setContent(DBController.getComplaintsBy(request[2], request[3]));
+//			} else if (request[1].equals("years")) {
+//				System.out.println("here");
+//				clMsg.setContent(DBController.getComplaintYears());
+//			} else if (request[1].equals("count")) {
+//				if (request[2].equals("inQuarter")) {
+//					clMsg.setContent(DBController.getCountComplaintsInQuarter(request[3], request[4]));
+//				}
+//			} else if (request[0].equals("questions")) {
+//				if (request[1].equals("all"))
+//					clMsg.setContent(DBController.getAllSurves());
+//			} else if (request[0].equals("survey")) {
+//				if (request[1].equals("date_survey"))
+//					clMsg.setContent(DBController.getAllSurvesYears());
+//				else if (request[1].equals("by") && request[2].equals("date_survey && id_question_average"))
+//					clMsg.setContent(DBController.getAverage(request[3], request[4]));
+//			}
+////		else if (request[0].equals("questions")) {
+////			if(request[1].equals("issue_date")&& request[2].equals("all")) 
+////				clMsg.setContent(DBController.getAllDatesForQuestion());
+////		} 
+////		else if(request[0].equals("survey_question")) {
+////			if(request[1].equals("all"))
+////				clMsg.setContent(DBController.getAllSurviesQuestion());
+////		}
+//			else {
+//				ServerView.printErr(getClass(), "Unhandled Get request: " + clMsg.getInfo());
+//			}
+//		}
 	}
 
 	private void handlePostRequest(MyMessage clMsg, ConnectionToClient client) {
 
 		String[] request = clMsg.getInfo().split("/");
 
-		if (request[0].equals("complaint")) {
+		if(request[0].equals("order")) {
+			Order o=(Order) clMsg.getContent();
+			clMsg.setContent(DBController.insertOrder(o));
+		}
+		else if (request[0].equals("complaint")) {
 			Complaint complaint = (Complaint) clMsg.getContent();
 			clMsg.setContent(DBController.insertComplaint(complaint));
 
@@ -360,13 +489,12 @@ public class ServerController extends ObservableServer {
 			clMsg.setContent(DBController.insertSurvey(s));
 		} else if (request[0].equals("item")) {
 			Item i = (Item) clMsg.getContent();
-			clMsg.setContent(DBController.insertItem(i));				
-		} 
-		else if(request[0].equals("report")) {
+			clMsg.setContent(DBController.insertItem(i));
+		} else if (request[0].equals("report")) {
 			SurveyReport sr = (SurveyReport) clMsg.getContent();
 			clMsg.setContent(DBController.insertReportPDF(sr));
 		}
-			
+
 		else {
 			ServerView.printErr(getClass(), "Unhandled POST request: " + clMsg.getInfo());
 		}
@@ -392,9 +520,9 @@ public class ServerController extends ObservableServer {
 			if (request[1].equals("status")) {
 				clMsg.setContent(
 						DBController.updateCustomerStatusOne(c, CustomerStatus.getById(c.getIdCustomerStatus())));
-			}
-			else if(request[1].equals("point"))
-				clMsg.setContent(DBController.updatePoint(Integer.parseInt(request[2]), Double.parseDouble(request[3])));
+			} else if (request[1].equals("point"))
+				clMsg.setContent(
+						DBController.updatePoint(Integer.parseInt(request[2]), Double.parseDouble(request[3])));
 		} else if (request[0].equals("complaint")) {
 			Complaint complaint = (Complaint) clMsg.getContent();
 			clMsg.setContent(DBController.updateComplaint(complaint));

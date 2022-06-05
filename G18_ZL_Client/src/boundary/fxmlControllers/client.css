@@ -51,13 +51,6 @@ Text {
     -fx-effect: dropshadow( three-pass-box, rgba(0,0,0,0.8), 3, 0, 2, 2);
 }
 
-/*focused is sus*/
-.button:focused {
-    -fx-border-color: transparent, transparent;
-    -fx-border-width: 1, 1;
-    -fx-border-style: solid;
-    -fx-border-radius: 0, 0;
-}
 .button:pressed {
     -fx-background-color: #dee2e6;
 }
@@ -79,12 +72,12 @@ Text {
     -fx-background-size: 0 ;
 
 }
-.scroll-pane{
-    -fx-effect: dropshadow( three-pass-box, rgba(0,0,0,0.8), 3, 0, 2, 2);
-    -fx-font-size:  12px;
-}
 .color-picker{
     -fx-font-size:  12px;
     -fx-background-color: #ffffff ;
 
+}
+.combo-box{
+	-fx-font-size:  12px;
+    -fx-background-color: #ffffff ;
 }
