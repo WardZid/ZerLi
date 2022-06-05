@@ -79,6 +79,7 @@ public class ServerController extends ObservableServer {
 	public void startServer() throws Exception {
 		try {
 			DBController.connectDB();
+			DBController.logOutAll();
 			listen(); // Start listening for connections
 			serverState = true;
 		} catch (SQLException ex) {
@@ -100,6 +101,7 @@ public class ServerController extends ObservableServer {
 			sendToAllClients(new MyMessage(null, 0, MessageType.INFO, "global/stop", null));
 			close();
 			serverState = false;
+			DBController.logOutAll();
 			DBController.disconnectDB();
 		} catch (IOException e) {
 			e.printStackTrace();
