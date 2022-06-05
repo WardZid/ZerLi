@@ -1,5 +1,6 @@
 package boundary.fxmlControllers;
 
+import java.io.File;
 import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -30,6 +31,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.text.Text;
+import javafx.stage.DirectoryChooser;
 
 /* ------------------------------------------------ */
 /*            \/ Important Comments  \/             */
@@ -144,6 +146,9 @@ public class CEOComplaintReportsController implements Initializable {
 			errorAlert.showAndWait();
     	}
     	else {
+    		DirectoryChooser dirChooser = new DirectoryChooser();
+    		File chosenDir = dirChooser.showDialog(null);
+    		System.out.println(chosenDir);
     		
     	}
     }
