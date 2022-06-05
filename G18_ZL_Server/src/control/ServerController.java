@@ -334,14 +334,6 @@ public class ServerController extends ObservableServer {
 				if (request[2].equals("inQuarter")) {
 					clMsg.setContent(DBController.getCountComplaintsInQuarter(request[3], request[4]));
 				}
-			} else if (request[0].equals("questions")) {
-				if (request[1].equals("all"))
-					clMsg.setContent(DBController.getAllSurves());
-			} else if (request[0].equals("survey")) {
-				if (request[1].equals("date_survey"))
-					clMsg.setContent(DBController.getAllSurvesYears());
-				else if (request[1].equals("by") && request[2].equals("date_survey && id_question_average"))
-					clMsg.setContent(DBController.getAverage(request[3], request[4]));
 			}else if(request[1].equals("years")) {
 				clMsg.setContent(DBController.getComplaintYears());
 			}else if(request[1].equals("count")) {
@@ -349,6 +341,16 @@ public class ServerController extends ObservableServer {
 					clMsg.setContent(DBController.getCountComplaintsInQuarter(request[3],request[4]));
 				}
 			}
+			break;
+		case "questions":
+			if (request[1].equals("all"))
+				clMsg.setContent(DBController.getAllSurves());
+			break;
+		case "survey":
+			if (request[1].equals("date_survey"))
+				clMsg.setContent(DBController.getAllSurvesYears());
+			else if (request[1].equals("by") && request[2].equals("date_survey && id_question_average"))
+				clMsg.setContent(DBController.getAverage(request[3], request[4]));
 			break;
 		default:
 			ServerView.printErr(getClass(), "Unhandled Get request: " + clMsg.getInfo());
