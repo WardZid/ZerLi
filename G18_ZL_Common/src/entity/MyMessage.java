@@ -11,7 +11,7 @@ public class MyMessage implements Serializable {
 		GET,
 		POST,
 		UPDATE,
-		DELETE
+		SEND
 	}
 	private String clientAddress;
 	private int msgID;
