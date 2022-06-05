@@ -298,7 +298,7 @@ public class BranchManagerOrderReportsController implements Initializable {
 			}	
 		}
 		this.avg = this.overallSoldItemsThisMonth/amountOfItems.size();	
-	}
+	} 
 	
 	/**
 	 * Method to initialize date for the PieChart.
