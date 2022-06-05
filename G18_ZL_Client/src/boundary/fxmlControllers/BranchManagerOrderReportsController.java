@@ -185,14 +185,14 @@ public class BranchManagerOrderReportsController implements Initializable {
 	}
 	
 	
-	
 	/**
 	 * Action when a line is selected in the monthsListView. 
 	 */
 	public void monthSelectedFromListView() {
-		saveDate();
-		this.viewReportButton.setDisable(false);
-		 
+		if(!monthsListView.getSelectionModel().isEmpty()) {
+			saveDate();
+			this.viewReportButton.setDisable(false);
+		}
 	}
 	
 	/**
@@ -209,18 +209,20 @@ public class BranchManagerOrderReportsController implements Initializable {
 			errorAlert.setContentText("You must select a month and year!");
 			errorAlert.showAndWait();
 		}
-		getDataAfterMonthIsChosen();
-		calculateTextValues();
-		initDataForPieChart();
-		initDataForTable();
-		System.out.println(overallSoldItemsThisMonth+" "+avg+" "+max+" "+min);
-		reportMonthText.setText(month+"-"+year+" Report");
-		reportTableView.setItems(tableData);
-		reportPieChart.setData(pieChartData);
-		this.totalItemsSoldText.setText(overallSoldItemsThisMonth+"");
-		this.averageText.setText(avg+"");
-		this.maxText.setText(max+" ("+maxI+")");
-		this.minText.setText(min+" ("+minI+")");
+		else {
+			getDataAfterMonthIsChosen();
+			calculateTextValues();
+			initDataForPieChart();
+			initDataForTable();
+			System.out.println(overallSoldItemsThisMonth+" "+avg+" "+max+" "+min);
+			reportMonthText.setText(month+"-"+year+" Report");
+			reportTableView.setItems(tableData);
+			reportPieChart.setData(pieChartData);
+			this.totalItemsSoldText.setText(overallSoldItemsThisMonth+"");
+			this.averageText.setText(avg+"");
+			this.maxText.setText(max+" ("+maxI+")");
+			this.minText.setText(min+" ("+minI+")");
+		}
 	}
 	
 	/* ------------------------------------------------ */
