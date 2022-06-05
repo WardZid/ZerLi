@@ -178,10 +178,9 @@ public class ClientController extends ObservableClient {
 		case UPDATE:
 			handleUpdateReply(svMsg);
 			break;
-		case DELETE:
+		case SEND:
 
 			break;
-
 		default:
 			break;
 		}

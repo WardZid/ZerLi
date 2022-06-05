@@ -11,6 +11,7 @@ import entity.BuildItem;
 import entity.Complaint;
 import entity.Customer;
 import entity.Customer.CustomerStatus;
+import entity.Email;
 import entity.Item;
 import entity.MyMessage;
 import entity.MyMessage.MessageType;
@@ -176,8 +177,8 @@ public class ServerController extends ObservableServer {
 		case UPDATE:
 			handleUpdateRequest(clMsg);
 			break;
-		case DELETE:
-
+		case SEND:
+			handleSendRequest(clMsg);
 			break;
 		default:
 			ServerView.printErr(getClass(), "Unhandled Client Request: " + clMsg.toString());
@@ -551,5 +552,12 @@ public class ServerController extends ObservableServer {
 
 		} else
 			ServerView.printErr(getClass(), "Unhandled Update Request: " + clMsg.getInfo());
+	}
+	
+	private void handleSendRequest(MyMessage clMsg) {
+		if (clMsg.getInfo().startsWith("email")) {
+			Email email = (Email) clMsg.getContent();
+			EmailController.sendEmail(email);
+		}
 	}
 }
