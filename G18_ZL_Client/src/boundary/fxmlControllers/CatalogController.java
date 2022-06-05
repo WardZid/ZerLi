@@ -49,6 +49,11 @@ public class CatalogController implements Initializable {
 
 	@FXML
 	private Label numberItemInOrder;
+	
+
+    @FXML
+    private ImageView cartIV;
+
 
 	@FXML
 	private VBox vboxViewItemDescription;
@@ -83,7 +88,7 @@ public class CatalogController implements Initializable {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		
+		cartIV.setImage(new Image("boundary/media/cart.png"));
 		UserNameLable.setText(ClientConsoleController.getUser().getName());
 		this.getvboxViewItemDescription().setVisible(false);
 		setLabelNumItemInOrderText();
