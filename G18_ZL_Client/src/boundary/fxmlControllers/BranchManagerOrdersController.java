@@ -262,7 +262,6 @@ public class BranchManagerOrdersController implements Initializable {
 		setOrderDetails();
 		
 		// METHOD NOT DONE! MAYBE NO NEED,
-		saveSelectedCancelOrderCancelationDate();
 	}
 	
 	/**
@@ -298,6 +297,7 @@ public class BranchManagerOrdersController implements Initializable {
 	@SuppressWarnings("unchecked")
 	private void setFullOrderDetails() {
 		ArrayList<Customer> c = (ArrayList<Customer>) MainController.getMyClient().send(MessageType.GET, "customer/by/id_customer/"+currentOrder.getIdCustomer() , null);
+		
 		currentCustomer = c.get(0);
 		this.fAddress.setText(currentOrder.getAddress());
 		//this.fCName.setText(currentCustomer.getName());
@@ -379,27 +379,20 @@ public class BranchManagerOrdersController implements Initializable {
 		}
 		selectedOrderID = split[0];
 	}
-
-	
-	/**
-	 *  to save the -date of cancellation- of the selected order in cancel ListView.
-	 */
-	private void saveSelectedCancelOrderCancelationDate() {
-		// TO DO LATER... ( AFTER FINISHING THE APPROVE LIST )
-	}
 	
 	/**
 	 * Method to do when an ID is selected from approve ListView
 	 */
 	private void setActionOnApprovaeListView() {
 		ordersToApproveListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
-
 			@Override
 			// this method has the main Action that happens when selection accrues on ListView
 			public void changed(ObservableValue<? extends String> arg0, String arg1, String arg2) {
 				approveSelected = true;
 				cancelSelected = false;
 				saveOrderID();
+				//ordersToCancelListView.getSelectionModel().clearSelection();
+				//initCancellationListView();
 				orderSelectedFromApproveOrderListView();
 			}
 		});
@@ -416,6 +409,8 @@ public class BranchManagerOrdersController implements Initializable {
 				cancelSelected = true;
 				approveSelected = false;
 				saveOrderID();
+				//ordersToApproveListView.getSelectionModel().clearSelection();
+				//initApprovalListView();
 				monthSelectedFromCancelOrderListView();
 			}
 		});
