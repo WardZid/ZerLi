@@ -1115,7 +1115,7 @@ public class DBController {
 	public static boolean updateLogIn(User u) {
 		int linesChanged = 0;
 		try {
-			linesChanged = statement.executeUpdate("UPDATE user SET logged_in=TRUE WHERE id_user=" + u.getIdUser()+" AND logged_in=TRUE");
+			linesChanged = statement.executeUpdate("UPDATE user SET logged_in=TRUE WHERE id_user=" + u.getIdUser()+" AND logged_in=FALSE");
 		} catch (SQLException e) {
 			ServerView.printErr(DBController.class, e.getMessage());
 		}
