@@ -13,6 +13,7 @@ import entity.MyMessage.MessageType;
 import entity.Quarters;
 import entity.Store;
 import entity.SurveyQuestion;
+import entity.SurveyReport;
 import entity.SurveySumAnswers;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -149,6 +150,8 @@ public class CEOComplaintReportsController implements Initializable {
     		DirectoryChooser dirChooser = new DirectoryChooser();
     		File chosenDir = dirChooser.showDialog(null);
     		System.out.println(chosenDir);
+    		SurveyReport report = (SurveyReport)MainController.getMyClient().send(MessageType.GET, "report/"+yearPDF+"/"+selectedSurveyID, null);
+    		
     	}
     }
     

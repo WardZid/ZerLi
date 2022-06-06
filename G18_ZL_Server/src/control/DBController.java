@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import boundary.ServerView;
 import entity.AmountItem;
@@ -926,6 +927,33 @@ public class DBController {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		
+		ArrayList<Order> o = getOrdersByBranchMonthYear(branchID,month,year);
+		boolean isIn = false;
+		for (Order order : o) {
+			order=getOrderItemsFull(order);
+			for(BuildItem bi : order.getBuildItems()) {
+				int amountOfBuildItem = bi.getAmount();
+				for(Map.Entry<Integer, ItemInBuild> entry : bi.getItemsInBuild().entrySet()) {
+					isIn = false;
+					for(int i = 0 ; i < amounts.size() ; i++) {
+						if(amounts.get(i).getName().equals(entry.getValue().getName())){
+							System.out.println(amounts.get(i).getName()+" was "+amounts.get(i).getAmount());
+							System.out.println("found "+entry.getValue().getName()+" and added "+entry.getValue().getAmount()*amountOfBuildItem);
+							amounts.get(i).setAmount(amounts.get(i).getAmount() + entry.getValue().getAmount()*amountOfBuildItem);
+							isIn=true;
+							break;
+						}
+					}
+					if(isIn==false) {
+						amounts.add(new AmountItem(entry.getValue().getName(),entry.getValue().getAmount()*amountOfBuildItem));
+						System.out.println("didnt found "+entry.getValue().getName()+" added: "+entry.getValue().getAmount()*amountOfBuildItem);
+					}
+				}
+			}
+		}
+
+		
 		return amounts;
 	}
 
@@ -1112,6 +1140,20 @@ public class DBController {
 			return false;
 		return true;
 	}
+	
+	public static SurveyReport getReportOfYearAndQuestionID(String year, String questionID) {
+		SurveyReport report=null;
+		ResultSet rs;
+		try {
+			rs = statement.executeQuery("SELECT * FROM assignment3.reports WHERE Year(year_report) = "+year+" AND id_question = "+questionID);
+			rs.beforeFirst(); // ---move back to first row
+			report = new SurveyReport(rs.getString("year_report"),rs.getInt("id_question"),rs.getBytes("pdf_report"));
+			rs.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return report;
+}
 	
 	/*
 	 * public static boolean insertSurvey(Survey s) { int linesChanged = 0; try {

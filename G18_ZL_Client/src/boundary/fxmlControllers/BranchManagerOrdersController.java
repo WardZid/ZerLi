@@ -297,10 +297,10 @@ public class BranchManagerOrdersController implements Initializable {
 	@SuppressWarnings("unchecked")
 	private void setFullOrderDetails() {
 		ArrayList<Customer> c = (ArrayList<Customer>) MainController.getMyClient().send(MessageType.GET, "customer/by/id_customer/"+currentOrder.getIdCustomer() , null);
-		
 		currentCustomer = c.get(0);
+		User u = (User)MainController.getMyClient().send(MessageType.GET, "user/by/id_user/"+currentCustomer.getIdUser(), null);
 		this.fAddress.setText(currentOrder.getAddress());
-		//this.fCName.setText(currentCustomer.getName());
+		this.fCName.setText(u.getName());
 		this.fCID.setText(currentOrder.getIdCustomer()+"");
 		this.fONumber.setText(currentOrder.getIdOrder()+"");
 		this.fOStatus.setText(OrderStatus.getById(currentOrder.getIdOrderStatus()).toString());
