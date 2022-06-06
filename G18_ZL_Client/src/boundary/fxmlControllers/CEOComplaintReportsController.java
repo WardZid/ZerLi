@@ -147,10 +147,17 @@ public class CEOComplaintReportsController implements Initializable {
 			errorAlert.showAndWait();
     	}
     	else {
-    		DirectoryChooser dirChooser = new DirectoryChooser();
-    		File chosenDir = dirChooser.showDialog(null);
-    		System.out.println(chosenDir);
     		SurveyReport report = (SurveyReport)MainController.getMyClient().send(MessageType.GET, "report/"+yearPDF+"/"+selectedSurveyID, null);
+    		if(report == null) {
+    			
+    			Alert errorAlert = new Alert(AlertType.ERROR);
+    			errorAlert.setHeaderText(null);
+    			errorAlert.setContentText("There is no report for the selected year and question ID !");
+    			errorAlert.showAndWait();
+    		}
+    		else {
+    			
+    		}
     		System.out.println(report);
     	}
     }
