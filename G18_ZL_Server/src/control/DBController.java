@@ -294,15 +294,16 @@ public class DBController {
 	public static Order getOrderItemsFull(Order o) {
 		try {
 			ArrayList<OrderItem> orderItems = new ArrayList<>();
-			ResultSet rs = statement.executeQuery("SELECT I.* ,OI.amount FROM item I, order_item OI WHERE OI.id_order="
+			ResultSet rs = statement.executeQuery("SELECT I.* ,OI.amount ,OI.sale_item_order FROM item I, order_item OI WHERE OI.id_order="
 					+ o.getIdOrder() + " AND OI.id_item=I.id_item");
 			System.out.println("order: " + o.toString());
 			rs.beforeFirst(); // ---move back to first row
 			while (rs.next()) {
 
 				Item itemToAdd = new Item(rs.getInt("id_item"), rs.getString("name"), rs.getDouble("price"),
-						rs.getInt("sale"), rs.getString("category"), rs.getString("color"), rs.getString("description"),
+						rs.getInt("sale_item_order"), rs.getString("category"), rs.getString("color"), rs.getString("description"),
 						rs.getString("status"), blobToMyFile(rs.getBlob("image")));
+				
 				orderItems.add(itemToAdd.new OrderItem(itemToAdd, rs.getInt("amount")));
 			}
 			rs.close();
@@ -504,16 +505,16 @@ public class DBController {
 	 * @return BuildItem same BuildItem receive in parameter after filling with the
 	 *         items in build
 	 */
-	public static BuildItem getItemInBuildAll(BuildItem buildItem) {
+	public static BuildItem getItemInBuildAll(BuildItem buildItem) { //amer
 		ResultSet rs;
 		try {
 			rs = statement
-					.executeQuery("SELECT I.*,IB.amount_in_build FROM item I,item_in_build IB WHERE IB.id_build_item="
+					.executeQuery("SELECT I.*,IB.amount_in_build ,IB.sale_item_order FROM item I,item_in_build IB WHERE IB.id_build_item="
 							+ buildItem.getIdBuildItem() + " AND IB.id_item=I.id_item");
 			rs.beforeFirst(); // ---move back to first row
 			while (rs.next()) {
 				buildItem.addItem(
-						new Item(rs.getInt("id_item"), rs.getString("name"), rs.getDouble("price"), rs.getInt("sale"),
+						new Item(rs.getInt("id_item"), rs.getString("name"), rs.getDouble("price"), rs.getInt("sale_item_order"),
 								rs.getString("category"), rs.getString("color"), rs.getString("description"),
 								rs.getString("status"), blobToMyFile(rs.getBlob("image"))),
 						rs.getInt("amount_in_build"));
@@ -963,10 +964,11 @@ public class DBController {
 
 			for (OrderItem item : order.getItems()) {
 				ps = conn.prepareStatement(
-						"INSERT INTO assignment3.order_item (`id_order`,`id_item`,`amount`) VALUES (?,?,?)");
+						"INSERT INTO assignment3.order_item (`id_order`,`id_item`,`amount`,`sale_item_order`) VALUES (?,?,?,?)");
 				ps.setInt(1, order.getIdOrder());
 				ps.setInt(2, item.getIdItem());
 				ps.setInt(3, item.getAmount());
+				ps.setInt(4, item.getSale());
 				linesChanged = ps.executeUpdate();
 				if (linesChanged == 0) {
 					ps.close();
@@ -995,10 +997,11 @@ public class DBController {
 				
 				for (ItemInBuild itemInBuild : buildItem.getItemsInBuild().values()) {
 					ps = conn.prepareStatement(
-							"INSERT INTO assignment3.item_in_build (`id_item`,`id_build_item`,`amount_in_build`) VALUES (?,?,?)");
+							"INSERT INTO assignment3.item_in_build (`id_item`,`id_build_item`,`amount_in_build`,`sale_item_order`) VALUES (?,?,?,?)");
 					ps.setInt(1, itemInBuild.getIdItem());
 					ps.setInt(2, buildItem.getIdBuildItem());
 					ps.setInt(3, itemInBuild.getAmount());
+					ps.setInt(4, itemInBuild.getSale());
 					linesChanged = ps.executeUpdate();
 					if (linesChanged == 0) {
 						ps.close();
