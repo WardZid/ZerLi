@@ -283,7 +283,7 @@ public class CustomerOrdersController implements Initializable {
 			return;
 		}
 		
-		orderStatusTF.setText("CANCELLED");
+		orderStatusTF.setText("WAITING_CANCELLATION");
 		setOptionforSelceted();
 	}
 

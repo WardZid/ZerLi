@@ -9,6 +9,7 @@ import control.MainController;
 import entity.Store;
 import entity.User;
 import entity.Customer;
+import entity.Email;
 import entity.MyMessage.MessageType;
 import entity.Order;
 import entity.Order.OrderStatus;
@@ -189,6 +190,16 @@ public class BranchManagerOrdersController implements Initializable {
 		//change the current selected order status to 1 (APPROVED).
 		currentOrder.setIdOrderStatus(OrderStatus.PROCESSING.ordinal());
 		ArrayList<Order> order = (ArrayList<Order>)MainController.getMyClient().send(MessageType.UPDATE, "order/status", currentOrder);
+		
+		if(order.size()!=0) {
+		User currentUser=(User)MainController.getMyClient().send(MessageType.GET, "user/by/id_coustmer/"+order.get(0).getIdCustomer(), currentOrder);
+		 
+		Email email=new Email(currentUser.getEmail(), "Order number ["+order.get(0).getIdOrder()+"] has been approved!", "Your order has been approved\nYou will get it soon ^_^\n");
+		
+         System.out.println("currentUser "+currentUser.getEmail());
+         
+		 MainController.getMyClient().send(MessageType.SEND, "email", email);
+		}
 		//check if order was changed.
 		if(order.get(0).getIdOrderStatus() == OrderStatus.PROCESSING.ordinal())
 			System.out.println("Order updated successfully!");
@@ -218,6 +229,18 @@ public class BranchManagerOrdersController implements Initializable {
 		 
 		MainController.getMyClient().send(MessageType.UPDATE, "customer/point/"+currentOrder.getIdCustomer()+"/"+currentOrder.getPrice(), null);
 		clearAfterButtonPressed();
+		
+
+
+		if(order.size()!=0) {
+			User currentUser=(User)MainController.getMyClient().send(MessageType.GET, "user/by/id_coustmer/"+order.get(0).getIdCustomer(), currentOrder);
+			 
+			Email email=new Email(currentUser.getEmail(), "Order number ["+order.get(0).getIdOrder()+"] has been unapproved!", "Your order has been unapproved.\n \n");
+			
+	         System.out.println("currentUser "+currentUser.getEmail());
+	         
+			 MainController.getMyClient().send(MessageType.SEND, "email", email);
+			}
 	}
 	
 	/**
@@ -316,6 +339,7 @@ public class BranchManagerOrdersController implements Initializable {
 	 * To set the details of the selected order.
 	 */
 	private void setOrderDetails() {
+		if(currentOrder !=null) {
 		getOrderBySelection();
 		viewFullDetailsButton.setDisable(false);
 		this.orderIDText.setText(currentOrder.getIdOrder()+"");
@@ -323,12 +347,14 @@ public class BranchManagerOrdersController implements Initializable {
 		this.deliveryDateText.setText(currentOrder.getDeliveryDate());
 		this.addressText.setText(currentOrder.getAddress());
 		this.overallOrderToPayText.setText(currentOrder.getPrice()+"");
+		}
 	}
 	
 	/**
 	 * To save the order that is selected from the ListViews
 	 */
 	private void getOrderBySelection() {
+       if(waitingApprovalOrders != null&& selectedOrderID!=null) {
 		if(approveSelected == true) {
 			for(Order o : waitingApprovalOrders) {
 				if(selectedOrderID.equals(o.getIdOrder()+"")) {
@@ -344,6 +370,7 @@ public class BranchManagerOrdersController implements Initializable {
 			}
 		}
 		setCorrectValues();
+       }
 	}
 	
 	/**
@@ -371,6 +398,8 @@ public class BranchManagerOrdersController implements Initializable {
 	 */
 	private void saveOrderID(){
 		String[] split = null;
+		System.out.println("ordersToApproveListView. "+ordersToApproveListView.getSelectionModel().getSelectedItem());
+		if(ordersToApproveListView.getSelectionModel().getSelectedItem()!=null) {
 		if(approveSelected == true) {
 			split = ordersToApproveListView.getSelectionModel().getSelectedItem().split(" - ");
 		}
@@ -378,6 +407,8 @@ public class BranchManagerOrdersController implements Initializable {
 			split = ordersToCancelListView.getSelectionModel().getSelectedItem().split(" - ");
 		}
 		selectedOrderID = split[0];
+		System.out.println("selectedOrderID"+selectedOrderID);
+	}
 	}
 	
 	/**
