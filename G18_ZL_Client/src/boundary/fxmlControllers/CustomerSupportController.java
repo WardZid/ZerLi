@@ -236,9 +236,18 @@ public class CustomerSupportController implements Initializable{
 			LocalDateTime now = LocalDateTime.now();
 			Complaint newComplaint = new Complaint(CustomerComplaintSendViewController.getCustomerID(),
 					dtf.format(now), CustomerComplaintSendViewController.getComplaint());
-		 ComplaintQueryFromDB(MessageType.POST, newComplaint);
-			initialize(null,null);
+			newComplaint=  (Complaint) ComplaintQueryFromDB(MessageType.POST, newComplaint);
+		 
+		 System.out.println("hihihihihi " +newComplaint.getIdComplaint()+" "+ CustomerComplaintSendViewController.getCustomerID());
+		 User currentUser = (User) MainController.getMyClient().send(MessageType.GET,
+					"user/by/id_customer/" + CustomerComplaintSendViewController.getCustomerID(), null);
+		 
+		 initialize(null,null);
 			dialog.close();
+			
+			
+			
+			
 		}
 		else 
 			dialog.close();
