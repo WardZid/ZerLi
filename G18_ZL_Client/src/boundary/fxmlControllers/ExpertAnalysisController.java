@@ -141,6 +141,14 @@ public class ExpertAnalysisController implements Initializable {
 	@FXML
 	private VBox vb;
 	/**
+	 * isSelectedSurvey = true if survey is Selected and false if not
+	 */
+	private boolean isSeletedSurvey;
+	/**
+	 * isSelectedReport = true if report is Selected and false if not
+	 */
+	private boolean isSelectedReport;
+	/**
 	 * yearIdQuestionsHashMap that contains all the years that surveys have been conducted in them as a key and an internal hashMap to contain the (surveys) as key and all the questions of the survey as a value 
 	 */
 	private HashMap<String, HashMap<Integer, SurveyQuestion>> yearIdQuestionsHashMap;
@@ -152,7 +160,8 @@ public class ExpertAnalysisController implements Initializable {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-
+		isSeletedSurvey = false;
+		isSelectedReport = false;
 		yearIdQuestionsHashMap = (HashMap<String, HashMap<Integer, SurveyQuestion>>) MainController.getMyClient().send(MessageType.GET, "survey/date_survey", null);
 		surveyYearComboBox.getItems().addAll(yearIdQuestionsHashMap.keySet());
 		/**
@@ -167,7 +176,8 @@ public class ExpertAnalysisController implements Initializable {
 				surveyIdQuestionsComboBox.getItems()
 						.addAll(yearIdQuestionsHashMap.get(surveyYearComboBox.getValue()).keySet());
 				answersBarChart.getData().clear();
-				sendReportButton.setDisable(true);
+				isSeletedSurvey = false;
+				enableOrDisableSendReportButton();
 				clearQuestions();
 			}
 		});
@@ -188,7 +198,9 @@ public class ExpertAnalysisController implements Initializable {
 					for (int i = 0; i < 6; i++)
 						set1.getData().add(new XYChart.Data(i + 1 + "", surveySumAnswers.getAvgAnswers().get(i)));
 					answersBarChart.getData().addAll(set1);
-					sendReportButton.setDisable(false);
+					isSeletedSurvey = true ;
+					enableOrDisableSendReportButton();
+					//sendReportButton.setDisable(false);
 				} catch (NullPointerException e) {
 				}
 			}
@@ -263,7 +275,9 @@ public class ExpertAnalysisController implements Initializable {
 			uploadVBox.setVisible(false);
 			fileNameLbl.setText(f.getName());
 			fileNameLbl.setVisible(true);
-			sendReportButton.setDisable(false);
+			isSelectedReport =true;
+			enableOrDisableSendReportButton();
+			//sendReportButton.setDisable(false);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -276,8 +290,17 @@ public class ExpertAnalysisController implements Initializable {
     	pdfBytes=null;
     	uploadVBox.setVisible(true);
     	fileNameLbl.setVisible(false);
-    	sendReportButton.setDisable(true);
+    	isSelectedReport = false;
+    	isSeletedSurvey = false;
+    	enableOrDisableSendReportButton();
+    	//sendReportButton.setDisable(true);
     	
     	
+    }
+    /**
+     * This function decide to disable or enable send Report button
+     */
+    private void enableOrDisableSendReportButton() {
+    	sendReportButton.setDisable(!isSeletedSurvey || !isSelectedReport );
     }
 }
