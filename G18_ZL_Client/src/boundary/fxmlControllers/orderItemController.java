@@ -92,7 +92,7 @@ public class orderItemController implements Initializable {
 		}
 
 	}
-
+ 
 	private void setDataforVbox(ItemInBuild itemInBuild) {
 		nameOrderLbl.setText("" + itemInBuild.getName());
 		amountLbl.setText("x" + itemInBuild.getAmount()); 
