@@ -269,7 +269,7 @@ public class BranchManagerIncomeReportsController implements Initializable {
 			reportLineChart.setTitle("Daily Incomes Of " + month + "-" + year);
 	
 			reportLineChart.getData().add(series);
-			totalIncomeText.setText(overallIncomeThisMonth + "");
+			totalIncomeText.setText(String.format("%.2f", overallIncomeThisMonth));
 			averageText.setText(String.format("%.2f", avg));
 			minText.setText(min + "");
 			maxText.setText(max + "");
