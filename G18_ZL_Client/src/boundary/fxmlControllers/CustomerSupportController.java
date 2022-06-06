@@ -12,7 +12,9 @@ import java.util.ResourceBundle;
 import boundary.ClientView;
 import control.MainController;
 import entity.Complaint;
+import entity.Email;
 import entity.MyMessage.MessageType;
+import entity.User;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -52,7 +54,7 @@ public class CustomerSupportController implements Initializable{
 	@FXML
 	private TextField CustomerIdT;
 	/**
-	 * Enter new Complaint button is used to open new dialog box which there the store worker can enter new Complaint for specific customer
+	 * Enter new Complaint button is used to open new dialog box which there the survey worker can enter new Complaint for specific customer
 	 */
 	@FXML
     private Button enterNewComplaintButton;
@@ -69,7 +71,7 @@ public class CustomerSupportController implements Initializable{
 	@FXML
 	private TextArea descriptionT;
 	/**
-	 * refund textArea is used to enter refund if the service worker decided to refund the customer
+	 * refund textArea is used to enter refund if the survey worker decided to refund the customer
 	 */
 
 	@FXML
@@ -92,11 +94,11 @@ public class CustomerSupportController implements Initializable{
 	@FXML
 	private TextField statusT;
 	/**
-	 * selectedComplaintId contains the current complaint id that the store worker choose from the list view
+	 * selectedComplaintId contains the current complaint id that the survey worker choose from the list view
 	 */
 	private int selectedComplaintId;
 	/**
-	 * selectedComplaint contains the current complaint that the store worker choose from the list
+	 * selectedComplaint contains the current complaint that the survey worker choose from the list
 	 */
 	private Complaint selectedComplaint;
 	/**
@@ -129,7 +131,7 @@ public class CustomerSupportController implements Initializable{
 		    }
 		});
 		/**
-		 * Listener on refund text field is used to prevent the store worker to enter letters 
+		 * Listener on refund text field is used to prevent the survey worker to enter letters 
 		 */
 		refundT.textProperty().addListener(new ChangeListener<String>() {
 		    @Override
@@ -159,7 +161,7 @@ public class CustomerSupportController implements Initializable{
 		});
 	}
 	/**
-	 * This function is used to make the refund text field and the reply text field editable if currently the store worker point on specific complaint id
+	 * This function is used to make the refund text field and the reply text field editable if currently the survey worker point on specific complaint id
 	 * @param toEdit  toEdit = true if the store worker point on complaint id and false if not
 	 */
 
@@ -188,7 +190,7 @@ public class CustomerSupportController implements Initializable{
 		ComplaintL.getItems().addAll(ComplaintMap.keySet());
 	}
 	/**
-	 * This function is start when the store worker click on send reply button (set the reply in the suit complaint object and send the this object to the server)
+	 * This function is start when the survey workers click on send reply button (set the reply in the suit complaint object and send the this object to the server)
 	 * @param event 
 	 */
 
@@ -200,6 +202,9 @@ public class CustomerSupportController implements Initializable{
 		selectedComplaint.setResponse(replyT.getText());
 		MainController.getMyClient().send(MessageType.UPDATE, "complaint",selectedComplaint);
 		ComplaintMap.remove(selectedComplaintId);
+		ArrayList<User> user = (ArrayList<User>)MainController.getMyClient().send(MessageType.GET,"user/by/id_customer/" + CustomerIdT.getText(),null);
+		Email email=new Email(user.get(0).getEmail(), "The treatment of complaint ["+selectedComplaintId+"] has been finished!", "Your Complaint has been treated\nComplaint Reply:\n"+ replyT.getText() +"\n" + "refund " + refundT.getText());
+		MainController.getMyClient().send(MessageType.SEND, "email", email);
 		clearTexts();
 		ComplaintL.getItems().addAll(ComplaintMap.keySet());
 		setEditable(false);

@@ -44,7 +44,7 @@ public class ExpertAnalysisController implements Initializable {
 	private byte[] pdfBytes;
 	
 	/**
-	 * answerBarChart to show the average of answers for each question during specfic year
+	 * answerBarChart to show the average of answers for each question during specific year
 	 */
 	@FXML
 	private BarChart<String, Double> answersBarChart;
