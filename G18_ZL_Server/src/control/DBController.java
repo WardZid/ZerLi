@@ -1196,7 +1196,7 @@ public class DBController {
 			System.out.println("RS->order->ID: " + rs.getInt(1));
 			c.setIdComplaint(rs.getInt(1));
 			rs.close();
-			ps.close();
+			ps.close(); 
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
