@@ -92,7 +92,7 @@ public class LogInController implements Initializable {
 			
 			if (user.getIdCustomer() <= 0) {
 				errorLbl.setVisible(true);
-				errorLbl.setText("*Your account hasn't been confirmed");
+				errorLbl.setText("*Account Unconfirmed");
 				return;
 			} else {
 				Customer customer = ((ArrayList<Customer>) MainController.getMyClient().send(MessageType.GET,
