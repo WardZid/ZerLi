@@ -238,7 +238,7 @@ public class BranchManagerOrdersController implements Initializable {
 		if(order.size()!=0) {
 			User currentUser=(User)MainController.getMyClient().send(MessageType.GET, "user/by/id_customer/"+order.get(0).getIdCustomer(), null);
 			Email email=new Email(currentUser.getEmail(), "Order number ["+order.get(0).getIdOrder()+"] has been unapproved!", "Your order has been unapproved.\n you will get a refund of "+order.get(0).getPrice()+"  \n");
-			 MainController.getMyClient().send(MessageType.SEND, "email", email);
+			 MainController.getMyClient().send(MessageType.SEND, "email", email); 
 			}
 		
 		approveButton.setDisable(true);
