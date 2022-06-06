@@ -140,7 +140,10 @@ public class CustomerComplaintsController implements Initializable {
 		ComplaintIdT.setText(Integer.toString(selectedComplaint.getIdComplaint()));
 		statusT.setText(selectedComplaint.getStatus());
 		dateT.setText(selectedComplaint.getDate());
-		refundT.setText(Double.toString(selectedComplaint.getRefund()));
+		if(  (selectedComplaint.getRefund())==0&& selectedComplaint.getStatus().equals("OPEN"))
+		    refundT.setText(" This Complaint in Processing ");
+		else
+			refundT.setText(Double.toString(selectedComplaint.getRefund()));
 		descriptionT.setText(selectedComplaint.getComplaint());
 		replyT.setText(selectedComplaint.getResponse());
 	}
