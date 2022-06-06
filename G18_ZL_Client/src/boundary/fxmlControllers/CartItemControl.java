@@ -14,28 +14,55 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 
 public class CartItemControl implements Initializable {
+	/**
+	 * to increase the amount of the item
+	 */
 	@FXML
     private Button addBtn;
+	/**
+	 * contains all the details of the item
+	 */
     @FXML
     private StackPane stackPaneforItem;
+    /**
+     * item image
+     */
     @FXML
     private ImageView itemIV;
+   /**
+    * to view item amount
+    */
     @FXML
     private Label amountLabel;
-
+/**
+ * to decrease item amount
+ */
     @FXML
     private Button deleteBtn;
-
+/**
+ * to view item name 
+ */
     @FXML
     private Label nameItemLabel;
-
+/**
+ * to view item price
+ */
     @FXML
     private Label priceLabel;
+    /**
+     * a parameter from OrderItem type to save all details of the item
+     */
     private OrderItem PressedItem;
-    
+    /**
+     * parameter from CartController type 
+     */
     CartController cartController;
     
-  
+  /**
+   * set all the label text (amount, price, name,image ,PressedItem) 
+   * @param item from OrderItem type to set all the details of the item 
+   * @param cartController from CartController type 
+   */
     public void setData(OrderItem item, CartController cartController) {
 		PressedItem=item;
 		System.out.println("here setData"+item);
@@ -46,13 +73,18 @@ public class CartItemControl implements Initializable {
 		if(item.getImage()!=null)
 		itemIV.setImage(item.getImage());
 	}
+    /**
+     * to add item on the order and update/increase the amount and the price and set amountLabel text
+     */
     public void onAdditemPressed() {
 
     	CartController.getOrderInProcess().addItemtoOrder(PressedItem);
     	amountLabel.setText(PressedItem.getAmount()+"");
     	cartController.SetTotalPrice();
 	}
-    
+    /**
+     * to decrease the amount of the item and update the price of the order and set text for the amountLable 
+     */
     public void onAddDeletePressed() {
     	
     	 try {
@@ -61,11 +93,12 @@ public class CartItemControl implements Initializable {
     	    	cartController.SetTotalPrice();
 			cartController.LoadCartItem();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
     
-
+/**
+ * remove the item from the order and update the order price and the amount and set text for the labels 
+ */
     }
     public void OnDeleteBtnPressed() {
     	CartController.getOrderInProcess().DeleteItemFromScroll(PressedItem);
@@ -73,14 +106,12 @@ public class CartItemControl implements Initializable {
     	try {
 			cartController.LoadCartItem();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
      }
     
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		// TODO Auto-generated method stub
 		
 	}
 
