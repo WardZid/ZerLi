@@ -48,39 +48,75 @@ public class BranchManagerOrdersController implements Initializable {
 	/* \/ FXML Variables \/ */
 	/* ------------------------------------------------ */
 
+	/**
+	 * VBox that contains the texts of the full order details
+	 */
 	@FXML
 	private VBox myVBox;
 
+	/**
+	 * the order address
+	 */
 	@FXML
 	private Text addressText;
 
+	/**
+	 * button to approve an order
+	 */
 	@FXML
 	private Button approveButton;
 
+	/**
+	 * button to cancel an order
+	 */
 	@FXML
 	private Button cancelButton;
 
+	/**
+	 * text contains the date when the order was made
+	 */
 	@FXML
 	private Text dateOfOrderText;
 
+	/**
+	 * text that contains the date of delivery of the order
+	 */
 	@FXML
 	private Text deliveryDateText;
 
+	/**
+	 * text that contains the order ID
+	 */
 	@FXML
 	private Text orderIDText;
 
+	/**
+	 * list view of the orders that need approve
+	 */
 	@FXML
 	private ListView<String> ordersToApproveListView;
 
+	/**
+	 * list view of orders that need to be canceled
+	 */
 	@FXML
 	private ListView<String> ordersToCancelListView;
 
+	/**
+	 * text that contains the price of the order
+	 */
 	@FXML
 	private Text overallOrderToPayText;
 
+	/**
+	 * button to show full order details
+	 */
 	@FXML
 	private Button viewFullDetailsButton;
 
+	/**
+	 * button to reject an order
+	 */
 	@FXML
 	private Button rejectButton;
 
@@ -88,39 +124,75 @@ public class BranchManagerOrdersController implements Initializable {
 	/* \/ FXML Full Order Details Variables \/ */
 	/* ------------------------------------------------ */
 
+	/**
+	 * the order details vbox
+	 */
 	@FXML
 	private VBox orderVBox;
 
+	/**
+	 * order address in full review
+	 */
 	@FXML
 	private Text fAddress;
 
+	/**
+	 * order id in full review
+	 */
 	@FXML
 	private Text fCID;
 
+	/**
+	 * customer name in full review
+	 */
 	@FXML
 	private Text fCName;
 
+	/**
+	 * order description in full review
+	 */
 	@FXML
 	private TextArea fDescription;
 
+	/**
+	 * order greeting in full review
+	 */
 	@FXML
 	private TextArea fGreeting;
 
+	/**
+	 * order cancellation date in full review
+	 */
 	@FXML
 	private Text fOCDate;
 
+	/**
+	 * order delivery date in full review
+	 */
 	@FXML
 	private Text fODDate;
 
+	/**
+	 * order number in full review
+	 */
 	@FXML
 	private Text fONumber;
 
+	/**
+	 * order status in full review
+	 */
 	@FXML
 	private Text fOStatus;
 
+	/**
+	 * order date of order in full review
+	 */
 	@FXML
 	private Text fOdate;
 
+	/**
+	 * order price in full review
+	 */
 	@FXML
 	private Text fOverall;
 

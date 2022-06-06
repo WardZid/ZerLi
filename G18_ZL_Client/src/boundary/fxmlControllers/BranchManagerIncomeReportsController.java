@@ -52,51 +52,92 @@ public class BranchManagerIncomeReportsController implements Initializable {
 	/* \/ FXML Variables \/ */
 	/* ------------------------------------------------ */
 
+	/**
+	 * text that shows the average daily income of the month
+	 */
 	@FXML
 	private Text averageText;
 
+	/**
+	 * text of the maximum daily income of the month
+	 */
 	@FXML
 	private Text maxText;
 
+	/**
+	 * text that contains the minimum daily income of the month
+	 */
 	@FXML
 	private Text minText;
 
+	/**
+	 * text that contains the total income of the month
+	 */
 	@FXML
 	private Text totalIncomeText;
 
+	/**
+	 * a table that contains the receipts of the month
+	 */
 	@FXML
 	private TableView<Receipt> reportTableView;
 
+	/**
+	 * the column of the names
+	 */
 	@FXML
 	private TableColumn<Receipt, String> nameTableCol;
 
+	/**
+	 * the column of the dates
+	 */
 	@FXML
 	private TableColumn<Receipt, String> dateTableCol;
 
+	/**
+	 * the column of the income
+	 */
 	@FXML
 	private TableColumn<Receipt, Double> incomeTableCol;
 
+	/**
+	 * the list view of the working months in the store
+	 */
 	@FXML
 	private ListView<String> monthsListView;
 
+	/**
+	 * a chart that show the daily incoms in the month
+	 */
 	@FXML
 	private LineChart<String, Double> reportLineChart;
 
+	/**
+	 * text that contains the selected month
+	 */
 	@FXML
 	private Text reportMonthText;
 
+	/**
+	 * button to review the report
+	 */
 	@FXML
 	private Button viewReportButton;
 
+	/**
+	 * combobox that contains the branches (only visible if the user is the CEO)
+	 */
 	@FXML
 	private ComboBox<String> ComboBoxbranches;
 
-	private String AcountType = "BranchManager";
 
 	/* ------------------------------------------------ */
 	/* \/ Help Variables \/ */
 	/* ------------------------------------------------ */
 
+	// the current user account type
+	private String AcountType = "BranchManager";
+	
 	/* XYChart series to insert values in the line chart */
 	XYChart.Series<String, Double> series = new XYChart.Series<String, Double>();
 

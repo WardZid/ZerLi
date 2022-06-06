@@ -57,39 +57,75 @@ public class BranchManagerOrderReportsController implements Initializable {
     /*               \/ FXML Variables \/               */
     /* ------------------------------------------------ */
 	
+	/**
+	 * column of the amount that is sold
+	 */
 	@FXML
     private TableColumn<AmountItem, Integer> amountSoldTableCol;
 
+    /**
+     * column of the names of the sold items
+     */
     @FXML
     private TableColumn<AmountItem, String> itemNameTableCol;
 
+    /**
+     * list view of the working months of the store
+     */
     @FXML
     private ListView<String> monthsListView;
 
+    /**
+     * pie chart that shows the percentages of the sold items of the store in the selected month
+     */
     @FXML
     private PieChart reportPieChart;
 
+    /**
+     * text that contains the selected month
+     */
     @FXML
     private Text reportMonthText;
 
+    /**
+     * table that contains the amount of every sold item in the store in the selected month
+     */
     @FXML
     private TableView<AmountItem> reportTableView;
 
+    /**
+     * text contains the total sold items in the store in the selected month
+     */
     @FXML
     private Text totalItemsSoldText;
     
+    /**
+     * text that contains the daily average of sold items in the store in the selected month
+     */
     @FXML
     private Text averageText;
     
+    /**
+     * text that contains the maximum amount of items sold in a day
+     */
     @FXML
     private Text maxText;
 
+    /**
+     * text that contains the minimum amount of an item sold in a day
+     */
     @FXML
     private Text minText;
 
+    /**
+     * button to view the selected report
+     */
     @FXML
     private Button viewReportButton;
     
+    /**
+     * combobox that contains the names of the stores (only visible for CEO)
+     */
     @FXML
 	private ComboBox<String> ComboBoxbranches;
     
