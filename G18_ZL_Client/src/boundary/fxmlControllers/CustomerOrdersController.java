@@ -35,62 +35,113 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
-
+/**
+ * in this class we view all the orders that the customer has make before 
+ * with all the details about the order contains the items he has selected and the products
+ * that he built before and the details about the items and products 
+ * @author saher
+ *
+ */
 public class CustomerOrdersController implements Initializable {
-
+/**
+ * ArrayList for save all the orders that customer make from DB
+ */
 	private ArrayList<Order> orders;
-
+/**
+ * to save the order in this object that has selected from the List View 
+ */
 	private Order selectedOrder;
-
+/**
+ * to view the order price
+ */
 	@FXML
 	private TextField PriceTF;
-
+/**
+ * to view the address of the customer 
+ */
 	@FXML
 	private TextField addressTF;
-
+/**
+ * to view the delivery date of the order
+ */
 	@FXML
 	private TextField deliveryTF;
+/**
+ *  to view order date
+ */
 	@FXML
 	private TextField orderDateTF;
-
+/**
+ * to view order id
+ */
 	@FXML
 	private TextField orderIdTF;
-
+/**
+ * to view order status 
+ */
 	@FXML
 	private TextField orderStatusTF;
+	/**
+	 * to view the store address
+	 */
 	@FXML
 	private TextField storeTF;
-
+/**
+ * to view description order 
+ */
 	@FXML
 	private TextArea descriptionTA;
-
+/**
+ * to view greeting order
+ */
 	@FXML
 	private TextArea grearingTA;
 
+	/**
+	 * to view all the items and products in this VBox
+	 */
 	@FXML
 	private VBox orderItemVB;
 
+	/**
+	 * to view orders id in this list
+	 */
 	@FXML
 	private ListView<String> ordersLV;
-
+/**
+ * to view Button back
+ */
 	@FXML
 	private VBox innerVbox;
-
+/**
+ * to view all the items in product that he has built in this VBox
+ */
 	@FXML
 	private VBox itemsViewVbox;
-
+/**
+ * to view all the items and products in this  HBox
+ */
 	@FXML
 	private HBox orderPageHBox;
-
+/**
+ * return to orders page / form
+ */
 	@FXML
 	private Button backBtn;
-
+/**
+ * to view a message about the canceling
+ */
 	@FXML
 	private Text resaonLbl;
-
+/**
+ * to cancel an order 
+ */
 	@FXML
 	private Button cancelOrderBtn;
-
+/**
+ * we added a listener for the table view to Recognize the order that we select from the list view 
+ * we loaded the orders and the items 
+ */
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		resaonLbl.setText("\n");
@@ -114,7 +165,7 @@ public class CustomerOrdersController implements Initializable {
 				try {
 					loadItemToVBox();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
+					
 					e.printStackTrace();
 				}
 
@@ -122,7 +173,10 @@ public class CustomerOrdersController implements Initializable {
 		});
 
 	}
-
+/**
+ * load all the items and products in VBox that selected from order he make 
+ * @throws IOException
+ */
 	private void loadItemToVBox() throws IOException {
 
 		orderItemVB.getChildren().clear();
@@ -154,7 +208,10 @@ public class CustomerOrdersController implements Initializable {
 
 		}
 	}
-
+/**
+ * load all the orders from DB that he make before on list view 
+ */
+	@SuppressWarnings("unchecked")
 	private void loadOrders() {
 		int numberOrder = 1;
 		orders = (ArrayList<Order>) MainController.getMyClient().send(MessageType.GET,
@@ -166,7 +223,9 @@ public class CustomerOrdersController implements Initializable {
 			ordersLV.getItems().add((numberOrder++) + "");
 		}
 	}
-
+/**
+ * set all the text from the order that we selected from list view 
+ */
 	private void previewOrder() {
 
 		// fill fields
@@ -182,42 +241,11 @@ public class CustomerOrdersController implements Initializable {
 
 	}
 
-	public void onCancelOrderBtnPressed1() {
-		System.out.println("cancel");
-		Alert errorAlert = new Alert(AlertType.ERROR);
 
-		if (selectedOrder == null) {
-			errorAlert.setHeaderText(null);
-			errorAlert.setContentText("You have to pick order to cancel");
-			errorAlert.showAndWait();
-			return;
-		}
-
-		int remainingTime = (int) MainController.timeDiffHour(selectedOrder.getDeliveryDate(),
-				MainController.currentTime());
-
-		if (remainingTime < 1) {
-//			Alert waringAlert = new Alert(AlertType.WARNING);
-//			waringAlert.setHeaderText(null);
-//			waringAlert.setContentText("The remaining time is less than 1 hour we cant ,cancele it !!!");
-//			waringAlert.showAndWait();
-			return;
-		} else if (remainingTime <= 0) {
-			Alert waringAlert = new Alert(AlertType.WARNING);
-			waringAlert.setHeaderText(null);
-			waringAlert.setContentText("you already received the item ,cannot cancel it");
-			waringAlert.showAndWait();
-			return;
-		} else if (remainingTime > 3) {
-
-			cancelOrder(100);
-
-		} else {
-			cancelOrder(50);
-		}
-
-	}
-
+/**
+ * when we click on cancel button we check all the status of the order canceling 
+ * if we can to cancel  the order due to the delivery order and how much the refund that the customer deserve 
+ */
 	public void onCancelOrderBtnPressed() {
 		System.out.println("cancel");
 		Alert errorAlert = new Alert(AlertType.ERROR);
@@ -254,6 +282,12 @@ public class CustomerOrdersController implements Initializable {
 
 	}
 
+	/**
+	 * this method gets a parameter percent this is the refund that the customer deserve 
+	 * then we showing a message that asking if he wants to sure canceling  
+	 * if we can to cancel then we update refund else he gets alert message 
+	 * @param percent
+	 */
 	private void cancelOrder(int percent) {
 		Alert confirmationAlert = new Alert(AlertType.WARNING);
 
@@ -307,35 +341,54 @@ public class CustomerOrdersController implements Initializable {
 		grearingTA.clear();
 
 	}
-
+/**
+ * here we view all the items that has selected to build the product
+ */
 	public void showInnerVbox() {
 
 		orderPageHBox.setDisable(true);
 		innerVbox.setVisible(true);
 	}
-
+/**
+ * here we hide the VBox that view all the items that has selected to build the product
+ */
 	public void closeInnerVbox() {
 		orderPageHBox.setDisable(false);
 		innerVbox.setVisible(false);
 	}
-
+/**
+ * to return to orders page
+ */
 	public void onbackBtnPressed() {
 
 		closeInnerVbox();
 	}
 
+	/**
+	 * @return VBox innerVbox
+	 */
 	public VBox getInnerVbox() {
 		return innerVbox;
 	}
 
+	/**
+	 * 
+	 * @return VBox itemsViewVbox
+	 */
 	public VBox getItemsViewVbox() {
 		return itemsViewVbox;
 	}
+	/**
+	 * set the itemsViewVbox VBox
+	 * @param itemsViewVbox
+	 */
 
 	public void setItemsViewVbox(VBox itemsViewVbox) {
 		this.itemsViewVbox = itemsViewVbox;
 	}
-
+/**
+ * here we check the canceling order status and we show a message due to the canceling 
+ */
 	public void setOptionforSelceted() {
 
 		int MinRemaining = 1;
@@ -382,19 +435,26 @@ public class CustomerOrdersController implements Initializable {
 
 		return false;
 	}
-
+/**
+ * here we clear the message and we view the cancel button
+ */
 	private void clearCancelOption() {
 		resaonLbl.setText("\n");
 		cancelOrderBtn.setDisable(true);
 
 	}
-
+/**
+ * view the message of canceling order status
+ * @param reason string contains the message
+ */
 	private void disableCancelOrderButton(String reason) {
 		resaonLbl.setText(reason);
 		cancelOrderBtn.setDisable(true);
 
 	}
-
+/**
+ * disable for cancel button
+ */
 	private void showCancelOrderButton( ) {
 		 
 		cancelOrderBtn.setDisable(false);

@@ -18,31 +18,57 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-
+/**
+ * in this class we view the item details the exist in Order Page 
+ * that the customer has make order 
+ * @author saher
+ *
+ */
 public class orderItemController implements Initializable {
-
+/**to view amount of the price
+ * 
+ */
 	@FXML
 	private Label amountLbl;
-
+/**
+ * to view item name 
+ */
 	@FXML
 	private Label nameOrderLbl;
-
+/**
+ * to view item price
+ */
 	@FXML
 	private Label priceLbl;
-
+/**
+ * to view all the items that the customer has selected them to build product 
+ */
 	@FXML
 	private Button viewBtn;
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		// TODO Auto-generated method stub
 
 	}
-
+/**
+ * Object from Item type to save/take all the item details 
+ */
 	Item orderItem;
+	/**
+	 * Object from BuildItem type to save/take all the item details 
+	 */
 	BuildItem buildItem;
+	/**
+	 * Object from CustomerOrdersController type to call the function from there
+	 */
 	CustomerOrdersController customerOrdersController;
-
+/**
+ * set all the data text from the orderItem and buildItem we get 
+ * and set visible true for view button if the object from Build item type to view the items of the product 
+ * @param orderItem object from OrderItem type to take the item information
+ * @param buildItem object from BuildItem type to take the item information
+ * @param customerOrdersController to call the some methods from there
+ */
 	public void setData(OrderItem orderItem, BuildItem buildItem, CustomerOrdersController customerOrdersController) {
 		this.orderItem = orderItem;
 		this.buildItem = buildItem;
@@ -60,7 +86,10 @@ public class orderItemController implements Initializable {
 		}
 
 	}
-
+/**
+ * view VBox that contains all the items and the product that the customer has selected for this order 
+ * by calling  showInnerVbox method
+ */
 	public void onViewCustomItemPressed() {
 
 		customerOrdersController.showInnerVbox();
@@ -74,7 +103,10 @@ public class orderItemController implements Initializable {
 		}
 
 	}
-
+/**
+ * load all the items and products in the item VBox that exist in order that he make before
+ * @throws IOException
+ */
 	private void loaditemtoitemsViewVbox() throws IOException {
 
 		customerOrdersController.getItemsViewVbox().getChildren().clear();
@@ -92,7 +124,10 @@ public class orderItemController implements Initializable {
 		}
 
 	}
- 
+ /**
+  * set all the text from itemInBuild that we get like name amount and price for the VBox 
+  * @param itemInBuild
+  */
 	private void setDataforVbox(ItemInBuild itemInBuild) {
 		nameOrderLbl.setText("" + itemInBuild.getName());
 		amountLbl.setText("x" + itemInBuild.getAmount()); 
