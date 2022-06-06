@@ -521,6 +521,10 @@ public class ServerController extends ObservableServer {
 		} else if (request[0].equals("report")) {
 			SurveyReport sr = (SurveyReport) clMsg.getContent();
 			clMsg.setContent(DBController.insertReportPDF(sr));
+		} else if (request[0].equals("customer")) {
+			// "customer/`card_number`,content=user"
+			User u = (User) clMsg.getContent();
+			clMsg.setContent(DBController.insertCustomer(u, request[1]));
 		}
 
 		else {

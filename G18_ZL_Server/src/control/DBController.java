@@ -1066,10 +1066,34 @@ public class DBController {
 
 	// INSERT QUERIES (POST)*******************************************************
 
-//	public static boolean insertNewCustomer(Customer cus) {
-//		PreparedStatement ps=conn.prepareStatement("INSERT INTO assignment3.customer (`customer`)");
-//
-//	}
+	public static boolean insertCustomer(User user,String card) {
+		int linesAffected=0;
+		try {
+			PreparedStatement ps=conn.prepareStatement("INSERT INTO assignment3.customer (`card_number`) VALUES (?)",Statement.RETURN_GENERATED_KEYS);
+			ps.setString(1, card);
+			linesAffected = ps.executeUpdate();
+			if (linesAffected == 0) {
+				ps.close();
+				return false;
+			}
+
+			ResultSet rs = ps.getGeneratedKeys();
+
+			rs.next();
+			System.out.println("RS->customer->ID: " + rs.getInt(1));
+			user.setIdCustomer(rs.getInt(1));
+			rs.close();
+			ps.close();
+			
+			updateUserCustomer(user);
+		} catch (SQLException e) {
+			ServerView.printErr(DBController.class, "Inserting new customer failed: " + user.toString());
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+
+	}
 
 	public static boolean insertOrder(Order order) {
 
