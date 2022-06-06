@@ -684,7 +684,23 @@ public class DBController {
 		return complaints;
 
 	}
-
+	public static ArrayList<Complaint> checkComplaint(int complainId) {
+		ArrayList<Complaint> complaints = new ArrayList<>();
+		ResultSet rs;
+		try {
+			rs = statement.executeQuery("SELECT * FROM assignment3.complaint where status_complaint='OPEN' and response IS NULL and id_complaint="+complainId);
+			rs.beforeFirst(); // ---move back to first row
+			while (rs.next()) {
+				complaints.add(new Complaint(rs.getInt("id_complaint"), rs.getInt("id_customer"),
+						rs.getString("status_complaint"), rs.getString("date_complaint"), rs.getDouble("refund_amount"),
+						rs.getString("complaint"), rs.getString("response")));
+			}
+			rs.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return complaints;
+	}
 	public static ArrayList<Complaint> getComplaintsBy(String column, String value) {
 		ArrayList<Complaint> complaints = new ArrayList<>();
 		ResultSet rs;
