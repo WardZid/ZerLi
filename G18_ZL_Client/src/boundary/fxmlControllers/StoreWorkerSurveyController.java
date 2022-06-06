@@ -172,25 +172,14 @@ public class StoreWorkerSurveyController implements Initializable {
 	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		storeL.setText("");//TODO get worker
+		storeL.setText(Store.getById(ClientConsoleController.getWorker().getIdStore()).name());//TODO get worker
 		survey = new Survey();
 		surviesList = (ArrayList<SurveyQuestion>) MainController.getMyClient().send(MessageType.GET,"questions/all", null);
 		clearSelectedItemInSurviesComboBox();
-		storeComboBox.getItems().clear();
-		storeComboBox.getItems().addAll(Store.values());
 		for (int i = 0; i < 6; i++)
 			isAnsweredQuestion[i] = false;
 		enableEnterAnswerButton();
-		/**
-		 * This Listener is used to tell the system that store has been selected
-		 */
-		storeComboBox.getSelectionModel().selectedItemProperty().addListener( new ChangeListener<Store>(){
 
-			@Override
-			public void changed(ObservableValue<? extends Store> observable, Store oldValue, Store newValue) {
-				enableEnterAnswerButton();
-			}
-		});
 		/**
 		 * This Listener is used to tell the system that survey has been selected and to show the suitable questions
 		 */
@@ -253,7 +242,6 @@ public class StoreWorkerSurveyController implements Initializable {
 		setAnswers();
 		survey.setIdQuestion(surviesComB.getValue() + 1);
 		survey.setDateSurvey(MainController.currentTime());
-		survey.setIdStore(storeComboBox.getValue().ordinal());
 		SurveyQueryFromDB(MessageType.POST,survey);
 		Dialog<ButtonType> dialog = LoadDialogPane();
 		Optional<ButtonType> clickedButton = dialog.showAndWait();
@@ -305,7 +293,6 @@ public class StoreWorkerSurveyController implements Initializable {
 		answersList.add(Integer.parseInt(((RadioButton) question4TG.getSelectedToggle()).getText()));
 		answersList.add(Integer.parseInt(((RadioButton) question5TG.getSelectedToggle()).getText()));
 		answersList.add(Integer.parseInt(((RadioButton) question6TG.getSelectedToggle()).getText()));
-		//surviesList.get(surviesComB.getValue()).setAnswers(answersList);
 		survey.setAnswers(answersList);
 	}
 	
