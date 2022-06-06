@@ -202,8 +202,8 @@ public class CustomerSupportController implements Initializable{
 		selectedComplaint.setResponse(replyT.getText());
 		MainController.getMyClient().send(MessageType.UPDATE, "complaint",selectedComplaint);
 		ComplaintMap.remove(selectedComplaintId);
-		ArrayList<User> user = (ArrayList<User>)MainController.getMyClient().send(MessageType.GET,"user/by/id_customer/" + CustomerIdT.getText(),null);
-		Email email=new Email(user.get(0).getEmail(), "The treatment of complaint ["+selectedComplaintId+"] has been finished!", "Your Complaint has been treated\nComplaint Reply:\n"+ replyT.getText() +"\n" + "refund " + refundT.getText());
+		User user = (User)MainController.getMyClient().send(MessageType.GET,"user/by/id_customer/" + CustomerIdT.getText(),null);
+		Email email=new Email(user.getEmail(), "The treatment of complaint ["+selectedComplaintId+"] has been finished!", "Your Complaint has been treated\nComplaint Reply:\n"+ replyT.getText() +"\n" + "refund " + refundT.getText());
 		MainController.getMyClient().send(MessageType.SEND, "email", email);
 		clearTexts();
 		ComplaintL.getItems().addAll(ComplaintMap.keySet());
