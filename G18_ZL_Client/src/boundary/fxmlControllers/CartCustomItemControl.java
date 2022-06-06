@@ -13,7 +13,11 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-
+/**
+ * in this class we view the item with the details
+ * @author saher
+ *
+ */
 public class CartCustomItemControl implements Initializable {
 /**
  * a plus button to increase the amount

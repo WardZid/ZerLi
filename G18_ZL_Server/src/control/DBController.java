@@ -1229,6 +1229,13 @@ public class DBController {
 		return true;
 	}
 	
+	/**
+	 * asked the DataBase to return the needed report
+	 * 
+	 * @param year - the selected year
+	 * @param questionID - the selected question ID
+	 * @return the report
+	 */
 	public static SurveyReport getReportOfYearAndQuestionID(String year, String questionID) {
 		SurveyReport report=null;
 		ResultSet rs;

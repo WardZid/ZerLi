@@ -33,7 +33,12 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
-
+/**
+ * in this class we view all the items and we can move to the build item page
+ * and we can filter the items 
+ * @author saher
+ *
+ */
 public class CatalogController implements Initializable {
 	/**
 	 * to filter the items due to price 

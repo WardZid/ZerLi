@@ -21,7 +21,11 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
-
+/**
+ * in this class we view all the items that the customer selected or build it  with there amount and price and all the details 
+ * @author saher
+ *
+ */
 public class CartController implements Initializable {
 
 	/**
