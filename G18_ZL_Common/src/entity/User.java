@@ -1,6 +1,7 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class User implements Serializable {
 
@@ -157,8 +158,23 @@ public class User implements Serializable {
 		builder.append("]");
 		return builder.toString();
 	}
-	
-	
+	@Override
+	public int hashCode() {
+		return Objects.hash(email, idUser, idUserType, name, password, phone, username);
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		User other = (User) obj;
+		return Objects.equals(email, other.email) && idUser == other.idUser && idUserType == other.idUserType
+				&& Objects.equals(name, other.name) && Objects.equals(password, other.password)
+				&& Objects.equals(phone, other.phone) && Objects.equals(username, other.username);
+	}
 	
 	
 }
