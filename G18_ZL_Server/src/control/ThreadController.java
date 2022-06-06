@@ -60,7 +60,7 @@ public class ThreadController {
 						if (complaint.size()!=0) {
 							User currentUser =  DBController.getUserBy("id_user", idUser+"").get(0);
 							Email email = new Email(currentUser.getEmail(),"Reminder Complain " ," 24 hours have passed since the complaint ( "+ComplainId+" ) this email for a Reminder\n"  );
-							EmailController.sendEmail(email);		
+							//EmailController.sendEmail(email);		
 						}
 					} else
 						flagOnce = 1;
