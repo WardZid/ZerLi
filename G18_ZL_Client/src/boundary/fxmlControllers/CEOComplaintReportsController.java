@@ -1,37 +1,27 @@
 package boundary.fxmlControllers;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.net.URL;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.ResourceBundle;
 
 import control.MainController;
 import entity.MyMessage.MessageType;
 import entity.Quarters;
-import entity.Store;
-import entity.SurveyQuestion;
 import entity.SurveyReport;
-import entity.SurveySumAnswers;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.BarChart;
-import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
-import javafx.scene.chart.PieChart.Data;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
-import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 
 /* ------------------------------------------------ */
@@ -101,8 +91,6 @@ public class CEOComplaintReportsController implements Initializable {
 	/* \/ Help Variables \/ */
 	/* ------------------------------------------------ */
 
-	private HashMap<String, HashMap<Integer, SurveyQuestion>> yearIdQuestionsHashMap;
-
 	// the selected years
 	private String yearComplaint, yearPDF;
 
@@ -138,17 +126,17 @@ public class CEOComplaintReportsController implements Initializable {
 	 * Action to do when download is pressed
 	 * 
 	 * @param event
+	 * @throws FileNotFoundException 
 	 */
 	@SuppressWarnings("unchecked")
-	public void onDownloadPressed(ActionEvent event) {
+	public void onDownloadPressed(ActionEvent event) throws FileNotFoundException {
 		if (choiceBoxYearPDF.getSelectionModel().isEmpty() || choiceBoxSurveyPDF.getSelectionModel().isEmpty()) {
 			Alert errorAlert = new Alert(AlertType.ERROR);
 			errorAlert.setHeaderText(null);
 			errorAlert.setContentText("You must choose Year and Question ID!");
 			errorAlert.showAndWait();
 		} else {
-			ArrayList<SurveyReport> report = (ArrayList<SurveyReport>) MainController.getMyClient()
-					.send(MessageType.GET, "report/" + yearPDF + "/" + selectedSurveyID, null);
+			ArrayList<SurveyReport> report = (ArrayList<SurveyReport>) MainController.getMyClient().send(MessageType.GET, "report/" + yearPDF + "/" + selectedSurveyID, null);
 			if (report.size() == 0) {
 				Alert errorAlert = new Alert(AlertType.ERROR);
 				errorAlert.setHeaderText(null);
@@ -157,19 +145,22 @@ public class CEOComplaintReportsController implements Initializable {
 			} else {
 				DirectoryChooser dirChooser = new DirectoryChooser();
 				File chosenDir = dirChooser.showDialog(null);
-				System.out.println(chosenDir);
-				
-				File newFile = new File(LocalfilePath);
-				
-				byte[] mybytearray = new byte[(int) newFile.length()];
-				FileInputStream fis = new FileInputStream(newFile);
-				BufferedInputStream bis = new BufferedInputStream(fis);
-				msg.initArray(mybytearray.length);
-				msg.setSize(mybytearray.length);
-				bis.read(msg.getMybytearray(), 0, mybytearray.length);
-				sendToServer(msg);
+				if(chosenDir != null) {					
+					File newFile = new File(chosenDir.getAbsolutePath()+"\\"+yearPDF+"_"+selectedSurveyID+".pdf");
+					FileOutputStream fos = new FileOutputStream(newFile);
+					try {
+						fos.write(report.get(0).getReportBytes());
+						fos.flush();
+						fos.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+					Alert errorAlert = new Alert(AlertType.INFORMATION);
+					errorAlert.setHeaderText(null);
+					errorAlert.setContentText(yearPDF+"_"+selectedSurveyID+".pdf"+" was downloaded successfully to:\n"+chosenDir.getAbsolutePath());
+					errorAlert.showAndWait();
+				}
 			}
-			System.out.println(report);
 		}
 	}
 
