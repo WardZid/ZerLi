@@ -371,7 +371,7 @@ public class ServerController extends ObservableServer {
 			}
 			break;
 		case "report":
-			clMsg.setContent(DBController.getQuestionIDsByYear(request[2]));
+			clMsg.setContent(DBController.getReportOfYearAndQuestionID(request[1], request[2]));
 			break;
 		default:
 			ServerView.printErr(getClass(), "Unhandled Get request: " + clMsg.getInfo());
