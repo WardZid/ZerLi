@@ -7,6 +7,7 @@ import java.util.ResourceBundle;
 
 import control.MainController;
 import entity.Complaint;
+import entity.Customer;
 import entity.MyMessage.MessageType;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -58,10 +59,6 @@ public class CustomerComplaintSendViewController implements Initializable {
 	private static int customerID;
 	private static Label wrongLable;
 	/**
-	 * This arrayList is used to decide if the customer ID existed in the data base
-	 */
-	private ArrayList<Complaint> arrayList;
-	/**
 	 * isExistedCustomerID = true if the customer ID exists and false if not
 	 */
 	private boolean isExistedCustomerID = false;
@@ -98,11 +95,12 @@ public class CustomerComplaintSendViewController implements Initializable {
 			@Override
 			public void changed(ObservableValue<? extends Boolean> arg0, Boolean oldPropertyValue,
 					Boolean newPropertyValue) {
+				ArrayList<Customer> customerList;
 				if (newPropertyValue) {
 					visableWrongCustomerIDLabel(false);
 				} else {
-				arrayList =	(ArrayList<Complaint>) MainController.getMyClient().send(MessageType.GET, "customer/by/id_customer/" + customerID,null);
-				if(arrayList.size()!=0) {
+					customerList =	(ArrayList<Customer>) MainController.getMyClient().send(MessageType.GET, "customer/by/id_customer/" + customerID,null);
+				if(customerList.size()!=0) {
 					visableWrongCustomerIDLabel(false);
 					isExistedCustomerID = true;
 					setDisableFinish(isExistedCustomerID, !descriptionTA.getText().equals(""));

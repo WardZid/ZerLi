@@ -323,7 +323,8 @@ public class ServerController extends ObservableServer {
 				clMsg.setContent(DBController.getCustomerAll());
 			} else if (request[1].equals("by")) {
 				clMsg.setContent(DBController.getCustomerBy(request[2], request[3]));
-			}
+			} else if(request[1].equals("point"))
+				clMsg.setContent(DBController.getPoints(request[2]));
 			break;
 		case "worker":
 			if (request[1].equals("all")) {
