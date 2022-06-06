@@ -8,7 +8,7 @@ public class User implements Serializable {
 
 	public enum UserType {
 		CUSTOMER, BRANCH_MANAGER, CEO, STORE_WORKER, DELIVERY_WORKER, CUSTOMER_SUPPORT, SUPPORT_SPECIALIST,
-		CATALOG_MANAGER;
+		CATALOG_MANAGER,SURVEY_WORKER;
 
 		public static UserType getById(int id) {
 
@@ -17,6 +17,11 @@ public class User implements Serializable {
 					return type;
 			}
 			return null;
+		}
+		public boolean isWorker() {
+			if(this==BRANCH_MANAGER || this==STORE_WORKER || this==DELIVERY_WORKER || this==CATALOG_MANAGER || this==SURVEY_WORKER)
+				return true;
+			return false;
 		}
 	}
 
@@ -27,6 +32,9 @@ public class User implements Serializable {
 	private String name;
 	private String email;
 	private String phone;
+	private int idCustomer;
+	private int idWorker;
+	
 	public User(String username, String password) {
 		this.username = username;
 		this.password = password;
@@ -40,6 +48,7 @@ public class User implements Serializable {
 		this.email=email;
 		this.phone=phone;
 	}
+	
 	public int getIdUserType() {
 		return idUserType;
 	}
@@ -87,10 +96,35 @@ public class User implements Serializable {
 		return phone;
 	}
 	/**
-	 * @param phone the phone to set
+	 * @param phone the phone number to set
 	 */
 	public void setPhone(String phone) {
 		this.phone = phone;
+	}
+	
+	/**
+	 * @return the idCustomer
+	 */
+	public int getIdCustomer() {
+		return idCustomer;
+	}
+	/**
+	 * @param idCustomer the idCustomer to set
+	 */
+	public void setIdCustomer(int idCustomer) {
+		this.idCustomer = idCustomer;
+	}
+	/**
+	 * @return the idWorker
+	 */
+	public int getIdWorker() {
+		return idWorker;
+	}
+	/**
+	 * @param idWorker the idWorker to set
+	 */
+	public void setIdWorker(int idWorker) {
+		this.idWorker = idWorker;
 	}
 	public UserType getUserType() {
 		return UserType.getById(idUserType);
@@ -116,6 +150,10 @@ public class User implements Serializable {
 		builder.append(email);
 		builder.append(", phone=");
 		builder.append(phone);
+		builder.append(", idCustomer=");
+		builder.append(idCustomer);
+		builder.append(", idWorker=");
+		builder.append(idWorker);
 		builder.append("]");
 		return builder.toString();
 	}

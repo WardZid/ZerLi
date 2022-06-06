@@ -12,6 +12,7 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import boundary.ServerView;
 import entity.Email;
 
 public class EmailController {
@@ -19,12 +20,10 @@ public class EmailController {
 	private static final String password = "SemesterProject18"; // your email password
 	private static final String sender = "ZerLeeG18@outlook.com"; // Insert Your email again
 
-//	    private String Receiver = "Abd.Elaziz.Hamed@e.braude.ac.il"; // Insert Receiver's Email 
-//	    private String Email_Subject = "Test Email Subject"; 
-
-//	    private String Content = "Hello! This is delftstack program for sending email."; 
-
 	public static boolean sendEmail(Email email) {
+		if(email.getSubject()==null || email.getSubject().equals(""))
+			return false;
+		
 		final Session newSession = Session.getInstance(EmailController.mailProperties(), new Authenticator() {
 			@Override
 			// password authentication
@@ -45,10 +44,11 @@ public class EmailController {
 				@Override
 				public void run() {
 					try {
+						ServerView.printErr(EmailController.class,"Sending email to: "+email.getRecipient());
 						Transport.send(msg);
-						System.out.println("Your Email has been sent successfully!");
+						ServerView.printErr(EmailController.class,"Your Email has been successfully sent to: "+email.getRecipient());
 					} catch (MessagingException e) {
-						// TODO Auto-generated catch block
+						ServerView.printErr(EmailController.class,"Email Sending Failed"); // failed
 						e.printStackTrace();
 					}// Transport the email
 					
@@ -57,14 +57,16 @@ public class EmailController {
 			}).start();
 			return true;
 		} catch (final MessagingException e) { // exception to catch the errors
-			System.out.println("Email Sending Failed"); // failed
+			ServerView.printErr(EmailController.class,"Email Sending Failed"); // failed
 			e.printStackTrace();
 			return false;
 		}
 	}
-
-	// The permanent set of properties containing string keys, the following
-	// setting the properties for SMPT function
+	/**
+	 * The permanent set of properties containing string keys, the following
+	 * setting the properties for SMPT function
+	 * @return
+	 */
 	public static Properties mailProperties() {
 		final Properties mailProp = new Properties();
 		mailProp.put("mail.smtp.host", "smtp.office365.com");

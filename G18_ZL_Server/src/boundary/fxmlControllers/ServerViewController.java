@@ -39,7 +39,7 @@ public class ServerViewController implements Initializable {
 	private static ObservableList<ClientConnection> clientsObservableList = FXCollections
 			.<ClientConnection>observableArrayList();
 
-	// FXML Components************************8
+	// FXML Components************************
 
 	@FXML
 	private AnchorPane mainAnchor;
@@ -111,6 +111,9 @@ public class ServerViewController implements Initializable {
 
 	}
 
+	/**
+	 * sets up the tableview for the customers to show up
+	 */
 	private void initTable() {
 		tblColIP.setCellValueFactory(new PropertyValueFactory<ClientConnection, String>("ip"));
 		tblColHost.setCellValueFactory(new PropertyValueFactory<ClientConnection, String>("host"));
@@ -123,7 +126,7 @@ public class ServerViewController implements Initializable {
 			DBController.setDBInfo(txtDBURL.getText(), txtUser.getText(), txtPass.getText());
 			MainController.getServer().startServer();
 
-			enableButtons(false, false, true, false, true);
+			enableButtons(false, false, true, true, true);
 
 			gridTextInputs.setDisable(true); 
 
@@ -144,7 +147,7 @@ public class ServerViewController implements Initializable {
 		MainController.getServer().stopServer();
 		clientsObservableList.clear();
 
-		enableButtons(true, true, false, true, false);
+		enableButtons(true, true, false, false, false);
 
 		gridTextInputs.setDisable(false);
 	}
@@ -157,7 +160,7 @@ public class ServerViewController implements Initializable {
 
 	@FXML
 	void onImport() {
-
+		DBController.importUsers();
 	}
 
 	@FXML

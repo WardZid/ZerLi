@@ -7,6 +7,7 @@ import boundary.ClientView;
 import control.MainController;
 import entity.MyMessage.MessageType;
 import entity.User;
+import entity.User.UserType;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -84,6 +85,12 @@ public class LogInController implements Initializable {
 			return;
 		}
 
+		if(user.getUserType()==UserType.CUSTOMER && user.getIdCustomer()<=0) {
+			errorLbl.setVisible(true);
+			errorLbl.setText("*Your account hasn't been confirmed");
+			return;
+		}
+			
 		if (!(boolean) MainController.getMyClient().send(MessageType.INFO, "log/in", user)) {
 			errorLbl.setVisible(true);
 			errorLbl.setText("*User is already logged in");

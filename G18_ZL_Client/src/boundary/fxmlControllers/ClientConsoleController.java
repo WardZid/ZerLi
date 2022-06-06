@@ -11,6 +11,7 @@ import entity.Customer;
 import entity.Store;
 import entity.MyMessage.MessageType;
 import entity.User;
+import entity.Worker;
 import javafx.event.ActionEvent;
 import javafx.event.EventType;
 import javafx.fxml.FXML;
@@ -30,6 +31,7 @@ public class ClientConsoleController implements Initializable {
 
 	private static User user;
 	private static Customer customer;
+	private static Worker worker;
 
 	public static User getUser() {
 		return user;
@@ -46,9 +48,20 @@ public class ClientConsoleController implements Initializable {
 	public static void setCustomer(Customer customer) {
 		ClientConsoleController.customer = customer;
 	}
+	
+	public static Worker getWorker() {
+		return worker;
+	}
+
+	public static void setWorker(Worker worker) {
+		ClientConsoleController.worker = worker;
+	}
 
 	@FXML
 	private Label consoleLbl;
+
+    @FXML
+    private Label storeLbl;
 
 	@FXML
 	private ImageView logoIV;
@@ -104,6 +117,7 @@ public class ClientConsoleController implements Initializable {
 		ClientView.setUpLogIn();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 
@@ -115,6 +129,12 @@ public class ClientConsoleController implements Initializable {
 
 		consoleLbl.setText(user.getUserType().toString().replace('_', ' ') + " CONSOLE");
 		nameText.setText(user.getName());
+		
+		if(user.getUserType().isWorker()) {
+			worker=((ArrayList<Worker>)MainController.getMyClient().send(MessageType.GET, "worker/by/id_worker/"+user.getIdWorker(), null)).get(0);
+			storeLbl.setText("Store: "+Store.getById(worker.getIdStore()));
+			storeLbl.setVisible(true);
+		}
 
 		switch (user.getUserType()) {
 		case CUSTOMER:
@@ -140,6 +160,9 @@ public class ClientConsoleController implements Initializable {
 			break;
 		case CATALOG_MANAGER:
 			loadCatalogManagerConsole();
+			break;
+		case SURVEY_WORKER:
+			loadSurveyWorkerConsole();
 			break;
 		default:
 			ClientView.printErr(getClass(), "no such user type");
@@ -222,7 +245,6 @@ public class ClientConsoleController implements Initializable {
 	}
 
 	private void loadStoreWorkerConsole() {
-		initPage(null, "fxmls/store-worker-survey-view.fxml");
 	}
 
 	private void loadDeliveryWorkerConsole() {
@@ -239,6 +261,9 @@ public class ClientConsoleController implements Initializable {
 
 	private void loadCatalogManagerConsole() {
 		initPage(null, "fxmls/catalog-manager-view.fxml");
+	}
+	private void loadSurveyWorkerConsole(){
+		initPage(null, "fxmls/store-worker-survey-view.fxml");
 	}
 
 	public static class Navigation {

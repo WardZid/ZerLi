@@ -233,7 +233,7 @@ public class DeliveryController implements Initializable {
 				"customer/by/id_customer/" + selectedOrder.getIdCustomer(), null);
 
 		buyingUser = (User) MainController.getMyClient().send(MessageType.GET,
-				"user/by/id_user/" + customers.get(0).getIdUser(), null);
+				"user/by/id_customer/" + customers.get(0).getIdCustomer(), null);
 		
 		custNameTF.setText(buyingUser.getName());
 		custNumTF.setText(buyingUser.getPhone());

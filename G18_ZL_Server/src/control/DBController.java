@@ -29,6 +29,8 @@ import entity.SurveyQuestion;
 import entity.SurveyReport;
 import entity.SurveySumAnswers;
 import entity.User;
+import entity.User.UserType;
+import entity.Worker;
 
 public class DBController {
 
@@ -105,6 +107,7 @@ public class DBController {
 	 */
 	public static void disconnectDB() {
 		try {
+			statement.close();
 			conn.close();
 			ServerView.print(DBController.class, "DB Connection Terminated.");
 		} catch (SQLException e) {
@@ -112,6 +115,67 @@ public class DBController {
 		}
 	}
 
+	// IMPORTING USERS FROM EXTERNAL DB
+	/**
+	 * 
+	 */
+	public static void importUsers() {
+		try {
+			Connection connExternal = DriverManager
+					.getConnection("jdbc:mysql://localhost/external?serverTimezone=IST&useSSL=false", userDB, passDB);
+			Statement statementExt = connExternal.createStatement();
+			ArrayList<User> usersExternal = new ArrayList<>();
+			ResultSet rs = statementExt.executeQuery("SELECT * FROM external.user");
+			while (rs.next()) {
+				User u=new User(rs.getInt("id_user"), rs.getInt("id_user_type"), rs.getString("username"),
+						rs.getString("password"), rs.getString("name"), rs.getString("email"), rs.getString("phone"));
+				if(u.getUserType()==UserType.CUSTOMER && rs.getInt("id_customer")>0)
+					u.setIdCustomer(rs.getInt("id_customer"));
+				else if(u.getUserType().isWorker())
+					u.setIdWorker(rs.getInt("id_worker"));
+				usersExternal.add(u);
+			}
+			statementExt.close();
+			connExternal.close();
+			int linesAffected = 0;
+			for (User user : usersExternal) {
+				PreparedStatement ps = conn.prepareStatement(
+						"INSERT INTO assignment3.user (`id_user`,`id_user_type`,`username`,`password`,`name`,`email`,`phone`) "
+								+ "VALUES (?,?,?,?,?,?,?)"
+								+ " ON DUPLICATE KEY UPDATE id_user_type=?,username=?,password=?,name=?,email=?,phone=?");
+				// insert
+				ps.setInt(1, user.getIdUser());
+				ps.setInt(2, user.getIdUserType());
+				ps.setString(3, user.getUsername());
+				ps.setString(4, user.getPassword());
+				ps.setString(5, user.getName());
+				ps.setString(6, user.getEmail());
+				ps.setString(7, user.getPhone());
+
+				// on duplicate key
+				ps.setInt(8, user.getIdUserType());
+				ps.setString(9, user.getUsername());
+				ps.setString(10, user.getPassword());
+				ps.setString(11, user.getName());
+				ps.setString(12, user.getEmail());
+				ps.setString(13, user.getPhone());
+
+				linesAffected = ps.executeUpdate();
+				if (linesAffected == 0)
+					ServerView.printErr(DBController.class, "Failed to insert user to database: " + user.toString());
+				ps.close();
+				if(user.getUserType().isWorker() && user.getIdWorker()>0)
+					updateUserWorker(user);
+				else if (user.getIdCustomer() > 0)
+					updateUserCustomer(user);
+			}
+
+		} catch (SQLException e) {
+			ServerView.printErr(DBController.class, e.getMessage());
+			e.printStackTrace();
+		}
+
+	}
 	// helper methods
 
 	private static int resultSetSize(ResultSet rs) throws SQLException {
@@ -123,7 +187,7 @@ public class DBController {
 		return size;
 	}
 
-	private static byte[] blobToMyFile(Blob blob) throws SQLException {
+	private static byte[] blobToBytes(Blob blob) throws SQLException {
 		if (blob == null)
 			return null;
 		int blobLength = (int) blob.length();
@@ -137,6 +201,7 @@ public class DBController {
 	}
 
 	// SQL Query Methods ******************************
+
 	public static ArrayList<SurveyQuestion> getAllSurves() {
 		ResultSet rs;
 		SurveyQuestion surveyBuild;
@@ -159,7 +224,6 @@ public class DBController {
 
 	}
 
-
 	public static User getUser(String username, String password) {
 		ResultSet rs;
 		try {
@@ -169,14 +233,13 @@ public class DBController {
 				return null;
 			rs.beforeFirst(); // ---move back to first row
 			while (rs.next()) {
-				return new User(
-						rs.getInt("id_user"),
-						rs.getInt("id_user_type"),
-						rs.getString("username"),
-						rs.getString("password"),
-						rs.getString("name"),
-						rs.getString("email"),
-						rs.getString("phone"));
+				User u=new User(rs.getInt("id_user"), rs.getInt("id_user_type"), rs.getString("username"),
+						rs.getString("password"), rs.getString("name"), rs.getString("email"), rs.getString("phone"));
+				if(u.getUserType()==UserType.CUSTOMER && rs.getInt("id_customer")>0)
+					u.setIdCustomer(rs.getInt("id_customer"));
+				else if(u.getUserType().isWorker())
+					u.setIdWorker(rs.getInt("id_worker"));
+				return u;
 			}
 			rs.close();
 		} catch (SQLException e) {
@@ -184,23 +247,22 @@ public class DBController {
 		}
 		return null;
 	}
+
 	public static User getUserBy(String column, String value) {
 		ResultSet rs;
 		try {
-			rs = statement.executeQuery(
-					"SELECT * FROM user WHERE "+column+" = "+value);
+			rs = statement.executeQuery("SELECT * FROM user WHERE " + column + " = " + value);
 			if (resultSetSize(rs) == 0)
 				return null;
 			rs.beforeFirst(); // ---move back to first row
 			while (rs.next()) {
-				return new User(
-						rs.getInt("id_user"),
-						rs.getInt("id_user_type"),
-						rs.getString("username"),
-						rs.getString("password"),
-						rs.getString("name"),
-						rs.getString("email"),
-						rs.getString("phone"));
+				User u=new User(rs.getInt("id_user"), rs.getInt("id_user_type"), rs.getString("username"),
+						rs.getString("password"), rs.getString("name"), rs.getString("email"), rs.getString("phone"));
+				if(u.getUserType()==UserType.CUSTOMER && rs.getInt("id_customer")>0)
+					u.setIdCustomer(rs.getInt("id_customer"));
+				else if(u.getUserType().isWorker())
+					u.setIdWorker(rs.getInt("id_worker"));
+				return u;
 			}
 			rs.close();
 		} catch (SQLException e) {
@@ -256,10 +318,13 @@ public class DBController {
 		ArrayList<Double> allIncomesInQuarter = new ArrayList<>();
 		ResultSet rs;
 		try {
-			
-			for(int i=0;i<3;i++) {
-				int currenIntegertMonth = Integer.parseInt(month)+i;
-				rs = statement.executeQuery("SELECT sum(O.price_order) as sum FROM assignment3.order O WHERE Month(O.date_order) = "+currenIntegertMonth+" AND Year(O.date_order) ="+year+" AND O.id_store = "+branch);
+
+			for (int i = 0; i < 3; i++) {
+				int currenIntegertMonth = Integer.parseInt(month) + i;
+				rs = statement.executeQuery(
+						"SELECT sum(O.price_order) as sum FROM assignment3.order O WHERE Month(O.date_order) = "
+								+ currenIntegertMonth + " AND Year(O.date_order) =" + year + " AND O.id_store = "
+								+ branch);
 				rs.beforeFirst(); // ---move back to first row
 				while (rs.next()) {
 					allIncomesInQuarter.add(new Double(rs.getDouble("sum")));
@@ -271,7 +336,7 @@ public class DBController {
 		}
 		return allIncomesInQuarter;
 	}
-	
+
 	public static ArrayList<Order> getOrdersBy(String column, String value) {
 		ArrayList<Order> orders = new ArrayList<>();
 		ResultSet rs;
@@ -303,8 +368,7 @@ public class DBController {
 
 				Item itemToAdd = new Item(rs.getInt("id_item"), rs.getString("name"), rs.getDouble("price"),
 						rs.getInt("sale_item_order"), rs.getString("category"), rs.getString("color"), rs.getString("description"),
-						rs.getString("status"), blobToMyFile(rs.getBlob("image")));
-				
+						rs.getString("status"), blobToBytes(rs.getBlob("image")));
 				orderItems.add(itemToAdd.new OrderItem(itemToAdd, rs.getInt("amount")));
 			}
 			rs.close();
@@ -326,7 +390,7 @@ public class DBController {
 			while (rs.next()) {
 				items.add(new Item(rs.getInt("id_item"), rs.getString("name"), rs.getDouble("price"), rs.getInt("sale"),
 						rs.getString("category"), rs.getString("color"), rs.getString("description"),
-						rs.getString("status"), blobToMyFile(rs.getBlob("image"))));
+						rs.getString("status"), blobToBytes(rs.getBlob("image"))));
 			}
 			rs.close();
 		} catch (SQLException e) {
@@ -344,7 +408,7 @@ public class DBController {
 			while (rs.next()) {
 				items.add(new Item(rs.getInt("id_item"), rs.getString("name"), rs.getDouble("price"), rs.getInt("sale"),
 						rs.getString("category"), rs.getString("color"), rs.getString("description"),
-						rs.getString("status"), blobToMyFile(rs.getBlob("image"))));
+						rs.getString("status"), blobToBytes(rs.getBlob("image"))));
 			}
 			rs.close();
 		} catch (SQLException e) {
@@ -352,7 +416,7 @@ public class DBController {
 		}
 		return items;
 	}
-	
+
 	public static ArrayList<Item> getItemsComplete() {
 		ArrayList<Item> items = new ArrayList<>();
 		ResultSet rs;
@@ -362,7 +426,7 @@ public class DBController {
 			while (rs.next()) {
 				items.add(new Item(rs.getInt("id_item"), rs.getString("name"), rs.getDouble("price"), rs.getInt("sale"),
 						rs.getString("category"), rs.getString("color"), rs.getString("description"),
-						rs.getString("status"), blobToMyFile(rs.getBlob("image"))));
+						rs.getString("status"), blobToBytes(rs.getBlob("image"))));
 			}
 			rs.close();
 		} catch (SQLException e) {
@@ -459,8 +523,6 @@ public class DBController {
 			ResultSet rs = statement.executeQuery("SELECT * FROM build_item");
 			rs.beforeFirst(); // ---move back to first row
 			while (rs.next()) {
-//				buildItems.add(getItemInBuildAll(
-//				new BuildItem(rs.getInt("id_build_item"), rs.getInt("id_order"), rs.getInt("amount"))));
 				buildItems.add(new BuildItem(rs.getInt("id_build_item"), rs.getInt("id_order"), rs.getInt("amount")));
 			}
 			rs.close();
@@ -506,7 +568,7 @@ public class DBController {
 	 * @return BuildItem same BuildItem receive in parameter after filling with the
 	 *         items in build
 	 */
-	public static BuildItem getItemInBuildAll(BuildItem buildItem) { //amer
+	public static BuildItem getItemInBuildAll(BuildItem buildItem) {
 		ResultSet rs;
 		try {
 			rs = statement
@@ -517,7 +579,7 @@ public class DBController {
 				buildItem.addItem(
 						new Item(rs.getInt("id_item"), rs.getString("name"), rs.getDouble("price"), rs.getInt("sale_item_order"),
 								rs.getString("category"), rs.getString("color"), rs.getString("description"),
-								rs.getString("status"), blobToMyFile(rs.getBlob("image"))),
+								rs.getString("status"), blobToBytes(rs.getBlob("image"))),
 						rs.getInt("amount_in_build"));
 			}
 			rs.close();
@@ -534,12 +596,8 @@ public class DBController {
 			rs = statement.executeQuery("SELECT * FROM customer");
 			rs.beforeFirst(); // ---move back to first row
 			while (rs.next()) {
-				customers.add(new Customer(
-						rs.getInt("id_customer"),
-						rs.getInt("id_customer_status"),
-						rs.getInt("id_user"),
-						rs.getString("card_number"),
-						rs.getDouble("point")));
+				customers.add(new Customer(rs.getInt("id_customer"), rs.getInt("id_customer_status"),
+						rs.getString("card_number"), rs.getDouble("point")));
 			}
 			rs.close();
 		} catch (SQLException e) {
@@ -550,13 +608,12 @@ public class DBController {
 
 	public static ArrayList<Customer> getCustomerBy(String column, String value) {
 		ArrayList<Customer> customers = new ArrayList<>();
-		ResultSet rs;
 		try {
-			rs = statement.executeQuery("SELECT * FROM customer WHERE " + column + "='" + value + "'");
+			ResultSet rs = statement.executeQuery("SELECT * FROM customer WHERE " + column + "='" + value + "'");
 			rs.beforeFirst(); // ---move back to first row
 			while (rs.next()) {
 				customers.add(new Customer(rs.getInt("id_customer"), rs.getInt("id_customer_status"),
-						rs.getInt("id_user"), rs.getString("card_number"), rs.getDouble("point")));
+						rs.getString("card_number"), rs.getDouble("point")));
 			}
 			rs.close();
 		} catch (SQLException e) {
@@ -564,7 +621,7 @@ public class DBController {
 		}
 		return customers;
 	}
- 
+	
 	public static int getPoints(String idCustomer) {
 		int points=0;
 		try {
@@ -578,6 +635,37 @@ public class DBController {
 		return points;
 	}
 	
+	public static ArrayList<Worker> getWorkerAll() {
+		ArrayList<Worker> workers = new ArrayList<>();
+		ResultSet rs;
+		try {
+			rs = statement.executeQuery("SELECT * FROM worker");
+			rs.beforeFirst(); // ---move back to first row
+			while (rs.next()) {
+				workers.add(new Worker(rs.getInt("id_worker"), rs.getInt("id_store")));
+			}
+			rs.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return workers;
+	}
+
+	public static ArrayList<Worker> getWorkerBy(String column, String value) {
+		ArrayList<Worker> workers = new ArrayList<>();
+		try {
+			ResultSet rs = statement.executeQuery("SELECT * FROM worker WHERE " + column + "='" + value + "'");
+			rs.beforeFirst(); // ---move back to first row
+			while (rs.next()) {
+				workers.add(new Worker(rs.getInt("id_worker"), rs.getInt("id_store")));
+			}
+			rs.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return workers;
+	}
+
 	public static ArrayList<Complaint> getComplaintsAll() {
 		ArrayList<Complaint> complaints = new ArrayList<>();
 		ResultSet rs;
@@ -620,11 +708,11 @@ public class DBController {
 		ArrayList<String> years = new ArrayList<>();
 		ResultSet rs;
 		try {
-			rs = statement.executeQuery("SELECT distinct Year(date_complaint) as year FROM assignment3.complaint order by Year(date_complaint)");
+			rs = statement.executeQuery(
+					"SELECT distinct Year(date_complaint) as year FROM assignment3.complaint order by Year(date_complaint)");
 			rs.beforeFirst(); // ---move back to first row
-			System.out.println("sql ok");
 			while (rs.next()) {
-				years.add(rs.getString("year")+"");
+				years.add(rs.getString("year") + "");
 			}
 			rs.close();
 		} catch (SQLException e) {
@@ -633,19 +721,19 @@ public class DBController {
 		return years;
 
 	}
-	
-	
+
 	public static ArrayList<Integer> getCountComplaintsInQuarter(String year, String firstMonthInQuarter) {
 		ArrayList<Integer> countOfComplaints = new ArrayList<>();
 		ResultSet rs;
 		int monthForSearch;
 		try {
-			for(int i = 0 ; i<3 ; i++) {
-				monthForSearch=Integer.parseInt((firstMonthInQuarter))+i;
-				rs = statement.executeQuery("SELECT count(month(date_complaint)) as count FROM assignment3.complaint WHERE year(date_complaint) = "+year+" and month(date_complaint) = "+monthForSearch);
+			for (int i = 0; i < 3; i++) {
+				monthForSearch = Integer.parseInt((firstMonthInQuarter)) + i;
+				rs = statement.executeQuery(
+						"SELECT count(month(date_complaint)) as count FROM assignment3.complaint WHERE year(date_complaint) = "
+								+ year + " and month(date_complaint) = " + monthForSearch);
 				rs.beforeFirst(); // ---move back to first row
 				while (rs.next()) {
-					System.out.println(rs.getString("count"));
 					countOfComplaints.add(rs.getInt("count"));
 				}
 				rs.close();
@@ -656,7 +744,7 @@ public class DBController {
 		return countOfComplaints;
 
 	}
-	
+
 	public static ArrayList<String> getStoreAll() {
 		ArrayList<String> stores = new ArrayList<>();
 		ResultSet rs;
@@ -704,37 +792,39 @@ public class DBController {
 
 		return questions;
 	}
+
 	// Report get queries
-	public static SurveySumAnswers getAverage(String idQuestion , String year) {
+	public static SurveySumAnswers getAverage(String idQuestion, String year) {
 		SurveySumAnswers ssa = new SurveySumAnswers();
 		try {
-			PreparedStatement ps = conn.prepareStatement("select avg(S.answer1),avg(S.answer2),avg(S.answer3),avg(S.answer4),avg(S.answer5),avg(S.answer6) from survey S where year(S.date_survey)= ? AND S.id_question= ?");
+			PreparedStatement ps = conn.prepareStatement(
+					"select avg(S.answer1),avg(S.answer2),avg(S.answer3),avg(S.answer4),avg(S.answer5),avg(S.answer6) from survey S where year(S.date_survey)= ? AND S.id_question= ?");
 			ps.setString(1, year);
 			ps.setInt(2, Integer.parseInt(idQuestion));
 			ResultSet rs = ps.executeQuery();
-		 while(rs.next()) {
+			while (rs.next()) {
 				ssa.getAvgAnswers().add(rs.getDouble(1));
 				ssa.getAvgAnswers().add(rs.getDouble(2));
 				ssa.getAvgAnswers().add(rs.getDouble(3));
 				ssa.getAvgAnswers().add(rs.getDouble(4));
 				ssa.getAvgAnswers().add(rs.getDouble(5));
 				ssa.getAvgAnswers().add(rs.getDouble(6));
-				}
+			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		System.out.println(ssa.getAvgAnswers().get(0) + " abcde");
 		return ssa;
 	}
-	
+
 	public static ArrayList<String> getAllSurvesYears1() {
 		ArrayList<String> years = new ArrayList<String>();
 		try {
-			ResultSet rs = statement.executeQuery("SELECT DISTINCT Year(date_survey) years FROM assignment3.survey ORDER BY Year(date_survey)");
+			ResultSet rs = statement.executeQuery(
+					"SELECT DISTINCT Year(date_survey) years FROM assignment3.survey ORDER BY Year(date_survey)");
 			rs.beforeFirst(); // ---move back to first row
 			while (rs.next()) {
-				years.add(rs.getInt("years")+"");
+				years.add(rs.getInt("years") + "");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -747,10 +837,12 @@ public class DBController {
 		ArrayList<String> IDs = new ArrayList<>();
 		ResultSet rs;
 		try {
-			rs = statement.executeQuery("SELECT DISTINCT id_question id FROM assignment3.survey WHERE Year(date_survey) = "+year+" order by id_question");
+			rs = statement
+					.executeQuery("SELECT DISTINCT id_question id FROM assignment3.survey WHERE Year(date_survey) = "
+							+ year + " order by id_question");
 			rs.beforeFirst(); // ---move back to first row
 			while (rs.next()) {
-				IDs.add(rs.getString("id")+"");
+				IDs.add(rs.getString("id") + "");
 			}
 			rs.close();
 		} catch (SQLException e) {
@@ -759,56 +851,54 @@ public class DBController {
 		return IDs;
 
 	}
-	
-	public static HashMap<String,HashMap<Integer,SurveyQuestion>> getAllSurvesYears(){
-		HashMap<String,HashMap<Integer,SurveyQuestion>> yearsIdQuestions = new HashMap<String,HashMap<Integer,SurveyQuestion>>();
+
+	public static HashMap<String, HashMap<Integer, SurveyQuestion>> getAllSurvesYears() {
+		HashMap<String, HashMap<Integer, SurveyQuestion>> yearsIdQuestions = new HashMap<String, HashMap<Integer, SurveyQuestion>>();
 		SurveyQuestion sq;
 		try {
-			ResultSet rs  = statement.executeQuery(
-					"SELECT year(s.date_survey) as year,s.id_question, q.id_question, q.question1, q.question2, q.question3, q.question4, q.question5, q.question6 FROM assignment3.survey s, assignment3.questions q WHERE s.id_question = q.id_question"
-							);
-			while(rs.next()) {
+			ResultSet rs = statement.executeQuery(
+					"SELECT year(s.date_survey) as year,s.id_question, q.id_question, q.question1, q.question2, q.question3, q.question4, q.question5, q.question6 FROM assignment3.survey s, assignment3.questions q WHERE s.id_question = q.id_question");
+			while (rs.next()) {
 				sq = new SurveyQuestion();
-				if(yearsIdQuestions.get(rs.getString(1))==null)
-				{
+				if (yearsIdQuestions.get(rs.getString(1)) == null) {
 					sq.getQuestion().add(rs.getString("question1"));
 					sq.getQuestion().add(rs.getString("question2"));
 					sq.getQuestion().add(rs.getString("question3"));
 					sq.getQuestion().add(rs.getString("question4"));
 					sq.getQuestion().add(rs.getString("question5"));
 					sq.getQuestion().add(rs.getString("question6"));
-					HashMap<Integer,SurveyQuestion> idQuestion = new HashMap<Integer, SurveyQuestion>();
+					HashMap<Integer, SurveyQuestion> idQuestion = new HashMap<Integer, SurveyQuestion>();
 					idQuestion.put(rs.getInt("id_question"), sq);
-					yearsIdQuestions.put(rs.getString("year"),idQuestion);
+					yearsIdQuestions.put(rs.getString("year"), idQuestion);
+				} 
+				else if (yearsIdQuestions.get(rs.getString(1)).get(rs.getInt(2)) == null) {
+					if (rs.getString("question1") == null)
+						sq.getQuestion().add("");
+					sq.getQuestion().add(rs.getString("question1"));
+					if (rs.getString("question1") == null)
+						sq.getQuestion().add("");
+					sq.getQuestion().add(rs.getString("question2"));
+					if (rs.getString("question2") == null)
+						sq.getQuestion().add("");
+					sq.getQuestion().add(rs.getString("question3"));
+					if (rs.getString("question3") == null)
+						sq.getQuestion().add("");
+					sq.getQuestion().add(rs.getString("question4"));
+					if (rs.getString("question4") == null)
+						sq.getQuestion().add("");
+					sq.getQuestion().add(rs.getString("question5"));
+					if (rs.getString("question5") == null)
+						sq.getQuestion().add("");
+					sq.getQuestion().add(rs.getString("question6"));
+					yearsIdQuestions.get(rs.getString("year")).put(rs.getInt("id_question"), sq);
 				}
-				else
-					if(yearsIdQuestions.get(rs.getString(1)).get(rs.getInt(2))==null) {
-						if(rs.getString("question1")==null)
-							sq.getQuestion().add("");
-							sq.getQuestion().add(rs.getString("question1"));
-							if(rs.getString("question1")==null)
-								sq.getQuestion().add("");
-							sq.getQuestion().add(rs.getString("question2"));
-							if(rs.getString("question2")==null)
-								sq.getQuestion().add("");
-							sq.getQuestion().add(rs.getString("question3"));
-							if(rs.getString("question3")==null)
-								sq.getQuestion().add("");
-							sq.getQuestion().add(rs.getString("question4"));
-							if(rs.getString("question4")==null)
-								sq.getQuestion().add("");
-							sq.getQuestion().add(rs.getString("question5"));
-							if(rs.getString("question5")==null)
-								sq.getQuestion().add("");
-							sq.getQuestion().add(rs.getString("question6"));
-						yearsIdQuestions.get(rs.getString("year")).put(rs.getInt("id_question"), sq);
-					}
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return yearsIdQuestions;
 	}
+
 	public static ArrayList<String> getMonthsInBranch(String idStore) {
 		ArrayList<String> monthsYears = new ArrayList<>();
 		try {
@@ -839,8 +929,8 @@ public class DBController {
 			rs = statement.executeQuery(
 					" SELECT  U.name as name , O.date_order  as date ,  (O.price_order) as income  FROM assignment3.order O , assignment3.customer C ,assignment3.user U  WHERE O.id_store ="
 							+ branch_id + " AND Month(O.date_order) = " + month + " AND Year(O.date_order) =" + year
-							+ "  and  O.id_customer=  C.id_customer  and U.id_user=  C.id_user"); 
- 
+							+ "  and  O.id_customer=  C.id_customer  and U.id_user=  C.id_user");
+
 			rs.beforeFirst(); // ---move back to first row
 			while (rs.next()) {
 				receipts.add(new Receipt(rs.getString("name"), rs.getString("date"), rs.getDouble("income")));
@@ -927,7 +1017,7 @@ public class DBController {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+
 		ArrayList<Order> o = getOrdersByBranchMonthYear(branchID,month,year);
 		boolean isIn = false;
 		for (Order order : o) {
@@ -959,7 +1049,11 @@ public class DBController {
 
 	// INSERT QUERIES (POST)*******************************************************
 
-	
+//	public static boolean insertNewCustomer(Customer cus) {
+//		PreparedStatement ps=conn.prepareStatement("INSERT INTO assignment3.customer (`customer`)");
+//
+//	}
+
 	public static boolean insertOrder(Order order) {
 
 		int linesChanged = 0;
@@ -985,7 +1079,7 @@ public class DBController {
 			ResultSet rs = ps.getGeneratedKeys();
 
 			rs.next();
-			System.out.println("RS->order->ID: "+rs.getInt(1));
+			System.out.println("RS->order->ID: " + rs.getInt(1));
 			order.setIdOrder(rs.getInt(1));
 			rs.close();
 			ps.close();
@@ -1008,8 +1102,8 @@ public class DBController {
 			for (BuildItem buildItem : order.getBuildItems()) {
 				ps = conn.prepareStatement("INSERT INTO assignment3.build_item (`id_order`,`amount`) VALUES (?,?)",
 						Statement.RETURN_GENERATED_KEYS);
-				ps.setInt(1,order.getIdOrder());
-				ps.setInt(2,buildItem.getAmount());
+				ps.setInt(1, order.getIdOrder());
+				ps.setInt(2, buildItem.getAmount());
 				linesChanged = ps.executeUpdate();
 				if (linesChanged == 0) {
 					ps.close();
@@ -1018,11 +1112,11 @@ public class DBController {
 				rs = ps.getGeneratedKeys();
 
 				rs.next();
-				System.out.println("RS->buildItem->ID: "+rs.getInt(1));
+				System.out.println("RS->buildItem->ID: " + rs.getInt(1));
 				buildItem.setIdBuildItem(rs.getInt(1));
 				rs.close();
 				ps.close();
-				
+
 				for (ItemInBuild itemInBuild : buildItem.getItemsInBuild().values()) {
 					ps = conn.prepareStatement(
 							"INSERT INTO assignment3.item_in_build (`id_item`,`id_build_item`,`amount_in_build`,`sale_item_order`) VALUES (?,?,?,?)");
@@ -1047,8 +1141,6 @@ public class DBController {
 		return true;
 	}
 
-
-	
 	public static boolean insertItem(Item item) {
 		int linesChanged = 0;
 		try {
@@ -1095,23 +1187,18 @@ public class DBController {
 	public static boolean insertSurvey(Survey s) {
 		int linesChanged = 0;
 		try {
-			PreparedStatement ps = conn.prepareStatement("INSERT INTO survey (`id_question`,`id_store`,`date_survey`,`answer1`,`answer2`,`answer3`,`answer4`,`answer5`,`answer6`) VALUES(?,?,?,?,?,?,?,?,?)",
+			PreparedStatement ps = conn.prepareStatement(
+					"INSERT INTO survey (`id_question`,`id_store`,`date_survey`,`answer1`,`answer2`,`answer3`,`answer4`,`answer5`,`answer6`) VALUES(?,?,?,?,?,?,?,?,?)",
 					Statement.RETURN_GENERATED_KEYS);
-			ps.setInt(1,s.getIdQuestion());
+			ps.setInt(1, s.getIdQuestion());
 			ps.setInt(2, s.getIdStore());
 			ps.setString(3, s.getDateSurvey());
-			for(int i=0 ; i<6 ; i++)
-			ps.setInt(i+4, s.getAnswers().get(i));
-			
+			for (int i = 0; i < 6; i++)
+				ps.setInt(i + 4, s.getAnswers().get(i));
+
 			linesChanged = ps.executeUpdate();
 
-//			ResultSet generatedKeys = ps.getGeneratedKeys();
-//			int idSurvey = generatedKeys.getInt(0);
 			ps.close();
-			//System.out.println(idSurvey);
-			// for (SurveyQuestion sq : s.getQuestions()) {
-//			insertSurveyAnswer(idSurvey, s.getSurveyQuestion());
-			// }
 		} catch (SQLException e) {
 			e.printStackTrace();
 			ServerView.printErr(DBController.class, "Unable to add new survey: " + s.toString());
@@ -1121,14 +1208,14 @@ public class DBController {
 			return false;
 		return true;
 	}
-	
+
 	public static boolean insertReportPDF(SurveyReport sr) {
 		int linesChanged = 0;
 		try {
-			PreparedStatement ps = conn.prepareStatement(
-					"INSERT INTO reports (`id_question`, `year_report`, `pdf_report`) VALUES(?,?,?)");
+			PreparedStatement ps = conn
+					.prepareStatement("INSERT INTO reports (`id_question`, `year_report`, `pdf_report`) VALUES(?,?,?)");
 			ps.setInt(1, sr.getIdQuestion());
-			ps.setString(2, sr.getYear()+"-00-00");
+			ps.setString(2, sr.getYear() + "-00-00");
 			ps.setBytes(3, sr.getReportBytes());
 			linesChanged = ps.executeUpdate();
 			ps.close();
@@ -1153,7 +1240,7 @@ public class DBController {
 			e.printStackTrace();
 		}
 		return report;
-}
+	}
 	
 	/*
 	 * public static boolean insertSurvey(Survey s) { int linesChanged = 0; try {
@@ -1206,7 +1293,8 @@ public class DBController {
 	public static boolean updateLogIn(User u) {
 		int linesChanged = 0;
 		try {
-			linesChanged = statement.executeUpdate("UPDATE user SET logged_in=TRUE WHERE id_user=" + u.getIdUser()+" AND logged_in=FALSE");
+			linesChanged = statement.executeUpdate(
+					"UPDATE user SET logged_in=TRUE WHERE id_user=" + u.getIdUser() + " AND logged_in=FALSE");
 		} catch (SQLException e) {
 			ServerView.printErr(DBController.class, e.getMessage());
 		}
@@ -1225,6 +1313,54 @@ public class DBController {
 		if (linesChanged == 0)
 			return false;
 		return true;
+	}
+
+	/**
+	 * inserts into a user an account number (id_customer)
+	 */
+	public static boolean updateUserCustomer(User user) {
+		int linesAffected=0;
+		try {
+			PreparedStatement ps=conn.prepareStatement("UPDATE assignment3.user SET id_customer=? WHERE id_user=?");
+			ps.setInt(1, user.getIdCustomer());
+			ps.setInt(2, user.getIdUser());
+			linesAffected=ps.executeUpdate();
+			if(linesAffected==0) {
+				ServerView.printErr(DBController.class, "Failed to add customer account number (id_customer) to user: "+user.toString());
+				return false;
+			}
+			ps.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			ServerView.printErr(DBController.class, "Failed to add customer account number (id_customer) to user: "+user.toString());
+			return false;
+		}
+		return true;
+		
+	}
+	
+	/**
+	 * inserts into a user an account number (id_customer)
+	 */
+	public static boolean updateUserWorker(User user) {
+		int linesAffected=0;
+		try {
+			PreparedStatement ps=conn.prepareStatement("UPDATE assignment3.user SET id_worker=? WHERE id_user=?");
+			ps.setInt(1, user.getIdWorker());
+			ps.setInt(2, user.getIdUser());
+			linesAffected=ps.executeUpdate();
+			if(linesAffected==0) {
+				ServerView.printErr(DBController.class, "Failed to add worker account number (id_worker) to user: "+user.toString());
+				return false;
+			}
+			ps.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			ServerView.printErr(DBController.class, "Failed to add worker account number (id_worker) to user: "+user.toString());
+			return false;
+		}
+		return true;
+		
 	}
 
 	public static ArrayList<Item> updateEditItem(Item item) {
@@ -1248,20 +1384,20 @@ public class DBController {
 		}
 		return getItemsBy("id_item", item.getIdItem() + "");
 	}
-	
+
 	public static ArrayList<Item> updateItemStatus(Item item) {
 		try {
-			PreparedStatement ps=conn.prepareStatement("UPDATE assignment3.item SET status=? WHERE id_item=?");
+			PreparedStatement ps = conn.prepareStatement("UPDATE assignment3.item SET status=? WHERE id_item=?");
 			ps.setString(1, item.getStatus());
 			ps.setInt(2, item.getIdItem());
-			
+
 			ps.executeUpdate();
 			ps.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
-		return getItemsBy("id_item", item.getIdItem()+"");
+
+		return getItemsBy("id_item", item.getIdItem() + "");
 	}
 
 	public static ArrayList<Customer> updateCustomerStatusOne(Customer c, CustomerStatus status) {
@@ -1296,10 +1432,10 @@ public class DBController {
 					.prepareStatement("UPDATE assignment3.order SET id_order_status=? WHERE id_order=?");
 			ps.setInt(1, o.getIdOrderStatus());
 			ps.setInt(2, o.getIdOrder());
-			System.out.println("o.getIdOrder() "+o.getIdOrder()+"o.getIdOrderStatus() "+o.getIdOrderStatus());
+			System.out.println("o.getIdOrder() " + o.getIdOrder() + "o.getIdOrderStatus() " + o.getIdOrderStatus());
 			ps.executeUpdate();
 			ps.close();
-		} catch (Exception e) { 
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return getOrdersBy("id_order", o.getIdOrder() + "");
@@ -1319,7 +1455,5 @@ public class DBController {
 		}
 		return true;
 	}
-
-	
 
 }

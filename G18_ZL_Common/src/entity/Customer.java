@@ -6,7 +6,7 @@ public class Customer implements Serializable {
 	private static final long serialVersionUID = -4182417182449829997L;
 
 	public enum CustomerStatus {
-		UNAPPROVED, APPROVED, FROZEN;
+		ACTIVE, FROZEN;
 
 		public static CustomerStatus getById(int id) {
 			for (CustomerStatus status : values())
@@ -41,14 +41,12 @@ public class Customer implements Serializable {
 	 * General constructor that takes everything
 	 * @param idCustomer id of the customer
 	 * @param idCustomerStatus status id
-	 * @param idUser user id of customer for log in
 	 * @param card credit card of the customer
 	 * @param point refund points
 	 */
-	public Customer(int idCustomer, int idCustomerStatus, int idUser, String card, double point) {
+	public Customer(int idCustomer, int idCustomerStatus, String card, double point) {
 		this.idCustomer = idCustomer;
 		this.idCustomerStatus = idCustomerStatus;
-		this.idUser = idUser;
 		this.card = card;
 		this.point = point;
 	}
@@ -68,15 +66,7 @@ public class Customer implements Serializable {
 	public void setIdCustomerStatus(int idCustomerStatus) {
 		this.idCustomerStatus = idCustomerStatus;
 	}
-
-	public int getIdUser() {
-		return idUser;
-	}
-
-	public void setIdUser(int idUser) {
-		this.idUser = idUser;
-	}
-
+	
 	public String getCard() {
 		return card;
 	}
