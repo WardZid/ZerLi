@@ -29,6 +29,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.DialogPane;
+import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.ToggleGroup;
@@ -142,6 +143,12 @@ public class StoreWorkerSurveyController implements Initializable {
 	 @FXML
 	 private ComboBox<Integer> surviesComB;
 	 /**
+	  * Label that contain branch name
+	  */
+	 @FXML
+	   private Label storeL;
+	 
+	 /**
 	  * survey object to enter to the data base
 	  */
 	private Survey survey;
@@ -149,10 +156,6 @@ public class StoreWorkerSurveyController implements Initializable {
 	 * boolean array with length 6, "i" index contains true if the "i" question is answered and false if not
 	 */
 	private boolean[] isAnsweredQuestion = new boolean[6];
-	/**
-	 * isSelectedStore = true if store has been selected and false if not
-	 */
-	private boolean isSelectedStore;
 	/**
 	 * isSelectedSurvey = true if survey has been selected and false if not
 	 */
@@ -169,12 +172,12 @@ public class StoreWorkerSurveyController implements Initializable {
 	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
+		storeL.setText("");//TODO get worker
 		survey = new Survey();
 		surviesList = (ArrayList<SurveyQuestion>) MainController.getMyClient().send(MessageType.GET,"questions/all", null);
 		clearSelectedItemInSurviesComboBox();
 		storeComboBox.getItems().clear();
 		storeComboBox.getItems().addAll(Store.values());
-		isSelectedStore = false;
 		for (int i = 0; i < 6; i++)
 			isAnsweredQuestion[i] = false;
 		enableEnterAnswerButton();
@@ -185,7 +188,6 @@ public class StoreWorkerSurveyController implements Initializable {
 
 			@Override
 			public void changed(ObservableValue<? extends Store> observable, Store oldValue, Store newValue) {
-				isSelectedStore = true;
 				enableEnterAnswerButton();
 			}
 		});
@@ -399,7 +401,7 @@ public class StoreWorkerSurveyController implements Initializable {
 
 	public void enableEnterAnswerButton() {
 		enterSurveyButton.setDisable(!isAnsweredQuestion[0] || !isAnsweredQuestion[1] || !isAnsweredQuestion[2]
-				|| !isAnsweredQuestion[3] || !isAnsweredQuestion[4] || !isAnsweredQuestion[5] ||!isSelectedStore);
+				|| !isAnsweredQuestion[3] || !isAnsweredQuestion[4] || !isAnsweredQuestion[5]);
 	}
 
 }
