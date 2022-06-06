@@ -187,12 +187,14 @@ public class BranchManagerOrdersController implements Initializable {
 	@SuppressWarnings("unchecked")
 	public void approveButtonAction(ActionEvent event) {
 		//change the current selected order status to 1 (APPROVED).
-		currentOrder.setIdOrderStatus(1);
+		currentOrder.setIdOrderStatus(OrderStatus.PROCESSING.ordinal());
 		ArrayList<Order> order = (ArrayList<Order>)MainController.getMyClient().send(MessageType.UPDATE, "order/status", currentOrder);
 		//check if order was changed.
-		if(order.get(0).getIdOrderStatus() == 1)
+		if(order.get(0).getIdOrderStatus() == OrderStatus.PROCESSING.ordinal())
 			System.out.println("Order updated successfully!");
-		else System.out.println("Error updating order!");initListViews();
+		else System.out.println("Error updating order!");
+		initListViews();
+		clearAfterButtonPressed();
 	}
 	
 	/**
@@ -204,10 +206,10 @@ public class BranchManagerOrdersController implements Initializable {
 	@SuppressWarnings("unchecked")
 	public void rejectButtonAction(ActionEvent event) {
 		//change the current selected order status to 4 (UNAPPROVED).
-		currentOrder.setIdOrderStatus(4);
+		currentOrder.setIdOrderStatus(OrderStatus.UNAPPROVED.ordinal());
 		ArrayList<Order> order = (ArrayList<Order>)MainController.getMyClient().send(MessageType.UPDATE, "order/status", currentOrder);
 		//check if order was changed.
-		if(order.get(0).getIdOrderStatus() == 4)
+		if(order.get(0).getIdOrderStatus() == OrderStatus.UNAPPROVED.ordinal())
 			
 			System.out.println("Order updated successfully!");
 		else System.out.println("Error updating order!");
@@ -215,7 +217,7 @@ public class BranchManagerOrdersController implements Initializable {
 		initListViews(); 
 		 
 		MainController.getMyClient().send(MessageType.UPDATE, "customer/point/"+currentOrder.getIdCustomer()+"/"+currentOrder.getPrice(), null);
-		  
+		clearAfterButtonPressed();
 	}
 	
 	/**
@@ -227,17 +229,17 @@ public class BranchManagerOrdersController implements Initializable {
 	@SuppressWarnings("unchecked")
 	public void cancelButtonAction(ActionEvent event) {
 		//change the current selected order status to 3 (CANCELED).
-		currentOrder.setIdOrderStatus(3);
+		currentOrder.setIdOrderStatus(OrderStatus.CANCELLED.ordinal());
 		ArrayList<Order> order = (ArrayList<Order>)MainController.getMyClient().send(MessageType.UPDATE, "order/status", currentOrder);
 		//check if order was changed.
-		if(order.get(0).getIdOrderStatus() == 3)
+		if(order.get(0).getIdOrderStatus() == OrderStatus.CANCELLED.ordinal())
 			System.out.println("Order updated successfully!");
 		else 
 			System.out.println("Error updating order!");
 		disableAllButtons();
 		initListViews();
 		MainController.getMyClient().send(MessageType.UPDATE, "customer/point/"+currentOrder.getIdCustomer()+"/"+currentOrder.getPrice(), null);
-		  
+		clearAfterButtonPressed();
 	}
 	
 	/**
@@ -260,7 +262,6 @@ public class BranchManagerOrdersController implements Initializable {
 		setOrderDetails();
 		
 		// METHOD NOT DONE! MAYBE NO NEED,
-		saveSelectedCancelOrderCancelationDate();
 	}
 	
 	/**
@@ -273,7 +274,6 @@ public class BranchManagerOrdersController implements Initializable {
 	 */
 	@FXML
 	public void actionOnViewFullDetailsBTN(ActionEvent event) throws IOException {
-		
 		myVBox.setDisable(true);
 		orderVBox.setVisible(true);
 		setFullOrderDetails();
@@ -297,6 +297,7 @@ public class BranchManagerOrdersController implements Initializable {
 	@SuppressWarnings("unchecked")
 	private void setFullOrderDetails() {
 		ArrayList<Customer> c = (ArrayList<Customer>) MainController.getMyClient().send(MessageType.GET, "customer/by/id_customer/"+currentOrder.getIdCustomer() , null);
+		
 		currentCustomer = c.get(0);
 		this.fAddress.setText(currentOrder.getAddress());
 		//this.fCName.setText(currentCustomer.getName());
@@ -308,6 +309,7 @@ public class BranchManagerOrdersController implements Initializable {
 		this.fOCDate.setText(currentOrder.getCancelDate());
 		this.fDescription.setText(currentOrder.getDescription());
 		this.fGreeting.setText(currentOrder.getGreetingCard());
+		this.fOverall.setText(currentOrder.getPrice()+"");
 	}
 	
 	/**
@@ -349,17 +351,19 @@ public class BranchManagerOrdersController implements Initializable {
 	 */
 	private void setCorrectValues() {
 		if(currentOrder.getAddress() == null)
-			currentOrder.setAddress("N/A");
+			currentOrder.setAddress("");
 		if(currentOrder.getCancelDate() == null)
-			currentOrder.setCancelDate("N/A");
+			currentOrder.setCancelDate("");
 		if(currentOrder.getDeliveryDate() == null)
-			currentOrder.setDeliveryDate("N/A");
+			currentOrder.setDeliveryDate("");
 		if(currentOrder.getDescription() == null)
-			currentOrder.setDescription("N/A");
+			currentOrder.setDescription("");
 		if(currentOrder.getGreetingCard() == null)
-			currentOrder.setGreetingCard("N/A");
+			currentOrder.setGreetingCard("");
 		if(currentOrder.getOrderDate() == null)
-			currentOrder.setOrderDate("N/A");
+			currentOrder.setOrderDate("");
+		if(currentOrder.getAddress() == " ")
+			currentOrder.setAddress("");
 	}
 	
 	/**
@@ -375,27 +379,20 @@ public class BranchManagerOrdersController implements Initializable {
 		}
 		selectedOrderID = split[0];
 	}
-
-	
-	/**
-	 *  to save the -date of cancellation- of the selected order in cancel ListView.
-	 */
-	private void saveSelectedCancelOrderCancelationDate() {
-		// TO DO LATER... ( AFTER FINISHING THE APPROVE LIST )
-	}
 	
 	/**
 	 * Method to do when an ID is selected from approve ListView
 	 */
 	private void setActionOnApprovaeListView() {
 		ordersToApproveListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
-
 			@Override
 			// this method has the main Action that happens when selection accrues on ListView
 			public void changed(ObservableValue<? extends String> arg0, String arg1, String arg2) {
 				approveSelected = true;
 				cancelSelected = false;
 				saveOrderID();
+				//ordersToCancelListView.getSelectionModel().clearSelection();
+				//initCancellationListView();
 				orderSelectedFromApproveOrderListView();
 			}
 		});
@@ -412,6 +409,8 @@ public class BranchManagerOrdersController implements Initializable {
 				cancelSelected = true;
 				approveSelected = false;
 				saveOrderID();
+				//ordersToApproveListView.getSelectionModel().clearSelection();
+				//initApprovalListView();
 				monthSelectedFromCancelOrderListView();
 			}
 		});
@@ -465,6 +464,18 @@ public class BranchManagerOrdersController implements Initializable {
 	public void onCancelPressed() {
 		myVBox.setDisable(false);
 		orderVBox.setVisible(false);
+	}
+	
+	/**
+	 * Method to clear every thing after a button is pressed (not the view vull details button)
+	 */
+	private void clearAfterButtonPressed() {
+		viewFullDetailsButton.setDisable(true);
+		orderIDText.setText("");
+		dateOfOrderText.setText("");
+		addressText.setText("");
+		deliveryDateText.setText("");
+		overallOrderToPayText.setText("");
 	}
 	
 }

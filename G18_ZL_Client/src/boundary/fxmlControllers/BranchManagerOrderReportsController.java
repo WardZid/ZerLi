@@ -2,6 +2,7 @@ package boundary.fxmlControllers;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.ResourceBundle;
 
 import control.MainController;
@@ -134,7 +135,8 @@ public class BranchManagerOrderReportsController implements Initializable {
     /* names of the max and min sold items */
     private String maxI,minI;
     
-    
+    /* number of day in every month of the year */
+	private HashMap<String, Integer> daysOfMonth = new HashMap<String, Integer>();
     
 	private static ArrayList<String> StoreAddressName = new ArrayList<String>();
 	private String AcountType = "BranchManager";
@@ -159,7 +161,7 @@ public class BranchManagerOrderReportsController implements Initializable {
 					ComboBoxbranches.setItems(storeAddress);
 					AcountType = "CEO";
 				}
-		
+		initHelpVariables();
 		setBranchID();
 		initMonthsListView();
 		initTableCols();
@@ -185,14 +187,14 @@ public class BranchManagerOrderReportsController implements Initializable {
 	}
 	
 	
-	
 	/**
 	 * Action when a line is selected in the monthsListView. 
 	 */
 	public void monthSelectedFromListView() {
-		saveDate();
-		this.viewReportButton.setDisable(false);
-		 
+		if(!monthsListView.getSelectionModel().isEmpty()) {
+			saveDate();
+			this.viewReportButton.setDisable(false);
+		}
 	}
 	
 	/**
@@ -209,18 +211,20 @@ public class BranchManagerOrderReportsController implements Initializable {
 			errorAlert.setContentText("You must select a month and year!");
 			errorAlert.showAndWait();
 		}
-		getDataAfterMonthIsChosen();
-		calculateTextValues();
-		initDataForPieChart();
-		initDataForTable();
-		System.out.println(overallSoldItemsThisMonth+" "+avg+" "+max+" "+min);
-		reportMonthText.setText(month+"-"+year+" Report");
-		reportTableView.setItems(tableData);
-		reportPieChart.setData(pieChartData);
-		this.totalItemsSoldText.setText(overallSoldItemsThisMonth+"");
-		this.averageText.setText(avg+"");
-		this.maxText.setText(max+" ("+maxI+")");
-		this.minText.setText(min+" ("+minI+")");
+		else {
+			getDataAfterMonthIsChosen();
+			calculateTextValues();
+			initDataForPieChart();
+			initDataForTable();
+			System.out.println(overallSoldItemsThisMonth+" "+avg+" "+max+" "+min);
+			reportMonthText.setText(month+"-"+year+" Report");
+			reportTableView.setItems(tableData);
+			reportPieChart.setData(pieChartData);
+			this.totalItemsSoldText.setText(overallSoldItemsThisMonth+"");
+			this.averageText.setText(String.format("%.2f", avg));
+			this.maxText.setText(max+" ("+maxI+")");
+			this.minText.setText(min+" ("+minI+")");
+		}
 	}
 	
 	/* ------------------------------------------------ */
@@ -306,7 +310,7 @@ public class BranchManagerOrderReportsController implements Initializable {
 				minI = ai.getName();
 			}	
 		}
-		this.avg = this.overallSoldItemsThisMonth/amountOfItems.size();	
+		this.avg = this.overallSoldItemsThisMonth/(double)daysOfMonth.get(month);
 	} 
 	
 	/**
@@ -327,6 +331,24 @@ public class BranchManagerOrderReportsController implements Initializable {
 	private void initDataForTable() {
 		tableData.clear();
 		tableData.addAll(amountOfItems);
+	}
+	
+	/**
+	 * To initialize the help variables.
+	 */
+	private void initHelpVariables() {
+		daysOfMonth.put("1", 31);
+		daysOfMonth.put("2", 29);
+		daysOfMonth.put("3", 31);
+		daysOfMonth.put("4", 30);
+		daysOfMonth.put("5", 31);
+		daysOfMonth.put("6", 30);
+		daysOfMonth.put("7", 31);
+		daysOfMonth.put("8", 31);
+		daysOfMonth.put("9", 30);
+		daysOfMonth.put("10", 31);
+		daysOfMonth.put("11", 30);
+		daysOfMonth.put("12", 31);
 	}
 	
 }

@@ -30,7 +30,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 public class OrderDetailsController implements Initializable {
-
+    @FXML
+    private CheckBox useRefundCheckBox;
 	@FXML
 	private CheckBox DeliveryNow;
 
@@ -46,12 +47,10 @@ public class OrderDetailsController implements Initializable {
 	@FXML
 	private Button NextBtn;
 
-	@FXML
-	private Label Note;
+
 	@FXML
 	private Label refundLable1;
-	@FXML
-	private Label refundLable2;
+
 
 	@FXML
 	private ComboBox<String> MinutesCombo;
@@ -112,8 +111,7 @@ public class OrderDetailsController implements Initializable {
 	@FXML
 	private Label required6;
 
-	@FXML
-	private Label required7;
+
 	@FXML
 	private Label required8;
 	@FXML
@@ -128,13 +126,7 @@ public class OrderDetailsController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 
-		if (ClientConsoleController.getCustomer().getPoint() >= CartController.getOrderInProcess().getPrice()) {
-			refundLable2.setText(ClientConsoleController.getCustomer().getPoint() + "");
-			Note.setVisible(true);
-			refundHbox.setVisible(true);
-		}
-
-		refundLable1.setText(ClientConsoleController.getCustomer().getPoint() + "");
+	
 		this.getPaymentVbox().setVisible(false);
 
 		PhoneText.focusedProperty().addListener(new ChangeListener<Boolean>() {
@@ -175,49 +167,10 @@ public class OrderDetailsController implements Initializable {
 				}
 			}
 		});
-		credutCardtextfield.focusedProperty().addListener(new ChangeListener<Boolean>() {
-			@Override
-			public void changed(ObservableValue<? extends Boolean> arg0, Boolean oldPropertyValue,
-					Boolean newPropertyValue) {
-
-				if (newPropertyValue) {
-					// Textfield on focus" ;
-
-				} else {
-
-					// Textfield is null
-					if (credutCardtextfield.getText().trim().isEmpty()) {
-						credutCardtextfield.setText(0 + "");
-					}
-
-					else {
-						// Textfield is not number
-
-						if (!isNumeric(credutCardtextfield.getText())) {
-								
-							credutCardtextfield.setText("0");
-							
-						} else {
-							if (credutCardtextfield.getText().length() > 6 ) {
-								credutCardtextfield.setText("0");
-							}
-							// Textfield ==0
-							if (Integer.parseInt(credutCardtextfield.getText()) == 0) {
-								credutCardtextfield.setText("0");
-								
-							} else {
-								credutCardtextfield.setStyle("-fx-text-fill: black; ");
-								Integer.parseInt(credutCardtextfield.getText());
-							}
-						}
-					}
-
-				}
-			}
-		});
+		
 
 		SetNodeFillAllFeilds(false);
-		required7.setVisible(false);
+
 		
 		shippingVbox.setVisible(false);
 
@@ -239,7 +192,7 @@ public class OrderDetailsController implements Initializable {
 		for (int i = 0; i < 60; i++) {
 			MinNum.add(String.format("%02d", i));
 		}
-
+		
 		ObservableList<String> Minutes = FXCollections.observableArrayList();
 		Minutes.setAll(MinNum);
 		MinutesCombo.setItems(Minutes);
@@ -288,21 +241,11 @@ public class OrderDetailsController implements Initializable {
 		required5.setVisible(status);
 		required6.setVisible(status);
 		required8.setVisible(status);
-
+ 
 	}
 
 	public void onPaymentPressed() {
-		if (ClientConsoleController.getCustomer().getPoint() < CartController.getOrderInProcess().getPrice()) {
-			if (credutCardtextfield.getText().trim().isEmpty() || Integer.parseInt(credutCardtextfield.getText()) == 0)
-					 {
-				required7.setVisible(true);
-				fillCreditCardLable.setVisible(true);
-			} else {
-				credutCardtextfield.setDisable(true);
-				fillCreditCardLable.setVisible(false);
-				SetOrderDetailsAndSend();
-			}
-		} else
+		
 			SetOrderDetailsAndSend();
 
 	}
@@ -330,24 +273,29 @@ public class OrderDetailsController implements Initializable {
 
 		/// if customer added shipping
 		if (AddShippingCheckBox.isSelected() == true) {
-			if (ClientConsoleController.getCustomer().getPoint() == 0)
-				CartController.getOrderInProcess().addPriceForShipping();
+			CartController.getOrderInProcess().addPriceForShipping();
+			if (ClientConsoleController.getCustomer().getPoint() == 0) {}
+//				CartController.getOrderInProcess().addPriceForShipping();
 			else {
-
+				if(useRefundCheckBox.isSelected()==true) {
 				// refund > price order
 				if (ClientConsoleController.getCustomer().getPoint() >= CartController.getOrderInProcess().getPrice()) {
+				 
+					MainController.getMyClient().send(MessageType.UPDATE, "customer/point/"+ClientConsoleController.getCustomer().getIdCustomer()+"/"+-CartController.getOrderInProcess().getPrice(), null);
 					ClientConsoleController.getCustomer().setPoint(ClientConsoleController.getCustomer().getPoint()
 							- CartController.getOrderInProcess().getPrice());
-					// +update refund in DB
 				}
 				// if refund < price order
 				else {
 					System.out.println("you have to pay " + (ClientConsoleController.getCustomer().getPoint()
 							- CartController.getOrderInProcess().getPrice()));
+					 
+					MainController.getMyClient().send(MessageType.UPDATE, "customer/point/"+ClientConsoleController.getCustomer().getIdCustomer()+"/"+-ClientConsoleController.getCustomer().getPoint(), null);
 					ClientConsoleController.getCustomer().setPoint(0);
-					// +update refund in DB
 				}
-				CartController.getOrderInProcess().addPriceForShipping();
+				
+			}
+				
 			}
 			System.out.println("Refund =" + ClientConsoleController.getCustomer().getPoint());
 		}
@@ -355,22 +303,27 @@ public class OrderDetailsController implements Initializable {
 		//// without shipping
 
 		else {
+			
 			if (ClientConsoleController.getCustomer().getPoint() != 0) {
+				if(useRefundCheckBox.isSelected()==true) {
 				// refund > price order
 				if (ClientConsoleController.getCustomer().getPoint() >= CartController.getOrderInProcess().getPrice()) {
+					MainController.getMyClient().send(MessageType.UPDATE, "customer/point/"+ClientConsoleController.getCustomer().getIdCustomer()+"/"+-CartController.getOrderInProcess().getPrice(), null);
 					ClientConsoleController.getCustomer().setPoint(ClientConsoleController.getCustomer().getPoint()
 							- CartController.getOrderInProcess().getPrice());
-					// +update refund in DB
 				}
 				// if refund < price order
 				else {
 					System.out.println("you have to pay " + (CartController.getOrderInProcess().getPrice()
 							- ClientConsoleController.getCustomer().getPoint()));
+					
+					MainController.getMyClient().send(MessageType.UPDATE, "customer/point/"+ClientConsoleController.getCustomer().getIdCustomer()+"/"+-ClientConsoleController.getCustomer().getPoint(), null);
 					ClientConsoleController.getCustomer().setPoint(0);
-					// +update refund in DB
 				}
 
+			} 
 			}
+			System.out.println("check Cb =" + useRefundCheckBox.isSelected());
 			System.out.println("Refund =" + ClientConsoleController.getCustomer().getPoint());
 
 		}
@@ -401,7 +354,9 @@ public class OrderDetailsController implements Initializable {
 	}
 
 	public void OnNextBtnPressed() {
-	
+		credutCardtextfield.setText(ClientConsoleController.getCustomer().getCard());
+		int point = (int) MainController.getMyClient().send(MessageType.GET, "customer/points/"+ClientConsoleController.getCustomer().getIdCustomer(),null);
+		refundLable1.setText(point + "");
 		if (DelevireyDatePicker.getValue() != null && HourCombo.getValue() != null && MinutesCombo.getValue() != null)
 			flag = 1;
 		if (flag == 1) {

@@ -149,7 +149,6 @@ public class CEOComplaintReportsController implements Initializable {
     		DirectoryChooser dirChooser = new DirectoryChooser();
     		File chosenDir = dirChooser.showDialog(null);
     		System.out.println(chosenDir);
-    		
     	}
     }
     

@@ -562,7 +562,20 @@ public class DBController {
 		}
 		return customers;
 	}
-
+ 
+	public static int getPoints(String idCustomer) {
+		int points=0;
+		try {
+			ResultSet rs=statement.executeQuery("SELECT point FROM assignment3.customer WHERE id_customer="+idCustomer);
+			rs.next();
+			points=rs.getInt("point");
+			rs.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return points;
+	}
+	
 	public static ArrayList<Complaint> getComplaintsAll() {
 		ArrayList<Complaint> complaints = new ArrayList<>();
 		ResultSet rs;
