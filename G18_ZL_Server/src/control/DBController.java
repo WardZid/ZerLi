@@ -684,7 +684,23 @@ public class DBController {
 		return complaints;
 
 	}
-
+	public static ArrayList<Complaint> checkComplaint(int complainId) {
+		ArrayList<Complaint> complaints = new ArrayList<>();
+		ResultSet rs;
+		try {
+			rs = statement.executeQuery("SELECT * FROM assignment3.complaint where status_complaint='OPEN' and response IS NULL and id_complaint="+complainId);
+			rs.beforeFirst(); // ---move back to first row
+			while (rs.next()) {
+				complaints.add(new Complaint(rs.getInt("id_complaint"), rs.getInt("id_customer"),
+						rs.getString("status_complaint"), rs.getString("date_complaint"), rs.getDouble("refund_amount"),
+						rs.getString("complaint"), rs.getString("response")));
+			}
+			rs.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return complaints;
+	}
 	public static ArrayList<Complaint> getComplaintsBy(String column, String value) {
 		ArrayList<Complaint> complaints = new ArrayList<>();
 		ResultSet rs;
@@ -1165,24 +1181,28 @@ public class DBController {
 		return true;
 	}
 
-	public static boolean insertComplaint(Complaint c) {
-		int linesChanged = 0;
+	public static Complaint insertComplaint(Complaint c) {
 		try {
 			PreparedStatement ps = conn.prepareStatement(
-					"INSERT INTO complaint (`id_customer`, `status_complaint`, `date_complaint`, `complaint`) VALUES(?,?,?,?)");
+					"INSERT INTO complaint (`id_customer`, `status_complaint`, `date_complaint`, `complaint`) VALUES(?,?,?,?)",Statement.RETURN_GENERATED_KEYS);
 			ps.setInt(1, c.getIdCustomer());
 			ps.setString(2, "OPEN");
 			ps.setString(3, c.getDate());
 			ps.setString(4, c.getComplaint());
-			linesChanged = ps.executeUpdate();
-			ps.close();
+			ps.executeUpdate();
+			ResultSet rs = ps.getGeneratedKeys();
+
+			rs.next();
+			System.out.println("RS->order->ID: " + rs.getInt(1));
+			c.setIdComplaint(rs.getInt(1));
+			rs.close();
+			ps.close(); 
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 			ServerView.printErr(DBController.class, "Unable to add new complaint: " + c.toString());
 		}
-		if (linesChanged == 0)
-			return false;
-		return true;
+		return getComplaintsBy("id_complaint", c.getIdComplaint()+"").get(0);
 	}
 
 	public static boolean insertSurvey(Survey s) {

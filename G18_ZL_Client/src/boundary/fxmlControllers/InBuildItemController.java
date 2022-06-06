@@ -10,39 +10,64 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-
+/**
+ * in this class we view the item with his details  that exist in cart page in scroll pane  
+ * @author saher
+ *
+ */
 public class InBuildItemController implements Initializable {
-
+/**
+ * to increase the amount of the item (add item to the order)
+ */
 	@FXML
 	private Button addBtn;
-
+/**
+ * to view the amount of the price
+ */
 	@FXML
 	private Label amountLabel;
-
+/**
+ * to decrease the amount of the item 
+ */
 	@FXML
 	private Button deleteBtn;
-
+/**
+ * to view the name of the item 
+ */
 	@FXML
 	private Label nameLabel;
-
+/**
+ * to view the price of the item 
+ */
 	@FXML
 	private Label priceLabel;
-
+/**
+ * parameter from ItemInBuild type to save the product details 
+ */
 	ItemInBuild itemInBuild;
+	/**
+	 * parameter from CartCustomItemControl type 
+	 */
 	CartCustomItemControl cartCustomItemControl;
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		// TODO Auto-generated method stub
+		
 
 	}
-
+/**
+ * to set all the data from the itemInBuild that we get set(name, price ,amount)  
+ * @param itemInBuild from ItemInBuild type
+ * @param cartCustomItemControl from CartCustomItemControl type
+ */
 	public void setData(ItemInBuild itemInBuild, CartCustomItemControl cartCustomItemControl) {
 		this.itemInBuild = itemInBuild;
 		setLabelsInBuildItem();
 		this.cartCustomItemControl = cartCustomItemControl;
 	}
-
+/**
+ * to increase the amount of the item and add item in to order  and set the labels
+ */
 	public void onPressedAddItem() {
 
 		cartCustomItemControl.getPressedItem().addItem(itemInBuild);
@@ -52,7 +77,11 @@ public class InBuildItemController implements Initializable {
 		setLabelsInBuildItem();
 		cartCustomItemControl.getCartController().setLabelsInCartText();
 	}
-
+/**
+ * decrease the amount of the item and remove it from order and delete all the custom item if the amount =0 
+ * load the item in the scroll pan in the card  
+ * @throws IOException
+ */
 	public void onPressedDelete() throws IOException {
 
 		// item in build have Amount above 1
@@ -83,7 +112,9 @@ public class InBuildItemController implements Initializable {
 		setLabelsInBuildItem();
 		cartCustomItemControl.getCartController().setLabelsInCartText();
 	}
-
+/**
+ * set the amountLabel and priceLabel and nameLabel with the name and price and amount of the itemInBuild
+ */
 	private void setLabelsInBuildItem() {
 
 		amountLabel.setText(itemInBuild.getAmount() + "");
