@@ -137,5 +137,21 @@ public class Customer implements Serializable {
 		builder.append("]");
 		return builder.toString();
 	}
+	
+	/**
+	 * sets CustomerStatus enum as id
+	 * @param customerStatus to set as idCustomerStatus
+	 */
+	public void setCustomerStatus(CustomerStatus customerStatus) {
+		this.idCustomerStatus=customerStatus.ordinal();
+	}
+	
+	/**
+	 * return UserType from stored id
+	 * @return CustomerStatus enum
+	 */
+	public CustomerStatus getCustomerStatus() {
+		return CustomerStatus.getById(idCustomerStatus);
+	}
 
 }
