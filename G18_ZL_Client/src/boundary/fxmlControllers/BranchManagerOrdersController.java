@@ -441,7 +441,7 @@ public class BranchManagerOrdersController implements Initializable {
 				approveSelected = false;
 				saveOrderID();
 				//ordersToApproveListView.getSelectionModel().clearSelection();
-				//initApprovalListView();
+				//initApprovalListView(); 
 				monthSelectedFromCancelOrderListView();
 			}
 		});
