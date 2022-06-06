@@ -2,6 +2,8 @@ package entity;
 
 import java.io.Serializable;
 
+import entity.User.UserType;
+
 public class Customer implements Serializable {
 	private static final long serialVersionUID = -4182417182449829997L;
 
@@ -51,43 +53,91 @@ public class Customer implements Serializable {
 		this.point = point;
 	}
 
+	/**
+	 * @return the idCustomer
+	 */
 	public int getIdCustomer() {
 		return idCustomer;
 	}
 
+	/**
+	 * @param idCustomer the idCustomer to set
+	 */
 	public void setIdCustomer(int idCustomer) {
 		this.idCustomer = idCustomer;
 	}
 
+	/**
+	 * @return the idCustomerStatus
+	 */
 	public int getIdCustomerStatus() {
 		return idCustomerStatus;
 	}
 
+	/**
+	 * @param idCustomerStatus the idCustomerStatus to set
+	 */
 	public void setIdCustomerStatus(int idCustomerStatus) {
 		this.idCustomerStatus = idCustomerStatus;
 	}
-	
+
+	/**
+	 * @return the idUser
+	 */
+	public int getIdUser() {
+		return idUser;
+	}
+
+	/**
+	 * @param idUser the idUser to set
+	 */
+	public void setIdUser(int idUser) {
+		this.idUser = idUser;
+	}
+
+	/**
+	 * @return the card
+	 */
 	public String getCard() {
 		return card;
 	}
 
+	/**
+	 * @param card the card to set
+	 */
 	public void setCard(String card) {
 		this.card = card;
 	}
 
+	/**
+	 * @return the point
+	 */
 	public double getPoint() {
 		return point;
 	}
 
+	/**
+	 * @param point the point to set
+	 */
 	public void setPoint(double point) {
 		this.point = point;
 	}
 
 	@Override
 	public String toString() {
-		return "Customer [idCustomer=" + idCustomer + ", CustomerStatus=(" + idCustomerStatus + ") "
-				+ CustomerStatus.getById(idCustomerStatus) + ", idUser=" + idUser + ", card=" + card + ", point="
-				+ point + "]";
+		StringBuilder builder = new StringBuilder();
+		builder.append("Customer [idCustomer=");
+		builder.append(idCustomer);
+		builder.append(", idCustomerStatus=");
+		builder.append(idCustomerStatus);
+		builder.append(", idUser=");
+		builder.append(idUser);
+		builder.append(", card=");
+		builder.append(card);
+		builder.append(", point=");
+		builder.append(point);
+		builder.append("]");
+		return builder.toString();
 	}
 
 }
