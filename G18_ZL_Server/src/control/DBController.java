@@ -248,10 +248,10 @@ public class DBController {
 		return null;
 	}
 
-	public static User getUserBy(String column, String value) {
-		ResultSet rs;
+	public static ArrayList<User> getUserBy(String column, String value) {
+		ArrayList<User> users=new ArrayList<>();
 		try {
-			rs = statement.executeQuery("SELECT * FROM user WHERE " + column + " = " + value);
+			ResultSet rs = statement.executeQuery("SELECT * FROM user WHERE " + column + " = " + value);
 			if (resultSetSize(rs) == 0)
 				return null;
 			rs.beforeFirst(); // ---move back to first row
@@ -262,13 +262,13 @@ public class DBController {
 					u.setIdCustomer(rs.getInt("id_customer"));
 				else if(u.getUserType().isWorker())
 					u.setIdWorker(rs.getInt("id_worker"));
-				return u;
+				users.add(u);
 			}
 			rs.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return null;
+		return users;
 	}
 
 	public static ArrayList<Order> getOrdersAll() {
