@@ -29,30 +29,50 @@ import javafx.scene.text.Text;
 
 public class ClientConsoleController implements Initializable {
 
+	
 	private static User user;
 	private static Customer customer;
 	private static Worker worker;
 
+
+	/**
+	 * @return the user
+	 */
 	public static User getUser() {
 		return user;
 	}
 
+	/**
+	 * @param user the user to set
+	 */
 	public static void setUser(User user) {
 		ClientConsoleController.user = user;
 	}
 
+	/**
+	 * @return the customer
+	 */
 	public static Customer getCustomer() {
 		return customer;
 	}
 
+	/**
+	 * @param customer the customer to set
+	 */
 	public static void setCustomer(Customer customer) {
 		ClientConsoleController.customer = customer;
 	}
-	
+
+	/**
+	 * @return the worker
+	 */
 	public static Worker getWorker() {
 		return worker;
 	}
 
+	/**
+	 * @param worker the worker to set
+	 */
 	public static void setWorker(Worker worker) {
 		ClientConsoleController.worker = worker;
 	}
@@ -204,16 +224,12 @@ public class ClientConsoleController implements Initializable {
 			mainSP.getChildren().add(currentNode);
 
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
 	@SuppressWarnings("unchecked")
 	private void loadCustomerConsole() {
-		ArrayList<Customer> c = (ArrayList<Customer>) MainController.getMyClient().send(MessageType.GET,
-				"login/customer", user);
-		customer = c.get(0);
 
 		cusCatalogBtn = menuButton("Catalog", "catalog-view.fxml");
 		cusCartBtn = menuButton("Cart", "cart-view.fxml");
@@ -226,7 +242,7 @@ public class ClientConsoleController implements Initializable {
 
 	private void loadBranchManagerConsole() {
 		bmOrdersBtn = menuButton("Orders", "branch-manager-orders-view.fxml");
-		bmCustomersBtn = menuButton("Customers", "branch-manager-accounts-view.fxml");
+		menuButton("Customer Management", "branch-manager-customers-view.fxml");
 		bmIReportsBtn = menuButton("Income Reports", "branch-manager-income-reports-view.fxml");
 		bmOReportsBtn = menuButton("Order Reports", "branch-manager-order-reports-view.fxml");
 	
