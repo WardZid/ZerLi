@@ -1,11 +1,14 @@
 package boundary.fxmlControllers;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import boundary.ClientView;
 import control.MainController;
 import entity.MyMessage.MessageType;
+import entity.Customer;
+import entity.Customer.CustomerStatus;
 import entity.User;
 import entity.User.UserType;
 import javafx.fxml.FXML;
@@ -51,24 +54,24 @@ public class LogInController implements Initializable {
 		passIconIV.setImage(new Image("boundary/media/pass-icon.png"));
 
 	}
-	
-    @FXML
-    void onLogInKeyPressed(KeyEvent event) {
-    	if (event.getCode() == KeyCode.ENTER)
-    		logIn();
-    }
 
-	
+	@FXML
+	void onLogInKeyPressed(KeyEvent event) {
+		if (event.getCode() == KeyCode.ENTER)
+			logIn();
+	}
+
 	public void onLogInPressed() {
 		logIn();
 	}
-	
+
 	/**
 	 * checks that the fields arent empty. fetches user with appropriate username
-	 * AND pass, if non is found then something is incorrect.
-	 * Makes sure the user can't log in if he is logged in somewhere else
+	 * AND pass, if non is found then something is incorrect. Makes sure the user
+	 * can't log in if he is logged in somewhere else
 	 * 
 	 */
+	@SuppressWarnings("unchecked")
 	private void logIn() {
 		if (usernameTF.getText().isEmpty() || passwordPF.getText().isEmpty()) {
 			errorLbl.setVisible(true);
@@ -85,12 +88,25 @@ public class LogInController implements Initializable {
 			return;
 		}
 
-		if(user.getUserType()==UserType.CUSTOMER && user.getIdCustomer()<=0) {
-			errorLbl.setVisible(true);
-			errorLbl.setText("*Your account hasn't been confirmed");
-			return;
-		}
+		if (user.getUserType() == UserType.CUSTOMER) {
 			
+			if (user.getIdCustomer() <= 0) {
+				errorLbl.setVisible(true);
+				errorLbl.setText("*Your account hasn't been confirmed");
+				return;
+			} else {
+				Customer customer = ((ArrayList<Customer>) MainController.getMyClient().send(MessageType.GET,
+					"login/customer", user)).get(0);
+				if (customer.getCustomerStatus()==CustomerStatus.FROZEN) {
+					errorLbl.setVisible(true);
+					errorLbl.setText("*Your account is frozen");
+					return;
+				} else
+					ClientConsoleController.setCustomer(customer);
+			}
+		} else
+			ClientConsoleController.setCustomer(null);
+
 		if (!(boolean) MainController.getMyClient().send(MessageType.INFO, "log/in", user)) {
 			errorLbl.setVisible(true);
 			errorLbl.setText("*User is already logged in");
