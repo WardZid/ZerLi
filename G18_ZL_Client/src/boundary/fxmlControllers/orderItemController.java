@@ -51,7 +51,7 @@ public class orderItemController implements Initializable {
 		if (orderItem != null) {
 			nameOrderLbl.setText("" + orderItem.getName());
 			amountLbl.setText("x" + orderItem.getAmount());
-			priceLbl.setText(orderItem.getPrice() + "");
+			priceLbl.setText(orderItem.getPriceAfterSale()+ "");
 		} else {
 			nameOrderLbl.setText("Custom Item");
 			amountLbl.setText("x" + buildItem.getAmount());
@@ -95,9 +95,9 @@ public class orderItemController implements Initializable {
 
 	private void setDataforVbox(ItemInBuild itemInBuild) {
 		nameOrderLbl.setText("" + itemInBuild.getName());
-		amountLbl.setText("x" + itemInBuild.getAmount());
-		priceLbl.setText(itemInBuild.getPrice() + "");
-
+		amountLbl.setText("x" + itemInBuild.getAmount()); 
+		priceLbl.setText(itemInBuild.getPriceAfterSale() + "");
+ 
 	}
 
 }
