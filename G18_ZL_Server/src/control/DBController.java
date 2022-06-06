@@ -871,7 +871,8 @@ public class DBController {
 					idQuestion.put(rs.getInt("id_question"), sq);
 					yearsIdQuestions.put(rs.getString("year"), idQuestion);
 				} 
-				else if (yearsIdQuestions.get(rs.getString(1)).get(rs.getInt(2)) == null) {
+				else 
+					if (yearsIdQuestions.get(rs.getString(1)).get(rs.getInt(2)) == null) {
 					if (rs.getString("question1") == null)
 						sq.getQuestion().add("");
 					sq.getQuestion().add(rs.getString("question1"));
