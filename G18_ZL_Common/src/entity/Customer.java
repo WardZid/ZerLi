@@ -1,7 +1,11 @@
 package entity;
 
 import java.io.Serializable;
-
+/**
+ * customer accounts thats belong to a user
+ * @author saher
+ *
+ */
 public class Customer implements Serializable {
 	private static final long serialVersionUID = -4182417182449829997L;
 
