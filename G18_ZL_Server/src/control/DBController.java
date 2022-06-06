@@ -1181,24 +1181,28 @@ public class DBController {
 		return true;
 	}
 
-	public static boolean insertComplaint(Complaint c) {
-		int linesChanged = 0;
+	public static Complaint insertComplaint(Complaint c) {
 		try {
 			PreparedStatement ps = conn.prepareStatement(
-					"INSERT INTO complaint (`id_customer`, `status_complaint`, `date_complaint`, `complaint`) VALUES(?,?,?,?)");
+					"INSERT INTO complaint (`id_customer`, `status_complaint`, `date_complaint`, `complaint`) VALUES(?,?,?,?)",Statement.RETURN_GENERATED_KEYS);
 			ps.setInt(1, c.getIdCustomer());
 			ps.setString(2, "OPEN");
 			ps.setString(3, c.getDate());
 			ps.setString(4, c.getComplaint());
-			linesChanged = ps.executeUpdate();
+			ps.executeUpdate();
+			ResultSet rs = ps.getGeneratedKeys();
+
+			rs.next();
+			System.out.println("RS->order->ID: " + rs.getInt(1));
+			c.setIdComplaint(rs.getInt(1));
+			rs.close();
 			ps.close();
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 			ServerView.printErr(DBController.class, "Unable to add new complaint: " + c.toString());
 		}
-		if (linesChanged == 0)
-			return false;
-		return true;
+		return getComplaintsBy("id_complaint", c.getIdComplaint()+"").get(0);
 	}
 
 	public static boolean insertSurvey(Survey s) {
