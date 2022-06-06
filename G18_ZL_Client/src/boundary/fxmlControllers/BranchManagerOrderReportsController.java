@@ -270,8 +270,10 @@ public class BranchManagerOrderReportsController implements Initializable {
 	public void setBranchID() {
 //		ArrayList<Store> stores = (ArrayList<Store>)MainController.getMyClient().send(MessageType.GET, "store/by/id_user/"+user.getIdUser(), null);
 //		if(stores.size()!=0)
+		if (AcountType != "CEO") {
 		Store store=Store.getById(ClientConsoleController.getWorker().getIdStore());
 		branchID = store.ordinal();
+		}
 	}
 	
 	/**
