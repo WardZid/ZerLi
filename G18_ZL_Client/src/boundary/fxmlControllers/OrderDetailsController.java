@@ -28,100 +28,182 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-
+/**
+ * In this class we  an order and we set the details of the order in DB 
+ * and we check the payment if all pass successfully
+ * we check if all the details is correct and all  pass successfully
+ * @author saher
+ *
+ */
 public class OrderDetailsController implements Initializable {
+	/**
+	 * check box for the refund if the customer wants to use refund
+	 */
     @FXML
     private CheckBox useRefundCheckBox;
+    /**
+     * check box for the delivery now if the customer wants to delivery in current time 
+     */
 	@FXML
 	private CheckBox DeliveryNow;
 
-	@FXML
-	private HBox refundHbox;
-	@FXML
-	private Label fillCreditCardLable;
+
+
 	@FXML
 	private VBox orderDetailsVbox;
+	/**
+	 * Vbox for the payment window to show it or make it invisible
+	 */
 	@FXML
 	private VBox PaymentVbox;
 
+	/**
+	 * this button to move to payment page
+	 */
 	@FXML
 	private Button NextBtn;
 
-
+/**
+ * this label update the refund for the customer  
+ */
 	@FXML
 	private Label refundLable1;
 
-
+/**
+ *  in this combo box we insert the minutes from 0 to 59 
+ */
 	@FXML
 	private ComboBox<String> MinutesCombo;
+	/**
+	 *check box if the customer wants to add shipping for the order
+	 */
 	@FXML
 	private CheckBox AddShippingCheckBox;
-
+/**
+ * text field the save the address of the customer 
+ */
 	@FXML
 	private TextField AddressText;
-
+/**
+ * to back to Cart page
+ */
 	@FXML
 	private Button BackBtn;
-
+/**
+ * the customer selected the date of delivery 
+ */
 	@FXML
 	private DatePicker DelevireyDatePicker;
-
+/**
+ * the customer maybe wants to insert a greeting
+ */
 	@FXML
 	private TextArea GreetingArea;
-
+/**
+ *  in this combo box we insert the hours from 0 to 23 
+ */
 	@FXML
 	private ComboBox<String> HourCombo;
-
+/**
+ * the customer insert his name when he add shipping
+ */
 	@FXML
 	private TextField NameReceiverText;
-
+/**
+ * when the customer finished from order and he wants to pay then he clicked on this button
+ */
 	@FXML
 	private Button PaymentBtn;
-
+/**
+ * the customer insert his phone number when he select to add shipping 
+ */
 	@FXML
 	private TextField PhoneText;
-
+/**
+ * this combo box to insert the addresses of the stores in this combo box
+ */
 	@FXML
 	private ComboBox<String> StoreAddressCombo;
-
+/**
+ * to make the shipping details visible or invisible we puts the details in this vbox
+ */
 	@FXML
 	private VBox shippingVbox;
-
+/**
+ * if the customer wants to add description for the order
+ */
 	@FXML
 	private TextArea DescribtionArea;
-
+/**
+ * this label in first we hide it and we make it visible when the customer didn't fill all the required fields 
+ */
 	@FXML
 	private Label noteLable;
-
+/**
+ * we make this label * visible when the customer didn't fill all the required fields
+ */
 	@FXML
 	private Label required1;
-
+	/**
+	 * we make this label * visible when the customer didn't fill all the required fields
+	 */
 	@FXML
 	private Label required2;
-
+	/**
+	 * we make this label * visible when the customer didn't fill all the required fields
+	 */
 	@FXML
 	private Label required3;
-
+	/**
+	 * we make this label * visible when the customer didn't fill all the required fields
+	 */
 	@FXML
 	private Label required4;
-
+	/**
+	 * we make this label * visible when the customer didn't fill all the required fields
+	 */
 	@FXML
 	private Label required5;
-
+	/**
+	 * we make this label * visible when the customer didn't fill all the required fields
+	 */
 	@FXML
 	private Label required6;
-
+	/**
+	 * we make this label * visible when the customer didn't fill all the required fields
+	 */
 
 	@FXML
 	private Label required8;
+	/**
+	 * we insert the credit card from DB to this TextField 
+	 */
 	@FXML
 	private TextField credutCardtextfield;
-	private int flag = 0;
-
+	/**
+	 * this flag to make sure that you can make the payment page visible or not 
+	 */
+	private int flagToMakePayment = 0;
+/**
+ * we insert from DB to this ArrayList all the address of the stores
+ */
 	private static ArrayList<String> StoreAddressName = new ArrayList<String>();
+	/**
+	 * we insert from DB to this ArrayList all the hours
+	 */
 	private static ArrayList<String> houreNum = new ArrayList<String>();
+	/**
+	 * we insert from DB to this ArrayList all the minutes
+	 */
 	private static ArrayList<String> MinNum = new ArrayList<String>();
 
+	
+	/**
+	 * we added a listener for phoneText to make sure that the customer insert a correct thing
+	 * we make all the Notes invisible in first 
+	 * in first we make also the shipping details invisible 
+	 * and we insert the details to all the combo box (store address, hour,minutes)  
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -198,10 +280,15 @@ public class OrderDetailsController implements Initializable {
 		MinutesCombo.setItems(Minutes);
 
 	}
-
+/**
+ * this function to make sure if the customer selected the DeliveryNow check box then
+ * we make the other combo box of the delivery is disable true (the minutes ,hour , DelevireyDatePicker) 
+ * else we make it  disable false (the minutes ,hour , DelevireyDatePicker) 
+ * @param event check box DeliveryNow if selected or not 
+ */
 	public void change(ActionEvent event) {
 		if (DeliveryNow.isSelected() == true) {
-			flag = 0;
+			flagToMakePayment = 0;
 			DelevireyDatePicker.setValue(null);
 			MinutesCombo.setValue(null);
 			HourCombo.setValue(null);
@@ -218,11 +305,15 @@ public class OrderDetailsController implements Initializable {
 		}
 
 	}
-
+/**
+ * this function if we clicked on Back button we move to Cart page  
+ */
 	public void OnBackBtnPressed() {
 		Navigation.navigator("cart-view.fxml");
 	}
-
+/**
+ * this function to make the shipping details (shippingVbox) visible or invisible when the customer select shipping check box
+ */
 	public void ShippingSelected() {
 		if (AddShippingCheckBox.isSelected() == false) {
 			shippingVbox.setVisible(true);
@@ -231,7 +322,10 @@ public class OrderDetailsController implements Initializable {
 		}
 
 	}
-
+/**
+ * to make all this label visible or invisible 
+ * @param status false or true 
+ */
 	public void SetNodeFillAllFeilds(boolean status) {
 		noteLable.setVisible(status);
 		required1.setVisible(status);
@@ -243,13 +337,22 @@ public class OrderDetailsController implements Initializable {
 		required8.setVisible(status);
  
 	}
-
+/**
+ * when we clicked on payment button we make sure that all the order details is saved in DB and 
+ * we returned to Catalog page if the customer wants to make new order
+ */
 	public void onPaymentPressed() {
 		
 			SetOrderDetailsAndSend();
 
 	}
-
+/**
+ * in this function we set all the order details and we saved the details in DB 
+ * and we check if this is the first order to this customer then he have a 20% sale
+ * and we checked if the customer has select a shipping then we added a 20$ to the total price 
+ * and we checked if the customer has select to use his refund if he have a refund
+ * then we finished we moved to catalog page and we make a new order if the customer wants to add order  
+ */
 	public void SetOrderDetailsAndSend() {
 
 		if (DeliveryNow.isSelected() == false)
@@ -327,6 +430,8 @@ public class OrderDetailsController implements Initializable {
 			System.out.println("Refund =" + ClientConsoleController.getCustomer().getPoint());
 
 		}
+		
+		// this ArrayList to check if the customer have an orders before or not ,if he didn't have we give him a 20% sale
 		@SuppressWarnings("unchecked")
 		ArrayList<Order> orderForFirstTime = (ArrayList<Order>) MainController.getMyClient().send(MessageType.GET,
 				"order/by/id_customer/" + ClientConsoleController.getCustomer().getIdCustomer(), null);
@@ -334,32 +439,49 @@ public class OrderDetailsController implements Initializable {
 			CartController.getOrderInProcess().setPrice(CartController.getOrderInProcess().getPrice() * 0.8);
 			System.out.println("order size= " + orderForFirstTime.size());
 		}
+		
+		
 		System.out.println("ordder==" + CartController.getOrderInProcess());
 		MainController.getMyClient().send(MessageType.POST, "order", CartController.getOrderInProcess());
 		CartController.NewOrder();
 		Navigation.navigator("catalog-view.fxml");
 	}
 
+	/**
+	 * this button exist on payment form if the customer does not want to pay 
+	 * and he wants to return to order details page he click on cancel button
+	 */
 	public void CancelBtnPressed() {
 		PaymentVbox.setVisible(false);
 		getorderDetailsVbox().setDisable(false);
 	}
-
+/**
+ * this function returns PaymentVbox (the payment form)
+ * @return VBox PaymentVbox
+ */
 	public VBox getPaymentVbox() {
 		return PaymentVbox;
 	}
-
+	/**
+	 * this function returns orderDetailsVbox (the Order details form)
+	 * @return VBox orderDetailsVbox
+	 */
 	public VBox getorderDetailsVbox() {
 		return orderDetailsVbox;
 	}
 
+	/**
+	 * on this function we check before to move to payment form if the customer insert all the field correctly
+	 * and we check if he selected a correctly time and we  get the point for the customer from DB and set the refund text  on payment form
+	 * and we check if the phone number that the customer insert is correct else he get a alert message 
+	 */
 	public void OnNextBtnPressed() {
 		credutCardtextfield.setText(ClientConsoleController.getCustomer().getCard());
 		int point = (int) MainController.getMyClient().send(MessageType.GET, "customer/points/"+ClientConsoleController.getCustomer().getIdCustomer(),null);
 		refundLable1.setText(point + "");
 		if (DelevireyDatePicker.getValue() != null && HourCombo.getValue() != null && MinutesCombo.getValue() != null)
-			flag = 1;
-		if (flag == 1) {
+			flagToMakePayment = 1;
+		if (flagToMakePayment == 1) {
 			String delevireyDateTime = DelevireyDatePicker.getValue().toString() + " " + HourCombo.getValue() + ":"
 					+ MinutesCombo.getValue() + ":00";
 			if (MainController.timeDiffHour(delevireyDateTime, MainController.currentTime()) < 3) {
@@ -372,7 +494,7 @@ public class OrderDetailsController implements Initializable {
 			
 			
 			else
-				flag = 0;
+				flagToMakePayment = 0;
 		}
 		
 		if ((DelevireyDatePicker.getValue() == null && DeliveryNow.isSelected() == false)
@@ -396,14 +518,14 @@ public class OrderDetailsController implements Initializable {
 					SetNodeFillAllFeilds(true);
 					 
 				} else {
-					if (flag == 0) {
+					if (flagToMakePayment == 0) {
 						this.getPaymentVbox().setVisible(true);
 						getorderDetailsVbox().setDisable(true);
 					}
 				}
 
 			} else {
-				if (flag == 0) {
+				if (flagToMakePayment == 0) {
 					SetNodeFillAllFeilds(false);
 					this.getPaymentVbox().setVisible(true);
 					getorderDetailsVbox().setDisable(true);
@@ -414,7 +536,11 @@ public class OrderDetailsController implements Initializable {
 
 	
 	}
-
+/**
+ * this function checked if the string contains just numbers 
+ * @param strNum string from text field that customer insert 
+ * @return true if number else false 
+ */
 	public static boolean isNumeric(String strNum) {
 		if (strNum == null) {
 			return false;
