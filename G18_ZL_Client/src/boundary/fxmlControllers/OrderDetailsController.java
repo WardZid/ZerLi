@@ -477,7 +477,7 @@ public class OrderDetailsController implements Initializable {
 	 */
 	public void OnNextBtnPressed() {
 		credutCardtextfield.setText(ClientConsoleController.getCustomer().getCard());
-		int point = (int) MainController.getMyClient().send(MessageType.GET, "customer/points/"+ClientConsoleController.getCustomer().getIdCustomer(),null);
+		int point = (int) MainController.getMyClient().send(MessageType.GET, "customer/point/"+ClientConsoleController.getCustomer().getIdCustomer(),null);
 		refundLable1.setText(point + "");
 		if (DelevireyDatePicker.getValue() != null && HourCombo.getValue() != null && MinutesCombo.getValue() != null)
 			flagToMakePayment = 1;

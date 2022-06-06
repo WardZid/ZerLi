@@ -930,7 +930,7 @@ public class DBController {
 			rs = statement.executeQuery(
 					" SELECT  U.name as name , O.date_order  as date ,  (O.price_order) as income  FROM assignment3.order O , assignment3.customer C ,assignment3.user U  WHERE O.id_store ="
 							+ branch_id + " AND Month(O.date_order) = " + month + " AND Year(O.date_order) =" + year
-							+ "  and  O.id_customer=  C.id_customer  and U.id_user=  C.id_user");
+							+ "  and  O.id_customer=  C.id_customer  and U.id_customer=  C.id_customer");
 
 			rs.beforeFirst(); // ---move back to first row
 			while (rs.next()) {

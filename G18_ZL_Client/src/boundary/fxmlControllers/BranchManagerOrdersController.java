@@ -229,7 +229,7 @@ public class BranchManagerOrdersController implements Initializable {
 		 
 		MainController.getMyClient().send(MessageType.UPDATE, "customer/point/"+currentOrder.getIdCustomer()+"/"+currentOrder.getPrice(), null);
 		clearAfterButtonPressed();
-		
+		 
 
 
 		if(order.size()!=0) {
@@ -486,9 +486,12 @@ public class BranchManagerOrdersController implements Initializable {
 	 */
 	@SuppressWarnings("unchecked")
 	private void setBranchID() {
-		ArrayList<Store> stores = (ArrayList<Store>)MainController.getMyClient().send(MessageType.GET, "store/by/id_user/"+user.getIdUser(), null);
-		if(stores.size()!=0)
-		branchID = stores.get(0).ordinal();		
+//		ArrayList<Store> stores = (ArrayList<Store>)MainController.getMyClient().send(MessageType.GET, "store/by/id_user/"+user.getIdUser(), null);
+//		if(stores.size()!=0)
+//		branchID = stores.get(0).ordinal();		
+		
+		Store store=Store.getById(ClientConsoleController.getWorker().getIdStore());
+		branchID = store.ordinal();
 	}
 	
 	@FXML
