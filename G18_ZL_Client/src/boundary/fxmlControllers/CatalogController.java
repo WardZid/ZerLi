@@ -35,56 +35,111 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 
 public class CatalogController implements Initializable {
+	/**
+	 * to filter the items due to price 
+	 */
 	@FXML
 	private Slider SliderPrice;
+	/**
+	 * just label to view
+	 */
 	@FXML
 	private Label priceRange;
+	/**
+	 * to view the items in grid on the catalog 
+	 */
 	@FXML
 	private GridPane grid;
+	/**
+	 * to insert the category from DB to this combo box 
+	 */
 	@FXML
 	private ComboBox<String> categoryCB;
-
+/**
+ * to insert the types from DB to this combo box 
+ */
 	@FXML
 	private ComboBox<String> typeCB;
-
+/**
+ * to view the number of the item that he build or selected 
+ */
 	@FXML
 	private Label numberItemInOrder;
-	
+	/**
+	 *  just a cart image
+	 */
 
     @FXML
     private ImageView cartIV;
-
-
+/**
+ * to view the item with description and photo in the VBox 
+ */
 	@FXML
 	private VBox vboxViewItemDescription;
+	/**
+	 * to view the description of the item from DB
+	 */
 	@FXML
 	private Label descriptionLable;
-
+/**
+ * to view the item name 
+ */
 	@FXML
 	private Label nameItemLable;
+	/**
+	 * to view the name of the customer 
+	 */
 	@FXML
 	private Label UserNameLable;
-
+/**
+ * to view all the catalog details on it and to Arrange all thing on it
+ */
 	@FXML
 	private VBox catalogvbox;
+	/**
+	 * cart image tom click on it and search
+	 */
 	@FXML
 	private ImageView searchIV;
-
+/**
+ * text field to write the item name and to search it in catalog
+ */
 	@FXML
 	private TextField searchTF;
-
+/**
+ * to save the number that returns from the slider to filter the items due to this number
+ */
 	private int PriceRangeCust;
-
+/**
+ * to Arrange the items as we want that we get from itemsGetFromDB and use it (Like to show the items that have a sales first)
+ */
 	private static ArrayList<Item> items=new ArrayList<Item>() ;
+	/**
+	 * in this ArrayList we get all the items from the DB
+	 */
 	private static ArrayList<Item> itemsGetFromDB;
+	/**
+	 * we use this ArrayList to filter the items ArrayList As we want(due to price , name , or category) 
+	 * and we saved the the items that we filter on this filteredItems and use it 
+	 */
 	private ArrayList<Item> filteredItems = new ArrayList<Item>();
-
+/**
+ * to save on this hash map the Category as a key and the type of this category like a value
+ */
 	private static HashMap<String, String> categoryType = new HashMap<String, String>();
-
+/**
+ * returns the hash map
+ * @return HashMap categoryType
+ */
 	public static HashMap<String, String> getCategoryType() {
 		return categoryType;
 	}
-
+/**
+ * we set all the labels we wants and set text for all labels we want
+ * and we set the image for all the items 
+ * and we insert to all the combo box the data from DB (Types , category )
+ * we add a listener to the slider and the all combo box to filter the items then we load the items 
+ */
 	@SuppressWarnings("unchecked")
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -162,44 +217,69 @@ public class CatalogController implements Initializable {
 		loadAllItems();
 
 	}
-
+/**
+ * 
+ * @return VBox vboxViewItemDescription
+ */
 	public VBox getvboxViewItemDescription() {
 		return vboxViewItemDescription;
 	}
-
+/**
+ * 
+ * @return VBox catalogvbox
+ */
 	public VBox getcatalogvbox() {
 		return catalogvbox;
 	}
-
+/**
+ * 
+ * @return Label nameItemLable
+ */
 	public Label getnameItemLable() {
 		return nameItemLable;
 	}
-
+/**
+ * 
+ * @return Label descriptionLable
+ */
 	public Label getdescriptionLable() {
 		return descriptionLable;
 	}
-
+/**
+ * to move to build item page 
+ */
 	public void onBuildItemPressed() {
 
 		Navigation.navigator("build-ItemsScene-View.fxml");
 	}
-
+/**
+ * to return from the Description items VBox to catalog VBox ( vboxViewItemDescription invisible, catalog VBox disable false)
+ */
 	public void BackBtnFromDesToCata() {
 		getvboxViewItemDescription().setVisible(false);
 		getcatalogvbox().setDisable(false);
 	}
-
+/**
+ * parameter we get from the text field to search the item due to his name 
+ * @param event :name of the item we put on search text field
+ */
 	@FXML
 	void onSearchEnter(KeyEvent event) {
 		if (event.getCode() == KeyCode.ENTER)
 			filterItemsAndShow();
 	}
-
+/*
+ * press on cart image to search
+ * calling filterItemsAndShow to show item we want due to his name 
+ */
 	@FXML
 	void onSearchPressed() {
 		filterItemsAndShow();
 	}
-
+/**
+ * we Arrange the items to view the items with sale first on catalog then items without sales 
+ * and set  the max value on slider due to max item price 
+ */
 	@SuppressWarnings("unchecked")
 
 	private void loadAllItems() {
@@ -228,7 +308,10 @@ public class CatalogController implements Initializable {
 
 		showFilteredItems();
 	}
-
+/**
+ * filter the ArrayLis that contains all the items due to name, or price or category or type or search or all together 
+ * and call showFilteredItems function to show them 
+ */
 	private void filterItemsAndShow() {
 		String search = searchTF.getText();
 		String type = typeCB.getSelectionModel().getSelectedItem();
@@ -250,7 +333,9 @@ public class CatalogController implements Initializable {
 		System.out.println("PriceRangeCust=" + PriceRangeCust);
 		showFilteredItems();
 	}
-
+/**
+ * Load all items in the catalog in the way the customer filtered them
+ */
 	private void showFilteredItems() {
 		int column = 0;
 		int row = 1;
@@ -275,7 +360,9 @@ public class CatalogController implements Initializable {
 			}
 		}
 	}
-
+/**
+ * set text the numberItemInOrder due to number of items the customer select 
+ */
 	void setLabelNumItemInOrderText() {
 
 		numberItemInOrder.setText(CartController.getOrderInProcess().getItemInOrder() + "");
