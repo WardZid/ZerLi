@@ -12,7 +12,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
-
+/**
+ * we view the item that he select with the details of the items
+ * @author saher
+ *
+ */
 public class CartItemControl implements Initializable {
 	/**
 	 * to increase the amount of the item

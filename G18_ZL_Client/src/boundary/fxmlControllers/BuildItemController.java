@@ -18,32 +18,64 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
-
+/**
+ *  in this class we view the item with the details and options to build 
+ * @author saher
+ *
+ */
 public class BuildItemController implements Initializable {
+	/**
+	 * item image
+	 */
 	   @FXML
 	    private ImageView itemIV;
+	   /**
+	    * check box to select items that he wants to build the product 
+	    */
 	@FXML
 	private CheckBox chooceItemChecBox;
-
+/**
+ * to view the item price
+ */
 	@FXML
 	private Label priceLabel;
-	
+	/**
+	 * to view the item name 
+	 */
 	@FXML
 	private Label namelabel;
-
+/**
+ * to insert a quantity thats he wants 
+ */
 	@FXML
 	private TextField quantityTextField;
+	/**
+	 * sale label
+	 */
     @FXML
     private Label saleLbl2;
-    
+    /**
+     * price the item  before sale 
+     */
     @FXML
     private Text PriceWithoutSale;
-	
+	/**
+	 * parameter from BuildItemsPageController type 
+	 */
 	BuildItemsPageController buildItemsPageController;
+	/**
+	 * parameter from Item type to save the item details and use it .
+	 */
 	Item presseditem;
-
+	/**
+	 * parameter from OrderItem type to save the item details and use it .
+	 */
 	OrderItem orderItem;
-
+/**
+ * set all the data and text from the item that we get it (name, price, amount,..)
+ * @param item from Item type
+ * @param buildItemsPageController from BuildItemsPageController type
+ */
 	public void setData(Item item, BuildItemsPageController buildItemsPageController) {
 		presseditem = item;
 		
@@ -67,7 +99,9 @@ public class BuildItemController implements Initializable {
 
 		}
 	}
-
+/**
+ * we added a listener for the quantityTextField to check that the customer insert a correct number 
+ */
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 
@@ -123,7 +157,11 @@ public class BuildItemController implements Initializable {
 		});
 
 	}
-
+/**
+ * if the customer select the check box the text field disable false and set text field to 1 if it is 0
+ * else disable true and set text field to 0
+ * @param event if the chooceItemChecBox selected or not
+ */
 	public void change(ActionEvent event) {
 
 		if (chooceItemChecBox.isSelected()) {
@@ -144,7 +182,11 @@ public class BuildItemController implements Initializable {
 
 		}
 	}
-	// check sting is number
+/**
+ * check sting is number
+ * @param strNum
+ * @return
+ */
 	public static boolean isNumeric(String strNum) {
 		if (strNum == null) {
 			return false;
