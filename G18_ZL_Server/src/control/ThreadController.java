@@ -59,7 +59,7 @@ public class ThreadController {
 
 						DBController.updatePoint(lateOrder.getIdCustomer(), lateOrder.getPrice());
 
-					}
+					} 
 				}
 			}
 		}, 0, 60* 1440*1000);// wait 0 ms before doing the action and do it evry 1000ms (1second)
