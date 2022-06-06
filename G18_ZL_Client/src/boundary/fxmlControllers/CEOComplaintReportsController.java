@@ -151,7 +151,7 @@ public class CEOComplaintReportsController implements Initializable {
     		File chosenDir = dirChooser.showDialog(null);
     		System.out.println(chosenDir);
     		SurveyReport report = (SurveyReport)MainController.getMyClient().send(MessageType.GET, "report/"+yearPDF+"/"+selectedSurveyID, null);
-    		
+    		System.out.println(report);
     	}
     }
     
