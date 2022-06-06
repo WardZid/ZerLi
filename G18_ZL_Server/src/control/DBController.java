@@ -1236,18 +1236,20 @@ public class DBController {
 	 * @param questionID - the selected question ID
 	 * @return the report
 	 */
-	public static SurveyReport getReportOfYearAndQuestionID(String year, String questionID) {
-		SurveyReport report=null;
+	public static ArrayList<SurveyReport> getReportOfYearAndQuestionID(String year, String questionID) {
+		ArrayList<SurveyReport> reports = new ArrayList<SurveyReport>();
 		ResultSet rs;
 		try {
 			rs = statement.executeQuery("SELECT * FROM assignment3.reports WHERE Year(year_report) = "+year+" AND id_question = "+questionID);
 			rs.beforeFirst(); // ---move back to first row
-			report = new SurveyReport(rs.getString("year_report"),rs.getInt("id_question"),rs.getBytes("pdf_report"));
+			while(rs.next()) {
+				reports.add(new SurveyReport(rs.getString("year_report"),rs.getInt("id_question"),rs.getBytes("pdf_report")));
+			}
 			rs.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return report;
+		return reports;
 	}
 	
 	/*
