@@ -23,7 +23,7 @@ public class ThreadController {
 			@Override
 			public void run() {
 				synchronized (lock) {
-					System.out.println("run");
+					 
 					Lateorders = DBController.getLateOrderDelivery();
 					for (Order lateOrder : Lateorders) {
 						System.out.println(lateOrder.toString());
@@ -48,7 +48,7 @@ public class ThreadController {
 			@Override
 			public void run() {
 				synchronized (lock) {
-					System.out.println("start ComplainTrackingfunction");
+					 
 					Lateorders = DBController.getLateOrderDelivery();
 					for (Order lateOrder : Lateorders) {
 						System.out.println(lateOrder.toString());
