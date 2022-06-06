@@ -11,33 +11,39 @@ import entity.Order;
 import entity.Order.OrderStatus;
 
 public class ThreadController {
-	
+
 	static Timer timer = new Timer();
-	
+	public static final Object lock = new Object();
+
 	public static void Trackingfunction() {
-		
+
 		timer.schedule(new TimerTask() {
 			ArrayList<Order> Lateorders;
-			  @Override
-			  public void run() {
-					Lateorders=DBController.getLateOrderDelivery();
+
+			@Override
+			public void run() {
+				synchronized (lock) {
+					System.out.println("run");
+					Lateorders = DBController.getLateOrderDelivery();
 					for (Order lateOrder : Lateorders) {
 						System.out.println(lateOrder.toString());
-						lateOrder.setIdOrderStatus(OrderStatus.REFUNDED.ordinal());
+						lateOrder.setIdOrderStatus(OrderStatus.DELIVERED.ordinal());
+
 						DBController.updateOrderStatus(lateOrder);
-						System.out.println("update "+lateOrder.getPrice()+" "+lateOrder.getIdCustomer());
-						
-						 DBController.updatePoint(lateOrder.getIdCustomer(),lateOrder.getPrice());
+						System.out.println("update " + lateOrder.getPrice() + " " + lateOrder.getIdCustomer());
+
+						DBController.updatePoint(lateOrder.getIdCustomer(), lateOrder.getPrice());
+
 					}
-			  }
-			}, 0, 1000);//wait 0 ms before doing the action and do it evry 1000ms (1second)
+				}
+			}
+		}, 0, 5000);// wait 0 ms before doing the action and do it evry 1000ms (1second)
 	}
 
 	public static void CloseTrackingfunction() {
-	 
-		
+
 		timer.cancel();
-		
+
 	}
 
 }

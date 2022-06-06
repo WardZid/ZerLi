@@ -154,7 +154,9 @@ public class ServerController extends ObservableServer {
 	public void handleMessageFromClient(Object msg, ConnectionToClient client) {
 		super.handleMessageFromClient(msg, client);
 		ServerView.print(getClass(), "<- " + msg + " from " + client);
-		handleRequest(msg, client);
+		synchronized (ThreadController.lock) {
+			handleRequest(msg, client);
+		}
 	}
 
 	/**
