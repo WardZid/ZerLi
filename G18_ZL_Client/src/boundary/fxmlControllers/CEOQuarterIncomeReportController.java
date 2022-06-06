@@ -35,36 +35,63 @@ public class CEOQuarterIncomeReportController implements Initializable {
     /*               \/ FXML Variables \/               */
     /* ------------------------------------------------ */
 	
+	/**
+	 * button to compare quarters reports
+	 */
 	@FXML
     private Button buttonCompare;
 	
+	/**
+	 * button to show quarter report
+	 */
 	@FXML
     private Button buttonShow;
 
-    @FXML
-    private CheckBox checkBoxCompare;
-
+    /**
+     * choice box of the quarters 
+     */
     @FXML
     private ChoiceBox<String> choiceBoxQuarter1;
 
+    /**
+     * choice box of the quarter to compare
+     */
     @FXML
     private ChoiceBox<String> choiceBoxQuarter2;
 
+    /**
+     * choice box of the years
+     */
     @FXML
     private ChoiceBox<String> choiceBoxYear1;
 
+    /**
+     * choice box of years to compare
+     */
     @FXML
     private ChoiceBox<String> choiceBoxYear2;
     
+    /**
+     * choice box of the branches
+     */
     @FXML
     private ChoiceBox<String> choiceBoxBranch1;
     
+    /**
+     * choice box of the branches to compare
+     */
     @FXML
     private ChoiceBox<String> choiceBoxBranch2;
 
+    /**
+     * barchart to review the quarters reports
+     */
     @FXML
     private StackedBarChart<String, Double> barChartIncome;
     
+    /**
+     * text of error message
+     */
     @FXML
     private Text error1;
 	

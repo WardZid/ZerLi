@@ -66,24 +66,45 @@ public class CEOComplaintReportsController implements Initializable {
 	/* \/ FXML Variables \/ */
 	/* ------------------------------------------------ */
 
+	/**
+	 * barchart of the complaints in the selected quarter
+	 */
 	@FXML
 	private BarChart<String, Integer> barChartComplaints;
 
+	/**
+	 * the button to download the report file
+	 */
 	@FXML
 	private Button buttonDownload;
 
+	/**
+	 * the button to show the data on the bar chart
+	 */
 	@FXML
 	private Button buttonShow;
 
+	/**
+	 * the choice box of quarters
+	 */
 	@FXML
 	private ChoiceBox<String> choiceBoxQuarterComplaint;
 
+	/**
+	 * the choice box of question IDs
+	 */
 	@FXML
 	private ComboBox<String> choiceBoxSurveyPDF;
 
+	/**
+	 * the choice box of years of the complaints
+	 */
 	@FXML
 	private ChoiceBox<String> choiceBoxYearComplaint;
 
+	/**
+	 * the choice box of the years of the surveys
+	 */
 	@FXML
 	private ComboBox<String> choiceBoxYearPDF;
 
@@ -123,7 +144,7 @@ public class CEOComplaintReportsController implements Initializable {
 	/* ------------------------------------------------ */
 
 	/**
-	 * Action to do when download is pressed
+	 * Action to do when download button is pressed
 	 * 
 	 * @param event
 	 * @throws FileNotFoundException 

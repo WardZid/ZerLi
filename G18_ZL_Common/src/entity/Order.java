@@ -5,7 +5,11 @@ import java.util.ArrayList;
 
 import entity.Item.ItemInBuild;
 import entity.Item.OrderItem;
-
+/**
+ * 
+ * @author saher
+ *
+ */
 public class Order implements Serializable, Cloneable {
 
 	private static final long serialVersionUID = -3217273749865937459L;
@@ -23,31 +27,71 @@ public class Order implements Serializable, Cloneable {
 		}
 	}
 
-	// Class variables
+/**
+ * id for order 
+ */
 	private int idOrder;
+	/**
+	 * id for customer
+	 */
 	private int idCustomer;
+	/**
+	 * id for store
+	 */
 	private int idStore;
+	/**
+	 * id for order status
+	 */
 	private int idOrderStatus;
+	/**
+	 * order price
+	 */
 	private double price;
+	/**
+	 * order date
+	 */
 	private String orderDate;
+	/**
+	 * order deliveryDate
+	 */
 	private String deliveryDate;
+	/**
+	 * order cancelDate
+	 */
 	private String cancelDate;
+	/**
+	 * customer address
+	 */
 	private String address;
+	/**
+	 * order description
+	 */
 	private String description;
+	/**
+	 * order greetingCard
+	 */
 	private String greetingCard;
-
+/**
+ * number the items 
+ */
 	private int ItemInOrder;
 
 	public int getItemInOrder() {
 		return ItemInOrder;
 	}
-
-	// Products in the order are enetered on request only as to minimize load to the
-	// server
+/**
+ * to save the build items to this order
+ */
 	private ArrayList<BuildItem> buildItems = new ArrayList<>();
+	/**
+ * to save the  items to this order
+	 */
 	private ArrayList<OrderItem> items = new ArrayList<>();
 
-	// main Constructor
+
+/**
+ * normal constructor for every thing 
+ */
 	public Order(int idOrder, int idCustomer, int idStore, int idOrderStatus, double price, String orderDate,
 			String deliveryDate, String cancelDate, String address, String description, String greetingCard) {
 		this.idOrder = idOrder;
@@ -68,7 +112,10 @@ public class Order implements Serializable, Cloneable {
 		items = new ArrayList<OrderItem>();
 	}
 
-	// add item to order
+	/**
+	 * adding a item to order and update the amount and the price and update the number of the items in the order
+	 * @param item that we want to add 
+	 */
 
 	public void addItemtoOrder(Item item) {
 		if (item == null)
@@ -100,7 +147,13 @@ public class Order implements Serializable, Cloneable {
 		price += item.getPrice();
 
 	}
-
+	/**
+	 * delete item update the amount if the amount 0 then we removed it from the Array List 
+	 * then we update the price 
+	 * we check how much we want to delete 
+	 * @param item item we wants to delete 
+	 * @param amountForDelete how much we want to delete 
+	 */
 	public void DeleteItemtoOrder(OrderItem item,  int amountForDelete) {
 		int amountAfterDelete=0;
 		 int FlagRemove=0;
@@ -125,7 +178,13 @@ public class Order implements Serializable, Cloneable {
 			items.remove(item);
 
 	}
-
+/**
+ * delete buildItem update the amount if the amount 0 then we removed it from the Array List 
+ * then we update the price 
+ * we check how much we want to delete 
+ * @param buildItem item we wants to delete 
+ * @param amountForDelete how much we want to delete 
+ */
 	public void DeleteItemtoOrder(BuildItem buildItem, int amountForDelete) {
 		ItemInOrder-=amountForDelete;
         int FlagRemove=0;
@@ -163,9 +222,12 @@ public class Order implements Serializable, Cloneable {
 	 
 
 
-	// add build item to cart
+	
 
-	// add item to Order (to Cart)
+	/**
+	 * adding a build item to order with update price , amount , and number of the items in order
+	 * @param buildItem
+	 */
 	public void addItemtoOrder(BuildItem buildItem) {
 		ItemInOrder++;
 		int amount = 0;
@@ -186,7 +248,10 @@ public class Order implements Serializable, Cloneable {
 
 	}
 
-	// create build item and add it to arr-> build item-view
+	/**
+	 * create build item and add it to ArrayList-> build item-view
+	 * @param buildItem
+	 */
 	public void addIBuildtemtoOrder(BuildItem buildItem) {
 		 
 		buildItems.add(buildItem);
@@ -195,7 +260,10 @@ public class Order implements Serializable, Cloneable {
 		System.out.println("OrderPrice=" + getPrice());
 	}
 
-	
+	/**
+	 * remove the item from the order and update the order price
+	 * @param item from OrderItem type to remove it 
+	 */
 	public void DeleteItemFromScroll(OrderItem item) {
 		System.out.println("items========" + items);
 		if (items.size() == 0)
@@ -212,7 +280,10 @@ public class Order implements Serializable, Cloneable {
 
  
 
-	// Getters and Setters
+	/**
+	 *  Getters and Setters for all the parameters 
+	 * @return
+	 */
 	public int getIdOrder() {
 		return idOrder;
 	}
@@ -317,17 +388,26 @@ public class Order implements Serializable, Cloneable {
 		this.items = items;
 	}
 
-	// adding full item arrays
+	/**
+	 *  adding full item arrays
+	 * @param orderItems
+	 */
 
 	public void addOrderItems(ArrayList<OrderItem> orderItems) {
 		this.items.addAll(orderItems);
 	}
-
+/**
+ * add the ArryaList buildItems to buildItems
+ * @param buildItems
+ */
 	public void addBuildItems(ArrayList<BuildItem> buildItems) {
 		this.buildItems.addAll(buildItems);
 	}
 
-	// handling id as enum
+	/**
+	 *  handling id as enum
+	 * @return Store by idStore
+	 */
 	public Store getStore() {
 		return Store.getById(idStore);
 	}
@@ -343,19 +423,26 @@ public class Order implements Serializable, Cloneable {
 	public void setOrderStatus(OrderStatus status) {
 		idOrderStatus = status.ordinal();
 	}
-
+/**
+ * add for the price buildItem price * amount 
+ * @param itemPrice
+ * @param buildItem
+ */
 	public void addPrice(double itemPrice, BuildItem buildItem) {
 
 		this.setPrice(this.getPrice() + (itemPrice * buildItem.getAmount()));
 	}
-
+/**
+ * decrease from the price a build item price * his amount
+ * @param itemPrice
+ * @param buildItem
+ */
 	public void deletePrice(double itemPrice, BuildItem buildItem) {
 
 		this.setPrice(this.getPrice() - (itemPrice * buildItem.getAmount()));
 	}
 
 	public void deleteItem(ItemInBuild itemInBuild) {
-		// TODO Auto-generated method stub
 
 	}
 
@@ -363,7 +450,9 @@ public class Order implements Serializable, Cloneable {
 		this.setPrice(this.getPrice() - (price2));
 
 	}
-
+/**
+ * adding 20$ to the price for the shipping 
+ */
 	public void addPriceForShipping() {
 		this.setPrice(this.getPrice() + 20);
 

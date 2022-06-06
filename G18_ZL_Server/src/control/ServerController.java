@@ -573,9 +573,13 @@ public class ServerController extends ObservableServer {
 	}
 
 	private void handleSendRequest(MyMessage clMsg) {
+		String[] request = clMsg.getInfo().split("/");
 		if (clMsg.getInfo().startsWith("email")) {
 			Email email = (Email) clMsg.getContent();
 			EmailController.sendEmail(email);
+		}
+		if (clMsg.getInfo().startsWith("ReminderEmail")) {
+			 System.out.println("ReminderEmail "+request[1]+request[2]);
 		}
 	}
 }

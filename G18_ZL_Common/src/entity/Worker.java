@@ -1,7 +1,11 @@
 package entity;
 
 import java.io.Serializable;
-
+/**
+ *  worker accounts thats belong to a user
+ * @author saher
+ *
+ */
 public class Worker implements Serializable {
 
 	/**
