@@ -2,7 +2,10 @@ package control;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
@@ -88,6 +91,17 @@ public class MainController {
         	   return TimeUnit.MILLISECONDS.toHours(diff) ;
           
 	}
+	
+	public static String addHoursToCurrentTime(int hours) {
+		 
+		Calendar cal = Calendar.getInstance();
+		cal.add(Calendar.HOUR_OF_DAY, hours);
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		 
+		
+		return dateFormat.format(cal.getTime());
+	}
+	
 	
 	private static boolean isValidDate(String date) {
 		if(date==null || date.equals(""))

@@ -1401,6 +1401,7 @@ public class DBController {
 		return getItemsBy("id_item", item.getIdItem() + "");
 	}
 
+	
 	public static ArrayList<Customer> updateCustomerStatusOne(Customer c, CustomerStatus status) {
 
 		try {
@@ -1433,8 +1434,7 @@ public class DBController {
 					.prepareStatement("UPDATE assignment3.order SET id_order_status=? WHERE id_order=?");
 			ps.setInt(1, o.getIdOrderStatus());
 			ps.setInt(2, o.getIdOrder());
-			System.out.println("o.getIdOrder() " + o.getIdOrder() + "o.getIdOrderStatus() " + o.getIdOrderStatus());
-			ps.executeUpdate();
+			 ps.executeUpdate();
 			ps.close();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -1442,6 +1442,20 @@ public class DBController {
 		return getOrdersBy("id_order", o.getIdOrder() + "");
 	}
 
+	public static ArrayList<Order> updateOrderDeliveryDate(Order o) {
+		try {
+			PreparedStatement ps = conn
+					.prepareStatement("UPDATE assignment3.order SET delivery_date_order=? WHERE id_order=?");
+			ps.setString(1, o.getDeliveryDate());
+			ps.setInt(2, o.getIdOrder());
+		 	ps.executeUpdate();
+			ps.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return getOrdersBy("id_order", o.getIdOrder() + "");
+	}
+	
 	public static boolean updatePoint(int idCustomer, double newPoint) {
 		try {
 			PreparedStatement ps = conn

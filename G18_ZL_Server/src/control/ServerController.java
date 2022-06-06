@@ -219,15 +219,15 @@ public class ServerController extends ObservableServer {
 	}
 
 	/**
-	 * handles clients' GET requests in http style
-	 * messages look loke: "order/by/id_order/xxx"
+	 * handles clients' GET requests in http style messages look loke:
+	 * "order/by/id_order/xxx"
 	 * 
 	 * @param MyMessage Contains GET request
 	 */
 
 	private void handleGetRequest(MyMessage clMsg, ConnectionToClient client) {
 		String[] request = clMsg.getInfo().split("/");
-		
+
 		switch (request[0]) {
 		case "login":
 			User user = (User) clMsg.getContent();
@@ -323,7 +323,7 @@ public class ServerController extends ObservableServer {
 				clMsg.setContent(DBController.getCustomerAll());
 			} else if (request[1].equals("by")) {
 				clMsg.setContent(DBController.getCustomerBy(request[2], request[3]));
-			} else if(request[1].equals("point"))
+			} else if (request[1].equals("point"))
 				clMsg.setContent(DBController.getPoints(request[2]));
 			break;
 		case "worker":
@@ -345,11 +345,11 @@ public class ServerController extends ObservableServer {
 				if (request[2].equals("inQuarter")) {
 					clMsg.setContent(DBController.getCountComplaintsInQuarter(request[3], request[4]));
 				}
-			}else if(request[1].equals("years")) {
+			} else if (request[1].equals("years")) {
 				clMsg.setContent(DBController.getComplaintYears());
-			}else if(request[1].equals("count")) {
-				if(request[2].equals("inQuarter")) {
-					clMsg.setContent(DBController.getCountComplaintsInQuarter(request[3],request[4]));
+			} else if (request[1].equals("count")) {
+				if (request[2].equals("inQuarter")) {
+					clMsg.setContent(DBController.getCountComplaintsInQuarter(request[3], request[4]));
 				}
 			}
 			break;
@@ -362,9 +362,9 @@ public class ServerController extends ObservableServer {
 				clMsg.setContent(DBController.getAllSurvesYears());
 			else if (request[1].equals("by") && request[2].equals("date_survey && id_question_average"))
 				clMsg.setContent(DBController.getAverage(request[3], request[4]));
-			else if(request[1].equals("years")) {
+			else if (request[1].equals("years")) {
 				clMsg.setContent(DBController.getAllSurvesYears1());
-			} else if(request[1].equals("idByYear")) {
+			} else if (request[1].equals("idByYear")) {
 				clMsg.setContent(DBController.getQuestionIDsByYear(request[2]));
 			}
 			break;
@@ -500,11 +500,10 @@ public class ServerController extends ObservableServer {
 
 		String[] request = clMsg.getInfo().split("/");
 
-		if(request[0].equals("order")) {
-			Order o=(Order) clMsg.getContent();
+		if (request[0].equals("order")) {
+			Order o = (Order) clMsg.getContent();
 			clMsg.setContent(DBController.insertOrder(o));
-		}
-		else if (request[0].equals("complaint")) {
+		} else if (request[0].equals("complaint")) {
 			Complaint complaint = (Complaint) clMsg.getContent();
 			clMsg.setContent(DBController.insertComplaint(complaint));
 
@@ -538,6 +537,8 @@ public class ServerController extends ObservableServer {
 			Order order = (Order) clMsg.getContent();
 			if (request[1].equals("status")) {
 				clMsg.setContent(DBController.updateOrderStatus(order));
+			} else if (request[1].equals("DeliveryDate")) {
+				clMsg.setContent(DBController.updateOrderDeliveryDate(order));
 			}
 		} else if (request[0].equals("customer")) {
 			Customer c = (Customer) clMsg.getContent();
@@ -561,7 +562,7 @@ public class ServerController extends ObservableServer {
 		} else
 			ServerView.printErr(getClass(), "Unhandled Update Request: " + clMsg.getInfo());
 	}
-	
+
 	private void handleSendRequest(MyMessage clMsg) {
 		if (clMsg.getInfo().startsWith("email")) {
 			Email email = (Email) clMsg.getContent();
