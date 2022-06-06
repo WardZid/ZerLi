@@ -71,205 +71,222 @@ GET -> question/by/questionID
 * */
 
 public class CEOComplaintReportsController implements Initializable {
-	
+
 	/* ------------------------------------------------ */
-    /*               \/ FXML Variables \/               */
-    /* ------------------------------------------------ */
+	/* \/ FXML Variables \/ */
+	/* ------------------------------------------------ */
 
 	@FXML
-    private BarChart<String, Integer> barChartComplaints;
+	private BarChart<String, Integer> barChartComplaints;
 
-    @FXML
-    private Button buttonDownload;
+	@FXML
+	private Button buttonDownload;
 
-    @FXML
-    private Button buttonShow;
+	@FXML
+	private Button buttonShow;
 
-    @FXML
-    private ChoiceBox<String> choiceBoxQuarterComplaint;
+	@FXML
+	private ChoiceBox<String> choiceBoxQuarterComplaint;
 
-    @FXML
-    private ComboBox<String> choiceBoxSurveyPDF;
+	@FXML
+	private ComboBox<String> choiceBoxSurveyPDF;
 
-    @FXML
-    private ChoiceBox<String> choiceBoxYearComplaint;
+	@FXML
+	private ChoiceBox<String> choiceBoxYearComplaint;
 
-    @FXML
-    private ComboBox<String> choiceBoxYearPDF;
-	
-    /* ------------------------------------------------ */
-    /*               \/ Help Variables \/               */
-    /* ------------------------------------------------ */
-    
-    private HashMap<String, HashMap<Integer, SurveyQuestion>> yearIdQuestionsHashMap;
-    
-    // the selected years
-    private String yearComplaint, yearPDF;
-    
-    // the selected survey ID
-    private String selectedSurveyID;
-    
-    // the first month in the selected quarter
-    private int firstMonthInQuarter = 1;
-    
-    /* XYChart series to insert values in the line chart */
-    XYChart.Series<String, Integer> series = new XYChart.Series<String, Integer>();
-    
-    /* ------------------------------------------------ */
-    /*            \/ initialize function \/             */
-    /* ------------------------------------------------ */
-    
-    @Override
+	@FXML
+	private ComboBox<String> choiceBoxYearPDF;
+
+	/* ------------------------------------------------ */
+	/* \/ Help Variables \/ */
+	/* ------------------------------------------------ */
+
+	private HashMap<String, HashMap<Integer, SurveyQuestion>> yearIdQuestionsHashMap;
+
+	// the selected years
+	private String yearComplaint, yearPDF;
+
+	// the selected survey ID
+	private String selectedSurveyID;
+
+	// the first month in the selected quarter
+	private int firstMonthInQuarter = 1;
+
+	/* XYChart series to insert values in the line chart */
+	XYChart.Series<String, Integer> series = new XYChart.Series<String, Integer>();
+
+	/* ------------------------------------------------ */
+	/* \/ initialize function \/ */
+	/* ------------------------------------------------ */
+
+	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-    	//choiceBoxSurveyPDF.setDisable(true);
-    	initChoiceBoxes();
-    	choiceBoxYearComplaint.setOnAction(this::onYearComplaintSelection);
-    	choiceBoxQuarterComplaint.setOnAction(this::onQuarterComplaintSelection);
-    	choiceBoxYearPDF.setOnAction(this::onYearPDFSelection);
-    	choiceBoxSurveyPDF.setOnAction(this::onSurveyIDSelection);
-    	barChartComplaints.setLegendVisible(false);
+		// choiceBoxSurveyPDF.setDisable(true);
+		initChoiceBoxes();
+		choiceBoxYearComplaint.setOnAction(this::onYearComplaintSelection);
+		choiceBoxQuarterComplaint.setOnAction(this::onQuarterComplaintSelection);
+		choiceBoxYearPDF.setOnAction(this::onYearPDFSelection);
+		choiceBoxSurveyPDF.setOnAction(this::onSurveyIDSelection);
+		barChartComplaints.setLegendVisible(false);
 	}
-    
-    /* ------------------------------------------------ */
-    /*               \/ Action Methods \/               */
-    /* ------------------------------------------------ */
-    
-    /**
-     * Action to do when download is pressed
-     * 
-     * @param event
-     */
-    public void onDownloadPressed(ActionEvent event) {
-    	if(choiceBoxYearPDF.getSelectionModel().isEmpty() || choiceBoxSurveyPDF.getSelectionModel().isEmpty()) {
-    		Alert errorAlert = new Alert(AlertType.ERROR);
+
+	/* ------------------------------------------------ */
+	/* \/ Action Methods \/ */
+	/* ------------------------------------------------ */
+
+	/**
+	 * Action to do when download is pressed
+	 * 
+	 * @param event
+	 */
+	@SuppressWarnings("unchecked")
+	public void onDownloadPressed(ActionEvent event) {
+		if (choiceBoxYearPDF.getSelectionModel().isEmpty() || choiceBoxSurveyPDF.getSelectionModel().isEmpty()) {
+			Alert errorAlert = new Alert(AlertType.ERROR);
 			errorAlert.setHeaderText(null);
 			errorAlert.setContentText("You must choose Year and Question ID!");
 			errorAlert.showAndWait();
-    	}
-    	else {
-    		SurveyReport report = (SurveyReport)MainController.getMyClient().send(MessageType.GET, "report/"+yearPDF+"/"+selectedSurveyID, null);
-    		if(report == null) {
-    			
-    			Alert errorAlert = new Alert(AlertType.ERROR);
-    			errorAlert.setHeaderText(null);
-    			errorAlert.setContentText("There is no report for the selected year and question ID !");
-    			errorAlert.showAndWait();
-    		}
-    		else {
-    			
-    		}
-    		System.out.println(report);
-    	}
-    }
-    
-    /**
-     * Action to do when a survey is selected
-     * 
-     * @param event
-     */
-    public void onSurveyIDSelection(ActionEvent event) {
-    	selectedSurveyID = choiceBoxSurveyPDF.getSelectionModel().getSelectedItem();
-    }
-    
-    /**
-     * Action to do when a year for PDF is selected
-     * 
-     * @param event
-     */
-    @SuppressWarnings("unchecked")
+		} else {
+			ArrayList<SurveyReport> report = (ArrayList<SurveyReport>) MainController.getMyClient()
+					.send(MessageType.GET, "report/" + yearPDF + "/" + selectedSurveyID, null);
+			if (report.size() == 0) {
+				Alert errorAlert = new Alert(AlertType.ERROR);
+				errorAlert.setHeaderText(null);
+				errorAlert.setContentText("There is no report for the selected year and question ID !");
+				errorAlert.showAndWait();
+			} else {
+				DirectoryChooser dirChooser = new DirectoryChooser();
+				File chosenDir = dirChooser.showDialog(null);
+				System.out.println(chosenDir);
+				
+				File newFile = new File(LocalfilePath);
+				
+				byte[] mybytearray = new byte[(int) newFile.length()];
+				FileInputStream fis = new FileInputStream(newFile);
+				BufferedInputStream bis = new BufferedInputStream(fis);
+				msg.initArray(mybytearray.length);
+				msg.setSize(mybytearray.length);
+				bis.read(msg.getMybytearray(), 0, mybytearray.length);
+				sendToServer(msg);
+			}
+			System.out.println(report);
+		}
+	}
+
+	/**
+	 * Action to do when a survey is selected
+	 * 
+	 * @param event
+	 */
+	public void onSurveyIDSelection(ActionEvent event) {
+		selectedSurveyID = choiceBoxSurveyPDF.getSelectionModel().getSelectedItem();
+	}
+
+	/**
+	 * Action to do when a year for PDF is selected
+	 * 
+	 * @param event
+	 */
+	@SuppressWarnings("unchecked")
 	public void onYearPDFSelection(ActionEvent event) {
-    	//choiceBoxSurveyPDF.setDisable(false);
-    	yearPDF = choiceBoxYearPDF.getSelectionModel().getSelectedItem();
-    	ArrayList<String> ids = (ArrayList<String>)MainController.getMyClient().send(MessageType.GET, "survey/idByYear/"+yearPDF, null);
-    	choiceBoxSurveyPDF.getItems().clear();
-    	choiceBoxSurveyPDF.getItems().addAll(ids);
-    }
-    
-    /**
-     * Action to do when years complaint choice box has a selection
-     * 
-     * @param event
-     */
-    public void onYearComplaintSelection(ActionEvent event) {
-    	yearComplaint = choiceBoxYearComplaint.getSelectionModel().getSelectedItem();
-    	if(!choiceBoxQuarterComplaint.getSelectionModel().isEmpty()) {
-    		buttonShow.setDisable(false);
-    	}
-    }
-    
-    /**
-     * Action to do when quarter is selected
-     * 
-     * @param event
-     */
-    public void onQuarterComplaintSelection(ActionEvent event) {
-    	Quarters q = Quarters.valueOf(choiceBoxQuarterComplaint.getSelectionModel().getSelectedItem());
-    	firstMonthInQuarter += 3*q.ordinal();
-    	
-    	if(!choiceBoxYearComplaint.getSelectionModel().isEmpty()) {
-    		buttonShow.setDisable(false);
-    	}
-    }
-    
-    /**
-     * Action to do when show is pressed
-     * 
-     * @param event
-     */
-    @SuppressWarnings("unchecked")
+		// choiceBoxSurveyPDF.setDisable(false);
+		yearPDF = choiceBoxYearPDF.getSelectionModel().getSelectedItem();
+		ArrayList<String> ids = (ArrayList<String>) MainController.getMyClient().send(MessageType.GET,
+				"survey/idByYear/" + yearPDF, null);
+		choiceBoxSurveyPDF.getItems().clear();
+		choiceBoxSurveyPDF.getItems().addAll(ids);
+	}
+
+	/**
+	 * Action to do when years complaint choice box has a selection
+	 * 
+	 * @param event
+	 */
+	public void onYearComplaintSelection(ActionEvent event) {
+		yearComplaint = choiceBoxYearComplaint.getSelectionModel().getSelectedItem();
+		if (!choiceBoxQuarterComplaint.getSelectionModel().isEmpty()) {
+			buttonShow.setDisable(false);
+		}
+	}
+
+	/**
+	 * Action to do when quarter is selected
+	 * 
+	 * @param event
+	 */
+	public void onQuarterComplaintSelection(ActionEvent event) {
+		Quarters q = Quarters.valueOf(choiceBoxQuarterComplaint.getSelectionModel().getSelectedItem());
+		firstMonthInQuarter += 3 * q.ordinal();
+
+		if (!choiceBoxYearComplaint.getSelectionModel().isEmpty()) {
+			buttonShow.setDisable(false);
+		}
+	}
+
+	/**
+	 * Action to do when show is pressed
+	 * 
+	 * @param event
+	 */
+	@SuppressWarnings("unchecked")
 	public void onShowPressed(ActionEvent event) {
-    	if(choiceBoxQuarterComplaint.getSelectionModel().isEmpty() || choiceBoxYearComplaint.getSelectionModel().isEmpty()) {
-    		Alert errorAlert = new Alert(AlertType.ERROR);
+		if (choiceBoxQuarterComplaint.getSelectionModel().isEmpty()
+				|| choiceBoxYearComplaint.getSelectionModel().isEmpty()) {
+			Alert errorAlert = new Alert(AlertType.ERROR);
 			errorAlert.setHeaderText(null);
 			errorAlert.setContentText("You must choose Year and Quarter!");
 			errorAlert.showAndWait();
-    	}
-    	else {
-	    	barChartComplaints.getData().clear();
-	    	series = new XYChart.Series<String, Integer>();
-	    	ArrayList<Integer> countOfComplaintsInQuarter = (ArrayList<Integer>)MainController.getMyClient().send(MessageType.GET, "complaint/count/inQuarter/"+yearComplaint+"/"+firstMonthInQuarter, null);
-	    	for(int i=0; i<3 ; i++) {
-	    		series.getData().add(new XYChart.Data<String, Integer>(firstMonthInQuarter+i+"", countOfComplaintsInQuarter.get(i)));
-	    	}
-	    	firstMonthInQuarter = 1;
-	    	barChartComplaints.getData().add(series);
-    	}
-    }
-    
-    /* ------------------------------------------------ */
-    /*                 \/ Help Methods \/               */
-    /* ------------------------------------------------ */
-    
-    /**
-     * initialize all choice boxes
-     */
-    private void initChoiceBoxes() {
-    	initSurveyChoiceBoxes();
-    	initComplaintsChoiceBoxes();
-    }
-    
-    /**
-     * initialize choice boxes for downloading PDF report
-     */
-    @SuppressWarnings("unchecked")
-	private void initSurveyChoiceBoxes() {
-    	ArrayList<String> yearsOfSurveys = (ArrayList<String>)MainController.getMyClient().send(MessageType.GET, "survey/years", null);
-    	if(yearsOfSurveys.size() == 0) return;
-    	choiceBoxYearPDF.getItems().addAll(yearsOfSurveys);
+		} else {
+			barChartComplaints.getData().clear();
+			series = new XYChart.Series<String, Integer>();
+			ArrayList<Integer> countOfComplaintsInQuarter = (ArrayList<Integer>) MainController.getMyClient().send(
+					MessageType.GET, "complaint/count/inQuarter/" + yearComplaint + "/" + firstMonthInQuarter, null);
+			for (int i = 0; i < 3; i++) {
+				series.getData().add(new XYChart.Data<String, Integer>(firstMonthInQuarter + i + "",
+						countOfComplaintsInQuarter.get(i)));
+			}
+			firstMonthInQuarter = 1;
+			barChartComplaints.getData().add(series);
+		}
+	}
 
-    }
-    
-    /**
-     * initialize all choice boxes for complaints chart
-     */
-    @SuppressWarnings("unchecked")
+	/* ------------------------------------------------ */
+	/* \/ Help Methods \/ */
+	/* ------------------------------------------------ */
+
+	/**
+	 * initialize all choice boxes
+	 */
+	private void initChoiceBoxes() {
+		initSurveyChoiceBoxes();
+		initComplaintsChoiceBoxes();
+	}
+
+	/**
+	 * initialize choice boxes for downloading PDF report
+	 */
+	@SuppressWarnings("unchecked")
+	private void initSurveyChoiceBoxes() {
+		ArrayList<String> yearsOfSurveys = (ArrayList<String>) MainController.getMyClient().send(MessageType.GET,
+				"survey/years", null);
+		if (yearsOfSurveys.size() == 0)
+			return;
+		choiceBoxYearPDF.getItems().addAll(yearsOfSurveys);
+
+	}
+
+	/**
+	 * initialize all choice boxes for complaints chart
+	 */
+	@SuppressWarnings("unchecked")
 	private void initComplaintsChoiceBoxes() {
-		ArrayList<String> yearsToChoose = (ArrayList<String>)MainController.getMyClient().send(MessageType.GET, "complaint/years", null);
+		ArrayList<String> yearsToChoose = (ArrayList<String>) MainController.getMyClient().send(MessageType.GET,
+				"complaint/years", null);
 		choiceBoxYearComplaint.getItems().addAll(yearsToChoose);
-		
-		for(Quarters q : Quarters.values()) {
+
+		for (Quarters q : Quarters.values()) {
 			choiceBoxQuarterComplaint.getItems().add(q.toString());
 		}
-    }
-    
+	}
+
 }
