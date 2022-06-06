@@ -321,7 +321,7 @@ public class BranchManagerOrdersController implements Initializable {
 	private void setFullOrderDetails() {
 		ArrayList<Customer> c = (ArrayList<Customer>) MainController.getMyClient().send(MessageType.GET, "customer/by/id_customer/"+currentOrder.getIdCustomer() , null);
 		currentCustomer = c.get(0);
-		User u = (User)MainController.getMyClient().send(MessageType.GET, "user/by/id_user/"+currentCustomer.getIdUser(), null);
+		User u = (User)MainController.getMyClient().send(MessageType.GET, "user/by/id_coustmer/"+currentCustomer.getIdCustomer(), null);
 		this.fAddress.setText(currentOrder.getAddress());
 		this.fCName.setText(u.getName());
 		this.fCID.setText(currentOrder.getIdCustomer()+"");
