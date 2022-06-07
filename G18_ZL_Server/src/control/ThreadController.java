@@ -60,13 +60,15 @@ public class ThreadController {
 			public void run() {
 				ArrayList<Complaint> complaint;
 				synchronized (lock) {
-					if (flagOnce == 1)
+					if (flagOnce == 1) {
 						timer.cancel();
+						System.out.println("close ********** ");
+					}
 					if (flagOnce != 0) {
 						complaint = DBController.checkComplaint(ComplainId);
 						if (complaint.size()!=0) {
 							User currentUser = DBController.getUserBy("id_user", idUser + "").get(0);
-							System.out.println("i will send mail to currentUser " + currentUser);
+							System.out.println("send Email ********** ");
 							Email email = new Email(currentUser.getEmail(), "Reminder Complain ",
 									" 24 hours have passed since the complaint ( " + ComplainId
 											+ " ) this email for a Reminder\n");

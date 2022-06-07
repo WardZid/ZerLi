@@ -7,7 +7,7 @@ import boundary.ServerView;
 
 public class MainController {
 
-	// main
+	// main 
 	public static void main(String[] args) {
 		myServer = new ServerController(ServerController.DEFAULT_PORT);
 
