@@ -4,16 +4,24 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 import boundary.ClientView;
 
+/**
+ * Main class that contains the main method and starts the whole application
+ * @author wardz
+ *
+ */
 public class MainController {
 
 	// main
+	/**
+	 * main inits the cliant(not connects) and calls to start the ui
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		myClient =new ClientController(getIpAddress(), ClientController.DEFAULT_PORT);
 		ClientView.launchApplication(args);
@@ -55,6 +63,10 @@ public class MainController {
 	
 	// Helpful Generic Methods
 	
+	/**
+	 * utility method that pulls current time and date from the pc
+	 * @return the time in a format suitable for mysql
+	 */
 	public static String currentTime() {
 		//current time is formatted into an appropriate datetime for mysql
 		SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  //formats date and time to be suitable for sql
@@ -62,6 +74,12 @@ public class MainController {
 		return formatter.format(date);
 	}
 	
+	/**
+	 * returns time span/difference between two received datetimes
+	 * @param startDate
+	 * @param endDate
+	 * @return differnce
+	 */
 	public static long timeDiffHour(String startDate, String endDate ) {
 		
 		if(!isValidDate(startDate) || !isValidDate(endDate))
@@ -92,6 +110,11 @@ public class MainController {
           
 	}
 	
+	/**
+	 * adds a given amount of hours to the current time 
+	 * @param hours to add
+	 * @return now + hours received
+	 */
 	public static String addHoursToCurrentTime(int hours) {
 		 
 		Calendar cal = Calendar.getInstance();
@@ -102,7 +125,11 @@ public class MainController {
 		return dateFormat.format(cal.getTime());
 	}
 	
-	
+	/**
+	 * checks validity of string inputs
+	 * @param date
+	 * @return
+	 */
 	private static boolean isValidDate(String date) {
 		if(date==null || date.equals(""))
 			return false;
