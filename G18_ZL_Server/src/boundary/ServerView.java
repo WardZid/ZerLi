@@ -11,17 +11,27 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-
+/**
+ * javafx applcation class th starts te gui
+ * @author wardz
+ *
+ */
 public class ServerView extends Application {
-	// static instance of the controller to pass it any info it might need
+	/**
+	 *  static instance of the controller to pass it any info it might need
+	 */
 	private static ServerViewController svFXController;
-
+	/**
+	 * log print counter
+	 */
 	private static int printCnt = 1;
-	
+	/**
+	 * calls the static function for starting the gui 
+	 * @param args
+	 */
 	public static void launchApplication(String[] args) {
 		ServerView.launch(args);
 	}
-	
 	
 	public void start(Stage primaryStage) throws Exception {
 		try {
@@ -60,13 +70,22 @@ public class ServerView extends Application {
 		MainController.getServer().stopServer();
 	}
 
-	
+	/**
+	 * prints messages to the log
+	 * @param from
+	 * @param msg
+	 */
 	public static void print(Class<?> from, String msg) {
 		String outputString="<" + (printCnt++) + ">  \t[" + from.getName() + "]:\t" + msg;
 		svFXController.printLog(outputString);
 		System.out.println(outputString);
 	}
 
+	/**
+	 * prints error messages to the log
+	 * @param from
+	 * @param msg
+	 */
 	public static void printErr(Class<?> from, String msg) {
 		String outputString="<" + (printCnt++) + ">  \t[" + from.getName() + "]:\t" + msg;
 		svFXController.printErrLog(outputString);
