@@ -2,7 +2,6 @@ package entity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashSet;
 /**
  * a survey class to save all survey details 
  * @author saher
@@ -48,6 +47,7 @@ public class Survey implements Serializable {
 	/**
 	 * object from SurveyQuestion type to call there methods 
 	 */
+	@SuppressWarnings("unused")
 	private SurveyQuestion surveyQuestion;
 
 	/**
