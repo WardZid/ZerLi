@@ -144,7 +144,7 @@ public class ServerViewController implements Initializable {
 	@FXML
 	public void onDisconnect() {
 
-		ThreadController.CloseTrackingfunction();
+		ThreadController.stopTimers(); 
 		
 		MainController.getServer().stopServer();
 		clientsObservableList.clear();

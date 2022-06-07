@@ -271,10 +271,10 @@ public class BranchManagerOrdersController implements Initializable {
 				"order/status", currentOrder);
 
 		if (order.size() != 0) {
-			User currentUser = (User) MainController.getMyClient().send(MessageType.GET,
+			ArrayList<User> currentUser = (ArrayList<User>) MainController.getMyClient().send(MessageType.GET,
 					"user/by/id_customer/" + order.get(0).getIdCustomer(), null);
 
-			Email email = new Email(currentUser.getEmail(),
+			Email email = new Email(currentUser.get(0).getEmail(),
 					"Order number [" + order.get(0).getIdOrder() + "] has been approved!",
 					"Your order has been approved\nYou will get it soon ^_^\n");
 
@@ -318,9 +318,9 @@ public class BranchManagerOrdersController implements Initializable {
 		clearAfterButtonPressed();
 
 		if (order.size() != 0) {
-			User currentUser = (User) MainController.getMyClient().send(MessageType.GET,
+			ArrayList<User> currentUser = (ArrayList<User>) MainController.getMyClient().send(MessageType.GET,
 					"user/by/id_customer/" + order.get(0).getIdCustomer(), null);
-			Email email = new Email(currentUser.getEmail(),
+			Email email = new Email(currentUser.get(0).getEmail(),
 					"Order number [" + order.get(0).getIdOrder() + "] has been unapproved!",
 					"Your order has been unapproved.\n you will get a refund of " + order.get(0).getPrice() + "  \n");
 			MainController.getMyClient().send(MessageType.SEND, "email", email);

@@ -16,12 +16,12 @@ import entity.Order.OrderStatus;
 
 public class ThreadController {
 
-	static Timer timer = new Timer();
+	static Timer ShippingTracking = new Timer();
 	public static final Object lock = new Object();
 
 	public static void ShippingTrackingfunction() {
-
-		timer.schedule(new TimerTask() {
+		   ShippingTracking = new Timer();
+		ShippingTracking.schedule(new TimerTask() {
 			ArrayList<Order> Lateorders;
 
 			@Override
@@ -41,12 +41,9 @@ public class ThreadController {
 								" we are sorry the delivery was late you will get full refund-  " + lateOrder.getPrice()
 										+ ".  \n");
 						EmailController.sendEmail(email);
-						
-						
+		 
 						DBController.updatePoint(lateOrder.getIdCustomer(), lateOrder.getPrice());
-						
-						
-
+		 
 					}
 				}
 			}
@@ -83,10 +80,11 @@ public class ThreadController {
 					// 60* 1440*1000 =1 day
 	}
 
-	public static void CloseTrackingfunction() {
+	 
 
-		timer.cancel();
-
+	public static void stopTimers() {
+		ShippingTracking.cancel();
+		
 	}
 
 	

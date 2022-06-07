@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import boundary.fxmlControllers.ServerViewController;
 import control.MainController;
+import control.ThreadController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -54,6 +55,8 @@ public class ServerView extends Application {
 	 * 
 	 */
 	public void stop() {
+		
+		ThreadController.stopTimers();
 		MainController.getServer().stopServer();
 	}
 
