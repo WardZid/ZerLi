@@ -1,9 +1,11 @@
 package boundary.fxmlControllers;
 
 import java.io.IOException;
+
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
+
 
 import control.MainController;
 import entity.Store;
@@ -337,9 +339,8 @@ public class BranchManagerOrdersController implements Initializable {
 	@FXML
 	@SuppressWarnings("unchecked")
 	public void cancelButtonAction(ActionEvent event) {
-
-		System.out.println("try **********");
-
+          double MoneyForRefund=0;
+	 
 		// change the current selected order status to 3 (CANCELED).
 		currentOrder.setIdOrderStatus(OrderStatus.CANCELLED.ordinal());
 		ArrayList<Order> order = (ArrayList<Order>) MainController.getMyClient().send(MessageType.UPDATE,
@@ -354,10 +355,33 @@ public class BranchManagerOrdersController implements Initializable {
 		ordersToCancelListView.getSelectionModel().clearSelection();
 
 		initListViews();
+		
+		if(  MainController.timeDiffHour(currentOrder.getDeliveryDate(), currentOrder.getCancelDate())>=3    )
+			MoneyForRefund=currentOrder.getPrice();
+		
+		else if(  MainController.timeDiffHour(currentOrder.getDeliveryDate(), currentOrder.getCancelDate())<3 && MainController.timeDiffHour(currentOrder.getDeliveryDate(), currentOrder.getCancelDate())>=1    )
+			MoneyForRefund=currentOrder.getPrice()*0.5;
+		else
+			MoneyForRefund=0;
+			
+			
+		User currentUser = (User) MainController.getMyClient().send(MessageType.GET,
+				"user/by/id_customer/" + currentOrder.getIdCustomer(), null);
+		
+		
+		Email email = new Email(currentUser.getEmail(),"Order number [" + currentOrder.getIdOrder() + "] has been canceled!","we canceled your order   .\n you will get a refund of " + MoneyForRefund + "  \n");
+				
+				
+	
+		
+		
 		MainController.getMyClient().send(MessageType.UPDATE,
 				"customer/point/" + currentOrder.getIdCustomer() + "/" + currentOrder.getPrice(), null);
+		
+		
+		
+		
 		clearAfterButtonPressed();
-
 		approveSelected = false;
 		cancelSelected = false;
 		cancelButton.setDisable(true);

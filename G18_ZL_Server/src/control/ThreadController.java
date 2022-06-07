@@ -44,6 +44,8 @@ public class ThreadController {
 						
 						
 						DBController.updatePoint(lateOrder.getIdCustomer(), lateOrder.getPrice());
+						
+						
 
 					}
 				}
