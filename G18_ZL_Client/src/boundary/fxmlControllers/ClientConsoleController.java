@@ -13,7 +13,6 @@ import entity.MyMessage.MessageType;
 import entity.User;
 import entity.Worker;
 import javafx.event.ActionEvent;
-import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -22,18 +21,28 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
+/**
+ * Main client page that switches all the user interface panels inside of it
+ *
+ */
 public class ClientConsoleController implements Initializable {
 
-	
+	/**
+	 * the logged in person's user account
+	 */
 	private static User user;
+	/**
+	 * customer account if user is customer
+	 */
 	private static Customer customer;
+	/**
+	 * worker account if user is worker
+	 */
 	private static Worker worker;
-
 
 	/**
 	 * @return the user
@@ -96,41 +105,22 @@ public class ClientConsoleController implements Initializable {
 	private VBox menuVB;
 
 	// Current page
+	/**
+	 * Node in the main panel that contains a user's main-purpose functionality purpose base pages
+	 */
 	private Node currentNode;
+	/**
+	 * the side panel menu button that is currently pressed
+	 */
 	private static Button pressedBtn;
 
-	// user specific FXML nodes
-
-	// Customer menu
-	private Button cusCatalogBtn;
-	private Button cusCartBtn;
-	private Button cusOrdersBtn;
-	private Button cusComplaintsBtn;
-
-	// BM MENU
-
-	private Button bmCustomersBtn;
-	private Button bmIReportsBtn;
-	private Button bmOReportsBtn;
-	private Button bmOrdersBtn;
-
-	// CEO MENU
-
-	private Button ceoIReportsBtn;
-	private Button ceoOReportsBtn;
-	private Button ceoCReportsBtn;
-	// Store worker
-
-	// delivery worker
-
-	// Customer support
-
-	// support specialist
-
-	// catalog manager
-
+	
 	@FXML
-	void onLogOutPressed(MouseEvent event) {
+	/**
+	 * action listener to when a button is pressed, user is logge out and the scene is swithced back to the log in scene
+	 * @param event
+	 */
+	void onLogOutPressed() {
 		MainController.getMyClient().send(MessageType.INFO,"log/out",user);
 		user = null;
 		customer = null;
@@ -139,6 +129,9 @@ public class ClientConsoleController implements Initializable {
 
 	@SuppressWarnings("unchecked")
 	@Override
+	/**
+	 * init main fxmls and loads appropriate user-type oriented consoles
+	 */
 	public void initialize(URL arg0, ResourceBundle arg1) {
 
 		Navigation.setClientConsoleController(this);
@@ -190,6 +183,12 @@ public class ClientConsoleController implements Initializable {
 		}
 	}
 
+	/**
+	 * creates a menu button and adds it the meny and gives it a listener to go to the fxml given
+	 * @param btnName name of menu button
+	 * @param fxml target of action on the button is to open the button
+	 * @return the built button
+	 */
 	private Button menuButton(String btnName, String fxml) {
 		Button btn = new Button(btnName);
 		btn.setMaxWidth(Double.MAX_VALUE);
@@ -212,6 +211,11 @@ public class ClientConsoleController implements Initializable {
 		return btn;
 	}
 
+	/**
+	 * sets a button to look pressed and opens page as first
+	 * @param firstBtn btn to be pressed
+	 * @param fxmlPath	fxml path to be opened as first page
+	 */
 	private void initPage(Button firstBtn, String fxmlPath) {
 		if (firstBtn != null) {
 			firstBtn.setStyle("-fx-background-color: #BBBBBB");
@@ -228,75 +232,123 @@ public class ClientConsoleController implements Initializable {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
+	/**
+	 * loads appropriate customer buttons with the corresponding fxmls
+	 */
 	private void loadCustomerConsole() {
 
-		cusCatalogBtn = menuButton("Catalog", "catalog-view.fxml");
-		cusCartBtn = menuButton("Cart", "cart-view.fxml");
-		cusOrdersBtn = menuButton("Orders", "customer-orders-view.fxml");
-		cusComplaintsBtn = menuButton("Complaints", "customer-complaints-view.fxml");
+		Button cusCatalogBtn = menuButton("Catalog", "catalog-view.fxml");
+		menuButton("Cart", "cart-view.fxml");
+		menuButton("Orders", "customer-orders-view.fxml");
+		menuButton("Complaints", "customer-complaints-view.fxml");
 
 		initPage(cusCatalogBtn, "fxmls/catalog-view.fxml");
 
 	}
-
+	
+	/**
+	 * loads appropriate branch manager buttons with the corresponding fxmls
+	 */
 	private void loadBranchManagerConsole() {
-		bmOrdersBtn = menuButton("Orders", "branch-manager-orders-view.fxml");
+		Button bmOrdersBtn = menuButton("Orders", "branch-manager-orders-view.fxml");
 		menuButton("Customer Management", "branch-manager-customers-view.fxml");
 		menuButton("Worker Management", "branch-manager-workers-view.fxml");
-		bmIReportsBtn = menuButton("Income Reports", "branch-manager-income-reports-view.fxml");
-		bmOReportsBtn = menuButton("Order Reports", "branch-manager-order-reports-view.fxml");
+		menuButton("Income Reports", "branch-manager-income-reports-view.fxml");
+		menuButton("Order Reports", "branch-manager-order-reports-view.fxml");
 	
 		initPage(bmOrdersBtn, "fxmls/branch-manager-orders-view.fxml");
 	}
 
+	/**
+	 * loads appropriate ceo buttons with the corresponding fxmls
+	 */
 	private void loadCEOConsole() {
 
-		ceoIReportsBtn=menuButton("Income Reports", "branch-manager-income-reports-view.fxml");
-		ceoOReportsBtn=menuButton("Order Reports", "branch-manager-order-reports-view.fxml");
-		ceoCReportsBtn= menuButton("Complaint Reports", "ceo-complaint-reports-view.fxml");
-		ceoCReportsBtn= menuButton("Quarter Reports", "ceo-quarter-income-report-view.fxml");
+		Button ceoIReportsBtn=menuButton("Income Reports", "branch-manager-income-reports-view.fxml");
+		menuButton("Order Reports", "branch-manager-order-reports-view.fxml");
+		menuButton("Complaint Reports", "ceo-complaint-reports-view.fxml");
+		menuButton("Quarter Reports", "ceo-quarter-income-report-view.fxml");
 		
 		initPage(ceoIReportsBtn, "fxmls/branch-manager-income-reports-view.fxml");
 	 
 	}
 
+	/**
+	 * a normal store worker has no pages, they will see nothing except for what branch they work at
+	 */
 	private void loadStoreWorkerConsole() {
 	}
 
+	/**
+	 * loads appropriate delivery worker fxml
+	 */
 	private void loadDeliveryWorkerConsole() {
 		initPage(null, "fxmls/delivery-view.fxml");
 	}
 
+	/**
+	 * loads appropriate customer support fxml
+	 */
 	private void loadCustomerSupportConsole() {
 		initPage(null, "fxmls/customer-support-view.fxml");
 	}
 
+	/**
+	 * loads appropriate support specialist support fxml
+	 */
 	private void loadSupportSpecialistConsole() {
-		initPage(null,  "fxmls/expert-survey-view.fxml");
+		initPage(null, "fxmls/expert-survey-view.fxml");
 	}
 
+	/**
+	 * loads appropriate catalog manager fxml
+	 */
 	private void loadCatalogManagerConsole() {
 		initPage(null, "fxmls/catalog-manager-view.fxml");
 	}
+	
+	/**
+	 * loads appropriate customer support fxml
+	 */
 	private void loadSurveyWorkerConsole(){
 		initPage(null, "fxmls/store-worker-survey-view.fxml");
 	}
-
+	
+	/**
+	 * class for easily navigating panes
+	 *
+	 */
 	public static class Navigation {
 
+		/**
+		 * client console in which to switch
+		 */
 		private static ClientConsoleController clientConsoleController;
+		/**
+		 * main node panel to add to ccc
+		 */
 		private static Node currentNode;
 
+		/**
+		 * gets the ClientConsoleController
+		 */
 		public static ClientConsoleController getClientConsoleController() {
 			return clientConsoleController;
 		}
 
+		/**
+		 * sets the ClientConsoleController
+		 * @param clientConsoleController1
+		 */
 		public static void setClientConsoleController(ClientConsoleController clientConsoleController1) {
 			clientConsoleController = clientConsoleController1;
 
 		}
 
+		/**
+		 * the navigation method that takes an fxml and navigates to it
+		 * @param fxml
+		 */
 		public static void navigator(String fxml) {
 
 			try {
