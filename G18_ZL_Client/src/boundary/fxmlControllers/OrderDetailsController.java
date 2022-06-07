@@ -444,7 +444,7 @@ public class OrderDetailsController implements Initializable {
 		System.out.println("ordder==" + CartController.getOrderInProcess());
 		MainController.getMyClient().send(MessageType.POST, "order", CartController.getOrderInProcess());
 		CartController.NewOrder();
-		Navigation.navigator("catalog-view.fxml");
+		Navigation.navigator("cart-view.fxml");
 	}
 
 	/**

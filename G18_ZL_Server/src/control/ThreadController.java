@@ -13,12 +13,24 @@ import entity.Order;
 import entity.User;
 import entity.MyMessage.MessageType;
 import entity.Order.OrderStatus;
-
+/**
+ * thread class to tracking the server 
+ * 
+ * @author ameer
+ *
+ */
 public class ThreadController {
-
+/**
+ * ShippingTracking is a timer 
+ */
 	static Timer ShippingTracking = new Timer();
+	/**
+	 * locker to synchronize
+	 */
 	public static final Object lock = new Object();
-
+/**
+ * the system checking that the order is delivered in the correct time  
+ */
 	public static void ShippingTrackingfunction() {
 		   ShippingTracking = new Timer();
 		ShippingTracking.schedule(new TimerTask() {
@@ -35,8 +47,7 @@ public class ThreadController {
 						lateOrder.setIdOrderStatus(OrderStatus.DELIVERED.ordinal());
 
 						DBController.updateOrderStatus(lateOrder);
-						System.out.println("update " + lateOrder.getPrice() + " " + lateOrder.getIdCustomer());
-
+						 
 						User currentUser = DBController.getUserBy("id_customer", lateOrder.getIdCustomer() + "").get(0);
 						Email email = new Email(currentUser.getEmail(), "Late Delivery  ",
 								" we are sorry the delivery was late you will get full refund-  " + lateOrder.getPrice()
@@ -48,9 +59,13 @@ public class ThreadController {
 					}
 				}
 			}
-		}, 0, 2000);// wait 0 ms before doing the action and do it evry 1000ms (1second)
+		}, 0, 20000);// wait 0 ms before doing the action and do it evry 1000ms (1second)
 	}
-
+/**
+ * function that tracking the store worker that he has response to the customer in 24 hour 
+ * @param ComplainId complane id 
+ * @param idUser user id 
+ */
 	public static void ComplainTrackingfunction(String ComplainId,String idUser) {
 
 		Timer timer= new Timer();
@@ -64,14 +79,13 @@ public class ThreadController {
 					 
 					if (flagOnce == 1) {
 						timer.cancel();
-						System.out.println("close ********** ");
+						 
 					}
 					if (flagOnce != 0) {
 						complaint = DBController.checkComplaint(ComplainId);
 						if (complaint.size()!=0) {
 							User currentUser = DBController.getUserBy("id_user", idUser + "").get(0);
-							System.out.println("send Email ********** ");
-							Email email = new Email(currentUser.getEmail(), "Reminder Complain ",
+							 Email email = new Email(currentUser.getEmail(), "Reminder Complain ",
 									" 24 hours have passed since the complaint ( " + ComplainId
 											+ " ) this email for a Reminder\n");
 							EmailController.sendEmail(email);	
@@ -80,34 +94,19 @@ public class ThreadController {
 						flagOnce = 1;
 				}
 			}
-		}, 0, 2000);// wait 0 ms before doing the action and do it evry 1000ms (1second)
+		}, 0, 60* 1440*1000);// wait 0 ms before doing the action and do it evry 1000ms (1second)
 					// 60* 1440*1000 =1 day
 	}
 
 	 
-
+/**
+ * function to stop the timer
+ */
 	public static void stopTimers() {
 		ShippingTracking.cancel();
 		 System.exit(0);  
 		
 	}
 
-	 
-	
-	
-	
-/*
-  complaint = DBController.checkComplaint(ComplainId);
-						System.out.println("i will complaint in " + complaint.size());
-						if (complaint.size() != 0) {
-
-							User currentUser = DBController.getUserBy("id_user", idUser + "").get(0);
-							System.out.println("i will send mail to currentUser " + currentUser);
-							Email email = new Email(currentUser.getEmail(), "Reminder Complain ",
-									" 24 hours have passed since the complaint ( " + ComplainId
-											+ " ) this email for a Reminder\n");
-							EmailController.sendEmail(email);
-							timer.cancel();
-   *
-   */
+ 
 }

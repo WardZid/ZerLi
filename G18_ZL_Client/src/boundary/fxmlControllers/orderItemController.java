@@ -81,7 +81,7 @@ public class orderItemController implements Initializable {
 		} else {
 			nameOrderLbl.setText("Custom Item");
 			amountLbl.setText("x" + buildItem.getAmount());
-			priceLbl.setText(buildItem.getPrice() + "X");
+			priceLbl.setText("");
 			viewBtn.setVisible(true);
 		}
 
