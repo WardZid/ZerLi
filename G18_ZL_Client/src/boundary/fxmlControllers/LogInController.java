@@ -21,6 +21,13 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
+/**
+ * the controller where the user enters his username and password, 
+ * and the system identifies him
+ * 
+ * @author ward
+ *
+ */
 public class LogInController implements Initializable {
 
 	@FXML

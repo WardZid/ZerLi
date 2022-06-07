@@ -12,6 +12,12 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.TextField;
 
+/**
+ * page to enter the IP to connect to
+ * 
+ * @author ward
+ *
+ */
 public class ConnectController implements Initializable {
 
 	@FXML
