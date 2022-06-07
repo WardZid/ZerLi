@@ -16,7 +16,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<StackPane prefHeight="550.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="boundary.fxmlControllers.OrderDetailsController">
+<StackPane prefHeight="550.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="boundary.fxmlControllers.OrderDetailsController">
    <children>
       <VBox fx:id="orderDetailsVbox" alignment="CENTER" StackPane.alignment="CENTER">
          <children>
@@ -134,7 +134,7 @@
                         </HBox>
                         <HBox prefHeight="98.0" prefWidth="551.0" spacing="15.0">
                            <children>
-                              <Label text="Add Describtion :">
+                              <Label text="Add Description :">
                                  <font>
                                     <Font size="15.0" />
                                  </font>
