@@ -444,10 +444,14 @@ public class BranchManagerOrdersController implements Initializable {
 		ArrayList<Customer> c = (ArrayList<Customer>) MainController.getMyClient().send(MessageType.GET,
 				"customer/by/id_customer/" + currentOrder.getIdCustomer(), null);
 		currentCustomer = c.get(0);
-		User u = (User) MainController.getMyClient().send(MessageType.GET,
-				"user/by/id_coustmer/" + currentCustomer.getIdCustomer(), null);
+		
+		ArrayList<User> u = (ArrayList<User>) MainController.getMyClient().send(MessageType.GET,
+				"user/by/id_customer/" + currentCustomer.getIdCustomer(), null);
+		
+		System.out.println("u.get(0) ****** "+u);
+		
 		this.fAddress.setText(currentOrder.getAddress());
-		this.fCName.setText(u.getName());
+		this.fCName.setText(u.get(0).getName());
 		this.fCID.setText(currentOrder.getIdCustomer() + "");
 		this.fONumber.setText(currentOrder.getIdOrder() + "");
 		this.fOStatus.setText(OrderStatus.getById(currentOrder.getIdOrderStatus()).toString());
