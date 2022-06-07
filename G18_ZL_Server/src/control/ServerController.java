@@ -571,7 +571,7 @@ public class ServerController extends ObservableServer {
 		} else
 			ServerView.printErr(getClass(), "Unhandled Update Request: " + clMsg.getInfo());
 	}
-
+ 
 	private void handleSendRequest(MyMessage clMsg) {
 		String[] request = clMsg.getInfo().split("/");
 		if (clMsg.getInfo().startsWith("email")) {
