@@ -296,7 +296,7 @@ public class DBController {
 		ResultSet rs;
 		try {
 			rs = statement.executeQuery(
-					"SELECT * FROM assignment3.order WHERE id_order_status=2&& DATEDIFF(delivery_date_order,NOW()   ) <0;"); // ---get
+					"SELECT * FROM assignment3.order WHERE id_order_status !=2 and DATEDIFF(delivery_date_order,NOW()   ) <0 and id_order_status !=3 and id_order_status !=4"); // ---get
 			// all
 			// orders
 			rs.beforeFirst(); // ---move back to first row

@@ -36,12 +36,19 @@ public class ThreadController {
 						DBController.updateOrderStatus(lateOrder);
 						System.out.println("update " + lateOrder.getPrice() + " " + lateOrder.getIdCustomer());
 
+						User currentUser = DBController.getUserBy("id_customer", lateOrder.getIdCustomer() + "").get(0);
+						Email email = new Email(currentUser.getEmail(), "Late Delivery  ",
+								" we are sorry the delivery was late you will get full refund-  " + lateOrder.getPrice()
+										+ ".  \n");
+						EmailController.sendEmail(email);
+						
+						
 						DBController.updatePoint(lateOrder.getIdCustomer(), lateOrder.getPrice());
 
 					}
 				}
 			}
-		}, 0, 5000);// wait 0 ms before doing the action and do it evry 1000ms (1second)
+		}, 0, 10000);// wait 0 ms before doing the action and do it evry 1000ms (1second)
 	}
 
 	public static void ComplainTrackingfunction(String ComplainId,String idUser) {
