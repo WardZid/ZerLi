@@ -576,12 +576,12 @@ public class ServerController extends ObservableServer {
 		String[] request = clMsg.getInfo().split("/");
 		if (clMsg.getInfo().startsWith("email")) {
 			Email email = (Email) clMsg.getContent();
-			EmailController.sendEmail(email);
+			//EmailController.sendEmail(email);
 		}
 	  if (clMsg.getInfo().startsWith("ReminderEmail")) {
 		 
 			 
- 			 ThreadController.ComplainTrackingfunction(request[1], request[2]);
+ 			// ThreadController.ComplainTrackingfunction(request[1], request[2]);
 		}
 	}
 }

@@ -6,7 +6,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-
 import control.MainController;
 import entity.Store;
 import entity.User;
@@ -264,8 +263,8 @@ public class BranchManagerOrdersController implements Initializable {
 
 		if (currentOrder.getDeliveryDate() == "") {
 			currentOrder.setDeliveryDate(MainController.addHoursToCurrentTime(3));
-			MainController.getMyClient().send(MessageType.UPDATE,"order/DeliveryDate/", currentOrder);
-					
+			MainController.getMyClient().send(MessageType.UPDATE, "order/DeliveryDate/", currentOrder);
+
 		}
 
 		ArrayList<Order> order = (ArrayList<Order>) MainController.getMyClient().send(MessageType.UPDATE,
@@ -339,8 +338,8 @@ public class BranchManagerOrdersController implements Initializable {
 	@FXML
 	@SuppressWarnings("unchecked")
 	public void cancelButtonAction(ActionEvent event) {
-          double MoneyForRefund=0;
-	 
+		double MoneyForRefund = 0;
+
 		// change the current selected order status to 3 (CANCELED).
 		currentOrder.setIdOrderStatus(OrderStatus.CANCELLED.ordinal());
 		ArrayList<Order> order = (ArrayList<Order>) MainController.getMyClient().send(MessageType.UPDATE,
@@ -355,32 +354,30 @@ public class BranchManagerOrdersController implements Initializable {
 		ordersToCancelListView.getSelectionModel().clearSelection();
 
 		initListViews();
-		
-		if(  MainController.timeDiffHour(currentOrder.getDeliveryDate(), currentOrder.getCancelDate())>=3    )
-			MoneyForRefund=currentOrder.getPrice();
-		
-		else if(  MainController.timeDiffHour(currentOrder.getDeliveryDate(), currentOrder.getCancelDate())<3 && MainController.timeDiffHour(currentOrder.getDeliveryDate(), currentOrder.getCancelDate())>=1    )
-			MoneyForRefund=currentOrder.getPrice()*0.5;
-		else
-			MoneyForRefund=0;  
-			
-			
-		User currentUser = (User) MainController.getMyClient().send(MessageType.GET,
+
+		if (currentOrder.getDeliveryDate() != "") {
+			if (MainController.timeDiffHour(currentOrder.getDeliveryDate(), currentOrder.getCancelDate()) >= 3)
+				MoneyForRefund = currentOrder.getPrice();
+
+			else if (MainController.timeDiffHour(currentOrder.getDeliveryDate(), currentOrder.getCancelDate()) < 3
+					&& MainController.timeDiffHour(currentOrder.getDeliveryDate(), currentOrder.getCancelDate()) >= 1)
+				MoneyForRefund = currentOrder.getPrice() * 0.5;
+			else
+				MoneyForRefund = 0;
+		} else {
+			MoneyForRefund = currentOrder.getPrice();
+		}
+
+		ArrayList<User> currentUser = (ArrayList<User>) MainController.getMyClient().send(MessageType.GET,
 				"user/by/id_customer/" + currentOrder.getIdCustomer(), null);
-		
-		
-		Email email = new Email(currentUser.getEmail(),"Order number [" + currentOrder.getIdOrder() + "] has been canceled!","we canceled your order   .\n you will get a refund of " + MoneyForRefund + "  \n");
-				
-				
-	
-		
-		
+
+		Email email = new Email(currentUser.get(0).getEmail(),
+				"Order number [" + currentOrder.getIdOrder() + "] has been canceled!",
+				"we canceled your order   .\n you will get a refund of " + MoneyForRefund + "  \n");
+
 		MainController.getMyClient().send(MessageType.UPDATE,
 				"customer/point/" + currentOrder.getIdCustomer() + "/" + currentOrder.getPrice(), null);
-		
-		
-		
-		
+
 		clearAfterButtonPressed();
 		approveSelected = false;
 		cancelSelected = false;
