@@ -126,6 +126,7 @@ public class BranchManagerWorkersController implements Initializable {
 			if (worker.getIdWorker() != ClientConsoleController.getWorker().getIdWorker()) {
 				ArrayList<User> users = (ArrayList<User>) MainController.getMyClient().send(MessageType.GET,
 						"user/by/id_worker/" + worker.getIdWorker(), null);
+				if(users!=null)
 				if (users.size() > 0)
 					workersMap.put(users.get(0), worker);
 			}
