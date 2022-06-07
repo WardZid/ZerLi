@@ -55,7 +55,7 @@ public class ThreadController {
 					}
 				}
 			}
-		}, 0, 20000);// wait 0 ms before doing the action and do it evry 1000ms (1second)
+		}, 0, 20000);// works every 20 seconds for checking a late orders
 	}
 /**
  * function that tracking the store worker that he has response to the customer in 24 hour 

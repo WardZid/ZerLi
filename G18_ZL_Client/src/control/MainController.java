@@ -15,7 +15,7 @@ import boundary.ClientView;
  * @author wardz
  *
  */
-public class MainController {
+public class MainController { 
 
 	// main
 	/**

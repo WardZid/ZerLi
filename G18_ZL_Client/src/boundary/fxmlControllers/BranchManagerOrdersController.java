@@ -324,8 +324,9 @@ public class BranchManagerOrdersController implements Initializable {
 			ArrayList<User> currentUser = (ArrayList<User>) MainController.getMyClient().send(MessageType.GET,
 					"user/by/id_customer/" + order.get(0).getIdCustomer(), null);
 			Email email = new Email(currentUser.get(0).getEmail(),
-					"Order number [" + order.get(0).getIdOrder() + "] has been unapproved!",
-					"Your order has been unapproved.\n you will get a refund of " + order.get(0).getPrice() + "  \n");
+					"Order number [" + order.get(0).getIdOrder() + "] has been rejected!",
+					"Your order has been rejected\nYou will get full refund ^_^\n");
+
 			MainController.getMyClient().send(MessageType.SEND, "email", email);
 		}
 
@@ -381,6 +382,9 @@ public class BranchManagerOrdersController implements Initializable {
 		MainController.getMyClient().send(MessageType.UPDATE,
 				"customer/point/" + currentOrder.getIdCustomer() + "/" + currentOrder.getPrice(), null);
 
+		MainController.getMyClient().send(MessageType.SEND, "email", email);
+		
+		
 		clearAfterButtonPressed();
 		approveSelected = false;
 		cancelSelected = false;
@@ -448,7 +452,7 @@ public class BranchManagerOrdersController implements Initializable {
 		ArrayList<User> u = (ArrayList<User>) MainController.getMyClient().send(MessageType.GET,
 				"user/by/id_customer/" + currentCustomer.getIdCustomer(), null);
 		
-		System.out.println("u.get(0) ****** "+u);
+	 
 		
 		this.fAddress.setText(currentOrder.getAddress());
 		this.fCName.setText(u.get(0).getName());
