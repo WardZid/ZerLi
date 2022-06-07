@@ -10,7 +10,6 @@ import boundary.fxmlControllers.ServerViewController;
 import entity.BuildItem;
 import entity.Complaint;
 import entity.Customer;
-import entity.Customer.CustomerStatus;
 import entity.Email;
 import entity.Item;
 import entity.MyMessage;
@@ -22,6 +21,11 @@ import entity.User;
 import ocsf.server.ConnectionToClient;
 import ocsf.server.ObservableServer;
 
+/**
+ * Server class that handles all communication with clients and fetches db data for them
+ * @author wardz
+ *
+ */
 public class ServerController extends ObservableServer {
 	// Class variables *************************************************
 
@@ -54,8 +58,6 @@ public class ServerController extends ObservableServer {
 		try {
 			ip = InetAddress.getLocalHost();
 			host = ip.getHostName();
-//			ServerView.print(getClass(), "Your current IP address : " + ip);
-//			ServerView.print(getClass(), "Your current Hostname : " + host);
 
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
@@ -65,6 +67,10 @@ public class ServerController extends ObservableServer {
 
 	// Getters********************************
 
+	/**
+	 * get my ipv4 address
+	 * @return
+	 */
 	public String getIP() {
 		return ip.getHostAddress();
 	}
@@ -186,6 +192,7 @@ public class ServerController extends ObservableServer {
 			ServerView.printErr(getClass(), "Unhandled Client Request: " + clMsg.toString());
 			break;
 		}
+		
 		// finally reply to client
 		try {
 			client.sendToClient(clMsg);
@@ -197,6 +204,11 @@ public class ServerController extends ObservableServer {
 
 	}
 
+	/**
+	 * handles all info type messages 
+	 * @param clMsg mymessage
+	 * @param client sender of message
+	 */
 	private void handleInfoMessage(MyMessage clMsg, ConnectionToClient client) {
 
 		String[] request = clMsg.getInfo().split("/");
@@ -377,130 +389,13 @@ public class ServerController extends ObservableServer {
 			ServerView.printErr(getClass(), "Unhandled Get request: " + clMsg.getInfo());
 			break;
 		}
-//
-//		if (request[0].equals("login")) {
-//			User user = (User) clMsg.getContent();
-//			if (request[1].equals("user")) {
-//				clMsg.setContent(DBController.getUser(user.getUsername(), user.getPassword()));
-//
-//			} else if (request[1].equals("customer")) {
-//				clMsg.setContent(DBController.getCustomerBy("id_user", user.getIdUser() + ""));
-//			}
-//		} else if (request[0].equals("user")) {
-//			if (request[1].equals("all")) {
-//
-//			} else if (request[1].equals("by"))
-//				clMsg.setContent(DBController.getUserBy(request[2], request[3]));
-//		}
-//
-//		else if (request[0].equals("order")) {
-//			if (request[1].equals("all")) {
-//				clMsg.setContent(DBController.getOrdersAll());
-//			} else if (request[1].equals("income")) {
-//				if (request[2].equals("quarter")) {
-//					clMsg.setContent(DBController.getIncomesInQuarter(request[3], request[4], request[5]));
-//				}
-//			} else if (request[1].equals("by")) {
-//				clMsg.setContent(DBController.getOrdersBy(request[2], request[3]));
-//			} else if (request[1].equals("fill")) {
-//				Order o = (Order) clMsg.getContent();
-//				clMsg.setContent(DBController.getOrderItemsFull(o));
-//			} else if (request[1].equals("byBranchMonth")) {
-//				clMsg.setContent(DBController.getOrdersByBranchMonthYear(request[2], request[3], request[4]));
-//			} else if (request[1].equals("report")) {
-//				if (request[2].equals("sale")) {
-//					if (request[3].equals("months")) {
-//						clMsg.setContent(DBController.getMonthsInBranch(request[4]));
-//					}
-//				} else if (request[2].equals("sum")) {
-//					if (request[3].equals("income")) {
-//						clMsg.setContent(DBController.getSumOfDailyIncome(request[4], request[5], request[6]));
-//					}
-//				} else if (request[2].equals("incomebycustomer")) {
-//					clMsg.setContent(DBController.getReceiptsOfMonth(request[3], request[4], request[5]));
-//				}
-//			}
-//		} else if (request[0].equals("item")) {
-//			if (request[1].equals("all")) {
-//				clMsg.setContent(DBController.getItemsAll());
-//			} else if (request[1].equals("by")) {
-//				clMsg.setContent(DBController.getItemsBy(request[2], request[3]));
-//			} else if (request[1].equals("amount")) {
-//				clMsg.setContent(DBController.getAmountOfEveryItem(request[2], request[3], request[4]));
-//			} else if (request[1].equals("complete")) {
-//				clMsg.setContent(DBController.getItemsComplete());
-//			}
-//		} else if (request[0].equals("build_item")) {
-//			if (request[1].equals("all")) {
-//				clMsg.setContent(DBController.getBuildItemsAll());
-//			} else if (request[1].equals("by")) {
-//				clMsg.setContent(DBController.getBuildItemsBy(request[2], request[3]));
-//			} else if (request[1].equals("full")) {
-//				if (request[2].equals("all")) {
-//					clMsg.setContent(DBController.getFullBuildItemsAll());
-//				} else if (request[2].equals("by")) {
-//					clMsg.setContent(DBController.getFullBuildItemsBy(request[3], request[4]));
-//				}
-//			}
-//		} else if (request[0].equals("item_in_build")) {
-//			clMsg.setContent(DBController.getItemInBuildAll((BuildItem) clMsg.getContent()));
-//		} else if (request[0].equals("store")) {
-//			if (request[1].equals("all")) {
-//				clMsg.setContent(DBController.getStoreAll());
-//			} else if (request[1].equals("by")) {
-//				clMsg.setContent(DBController.getStoreBy(request[2], request[3]));
-//			}
-//		} else if (request[0].equals("category")) {
-//			if (request[1].equals("all"))
-//				clMsg.setContent(DBController.getCategoryAll());
-//			else if (request[1].equals("by")) {
-//				if (request[2].equals("type"))
-//					clMsg.setContent(DBController.getCategoryByType(request[3]));
-//			}
-//		} else if (request[0].equals("type")) {
-//			if (request[1].equals("all"))
-//				clMsg.setContent(DBController.getTypeAll());
-//		} else if (request[0].equals("customer")) {
-//			if (request[1].equals("all")) {
-//				clMsg.setContent(DBController.getCustomerAll());
-//			} else if (request[1].equals("by")) {
-//				clMsg.setContent(DBController.getCustomerBy(request[2], request[3]));
-//			}
-//		} else if (request[0].equals("complaint")) {
-//			if (request[1].equals("all")) {
-//				clMsg.setContent(DBController.getComplaintsAll());
-//			} else if (request[1].equals("by")) {
-//				clMsg.setContent(DBController.getComplaintsBy(request[2], request[3]));
-//			} else if (request[1].equals("years")) {
-//				System.out.println("here");
-//				clMsg.setContent(DBController.getComplaintYears());
-//			} else if (request[1].equals("count")) {
-//				if (request[2].equals("inQuarter")) {
-//					clMsg.setContent(DBController.getCountComplaintsInQuarter(request[3], request[4]));
-//				}
-//			} else if (request[0].equals("questions")) {
-//				if (request[1].equals("all"))
-//					clMsg.setContent(DBController.getAllSurves());
-//			} else if (request[0].equals("survey")) {
-//				if (request[1].equals("date_survey"))
-//					clMsg.setContent(DBController.getAllSurvesYears());
-//				else if (request[1].equals("by") && request[2].equals("date_survey && id_question_average"))
-//					clMsg.setContent(DBController.getAverage(request[3], request[4]));
-//			}
-////		else if (request[0].equals("questions")) {
-////			if(request[1].equals("issue_date")&& request[2].equals("all")) 
-////				clMsg.setContent(DBController.getAllDatesForQuestion());
-////		} 
-////		else if(request[0].equals("survey_question")) {
-////			if(request[1].equals("all"))
-////				clMsg.setContent(DBController.getAllSurviesQuestion());
-////		}
-//			else {
-//				ServerView.printErr(getClass(), "Unhandled Get request: " + clMsg.getInfo());
-//			}
-//		}
 	}
 
+	/**
+	 * handle all post requests that insert into the database
+	 * @param clMsg mymessage
+	 * @param client sender
+	 */
 	private void handlePostRequest(MyMessage clMsg, ConnectionToClient client) {
 
 		String[] request = clMsg.getInfo().split("/");
@@ -576,6 +471,10 @@ public class ServerController extends ObservableServer {
 			ServerView.printErr(getClass(), "Unhandled Update Request: " + clMsg.getInfo());
 	}
 
+	/**
+	 * handles ending requests that send emails to users
+	 * @param clMsg
+	 */
 	private void handleSendRequest(MyMessage clMsg) {
 		String[] request = clMsg.getInfo().split("/");
 		if (clMsg.getInfo().startsWith("email")) {
