@@ -23,9 +23,10 @@ public class ThreadController {
 		   ShippingTracking = new Timer();
 		ShippingTracking.schedule(new TimerTask() {
 			ArrayList<Order> Lateorders;
-
+            
 			@Override
 			public void run() {
+				 
 				synchronized (lock) {
 
 					Lateorders = DBController.getLateOrderDelivery();
@@ -47,7 +48,7 @@ public class ThreadController {
 					}
 				}
 			}
-		}, 0, 10000);// wait 0 ms before doing the action and do it evry 1000ms (1second)
+		}, 0, 2000);// wait 0 ms before doing the action and do it evry 1000ms (1second)
 	}
 
 	public static void ComplainTrackingfunction(String ComplainId,String idUser) {
@@ -60,6 +61,7 @@ public class ThreadController {
 			public void run() {
 				ArrayList<Complaint> complaint;
 				synchronized (lock) {
+					 
 					if (flagOnce == 1) {
 						timer.cancel();
 						System.out.println("close ********** ");
@@ -78,7 +80,7 @@ public class ThreadController {
 						flagOnce = 1;
 				}
 			}
-		}, 0, 20000);// wait 0 ms before doing the action and do it evry 1000ms (1second)
+		}, 0, 2000);// wait 0 ms before doing the action and do it evry 1000ms (1second)
 					// 60* 1440*1000 =1 day
 	}
 
@@ -86,6 +88,7 @@ public class ThreadController {
 
 	public static void stopTimers() {
 		ShippingTracking.cancel();
+		 System.exit(0);
 		
 	}
 
