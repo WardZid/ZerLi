@@ -65,6 +65,9 @@ public class CatalogManagerAddController implements Initializable {
 		categoryCB.getItems().addAll(CatalogManagerController.getCategoryType().keySet());
 	}
 
+	/**
+	 * action to do when an image is pressed
+	 */
 	@FXML
 	void onImagePressed() {
 		FileChooser fc = new FileChooser();
@@ -84,11 +87,17 @@ public class CatalogManagerAddController implements Initializable {
 
 	}
 
+	/**
+	 * action to do when cancel is pressed
+	 */
 	@FXML
 	void onCancelPressed() {
 		cmc.cancelOverlay();
 	}
 
+	/**
+	 * action to do whem confirm is pressed
+	 */
 	@FXML
 	void onConfirmPressed() {
 		boolean allGood = true;

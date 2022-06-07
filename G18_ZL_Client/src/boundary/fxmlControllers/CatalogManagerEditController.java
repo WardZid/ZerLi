@@ -26,6 +26,13 @@ import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 
+
+/**
+ * the controller that edits the catalog
+ * 
+ * @author ward
+ *
+ */
 public class CatalogManagerEditController implements Initializable {
 	
 	private CatalogManagerController cmc;
@@ -50,6 +57,7 @@ public class CatalogManagerEditController implements Initializable {
 
 	private Image image = null;
 	private byte[] imageBytes;
+
 
     @FXML
     private ComboBox<String> categoryCB;
@@ -92,6 +100,9 @@ public class CatalogManagerEditController implements Initializable {
     	cmc.cancelOverlay();
     }
 
+    /**
+     * action to do when an image is pressed
+     */
     @FXML
     void onImagePressed() {
     	FileChooser fc = new FileChooser();
@@ -111,6 +122,9 @@ public class CatalogManagerEditController implements Initializable {
     }
 
 
+    /**
+     * action to do when the confirm button is pressed
+     */
     @SuppressWarnings("unchecked")
 	@FXML
     void onConfirmPressed() {

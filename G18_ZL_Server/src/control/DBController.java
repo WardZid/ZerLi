@@ -31,6 +31,11 @@ import entity.User;
 import entity.User.UserType;
 import entity.Worker;
 
+/**
+ * DB Control class that is responsible for all communication with the database and pulling of all data resources
+ * @author wardz
+ *
+ */
 public class DBController {
 
 	// Database variables
@@ -39,30 +44,55 @@ public class DBController {
 	 */
 	private static Connection conn = null;
 
+	/**
+	 * statement for pulling all db resources using queries
+	 */
 	private static Statement statement;
 
 	/**
 	 * URL with the DB's IP address and schema name
 	 */
 	public static String DBURL = "localhost/assignment3";
+	/**
+	 * final default URL with the DB's IP address and schema name to be restored
+	 */
 	final public static String DATABASE_URL = "localhost/assignment3";
 
 	/**
-	 * DB username and pass with permissions to allow for data manipulation and
+	 * DB username with permissions to allow for data manipulation and
 	 * retrieval
 	 */
 	public static String userDB = DBConfig.DBUSER;
+	/**
+	 * DB path with permissions to allow for data manipulation and
+	 * retrieval
+	 */
 	public static String passDB = DBConfig.DBPASS;
 
+	/**
+	 * final username for db to defaulted from
+	 */
 	final public static String DATABASE_USER = DBConfig.DBUSER;
+	/**
+	 * final password for db to defaulted from
+	 */
 	final public static String DATABASE_PASSWORD = DBConfig.DBUSER;
 
+	/**
+	 * setDB info to be defaulted
+	 * @param url
+	 * @param user
+	 * @param pass
+	 */
 	public static void setDBInfo(String url, String user, String pass) {
 		DBURL = url;
 		userDB = user;
 		passDB = pass;
 	}
 
+	/**
+	 * reset db info to default value
+	 */
 	public static void resetDBInfo() {
 		setDBInfo(DATABASE_URL, DATABASE_USER, DATABASE_PASSWORD);
 	}
@@ -116,7 +146,7 @@ public class DBController {
 
 	// IMPORTING USERS FROM EXTERNAL DB
 	/**
-	 * 
+	 * pulls users from external DB into an arraylist of users then systematically inserts them into database
 	 */
 	public static void importUsers() {
 		try {
@@ -177,6 +207,12 @@ public class DBController {
 	}
 	// helper methods
 
+	/**
+	 * returns size of a given resultSet
+	 * @param rs
+	 * @return
+	 * @throws SQLException
+	 */
 	private static int resultSetSize(ResultSet rs) throws SQLException {
 		int size = 0;
 		if (rs != null) {
@@ -186,6 +222,12 @@ public class DBController {
 		return size;
 	}
 
+	/**
+	 * turns blob into bytes
+	 * @param blob
+	 * @return
+	 * @throws SQLException
+	 */
 	private static byte[] blobToBytes(Blob blob) throws SQLException {
 		if (blob == null)
 			return null;
@@ -201,6 +243,10 @@ public class DBController {
 
 	// SQL Query Methods ******************************
 
+	/**
+	 * retrieves all survey question sets
+	 * @return
+	 */
 	public static ArrayList<SurveyQuestion> getAllSurves() {
 		ResultSet rs;
 		SurveyQuestion surveyBuild;
@@ -223,6 +269,12 @@ public class DBController {
 
 	}
 
+	/**
+	 * returns a user with same user and pass as params (if exists) for authentication
+	 * @param username
+	 * @param password
+	 * @return
+	 */
 	public static User getUser(String username, String password) {
 		ResultSet rs;
 		try {
@@ -247,8 +299,13 @@ public class DBController {
 		return null;
 	}
 
+	/**
+	 * returns users by col and val
+	 * @param column
+	 * @param value
+	 * @return
+	 */
 	public static ArrayList<User> getUserBy(String column, String value) {
-		System.out.println("sssssssssssssssssssssssssss");
 		ArrayList<User> users=new ArrayList<>();
 		try {
 			ResultSet rs = statement.executeQuery("SELECT * FROM user WHERE " + column + " = " + value);
@@ -271,6 +328,10 @@ public class DBController {
 		return users;
 	}
 
+	/**
+	 * returns alll orders in db
+	 * @return
+	 */
 	public static ArrayList<Order> getOrdersAll() {
 		ArrayList<Order> orders = new ArrayList<>();
 		ResultSet rs;
@@ -291,6 +352,10 @@ public class DBController {
 		return orders;
 	}
 
+	/**
+	 * returns all orders that are past their delivery date and are pending
+	 * @return
+	 */
 	public static ArrayList<Order> getLateOrderDelivery() {
 		ArrayList<Order> orders = new ArrayList<>();
 		ResultSet rs;
@@ -314,6 +379,13 @@ public class DBController {
 		return orders;
 	}
 
+	/**
+	 * returns all income s in a specified quarter
+	 * @param branch
+	 * @param month
+	 * @param year
+	 * @return
+	 */
 	public static ArrayList<Double> getIncomesInQuarter(String branch, String month, String year) {
 		ArrayList<Double> allIncomesInQuarter = new ArrayList<>();
 		ResultSet rs;
@@ -337,6 +409,12 @@ public class DBController {
 		return allIncomesInQuarter;
 	}
 
+	/**
+	 * fetches all orders by a column and its value
+	 * @param column
+	 * @param value
+	 * @return
+	 */
 	public static ArrayList<Order> getOrdersBy(String column, String value) {
 		ArrayList<Order> orders = new ArrayList<>();
 		ResultSet rs;
@@ -357,6 +435,11 @@ public class DBController {
 		return orders;
 	}
 
+	/**
+	 * returns all orders full with all the items and build items
+	 * @param o order
+	 * @return
+	 */
 	public static Order getOrderItemsFull(Order o) {
 		try {
 			ArrayList<OrderItem> orderItems = new ArrayList<>();
@@ -381,6 +464,10 @@ public class DBController {
 		return o;
 	}
 
+	/**
+	 * returns all items that are shown to the customer
+	 * @return
+	 */
 	public static ArrayList<Item> getItemsAll() {
 		ArrayList<Item> items = new ArrayList<>();
 		ResultSet rs;
@@ -399,6 +486,12 @@ public class DBController {
 		return items;
 	}
 
+	/**
+	 * returns all items by a column and its value
+	 * @param column
+	 * @param value
+	 * @return
+	 */
 	public static ArrayList<Item> getItemsBy(String column, String value) {
 		ArrayList<Item> items = new ArrayList<>();
 		ResultSet rs;
@@ -417,6 +510,10 @@ public class DBController {
 		return items;
 	}
 
+	/**
+	 * returns absolutely all items
+	 * @return
+	 */
 	public static ArrayList<Item> getItemsComplete() {
 		ArrayList<Item> items = new ArrayList<>();
 		ResultSet rs;
@@ -435,6 +532,10 @@ public class DBController {
 		return items;
 	}
 
+	/**
+	 * gets all categories in the db
+	 * @return
+	 */
 	public static ArrayList<String> getCategoryAll() {
 		ArrayList<String> category = new ArrayList<>();
 
@@ -452,6 +553,11 @@ public class DBController {
 		return category;
 	}
 
+	/**
+	 * returns categories that correspond to a certain type
+	 * @param type
+	 * @return
+	 */
 	public static ArrayList<String> getCategoryByType(String type) {
 		ArrayList<String> types = new ArrayList<>();
 
@@ -469,6 +575,10 @@ public class DBController {
 		return types;
 	}
 
+	/**
+	 * returns all types
+	 * @return
+	 */
 	public static ArrayList<String> getTypeAll() {
 		ArrayList<String> types = new ArrayList<>();
 
@@ -486,6 +596,10 @@ public class DBController {
 		return types;
 	}
 
+	/**
+	 * returns all BuildItems in the database
+	 * @return
+	 */
 	public static ArrayList<BuildItem> getBuildItemsAll() {
 		ArrayList<BuildItem> buildItems = new ArrayList<>();
 		try {
@@ -501,6 +615,12 @@ public class DBController {
 		return buildItems;
 	}
 
+	/**
+	 * get build items by a column and its value
+	 * @param column
+	 * @param value
+	 * @return
+	 */
 	public static ArrayList<BuildItem> getBuildItemsBy(String column, String value) {
 		ArrayList<BuildItem> buildItems = new ArrayList<>();
 		ResultSet rs;
@@ -517,6 +637,10 @@ public class DBController {
 		return buildItems;
 	}
 
+	/**
+	 * gets all build item with all their interna items
+	 * @return
+	 */
 	public static ArrayList<BuildItem> getFullBuildItemsAll() {
 		ArrayList<BuildItem> buildItems = new ArrayList<>();
 		try {
@@ -537,7 +661,7 @@ public class DBController {
 	}
 
 	/**
-	 * 
+	 * returns build items and their full item contents
 	 * @param column to use in the "WHERE" clause
 	 * @param value  to use with the column
 	 * @return ArrayList<BuildItem> arraylist with build ite with all its items
@@ -589,6 +713,10 @@ public class DBController {
 		return buildItem;
 	}
 
+	/**
+	 * returns all customers
+	 * @return
+	 */
 	public static ArrayList<Customer> getCustomerAll() {
 		ArrayList<Customer> customers = new ArrayList<>();
 		ResultSet rs;
@@ -606,6 +734,12 @@ public class DBController {
 		return customers;
 	}
 
+	/**
+	 * returns customers by a column and its value
+	 * @param column
+	 * @param value
+	 * @return
+	 */
 	public static ArrayList<Customer> getCustomerBy(String column, String value) {
 		ArrayList<Customer> customers = new ArrayList<>();
 		try {
@@ -622,6 +756,11 @@ public class DBController {
 		return customers;
 	}
 	
+	/**
+	 * gets a customer's credit points
+	 * @param idCustomer
+	 * @return
+	 */
 	public static int getPoints(String idCustomer) {
 		int points=0;
 		try {
@@ -635,6 +774,9 @@ public class DBController {
 		return points;
 	}
 	
+	/**
+	 * gets all worker accounts
+	 */
 	public static ArrayList<Worker> getWorkerAll() {
 		ArrayList<Worker> workers = new ArrayList<>();
 		ResultSet rs;
@@ -651,6 +793,12 @@ public class DBController {
 		return workers;
 	}
 
+	/**
+	 * gets workers by column an its value
+	 * @param column
+	 * @param value
+	 * @return
+	 */
 	public static ArrayList<Worker> getWorkerBy(String column, String value) {
 		ArrayList<Worker> workers = new ArrayList<>();
 		try {
@@ -666,6 +814,11 @@ public class DBController {
 		return workers;
 	}
 
+	
+	/**
+	 * gets all complaints in the db
+	 * @return
+	 */
 	public static ArrayList<Complaint> getComplaintsAll() {
 		ArrayList<Complaint> complaints = new ArrayList<>();
 		ResultSet rs;
@@ -684,6 +837,12 @@ public class DBController {
 		return complaints;
 
 	}
+	
+	/**
+	 * checks cimplaint
+	 * @param complainId
+	 * @return
+	 */
 	public static ArrayList<Complaint> checkComplaint(String complainId) {
 		ArrayList<Complaint> complaints = new ArrayList<>();
 		ResultSet rs;
@@ -701,6 +860,13 @@ public class DBController {
 		}
 		return complaints;
 	}
+	
+	/**
+	 * gets complaints by a column and its value
+	 * @param column
+	 * @param value
+	 * @return
+	 */
 	public static ArrayList<Complaint> getComplaintsBy(String column, String value) {
 		ArrayList<Complaint> complaints = new ArrayList<>();
 		ResultSet rs;
@@ -720,6 +886,10 @@ public class DBController {
 
 	}
 
+	/**
+	 * gets years of complaints
+	 * @return
+	 */
 	public static ArrayList<String> getComplaintYears() {
 		ArrayList<String> years = new ArrayList<>();
 		ResultSet rs;
@@ -738,6 +908,12 @@ public class DBController {
 
 	}
 
+	/**
+	 * gets amount of complaints by quarter
+	 * @param year
+	 * @param firstMonthInQuarter
+	 * @return
+	 */
 	public static ArrayList<Integer> getCountComplaintsInQuarter(String year, String firstMonthInQuarter) {
 		ArrayList<Integer> countOfComplaints = new ArrayList<>();
 		ResultSet rs;
@@ -761,6 +937,10 @@ public class DBController {
 
 	}
 
+	/**
+	 * gets all stores
+	 * @return
+	 */
 	public static ArrayList<String> getStoreAll() {
 		ArrayList<String> stores = new ArrayList<>();
 		ResultSet rs;
@@ -777,6 +957,12 @@ public class DBController {
 		return stores;
 	}
 
+	/**
+	 * gets stores by column an its value
+	 * @param column
+	 * @param value
+	 * @return
+	 */
 	public static ArrayList<Store> getStoreBy(String column, String value) {
 		ArrayList<Store> stores = new ArrayList<>();
 		ResultSet rs;
@@ -793,6 +979,10 @@ public class DBController {
 		return stores;
 	}
 
+	/**
+	 * gets all questions
+	 * @return
+	 */
 	public static ArrayList<String> getQuestionsAll() {
 		ArrayList<String> questions = new ArrayList<>();
 
@@ -809,7 +999,12 @@ public class DBController {
 		return questions;
 	}
 
-	// Report get queries
+	/**
+	 *  Report get queries
+	 * @param idQuestion
+	 * @param year
+	 * @return
+	 */
 	public static SurveySumAnswers getAverage(String idQuestion, String year) {
 		SurveySumAnswers ssa = new SurveySumAnswers();
 		try {
@@ -833,6 +1028,10 @@ public class DBController {
 		return ssa;
 	}
 
+	/**
+	 * gets all surves years 1
+	 * @return
+	 */
 	public static ArrayList<String> getAllSurvesYears1() {
 		ArrayList<String> years = new ArrayList<String>();
 		try {
@@ -849,6 +1048,11 @@ public class DBController {
 		return years;
 	}
 
+	/**
+	 * gets q_id by a year
+	 * @param year
+	 * @return
+	 */
 	public static ArrayList<String> getQuestionIDsByYear(String year) {
 		ArrayList<String> IDs = new ArrayList<>();
 		ResultSet rs;
@@ -868,6 +1072,10 @@ public class DBController {
 
 	}
 
+	/**
+	 * returns all questions and answers in answers in years
+	 * @return
+	 */
 	public static HashMap<String, HashMap<Integer, SurveyQuestion>> getAllSurvesYears() {
 		HashMap<String, HashMap<Integer, SurveyQuestion>> yearsIdQuestions = new HashMap<String, HashMap<Integer, SurveyQuestion>>();
 		SurveyQuestion sq;
@@ -916,6 +1124,11 @@ public class DBController {
 		return yearsIdQuestions;
 	}
 
+	/**
+	 * returns months by branches or stores
+	 * @param idStore
+	 * @return
+	 */
 	public static ArrayList<String> getMonthsInBranch(String idStore) {
 		ArrayList<String> monthsYears = new ArrayList<>();
 		try {
@@ -960,8 +1173,7 @@ public class DBController {
 	}
 
 	/**
-	 * /**
-	 * 
+	 * gets orders by a date of month and/or year
 	 * @param branch
 	 * @param month
 	 * @param year
@@ -991,6 +1203,7 @@ public class DBController {
 	}
 
 	/**
+	 * returns sum of income for each day
 	 * @param branch_id
 	 * @param month
 	 * @param year
@@ -1018,6 +1231,13 @@ public class DBController {
 		return incomes;
 	}
 
+	/**
+	 * returns amount of item for each item
+	 * @param branchID
+	 * @param month
+	 * @param year
+	 * @return
+	 */
 	public static ArrayList<AmountItem> getAmountOfEveryItem(String branchID, String month, String year) {
 		ArrayList<AmountItem> amounts = new ArrayList<>();
 		ResultSet rs;
@@ -1066,6 +1286,12 @@ public class DBController {
 
 	// INSERT QUERIES (POST)*******************************************************
 
+	/**
+	 * inserts new customer for a user and his id
+	 * @param user
+	 * @param card
+	 * @return
+	 */
 	public static boolean insertCustomer(User user,String card) {
 		int linesAffected=0;
 		try {
@@ -1095,6 +1321,11 @@ public class DBController {
 
 	}
 
+	/**
+	 * inserts a new order with all its contents to the database
+	 * @param order
+	 * @return
+	 */
 	public static boolean insertOrder(Order order) {
 
 		int linesChanged = 0;
@@ -1182,6 +1413,11 @@ public class DBController {
 		return true;
 	}
 
+	/**
+	 * inserts a new item to the db
+	 * @param item
+	 * @return
+	 */
 	public static boolean insertItem(Item item) {
 		int linesChanged = 0;
 		try {
@@ -1205,6 +1441,11 @@ public class DBController {
 		return true;
 	}
 
+	/**
+	 * inserts new complaint to the db
+	 * @param c
+	 * @return
+	 */
 	public static Complaint insertComplaint(Complaint c) {
 		try {
 			PreparedStatement ps = conn.prepareStatement(
@@ -1229,6 +1470,11 @@ public class DBController {
 		return getComplaintsBy("id_complaint", c.getIdComplaint()+"").get(0);
 	}
 
+	/**
+	 * inserts new survey to the db
+	 * @param s
+	 * @return
+	 */
 	public static boolean insertSurvey(Survey s) {
 		int linesChanged = 0;
 		try {
@@ -1254,6 +1500,11 @@ public class DBController {
 		return true;
 	}
 
+	/**
+	 * inserts a report pdf to the db using byte arrays
+	 * @param sr
+	 * @return
+	 */
 	public static boolean insertReportPDF(SurveyReport sr) {
 		int linesChanged = 0;
 		try {
@@ -1439,6 +1690,11 @@ public class DBController {
 		return getItemsBy("id_item", item.getIdItem() + "");
 	}
 	
+	/**
+	 * changes the type of customer (used for worker permissions
+	 * @param user
+	 * @return
+	 */
 	public static ArrayList<User> updateUserType(User user){
 		try {
 			statement.executeUpdate("UPDATE assignment3.user SET id_user_type=" + user.getIdUserType() + " WHERE id_user="
@@ -1485,6 +1741,11 @@ public class DBController {
 		return getComplaintsBy("id_complaint", c.getIdComplaint() + "");
 	}
 
+	/**
+	 * updates an order status
+	 * @param o
+	 * @return
+	 */
 	public static ArrayList<Order> updateOrderStatus(Order o) {
 		try {
 			PreparedStatement ps = conn
@@ -1499,20 +1760,31 @@ public class DBController {
 		return getOrdersBy("id_order", o.getIdOrder() + "");
 	}
 
-	public static ArrayList<Order> updateOrderDeliveryDate(Order o) {
+	/**
+	 * insert a new delivery date to the order
+	 * @param o
+	 * @return
+	 */
+	public static ArrayList<Order> updateOrderDeliveryDate(Order order) {
 		try {
 			PreparedStatement ps = conn
 					.prepareStatement("UPDATE assignment3.order SET delivery_date_order=? WHERE id_order=?");
-			ps.setString(1, o.getDeliveryDate());
-			ps.setInt(2, o.getIdOrder());
+			ps.setString(1, order.getDeliveryDate());
+			ps.setInt(2, order.getIdOrder());
 		 	ps.executeUpdate();
 			ps.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return getOrdersBy("id_order", o.getIdOrder() + "");
+		return getOrdersBy("id_order", order.getIdOrder() + "");
 	}
 	
+	/**
+	 * updates the credit points for a customer
+	 * @param idCustomer
+	 * @param newPoint
+	 * @return
+	 */
 	public static boolean updatePoint(int idCustomer, double newPoint) {
 		try {
 			PreparedStatement ps = conn

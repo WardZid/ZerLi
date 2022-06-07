@@ -22,6 +22,12 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
+/**
+ * the controller that manages the accounts of the customers and users
+ * 
+ * @author ward
+ *
+ */
 public class BranchManagerCustomersController implements Initializable {
 
 	private HashMap<User, Customer> userMap = new HashMap<>();
@@ -94,6 +100,9 @@ public class BranchManagerCustomersController implements Initializable {
 		setCustomerInfo(after);
 	}
 
+	/**
+	 * freeze the selected customer
+	 */
 	@SuppressWarnings("unchecked")
 	@FXML
 	void onFreeze() {
@@ -104,6 +113,9 @@ public class BranchManagerCustomersController implements Initializable {
 		setCustomerInfo(after);
 	}
 
+	/**
+	 * change the selected user to be a customer 
+	 */
 	@FXML
 	void onRegister() {
 		if((boolean)MainController.getMyClient().send(MessageType.POST,"customer/"+cardTF.getText(),selectedUser)) {
@@ -179,6 +191,9 @@ public class BranchManagerCustomersController implements Initializable {
 
 	// HELPER METHODS
 
+	/**
+	 * gets all users and there customers accounts
+	 */
 	@SuppressWarnings("unchecked")
 	private void fetchUsersCustomers() {
 		ArrayList<User> userCustomers = (ArrayList<User>) MainController.getMyClient().send(MessageType.GET,
@@ -193,6 +208,9 @@ public class BranchManagerCustomersController implements Initializable {
 		}
 	}
 
+	/**
+	 * initialize the list views with users and customers
+	 */
 	private void initLists() {
 		registeredLV.getItems().clear();
 		unregisteredLV.getItems().clear();
@@ -206,6 +224,11 @@ public class BranchManagerCustomersController implements Initializable {
 
 	}
 
+	/**
+	 * set the user details
+	 * 
+	 * @param user
+	 */
 	private void setUserInfo(User user) {
 		resetUserInfo();
 		
@@ -220,6 +243,11 @@ public class BranchManagerCustomersController implements Initializable {
 
 	}
 
+	/**
+	 * set the customer details
+	 * 
+	 * @param cus
+	 */
 	private void setCustomerInfo(Customer cus) {
 		resetCustomerInfo();
 		
@@ -241,11 +269,17 @@ public class BranchManagerCustomersController implements Initializable {
 		}
 	}
 
+	/**
+	 * removes all the shown details
+	 */
 	private void resetAllInfo() {
 		resetUserInfo();
 		resetCustomerInfo();
 	}
 
+	/**
+	 * removes the details of the user
+	 */
 	private void resetUserInfo() {
 		selectedUser=null;
 		idUserText.setText("---");
@@ -259,6 +293,9 @@ public class BranchManagerCustomersController implements Initializable {
 		registerVBox.setDisable(true);
 	}
 
+	/**
+	 * removes the details of the customer
+	 */
 	private void resetCustomerInfo() {
 		selectedCustomer=null;
 		idCustomerText.setText("---");

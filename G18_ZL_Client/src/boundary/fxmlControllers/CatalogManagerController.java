@@ -120,17 +120,28 @@ public class CatalogManagerController implements Initializable {
 		loadAllItems();
 	}
 
+	/**
+	 * action to do the add new item button is pressed
+	 */
 	@FXML
 	void onAddNewItemPressed() {
 		openOverlayAdd();
 	}
 
+	/**
+	 * action to do when "ENTER" key in keyboard is pressed
+	 * 
+	 * @param event
+	 */
 	@FXML
 	void onSearchEnter(KeyEvent event) {
 		if (event.getCode() == KeyCode.ENTER)
 			filterItemsAndShow();
 	}
 
+	/**
+	 * action to do when searching 
+	 */
 	@FXML
 	void onSearchPressed() {
 		filterItemsAndShow();
@@ -138,6 +149,9 @@ public class CatalogManagerController implements Initializable {
 
 	// NON FXML METHODS
 
+	/**
+	 * Method to load all the items
+	 */
 	@SuppressWarnings("unchecked")
 	private void loadAllItems() {
 		items = (ArrayList<Item>) MainController.getMyClient().send(MessageType.GET, "item/complete", null);
@@ -148,6 +162,9 @@ public class CatalogManagerController implements Initializable {
 		showFilteredItems();
 	}
 
+	/**
+	 * Method that filters the items and shows them
+	 */
 	private void filterItemsAndShow() {
 		String search = searchTF.getText();
 		String type = typeCB.getSelectionModel().getSelectedItem();
@@ -167,6 +184,9 @@ public class CatalogManagerController implements Initializable {
 		showFilteredItems();
 	}
 
+	/**
+	 * method to show the filter
+	 */
 	private void showFilteredItems() {
 		itemsVBox.getChildren().clear();
 		for (Item item : filteredItems) {
@@ -183,6 +203,9 @@ public class CatalogManagerController implements Initializable {
 		}
 	}
 
+	/**
+	 * opens the add item overlay
+	 */
 	private void openOverlayAdd() {
 		try {
 			mainVBox.setDisable(true);
@@ -195,6 +218,11 @@ public class CatalogManagerController implements Initializable {
 			ClientView.printErr(getClass(), e.getMessage());
 		}
 	}
+	
+	/**
+	 * opens the overlay of edit
+	 * @param itemForEdit
+	 */
 	public void openOverlayEdit(Item itemForEdit) {
 		try {
 			mainVBox.setDisable(true);
@@ -208,6 +236,9 @@ public class CatalogManagerController implements Initializable {
 		}
 	}
 
+	/**
+	 * action to close the overlay
+	 */
 	public void closeOverlay() {
 		mySP.getChildren().remove(overlay);
 		overlay=null;
@@ -215,6 +246,9 @@ public class CatalogManagerController implements Initializable {
 		loadAllItems();
 	}
 	
+	/**
+	 * method to cancel the overlay
+	 */
 	public void cancelOverlay() {
 		mySP.getChildren().remove(overlay);
 		overlay=null;
