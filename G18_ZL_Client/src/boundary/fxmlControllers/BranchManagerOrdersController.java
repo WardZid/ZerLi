@@ -496,7 +496,7 @@ public class BranchManagerOrdersController implements Initializable {
 			}
 		}
 		if (cancelSelected == true) {
-			System.out.println("try2************");
+			 
 			for (Order o : waitingCancellationOrders) {
 				if (selectedOrderID.equals(o.getIdOrder() + "")) {
 					currentOrder = o;
@@ -577,7 +577,7 @@ public class BranchManagerOrdersController implements Initializable {
 
 				if (arg2 != null) {
 
-					System.out.println("try1 ***********");
+				 
 					cancelSelected = true;
 					approveSelected = false;
 					saveOrderID();
