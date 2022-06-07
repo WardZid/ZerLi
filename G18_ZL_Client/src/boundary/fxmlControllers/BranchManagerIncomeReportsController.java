@@ -378,12 +378,12 @@ public class BranchManagerIncomeReportsController implements Initializable {
 		this.overallIncomeThisMonth = 0;
 		this.max = incomesOfMonth.get(0);
 		this.min = incomesOfMonth.get(0);
-		for (Double d : incomesOfMonth) {
-			this.overallIncomeThisMonth += d;
-			if (d > max)
-				max = d;
-			if (d < min)
-				min = d;
+		for (Double incomeInDay : incomesOfMonth) {
+			this.overallIncomeThisMonth += incomeInDay;
+			if (incomeInDay > max)
+				max = incomeInDay;
+			if (incomeInDay < min)
+				min = incomeInDay;
 		}
 		this.avg = this.overallIncomeThisMonth / (double)daysOfMonth.get(month);
 	}
@@ -420,8 +420,8 @@ public class BranchManagerIncomeReportsController implements Initializable {
 		}
 
 		int d = 0;
-		for (Double income : incomesOfMonth) {
-			series.getData().add(new XYChart.Data<String, Double>(d + "", income));
+		for (Double incomeInDay : incomesOfMonth) {
+			series.getData().add(new XYChart.Data<String, Double>(d + "", incomeInDay));
 			d++;
 		}
 

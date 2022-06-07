@@ -343,15 +343,15 @@ public class BranchManagerOrderReportsController implements Initializable {
 		maxI = amountOfItems.get(0).getName();
 		min = amountOfItems.get(0).getAmount();
 		minI = amountOfItems.get(0).getName();
-		for(AmountItem ai : amountOfItems) {
-			this.overallSoldItemsThisMonth += ai.getAmount();
-			if(ai.getAmount() > max) {
-				max = ai.getAmount();
-				maxI = ai.getName();
+		for(AmountItem amountOfItem : amountOfItems) {
+			this.overallSoldItemsThisMonth += amountOfItem.getAmount();
+			if(amountOfItem.getAmount() > max) {
+				max = amountOfItem.getAmount();
+				maxI = amountOfItem.getName();
 			}
-			if(ai.getAmount() < min) {
-				min = ai.getAmount();
-				minI = ai.getName();
+			if(amountOfItem.getAmount() < min) {
+				min = amountOfItem.getAmount();
+				minI = amountOfItem.getName();
 			}	
 		}
 		this.avg = this.overallSoldItemsThisMonth/(double)daysOfMonth.get(month);
@@ -363,9 +363,9 @@ public class BranchManagerOrderReportsController implements Initializable {
 	private void initDataForPieChart() {
 		reportPieChart.setLegendVisible(false);
 		pieChartData.clear();
-		for(AmountItem ai : amountOfItems) {
-			double persent=(ai.getAmount()/(double)overallSoldItemsThisMonth)*100;
-			pieChartData.add(new PieChart.Data(ai.getName()+" - "+  String.format("%.2f", persent)+"%"  , ai.getAmount()));
+		for(AmountItem amountOfItem : amountOfItems) {
+			double percent=(amountOfItem.getAmount()/(double)overallSoldItemsThisMonth)*100;
+			pieChartData.add(new PieChart.Data(amountOfItem.getName()+" - "+  String.format("%.2f", percent)+"%"  , amountOfItem.getAmount()));
 		}
 	}
 	
