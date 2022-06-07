@@ -920,7 +920,7 @@ public class DBController {
 		ArrayList<String> monthsYears = new ArrayList<>();
 		try {
 			ResultSet rs = statement.executeQuery(
-					"SELECT distinct(Month(O.date_order)) as month,year(O.date_order) as year FROM assignment3.order O WHERE O.id_store="
+					"SELECT distinct(Month(O.date_order)) as month,year(O.date_order) as year FROM assignment3.order O WHERE O.id_order_status = 2 AND O.id_store="
 							+ idStore);
 			rs.beforeFirst(); // ---move back to first row
 			while (rs.next()) {
