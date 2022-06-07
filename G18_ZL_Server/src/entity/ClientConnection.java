@@ -7,12 +7,33 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import ocsf.server.ConnectionToClient;
 
+/**
+ * Client Connection class needed to show the clients in a table
+ * @author wardz
+ *
+ */
 public class ClientConnection {
+	/**
+	 * inetaddress of the client
+	 */
 	private InetAddress inetAddress;
+	/**
+	 * ip of the client
+	 */
 	private String ip;
+	/**
+	 * hostname of the client
+	 */
 	private String host;
+	/**
+	 * connectiontoclient object taken from the server
+	 */
 	private ConnectionToClient connectionToClient;
 	
+	/**
+	 * general constructor
+	 * @param connectionToClient
+	 */
 	public ClientConnection(ConnectionToClient connectionToClient) {
 		this.inetAddress=connectionToClient.getInetAddress();
 		ip=inetAddress.getHostAddress();
@@ -34,10 +55,18 @@ public class ClientConnection {
 		return connectionToClient;
 	}
 	
+	/**
+	 * gets string property to use in table
+	 * @return
+	 */
 	public StringProperty getIPAddressStringProperty(){
 		return new SimpleStringProperty(getIp());
 	}
 	
+	/**
+	 * gets string property to usee in table
+	 * @return
+	 */
 	public StringProperty getHostNameStringProperty() {
 		return new SimpleStringProperty(getHost());
 	}
@@ -58,11 +87,17 @@ public class ClientConnection {
 	}
 
 	@Override
+	/**
+	 * hashfunction to use in hashmaps
+	 */
 	public int hashCode() {
 		return Objects.hash(host, ip);
 	}
 
 	@Override
+	/**
+	 * equating method
+	 */
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
