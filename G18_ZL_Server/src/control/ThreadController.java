@@ -69,7 +69,7 @@ public class ThreadController {
 											+ " ) this email for a Reminder\n");
 							EmailController.sendEmail(email);
 							System.out.println("flagOnce -> "+ flagOnce);
-							flagOnce = 2;
+							 
 						}
 					 
 
