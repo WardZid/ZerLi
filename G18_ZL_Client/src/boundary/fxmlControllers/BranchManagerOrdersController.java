@@ -521,16 +521,15 @@ public class BranchManagerOrdersController implements Initializable {
 	 */
 	private void saveOrderID() {
 		String[] split = null;
-
+		String[] split2 = null;
 		if (approveSelected == true) {
 			split = ordersToApproveListView.getSelectionModel().getSelectedItem().split(" - ");
 		}
 		if (cancelSelected == true) {
-
 			split = ordersToCancelListView.getSelectionModel().getSelectedItem().split(" - ");
 		}
-
-		selectedOrderID = split[0];
+		split2 = split[0].split(" : ");
+		selectedOrderID = split2[1];
 
 	}
 
@@ -597,7 +596,7 @@ public class BranchManagerOrdersController implements Initializable {
 		waitingApprovalOrders = (ArrayList<Order>) MainController.getMyClient().send(MessageType.GET,
 				"order/by/id_order_status/0", null);
 		for (Order o : waitingApprovalOrders)
-			waitingApprovalIDs.add(o.getIdOrder() + " - " + o.getIdCustomer());
+			waitingApprovalIDs.add("Order ID : "+o.getIdOrder() + " - " + "Customer ID : " + o.getIdCustomer());
 		ordersToApproveListView.getItems().addAll(waitingApprovalIDs);
 	}
 
@@ -611,7 +610,7 @@ public class BranchManagerOrdersController implements Initializable {
 		waitingCancellationOrders = (ArrayList<Order>) MainController.getMyClient().send(MessageType.GET,
 				"order/by/id_order_status/5", null);
 		for (Order o : waitingCancellationOrders)
-			waitingCancellationlIDs.add(o.getIdOrder() + " - " + o.getIdCustomer());
+			waitingCancellationlIDs.add("Order ID : "+o.getIdOrder() + " - " + "Customer ID : " + o.getIdCustomer());
 		ordersToCancelListView.getItems().addAll(waitingCancellationlIDs);
 	}
 
