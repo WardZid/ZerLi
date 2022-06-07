@@ -13,6 +13,7 @@ import boundary.ClientView;
 import control.MainController;
 import entity.Complaint;
 import entity.Email;
+import entity.Order;
 import entity.MyMessage.MessageType;
 import entity.User;
 import javafx.beans.value.ChangeListener;
@@ -239,9 +240,11 @@ public class CustomerSupportController implements Initializable{
 			newComplaint=  (Complaint) ComplaintQueryFromDB(MessageType.POST, newComplaint);
 		 
 		 System.out.println("hihihihihi " +newComplaint.getIdComplaint()+" "+ CustomerComplaintSendViewController.getCustomerID());
-		 User currentUser = (User) MainController.getMyClient().send(MessageType.GET,
+		 ArrayList<User> currentUser =   (ArrayList<User>) MainController.getMyClient().send(MessageType.GET,
 					"user/by/id_customer/" + CustomerComplaintSendViewController.getCustomerID(), null);
-		 
+		  
+		  MainController.getMyClient().send(MessageType.SEND,"ReminderEmail/"+newComplaint.getIdComplaint()+"/"+currentUser.get(0).getIdUser(), null);
+					
 		 initialize(null,null);
 			dialog.close();
 			

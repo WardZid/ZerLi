@@ -44,29 +44,39 @@ public class ThreadController {
 		}, 0, 5000);// wait 0 ms before doing the action and do it evry 1000ms (1second)
 	}
 
-	public static void ComplainTrackingfunction(int ComplainId,int idUser) {
+	public static void ComplainTrackingfunction(String ComplainId, String idUser) {
 
 		timer.schedule(new TimerTask() {
-			int flagOnce = 0;
 
 			@Override
 			public void run() {
+				int flagOnce = -1;
+
 				ArrayList<Complaint> complaint;
+
 				synchronized (lock) {
-					if (flagOnce == 1)
-						timer.cancel();
-					if (flagOnce != 0) {
+					System.out.println("flagOnce -> "+ flagOnce);
+					 
+						System.out.println("flagOnce -> "+ flagOnce);
 						complaint = DBController.checkComplaint(ComplainId);
-						if (complaint.size()!=0) {
-							User currentUser =  DBController.getUserBy("id_user", idUser+"").get(0);
-							Email email = new Email(currentUser.getEmail(),"Reminder Complain " ," 24 hours have passed since the complaint ( "+ComplainId+" ) this email for a Reminder\n"  );
-							//EmailController.sendEmail(email);		
+						System.out.println("i will complaint in " + complaint.size());
+						if (complaint.size() != 0) {
+
+							User currentUser = DBController.getUserBy("id_user", idUser + "").get(0);
+							System.out.println("i will send mail to currentUser " + currentUser);
+							Email email = new Email(currentUser.getEmail(), "Reminder Complain ",
+									" 24 hours have passed since the complaint ( " + ComplainId
+											+ " ) this email for a Reminder\n");
+							EmailController.sendEmail(email);
+							System.out.println("flagOnce -> "+ flagOnce);
+							flagOnce = 2;
 						}
-					} else
-						flagOnce = 1;
+					 
+
+					 
 				}
 			}
-		}, 0, 2000);// wait 0 ms before doing the action and do it evry 1000ms (1second)
+		}, 0, 5000);// wait 0 ms before doing the action and do it evry 1000ms (1second)
 					// 60* 1440*1000 =1 day
 	}
 

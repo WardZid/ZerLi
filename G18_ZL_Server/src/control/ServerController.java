@@ -578,8 +578,10 @@ public class ServerController extends ObservableServer {
 			Email email = (Email) clMsg.getContent();
 			EmailController.sendEmail(email);
 		}
-		if (clMsg.getInfo().startsWith("ReminderEmail")) {
-			 System.out.println("ReminderEmail "+request[1]+request[2]);
+	  if (clMsg.getInfo().startsWith("ReminderEmail")) {
+		 
+			 
+ 			 ThreadController.ComplainTrackingfunction(request[1], request[2]);
 		}
 	}
 }

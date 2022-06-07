@@ -684,7 +684,7 @@ public class DBController {
 		return complaints;
 
 	}
-	public static ArrayList<Complaint> checkComplaint(int complainId) {
+	public static ArrayList<Complaint> checkComplaint(String complainId) {
 		ArrayList<Complaint> complaints = new ArrayList<>();
 		ResultSet rs;
 		try {
