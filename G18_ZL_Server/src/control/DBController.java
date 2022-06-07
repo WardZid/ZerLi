@@ -322,7 +322,7 @@ public class DBController {
 			for (int i = 0; i < 3; i++) {
 				int currenIntegertMonth = Integer.parseInt(month) + i;
 				rs = statement.executeQuery(
-						"SELECT sum(O.price_order) as sum FROM assignment3.order O WHERE Month(O.date_order) = "
+						"SELECT sum(O.price_order) as sum FROM assignment3.order O WHERE O.id_order_status = 2 AND Month(O.date_order) = "
 								+ currenIntegertMonth + " AND Year(O.date_order) =" + year + " AND O.id_store = "
 								+ branch);
 				rs.beforeFirst(); // ---move back to first row
@@ -944,7 +944,7 @@ public class DBController {
 		ResultSet rs;
 		try {
 			rs = statement.executeQuery(
-					" SELECT  U.name as name , O.date_order  as date ,  (O.price_order) as income  FROM assignment3.order O , assignment3.customer C ,assignment3.user U  WHERE O.id_store ="
+					" SELECT  U.name as name , O.date_order  as date ,  (O.price_order) as income  FROM assignment3.order O , assignment3.customer C ,assignment3.user U  WHERE O.id_order_status = 2 AND O.id_store ="
 							+ branch_id + " AND Month(O.date_order) = " + month + " AND Year(O.date_order) =" + year
 							+ "  and  O.id_customer=  C.id_customer  and U.id_customer=  C.id_customer");
 
@@ -973,7 +973,7 @@ public class DBController {
 		ArrayList<Order> orders = new ArrayList<>();
 		ResultSet rs;
 		try {
-			rs = statement.executeQuery("SELECT * FROM assignment3.order O WHERE id_store = " + branch
+			rs = statement.executeQuery("SELECT * FROM assignment3.order O WHERE O.id_order_status = 2 AND id_store = " + branch
 					+ " AND (Month(O.date_order)) = " + month + " AND (Year(O.date_order)) = " + year);
 			rs.beforeFirst(); // ---move back to first row
 			while (rs.next()) {
@@ -1003,7 +1003,7 @@ public class DBController {
 		ResultSet rs;
 		try {
 			rs = statement.executeQuery(
-					"SELECT day(date_order) as day , sum(price_order) as income FROM assignment3.order  WHERE id_store ="
+					"SELECT day(date_order) as day , sum(price_order) as income FROM assignment3.order  WHERE id_order_status = 2 AND id_store ="
 							+ branch_id + " AND Month(date_order) = " + month + "  AND Year(date_order) =" + year
 							+ "  GROUP BY Day(date_order) ORDER BY day ");
 
@@ -1024,7 +1024,7 @@ public class DBController {
 		try {
 			rs = statement.executeQuery("SELECT I.name , sum(OI.amount) as amount" + " FROM order_item OI , item I"
 					+ " WHERE I.id_item = OI.id_item AND OI.id_order IN (" + " SELECT id_order"
-					+ "	FROM assignment3.order O" + " WHERE id_store = " + branchID + " AND (Month(O.date_order)) = "
+					+ "	FROM assignment3.order O" + " WHERE O.id_order_status = 2 AND id_store = " + branchID + " AND (Month(O.date_order)) = "
 					+ month + " AND (Year(O.date_order)) = " + year + ")" + " GROUP BY name");
 			rs.beforeFirst(); // ---move back to first row
 			while (rs.next()) {
