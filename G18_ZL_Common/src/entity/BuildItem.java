@@ -6,16 +6,34 @@ import java.util.HashMap;
 
 import entity.Item.ItemInBuild;
 import entity.Item.OrderItem;
-
+/**
+ * BuildItem to save all the items of the products that the customer built
+ * 
+ * @author saher
+ *
+ */
 public class BuildItem implements Serializable {
 
 	private static final long serialVersionUID = 4594039631520296979L;
-
+/**
+ * id for build item
+ */
 	private int idBuildItem;
+	/**
+	 * id of the order
+	 */
 	private int idOrder;
+	/**
+	 * amount for the build item 
+	 */
 	private int amount;
+	/**
+	 * description for the build item 
+	 */
 	private String description;
-	
+	/**
+	 * hash map with id of the ItemInBuild as key and the ItemInBuild itself as value
+	 */
 	private HashMap<Integer, ItemInBuild> itemsInBuild = new HashMap<>();
 
 	//non sql variables
@@ -29,7 +47,11 @@ public class BuildItem implements Serializable {
 		idBuildItemAutomatic++;
 		idOrder = 0;
 	}
-
+/**
+ * constructor with to parameters 
+ * @param idBuildItem build item id 
+ * @param idOrder order id 
+ */
 	public BuildItem(int idBuildItem, int idOrder) {
 		this.idBuildItem = idBuildItem;
 		this.idOrder = idOrder;
@@ -91,7 +113,7 @@ public class BuildItem implements Serializable {
 		this.itemsInBuild = itemsInBuild;
 	}
 
-	//non sql getters+setters
+	
 	
 	public void setPrice(double price) {
 		this.price=price;
@@ -100,7 +122,11 @@ public class BuildItem implements Serializable {
 	public double getPrice() {
 		return price;
 	}
-	
+	/**
+	 * update the build item price thats contains items with price
+	 * (update full price and return it )
+	 * @return double fullPrice
+	 */
 	public double getFullPrice() {
 		double fullPrice=0;
 		for (ItemInBuild iInB : itemsInBuild.values()) {
@@ -114,7 +140,10 @@ public class BuildItem implements Serializable {
 		return "BuildItem [idBuildItem=" + idBuildItem + ", idOrder=" + idOrder + ", amount="
 				+ amount + ", description=" + description + ", itemsInBuild=" + itemsInBuild + "]";
 	}
-	
+	/**
+	 * string that saved all the build item details 
+	 * @return String builder
+	 */
 	public String infoString() {
 		StringBuilder builder = new StringBuilder();
 		builder.append("idBuildItem=");
@@ -136,11 +165,17 @@ public class BuildItem implements Serializable {
 	}
 
 
-	// Instance methods
+/**
+ * increase the amount of the build item
+ * @return amount 
+ */
 	public int addOne() {
 		return ++amount;
 	}
-
+/**
+ * decrease the amount of the build item
+ * @return amount 
+ */
 	public int deductOne() {
 		if (amount > 0)
 			return --amount;
@@ -192,9 +227,11 @@ public class BuildItem implements Serializable {
 		}
 	}
 
-	// AMEER
-
-	// add itemInBuild to build item
+ 
+	/**
+	 *  add itemInBuild to build item and update amount and price 
+	 * @param itemInBuild item to set amount for itemInBuild
+	 */
 	public void addItem(ItemInBuild itemInBuild) {
 
 		int amount = itemInBuild.getAmount();
@@ -203,7 +240,10 @@ public class BuildItem implements Serializable {
 		this.setPrice(this.getPrice() + itemInBuild.getPrice());
 
 	}
-
+/**
+ * delete itemInBuild to build item and update amount and price 
+ * @param itemInBuild item to set amount for itemInBuild
+ */
 	public void deleteItem(ItemInBuild itemInBuild) {
 
 		int amount = itemInBuild.getAmount();
@@ -222,7 +262,11 @@ public class BuildItem implements Serializable {
 		this.setPrice(this.getPrice() - itemInBuild.getPrice());
 
 	}
-
+/**
+ * remove item from itemsInBuild and set the price 
+ * @param item
+ * @return
+ */
 	public boolean DeleteItem(Item item) {
 		if (item instanceof OrderItem)
 			return false;

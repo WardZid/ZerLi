@@ -3,15 +3,32 @@ package entity;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
-
+/**
+ * a survey class to save all survey details 
+ * @author saher
+ *
+ */
 public class Survey implements Serializable {
 
 	private static final long serialVersionUID = 3569646095233196718L;
-
+/**
+ * id for the survey
+ */
 	private int idSurvey;
+	/**
+	 * the date of the survey
+	 */
 	private String dateSurvey;
+	/**
+	 * id of the store that belong to this survey
+	 */
 	private int idStore;
+	/**
+	 * answers the questions ArrayList
+	 */
 	private ArrayList<Integer>  answers;
+	
+	/// getters and setters 
 	public ArrayList<Integer> getAnswers() {
 		return answers;
 	}
@@ -24,23 +41,43 @@ public class Survey implements Serializable {
 	public void setIdQuestion(int idQuestion) {
 		this.idQuestion = idQuestion;
 	}
+	/**
+	 * questions id for witch id questions the survey belongs to
+	 */
 	private int idQuestion;
+	/**
+	 * object from SurveyQuestion type to call there methods 
+	 */
 	private SurveyQuestion surveyQuestion;
 
-	
+	/**
+	 * constructor with id store parameter and date and store id 
+	 * @param idSurvey id for the survey
+	 * @param dateSurvey survey date
+	 * @param idStore store id 
+	 */
 	public Survey(int idSurvey, String dateSurvey, int idStore) {
 		this.idSurvey = idSurvey;
 		this.dateSurvey = dateSurvey;
 		this.idStore = idStore;
 	}
+	/**
+	 * constructor with just tow parameters date and store id 
+	 * @param dateSurvey survey date
+	 * @param idStore store id 
+	 */
 	public Survey(String dateSurvey, int idStore) {
 		this.dateSurvey = dateSurvey;
 		this.idStore = idStore;
 	}
+	/**
+	 * create a new survey
+	 */
 	public Survey() {
 		surveyQuestion = new SurveyQuestion();
 	}
 
+	//// getters and setters 
 	public int getIdSurvey() {
 		return idSurvey;
 	}

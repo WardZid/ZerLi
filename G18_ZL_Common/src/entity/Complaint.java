@@ -1,16 +1,40 @@
 package entity;
 
 import java.io.Serializable;
-
+/**
+ * complaint class so the employee can insert the complaint details to the ZLI system 
+ * @author saher
+ *
+ */
 public class Complaint implements Serializable{
 	private static final long serialVersionUID = -4849768615516941203L;
-	
+	/**
+	 * id for the complaint 
+	 */
 	private int idComplaint;
+	/**
+	 * id of the customer
+	 */
 	private int idCustomer;
+	/**
+	 * complaint status 
+	 */
 	private String status;
+	/**
+	 * complaint date 
+	 */
 	private String date;
+	/** 
+	 * refund that the employee give for the customer 
+	 */
 	private double refund;
+	/**
+	 * string that saved the complaint from the customer 
+	 */
 	private String complaint;
+	/**
+	 * response to the complaint 
+	 */
 	private String response;
 	
 	/**

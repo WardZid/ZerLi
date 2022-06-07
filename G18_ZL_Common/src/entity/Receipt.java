@@ -1,16 +1,29 @@
 package entity;
 
 import java.io.Serializable;
-
+/**
+ * Receipt class to save all Receipt details
+ * @author saher
+ *
+ */
 public class Receipt implements Serializable, Cloneable {
 
 	private static final long serialVersionUID = 7473241707950981161L;
+	/**
+	 * customer name
+	 */
 	private String name;
+	/**
+	 * Receipt date 
+	 */
 	private String date;
+/**
+ * Receipt income 
+ */
 	private double income;
 
 	/**
-	 * 
+	 * a normal constructor with all parameters 
 	 * @param name
 	 * @param date
 	 * @param income

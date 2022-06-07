@@ -469,7 +469,7 @@ public class OrderDetailsController implements Initializable {
 	public VBox getorderDetailsVbox() {
 		return orderDetailsVbox;
 	}
-
+ 
 	/**
 	 * on this function we check before to move to payment form if the customer insert all the field correctly
 	 * and we check if he selected a correctly time and we  get the point for the customer from DB and set the refund text  on payment form
@@ -477,6 +477,7 @@ public class OrderDetailsController implements Initializable {
 	 */
 	public void OnNextBtnPressed() {
 		credutCardtextfield.setText(ClientConsoleController.getCustomer().getCard());
+		
 		int point = (int) MainController.getMyClient().send(MessageType.GET, "customer/point/"+ClientConsoleController.getCustomer().getIdCustomer(),null);
 		refundLable1.setText(point + "");
 		if (DelevireyDatePicker.getValue() != null && HourCombo.getValue() != null && MinutesCombo.getValue() != null)
