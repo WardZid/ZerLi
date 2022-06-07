@@ -44,6 +44,9 @@ public class ServerController extends ObservableServer {
 	 */
 	public static String host;
 
+	/**
+	 * server state referring to if the server is active or no
+	 */
 	private static boolean serverState;
 	// Constructors ****************************************************
 
