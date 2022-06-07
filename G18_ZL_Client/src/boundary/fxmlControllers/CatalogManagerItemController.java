@@ -14,6 +14,12 @@ import javafx.scene.control.TextArea;
 import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
 
+/**
+ * the controller that edits an item
+ * 
+ * @author hamza
+ *
+ */
 public class CatalogManagerItemController implements Initializable {
 	
 	private CatalogManagerController cmc;
@@ -21,6 +27,12 @@ public class CatalogManagerItemController implements Initializable {
 	
 	private Item item;
 
+	/**
+	 * 
+	 * 
+	 * @param controller
+	 * @param item
+	 */
 	public void setCtrlAndItem(CatalogManagerController controller,Item item) {
 		cmc = controller;
 		
@@ -85,10 +97,16 @@ public class CatalogManagerItemController implements Initializable {
 		showBtn.setDisable(true);
 	}
 
+	/**
+	 * action to do when edit is pressed
+	 */
 	@FXML
 	void onEditPressed() {
 		cmc.openOverlayEdit(item);
 	}
+    /**
+     * Action to do when hide is pressed
+     */
     @SuppressWarnings("unchecked")
 	@FXML
     void onHide() {
@@ -100,6 +118,9 @@ public class CatalogManagerItemController implements Initializable {
     	}
     }
 
+    /**
+     * action to do when show is pressed
+     */
     @SuppressWarnings("unchecked")
 	@FXML
     void onShow() {

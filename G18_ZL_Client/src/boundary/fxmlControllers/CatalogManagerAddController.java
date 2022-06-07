@@ -22,6 +22,12 @@ import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 
+/**
+ * the controller that adds new item
+ * 
+ * @author hamza
+ *
+ */
 public class CatalogManagerAddController implements Initializable {
 
 	private CatalogManagerController cmc;

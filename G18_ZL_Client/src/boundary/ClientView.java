@@ -14,6 +14,10 @@ import javafx.scene.image.Image;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
+/**
+ * the controller for the client view
+ *
+ */
 public class ClientView extends Application {
 
 //	 Screen size properties
@@ -73,11 +77,19 @@ public class ClientView extends Application {
 		MainController.getMyClient().disconnectFromServer();
 	}
 
+	/**
+	 * method to setup the scenes
+	 * @throws IOException
+	 */
 	private void setUpScenes() throws IOException {
 		connect = FXMLLoader.load(getClass().getResource("fxmls/connect-view.fxml"));
 		primaryScene = new Scene(connect);
 	}
 
+	/**
+	 * method to setup the stages
+	 * @param scene
+	 */
 	private void setUpStage(Scene scene) {
 		scene.getStylesheets().add("/boundary/fxmlControllers/client.css");
 		primaryStage.setTitle("Client Console"); // window title
@@ -88,6 +100,9 @@ public class ClientView extends Application {
 		primaryStage.show();
 	}
 
+	/**
+	 * method to setup connect
+	 */
 	public static void setUpConnect() {
 		if (connect == null)
 			try {
@@ -101,6 +116,9 @@ public class ClientView extends Application {
 		polishStage();
 	}
 
+	/**
+	 * method to setup login
+	 */
 	public static void setUpLogIn() {
 
 		try {
@@ -114,6 +132,9 @@ public class ClientView extends Application {
 		}
 	}
 
+	/**
+	 * method to setup client console
+	 */
 	public static void setUpClientConsole() {
 		try {
 			clientConsole = FXMLLoader.load((ClientView.class).getResource("fxmls/client-console-view.fxml"));

@@ -31,32 +31,7 @@ import javafx.stage.DirectoryChooser;
 /*
 
 											1.
-"SELECT Count(id_complaint) as count"+
-"FROM complaint C"+
-"WHERE Year(date_complaint) = "+year+" AND Month(date_complaint) = "+month
 
-GET -> complaint/count/byYearMonth/year/m1 and m2 and m3
-	
-											2.
-"SELECT id_store"+
-"FROM survey s"+
-"WHERE s.id_survey = "+surveyID
-
-GET -> survey/storeid/surveyID		
-
-											3.
-"SELECT *"+
-"FROM survey_question SQ"+
-"WHERE SQ.id_survey = "+surveyID
-
-GET -> survey_question/by/id_survey/surveyID											
-			
-											4.
-"SELECT question"+
-"FROM question Q"+
-"WHERE Q.id_question = "+questionID
-
-GET -> question/by/questionID
 											
 * */
 

@@ -25,6 +25,12 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
+/**
+ * the main controller where the catalog manager adds , updates and puts sales.
+ * 
+ * @author ward
+ *
+ */
 public class CatalogManagerController implements Initializable {
 
 	private ArrayList<Item> items;
