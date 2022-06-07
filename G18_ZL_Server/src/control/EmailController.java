@@ -15,29 +15,11 @@ import javax.mail.internet.MimeMessage;
 import boundary.ServerView;
 import entity.Email;
 
-/**
- * A class that handles email sending to clients or anyone with an email
- *
- */
 public class EmailController {
-	/**
-	 * authentication name
-	 */
 	private static final String myEmail = "ZerLeeG18@outlook.com"; // your email
-	/**
-	 * sending email's password for authentication
-	 */
 	private static final String password = "SemesterProject18"; // your email password
-	/**
-	 * sending email
-	 */
 	private static final String sender = "ZerLeeG18@outlook.com"; // Insert Your email again
 
-	/**
-	 * receives an Email Object to send
-	 * @param email
-	 * @return false if given an improper email object
-	 */
 	public static boolean sendEmail(Email email) {
 		if(email.getSubject()==null || email.getSubject().equals(""))
 			return false;
