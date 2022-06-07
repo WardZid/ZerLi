@@ -40,6 +40,9 @@ import javafx.stage.Stage;
  * */
 
 /**
+ * the controller of the branch-manager-orders-view.fxml , it runs all the methods that 
+ * functions the list views and buttons, here orders are approved, rejected, canceled.
+ * 
  * @author hamza
  *
  */

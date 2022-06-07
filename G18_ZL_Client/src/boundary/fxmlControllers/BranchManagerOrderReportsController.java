@@ -47,7 +47,12 @@ import javafx.scene.text.Text;
 
  * */
 
+
 /**
+ * the controller of the branch-manager-order-reports-view.fxml , it runs all the methods 
+ * that functions the choice boxes, list views and charts , here, a branch manager can view 
+ * the report of every working month.
+ * 
  * @author hamza
  *
  */

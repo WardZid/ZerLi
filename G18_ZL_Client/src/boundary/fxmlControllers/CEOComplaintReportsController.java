@@ -60,6 +60,13 @@ GET -> question/by/questionID
 											
 * */
 
+/**
+ *  the controller for ceo-complaint-report-view.fxml , it runs all the method that functions the choice boxes , 
+ *  bar charts , here the CEO can review the complaint reports and download a PDF file report.
+ * 
+ * @author hamza
+ *
+ */
 public class CEOComplaintReportsController implements Initializable {
 
 	/* ------------------------------------------------ */

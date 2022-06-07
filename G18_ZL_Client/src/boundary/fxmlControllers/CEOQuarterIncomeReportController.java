@@ -29,6 +29,14 @@ import javafx.scene.text.Text;
 
  */
 
+/**
+ * the controller for ceo-quarter-income-report-view.fxml , it runs all the methods 
+ * that functions the choice boxes, bar charts , and buttons , here, the CEO can review the 
+ * quarters income reports.
+ * 
+ * @author hamza
+ *
+ */
 public class CEOQuarterIncomeReportController implements Initializable {
 	
 	/* ------------------------------------------------ */
