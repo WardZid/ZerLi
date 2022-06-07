@@ -13,7 +13,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 import boundary.ServerView;
-import entity.Email;
+import entity.Email; 
 
 public class EmailController {
 	private static final String myEmail = "ZerLeeG18@outlook.com"; // your email
