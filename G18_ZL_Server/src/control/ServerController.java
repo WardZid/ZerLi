@@ -542,7 +542,12 @@ public class ServerController extends ObservableServer {
 
 		String[] request = clMsg.getInfo().split("/");
 
-		if (request[0].equals("order")) {
+		if (request[0].equals("user")) {
+			User u = (User) clMsg.getContent();
+			if (request[1].equals("type"))
+				clMsg.setContent(DBController.updateUserType(u));
+
+		} else if (request[0].equals("order")) {
 			Order order = (Order) clMsg.getContent();
 			if (request[1].equals("status")) {
 				clMsg.setContent(DBController.updateOrderStatus(order));
@@ -552,8 +557,7 @@ public class ServerController extends ObservableServer {
 		} else if (request[0].equals("customer")) {
 			Customer c = (Customer) clMsg.getContent();
 			if (request[1].equals("status")) {
-				clMsg.setContent(
-						DBController.updateCustomerStatusOne(c, CustomerStatus.getById(c.getIdCustomerStatus())));
+				clMsg.setContent(DBController.updateCustomerStatusOne(c));
 			} else if (request[1].equals("point"))
 				clMsg.setContent(
 						DBController.updatePoint(Integer.parseInt(request[2]), Double.parseDouble(request[3])));
@@ -571,17 +575,16 @@ public class ServerController extends ObservableServer {
 		} else
 			ServerView.printErr(getClass(), "Unhandled Update Request: " + clMsg.getInfo());
 	}
- 
+
 	private void handleSendRequest(MyMessage clMsg) {
 		String[] request = clMsg.getInfo().split("/");
 		if (clMsg.getInfo().startsWith("email")) {
 			Email email = (Email) clMsg.getContent();
-			//EmailController.sendEmail(email);
+			// EmailController.sendEmail(email);
 		}
-	  if (clMsg.getInfo().startsWith("ReminderEmail")) {
-		 
-			 
- 			// ThreadController.ComplainTrackingfunction(request[1], request[2]);
+		if (clMsg.getInfo().startsWith("ReminderEmail")) {
+
+			// ThreadController.ComplainTrackingfunction(request[1], request[2]);
 		}
 	}
 }

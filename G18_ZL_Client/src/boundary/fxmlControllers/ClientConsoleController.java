@@ -243,6 +243,7 @@ public class ClientConsoleController implements Initializable {
 	private void loadBranchManagerConsole() {
 		bmOrdersBtn = menuButton("Orders", "branch-manager-orders-view.fxml");
 		menuButton("Customer Management", "branch-manager-customers-view.fxml");
+		menuButton("Worker Management", "branch-manager-workers-view.fxml");
 		bmIReportsBtn = menuButton("Income Reports", "branch-manager-income-reports-view.fxml");
 		bmOReportsBtn = menuButton("Order Reports", "branch-manager-order-reports-view.fxml");
 	

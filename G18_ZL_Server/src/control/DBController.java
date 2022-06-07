@@ -16,7 +16,6 @@ import entity.AmountItem;
 import entity.BuildItem;
 import entity.Complaint;
 import entity.Customer;
-import entity.Customer.CustomerStatus;
 import entity.DailyIncome;
 import entity.Item;
 import entity.Item.ItemInBuild;
@@ -249,6 +248,7 @@ public class DBController {
 	}
 
 	public static ArrayList<User> getUserBy(String column, String value) {
+		System.out.println("sssssssssssssssssssssssssss");
 		ArrayList<User> users=new ArrayList<>();
 		try {
 			ResultSet rs = statement.executeQuery("SELECT * FROM user WHERE " + column + " = " + value);
@@ -1296,46 +1296,11 @@ public class DBController {
 		return reports;
 	}
 	
-	/*
-	 * public static boolean insertSurvey(Survey s) { int linesChanged = 0; try {
-	 * PreparedStatement ps = conn.
-	 * prepareStatement("INSERT INTO survey (`date_survey`, `id_store`) VALUES(?,?)"
-	 * , Statement.RETURN_GENERATED_KEYS); ps.setString(1, s.getDateSurvey());
-	 * ps.setInt(2, s.getIdStore()); linesChanged = ps.executeUpdate();
-	 * 
-	 * ResultSet generatedKeys = ps.getGeneratedKeys(); int idSurvey =
-	 * generatedKeys.getInt(0); ps.close(); System.out.println(idSurvey); for
-	 * (SurveyQuestion sq : s.getQuestions()) { insertSurveyAnswer(idSurvey, sq); }
-	 * } catch (SQLException e) { e.printStackTrace();
-	 * ServerView.printErr(DBController.class, "Unable to add new survey: " +
-	 * s.toString()); return false; } if (linesChanged == 0) return false; return
-	 * true; }
-	 */
-
-//	public static boolean insertSurveyAnswer(int idSurvey, SurveyQuestion sq) {
-//		int linesChanged = 0;
-//		try {
-//			PreparedStatement ps = conn.prepareStatement(
-//					"INSERT INTO survey_question (`id_survey`, `id_question`,`answer`) VALUES(?,?,?)");
-//			ps.setInt(1, idSurvey);
-//			ps.setInt(2, sq.getIdQuestion());
-//			for (int i = 3; i < 9; i++)
-//				ps.setInt(i, sq.getAnswer().get(i - 3));
-//			linesChanged = ps.executeUpdate();
-//			ps.close();
-//
-//		} catch (SQLException e) {
-//			e.printStackTrace();
-//			ServerView.printErr(DBController.class, "Unable to add new survey_question: " + sq.toString());
-//			return false;
-//		}
-//		if (linesChanged == 0)
-//			return false;
-//		return true;
-//	}
-
 	// UPDATE QUERIES****************************************************
 
+	/**
+	 * set all users in database as logged out
+	 */
 	public static void logOutAll() {
 		try {
 			statement.executeUpdate("UPDATE user SET logged_in=FALSE");
@@ -1344,6 +1309,11 @@ public class DBController {
 		}
 	}
 
+	/**
+	 * Updates user as logged in and returns false if he already is somewhere else 
+	 * @param u user to set as logged in in the db
+	 * @return true if user wasnt logged in or false if they ARE logged in somewhere else
+	 */
 	public static boolean updateLogIn(User u) {
 		int linesChanged = 0;
 		try {
@@ -1356,7 +1326,12 @@ public class DBController {
 			return false;
 		return true;
 	}
-
+	
+	/**
+	 * Sets user logged_in to false in db
+	 * @param u user to log out
+	 * @return false if unsuccessful
+	 */
 	public static boolean updateLogOut(User u) {
 		int linesChanged = 0;
 		try {
@@ -1417,6 +1392,11 @@ public class DBController {
 		
 	}
 
+	/**
+	 * Updates all columns of an item
+	 * @param item to update
+	 * @return same item after update
+	 */
 	public static ArrayList<Item> updateEditItem(Item item) {
 		try {
 			PreparedStatement ps = conn.prepareStatement("UPDATE assignment3.item " + "SET name=?, " + "price=?, "
@@ -1439,6 +1419,11 @@ public class DBController {
 		return getItemsBy("id_item", item.getIdItem() + "");
 	}
 
+	/**
+	 * Updates an item status (Available or hidden)
+	 * @param item item to update
+	 * @return item after update attempt
+	 */
 	public static ArrayList<Item> updateItemStatus(Item item) {
 		try {
 			PreparedStatement ps = conn.prepareStatement("UPDATE assignment3.item SET status=? WHERE id_item=?");
@@ -1453,12 +1438,26 @@ public class DBController {
 
 		return getItemsBy("id_item", item.getIdItem() + "");
 	}
-
 	
-	public static ArrayList<Customer> updateCustomerStatusOne(Customer c, CustomerStatus status) {
+	public static ArrayList<User> updateUserType(User user){
+		try {
+			statement.executeUpdate("UPDATE assignment3.user SET id_user_type=" + user.getIdUserType() + " WHERE id_user="
+					+ user.getIdUser());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return getUserBy("id_user", user.getIdUser()+"");
+	}
+
+	/**
+	 * udates customer status (frozen or active)
+	 * @param c customer to update
+	 * @return Arraylist of the one customer after update
+	 */
+	public static ArrayList<Customer> updateCustomerStatusOne(Customer c) {
 
 		try {
-			statement.executeUpdate("UPDATE customer SET id_customer_status=" + status.ordinal() + " WHERE id_customer="
+			statement.executeUpdate("UPDATE customer SET id_customer_status=" + c.getIdCustomerStatus() + " WHERE id_customer="
 					+ c.getIdCustomer());
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -1466,6 +1465,11 @@ public class DBController {
 		return getCustomerBy("id_customer", c.getIdCustomer() + "");
 	}
 
+	/**
+	 * updates complaint status to closed and saves reply and refund
+	 * @param c complaint to save
+	 * @return Arraylist of the one complaint after update
+	 */
 	public static ArrayList<Complaint> updateComplaint(Complaint c) {
 		try {
 			PreparedStatement ps = conn.prepareStatement(
