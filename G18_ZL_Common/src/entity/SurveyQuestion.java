@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 /**
  * this class to the Question of the survey 
- * @author saher
  *
  */
 public class SurveyQuestion implements Serializable{
@@ -45,7 +44,7 @@ public class SurveyQuestion implements Serializable{
 	public ArrayList<String> getQuestion() {
 		return questions;
 	}
-	public void setQuestion(String question) {
+	public void setQuestion(ArrayList<String> questions) {
 		this.questions = questions;
 	}
 	@Override
