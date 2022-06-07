@@ -6,6 +6,11 @@ public class MyMessage implements Serializable {
 
 	private static final long serialVersionUID = -2988915464822652207L;
 
+	/**
+	 * enum in http requests style to help differentiate client requests
+	 * @author wardz
+	 *
+	 */
 	public enum MessageType{
 		INFO,
 		GET,
@@ -13,14 +18,37 @@ public class MyMessage implements Serializable {
 		UPDATE,
 		SEND
 	}
+	
+	/**
+	 * the sender's ip address
+	 */
 	private String clientAddress;
+	/**
+	 * msg counter id, just for help
+	 */
 	private int msgID;
+	/**
+	 * message request type
+	 */
 	private MessageType type;
+	/**
+	 * message info, used to identify the client;s needs
+	 */
 	private String info;
+	/**
+	 * the "cargo" of the request
+	 */
 	private Object content;
 	
 	//String.format("%04d", msgCnt)
-	
+	/**
+	 * General constructor
+	 * @param clientAddress
+	 * @param msgID
+	 * @param type
+	 * @param info
+	 * @param content
+	 */
 	public MyMessage(String clientAddress,int msgID,MessageType type,String info,Object content) {
 		this.clientAddress=clientAddress;
 		this.msgID=msgID;
