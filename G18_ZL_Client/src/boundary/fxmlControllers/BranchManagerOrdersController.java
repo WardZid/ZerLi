@@ -362,7 +362,7 @@ public class BranchManagerOrdersController implements Initializable {
 		else if(  MainController.timeDiffHour(currentOrder.getDeliveryDate(), currentOrder.getCancelDate())<3 && MainController.timeDiffHour(currentOrder.getDeliveryDate(), currentOrder.getCancelDate())>=1    )
 			MoneyForRefund=currentOrder.getPrice()*0.5;
 		else
-			MoneyForRefund=0;
+			MoneyForRefund=0;  
 			
 			
 		User currentUser = (User) MainController.getMyClient().send(MessageType.GET,
