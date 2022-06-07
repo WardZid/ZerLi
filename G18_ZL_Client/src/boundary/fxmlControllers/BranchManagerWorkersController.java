@@ -23,7 +23,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
 
 /**
- * @author wardz BranchManager manages his worker's roles in his branch only
+ *  BranchManager manages his worker's roles in his branch only
  */
 public class BranchManagerWorkersController implements Initializable {
 
@@ -71,6 +71,10 @@ public class BranchManagerWorkersController implements Initializable {
 	private ListView<String> workerLV;
 
 	@Override
+	/**
+	 * fetches users and workers
+	 * inits lists and adds listeners
+	 */
 	public void initialize(URL location, ResourceBundle resources) {
 		workerIV.setImage(new Image("boundary/media/workers.jpg"));
 		fetchWorkers();
@@ -143,6 +147,10 @@ public class BranchManagerWorkersController implements Initializable {
 		}
 	}
 
+	/**
+	 * sets the info of the user
+	 * @param user to view info of
+	 */
 	private void setInfo(User user) {
 		clearFields();
 

@@ -12,18 +12,21 @@ import entity.Item.OrderItem;
 import entity.MyMessage.MessageType;
 import entity.Order;
 import entity.Order.OrderStatus;
-import entity.Store;
 import entity.User;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
+/**
+ * DeliveryWorker controller, confirms deliveries
+ * @author wardz
+ *
+ */
 public class DeliveryController implements Initializable {
 
 	/**
@@ -40,11 +43,6 @@ public class DeliveryController implements Initializable {
 	private User buyingUser;
 
 	// FXML Components
-	/**
-	 * Combobox to view stores and be used to filter products
-	 */
-	@FXML
-	private ComboBox<Store> storeCB;
 	/**
 	 * listview to show orders by id and address ("id/address")
 	 */
@@ -113,14 +111,7 @@ public class DeliveryController implements Initializable {
 	 * initializing all listview listeners and fetching orders
 	 */
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		storeCB.getItems().setAll(Store.values());
 
-		storeCB.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Store>() {
-			@Override
-			public void changed(ObservableValue<? extends Store> observable, Store oldValue, Store newValue) {
-				loadOrders(newValue);
-			}
-		});
 		ordersLV.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
 
 			@Override
@@ -166,8 +157,7 @@ public class DeliveryController implements Initializable {
 			}
 		});
 
-		storeCB.getSelectionModel().select(-1);
-		loadOrders(null);
+		loadOrders();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -178,13 +168,12 @@ public class DeliveryController implements Initializable {
 	 * 
 	 * @param store Store to filter orders
 	 */
-	private void loadOrders(Store store) {
+	private void loadOrders() {
 		orders = (ArrayList<Order>) MainController.getMyClient().send(MessageType.GET, "order/by/id_order_status/1",
 				null);
 		clearFields();
 
 		for (Order order : orders) 
-			if (store == null || order.getStore().equals(store))
 				ordersLV.getItems().add(order.getIdOrder() + " / " + order.getAddress());
 	}
 
@@ -232,8 +221,8 @@ public class DeliveryController implements Initializable {
 		ArrayList<Customer> customers = (ArrayList<Customer>) MainController.getMyClient().send(MessageType.GET,
 				"customer/by/id_customer/" + selectedOrder.getIdCustomer(), null);
 
-		buyingUser = (User) MainController.getMyClient().send(MessageType.GET,
-				"user/by/id_customer/" + customers.get(0).getIdCustomer(), null);
+		buyingUser = ((ArrayList<User>) MainController.getMyClient().send(MessageType.GET,
+				"user/by/id_customer/" + customers.get(0).getIdCustomer(), null)).get(0);
 		
 		custNameTF.setText(buyingUser.getName());
 		custNumTF.setText(buyingUser.getPhone());
@@ -278,8 +267,6 @@ public class DeliveryController implements Initializable {
 			MainController.getMyClient().send(MessageType.SEND, "email", email);
 		}
 			
-
-		storeCB.getSelectionModel().select(-1);
-		loadOrders(null);
+		loadOrders();
 	}
 }
