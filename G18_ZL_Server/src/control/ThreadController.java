@@ -100,7 +100,6 @@ public class ThreadController {
  */
 	public static void stopTimers() {
 		ShippingTracking.cancel();
-		 System.exit(0);  
 		
 	}
 
