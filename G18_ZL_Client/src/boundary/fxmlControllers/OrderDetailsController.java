@@ -446,13 +446,6 @@ public class OrderDetailsController implements Initializable {
 		MainController.getMyClient().send(MessageType.POST, "order", CartController.getOrderInProcess());
 		CartController.NewOrder();
 		
-		
-		
-		Alert errorAlert = new Alert(AlertType.INFORMATION);
-		errorAlert.setHeaderText(null);
-		errorAlert.setContentText("Your order has been Successfully sent!");
-		errorAlert.showAndWait();
-		
 		Navigation.navigator("cart-view.fxml");
 	}
 
