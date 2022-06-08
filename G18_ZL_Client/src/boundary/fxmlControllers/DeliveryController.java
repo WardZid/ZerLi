@@ -174,6 +174,7 @@ public class DeliveryController implements Initializable {
 		clearFields();
 
 		for (Order order : orders) 
+			if (order.getIdStore() == ClientConsoleController.getWorker().getIdStore())
 				ordersLV.getItems().add(order.getIdOrder() + " / " + order.getAddress());
 	}
 
