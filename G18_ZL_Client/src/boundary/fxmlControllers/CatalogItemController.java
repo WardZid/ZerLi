@@ -104,6 +104,7 @@ public class CatalogItemController implements Initializable {
 		catalogController.getcatalogvbox().setDisable(true);
 		catalogController.getnameItemLable().setText(PressedItem.getName());
 		catalogController.getdescriptionLable().setText(PressedItem.getDescription());
+		catalogController.getitemIV().setImage((PressedItem.getImage()))  ;
 	}
 
 }

@@ -18,6 +18,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 /**
  * in this class we view the item details the exist in Order Page 
  * that the customer has make order 
@@ -45,6 +46,9 @@ public class orderItemController implements Initializable {
  */
 	@FXML
 	private Button viewBtn;
+	
+	 @FXML
+	  private ImageView itemIV;
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
@@ -78,11 +82,14 @@ public class orderItemController implements Initializable {
 			nameOrderLbl.setText("" + orderItem.getName());
 			amountLbl.setText("x" + orderItem.getAmount());
 			priceLbl.setText(orderItem.getPriceAfterSale()+ "");
+			if(orderItem.getImage()!=null)
+				itemIV.setImage(orderItem.getImage());
 		} else {
 			nameOrderLbl.setText("Custom Item");
 			amountLbl.setText("x" + buildItem.getAmount());
 			priceLbl.setText("");
 			viewBtn.setVisible(true);
+			
 		}
 
 	}
@@ -132,6 +139,8 @@ public class orderItemController implements Initializable {
 		nameOrderLbl.setText("" + itemInBuild.getName());
 		amountLbl.setText("x" + itemInBuild.getAmount()); 
 		priceLbl.setText(itemInBuild.getPriceAfterSale() + "");
+		if(itemInBuild.getImage()!=null)
+			itemIV.setImage(itemInBuild.getImage());
  
 	}
 

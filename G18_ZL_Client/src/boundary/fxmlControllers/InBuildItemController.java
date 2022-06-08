@@ -10,6 +10,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 /**
  * in this class we view the item with his details  that exist in cart page in scroll pane  
  * @author saher
@@ -21,6 +22,8 @@ public class InBuildItemController implements Initializable {
  */
 	@FXML
 	private Button addBtn;
+	 @FXML
+	    private ImageView itemIV;
 /**
  * to view the amount of the price
  */
@@ -120,6 +123,7 @@ public class InBuildItemController implements Initializable {
 		amountLabel.setText(itemInBuild.getAmount() + "");
 		priceLabel.setText(itemInBuild.getPrice() + "");
 		nameLabel.setText(itemInBuild.getName() + "");
+		itemIV.setImage(itemInBuild.getImage());
 	}
 
  

@@ -106,6 +106,12 @@ public class CatalogController implements Initializable {
 	 */
 	@FXML
 	private ImageView searchIV;
+	
+	/**
+	 *   image item description;
+	 */
+	 @FXML
+	    private ImageView itemIV;
 /**
  * text field to write the item name and to search it in catalog
  */
@@ -250,6 +256,16 @@ public class CatalogController implements Initializable {
 	public Label getdescriptionLable() {
 		return descriptionLable;
 	}
+	
+	/**
+	 * 
+	 * @return Label descriptionLable
+	 */
+		public ImageView getitemIV() {
+			return itemIV;
+		}
+	
+	
 /**
  * to move to build item page 
  */

@@ -13,7 +13,7 @@
    <children>
       <HBox alignment="CENTER_LEFT" prefHeight="112.0" prefWidth="400.0" spacing="10.0" StackPane.alignment="CENTER">
          <children>
-            <ImageView fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="itemIV" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" />
             <VBox alignment="CENTER" spacing="10.0" HBox.hgrow="ALWAYS">
                <children>
                   <Label fx:id="nameLabel" text="name">
