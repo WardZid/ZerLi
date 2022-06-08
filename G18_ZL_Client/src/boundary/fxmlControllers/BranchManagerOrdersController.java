@@ -40,8 +40,9 @@ import javafx.stage.Stage;
  * */
 
 /**
- * the controller of the branch-manager-orders-view.fxml , it runs all the methods that 
- * functions the list views and buttons, here orders are approved, rejected, canceled.
+ * the controller of the branch-manager-orders-view.fxml , it runs all the
+ * methods that functions the list views and buttons, here orders are approved,
+ * rejected, canceled.
  * 
  * @author hamza
  *
@@ -383,8 +384,7 @@ public class BranchManagerOrdersController implements Initializable {
 				"customer/point/" + currentOrder.getIdCustomer() + "/" + currentOrder.getPrice(), null);
 
 		MainController.getMyClient().send(MessageType.SEND, "email", email);
-		
-		
+
 		clearAfterButtonPressed();
 		approveSelected = false;
 		cancelSelected = false;
@@ -448,12 +448,10 @@ public class BranchManagerOrdersController implements Initializable {
 		ArrayList<Customer> c = (ArrayList<Customer>) MainController.getMyClient().send(MessageType.GET,
 				"customer/by/id_customer/" + currentOrder.getIdCustomer(), null);
 		currentCustomer = c.get(0);
-		
+
 		ArrayList<User> u = (ArrayList<User>) MainController.getMyClient().send(MessageType.GET,
 				"user/by/id_customer/" + currentCustomer.getIdCustomer(), null);
-		
-	 
-		
+
 		this.fAddress.setText(currentOrder.getAddress());
 		this.fCName.setText(u.get(0).getName());
 		this.fCID.setText(currentOrder.getIdCustomer() + "");
@@ -496,7 +494,7 @@ public class BranchManagerOrdersController implements Initializable {
 			}
 		}
 		if (cancelSelected == true) {
-			 
+
 			for (Order o : waitingCancellationOrders) {
 				if (selectedOrderID.equals(o.getIdOrder() + "")) {
 					currentOrder = o;
@@ -577,7 +575,6 @@ public class BranchManagerOrdersController implements Initializable {
 
 				if (arg2 != null) {
 
-				 
 					cancelSelected = true;
 					approveSelected = false;
 					saveOrderID();
@@ -607,7 +604,8 @@ public class BranchManagerOrdersController implements Initializable {
 		waitingApprovalOrders = (ArrayList<Order>) MainController.getMyClient().send(MessageType.GET,
 				"order/by/id_order_status/0", null);
 		for (Order o : waitingApprovalOrders)
-			waitingApprovalIDs.add("Order ID : "+o.getIdOrder() + " - " + "Customer ID : " + o.getIdCustomer());
+			if (o.getIdStore() == ClientConsoleController.getWorker().getIdStore())
+				waitingApprovalIDs.add("Order ID : " + o.getIdOrder() + " - " + "Customer ID : " + o.getIdCustomer());
 		ordersToApproveListView.getItems().addAll(waitingApprovalIDs);
 	}
 
@@ -621,7 +619,8 @@ public class BranchManagerOrdersController implements Initializable {
 		waitingCancellationOrders = (ArrayList<Order>) MainController.getMyClient().send(MessageType.GET,
 				"order/by/id_order_status/5", null);
 		for (Order o : waitingCancellationOrders)
-			waitingCancellationlIDs.add("Order ID : "+o.getIdOrder() + " - " + "Customer ID : " + o.getIdCustomer());
+			if (o.getIdStore() == ClientConsoleController.getWorker().getIdStore())
+				waitingCancellationlIDs.add("Order ID : " + o.getIdOrder() + " - " + "Customer ID : " + o.getIdCustomer());
 		ordersToCancelListView.getItems().addAll(waitingCancellationlIDs);
 	}
 
