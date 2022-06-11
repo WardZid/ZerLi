@@ -1,9 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/G18_ZL_Common"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/OCSF"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/JavaFX"/>
+	<classpathentry kind="lib" path="/G18_ZL_Common/JavaFX/javafx.base.jar"/>
+	<classpathentry kind="lib" path="/G18_ZL_Common/JavaFX/javafx.controls.jar"/>
+	<classpathentry kind="lib" path="/G18_ZL_Common/JavaFX/javafx.fxml.jar"/>
+	<classpathentry kind="lib" path="/G18_ZL_Common/JavaFX/javafx.graphics.jar"/>
+	<classpathentry kind="lib" path="/G18_ZL_Common/JavaFX/javafx.media.jar"/>
+	<classpathentry kind="lib" path="/G18_ZL_Common/JavaFX/javafx.swing.jar"/>
+	<classpathentry kind="lib" path="/G18_ZL_Common/JavaFX/javafx.web.jar"/>
+	<classpathentry kind="lib" path="/G18_ZL_Common/JavaFX/javafx-swt.jar"/>
+	<classpathentry kind="lib" path="/G18_ZL_Common/jre 1.8.0_331/access-bridge-64.jar"/>
+	<classpathentry kind="lib" path="/G18_ZL_Common/jre 1.8.0_331/charsets.jar"/>
+	<classpathentry kind="lib" path="/G18_ZL_Common/jre 1.8.0_331/cldrdata.jar"/>
+	<classpathentry kind="lib" path="/G18_ZL_Common/jre 1.8.0_331/dnsns.jar"/>
+	<classpathentry kind="lib" path="/G18_ZL_Common/jre 1.8.0_331/jaccess.jar"/>
+	<classpathentry kind="lib" path="/G18_ZL_Common/jre 1.8.0_331/jce.jar"/>
+	<classpathentry kind="lib" path="/G18_ZL_Common/jre 1.8.0_331/jfr.jar"/>
+	<classpathentry kind="lib" path="/G18_ZL_Common/jre 1.8.0_331/jfxrt.jar"/>
+	<classpathentry kind="lib" path="/G18_ZL_Common/jre 1.8.0_331/localedata.jar"/>
+	<classpathentry kind="lib" path="/G18_ZL_Common/jre 1.8.0_331/nashorn.jar"/>
+	<classpathentry kind="lib" path="/G18_ZL_Common/jre 1.8.0_331/resources.jar"/>
+	<classpathentry kind="lib" path="/G18_ZL_Common/jre 1.8.0_331/rt.jar"/>
+	<classpathentry kind="lib" path="/G18_ZL_Common/jre 1.8.0_331/sunec.jar"/>
+	<classpathentry kind="lib" path="/G18_ZL_Common/jre 1.8.0_331/sunjce_provider.jar"/>
+	<classpathentry kind="lib" path="/G18_ZL_Common/jre 1.8.0_331/sunmscapi.jar"/>
+	<classpathentry kind="lib" path="/G18_ZL_Common/jre 1.8.0_331/sunpkcs11.jar"/>
+	<classpathentry kind="lib" path="/G18_ZL_Common/jre 1.8.0_331/zipfs.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

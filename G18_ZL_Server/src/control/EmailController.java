@@ -16,9 +16,9 @@ import boundary.ServerView;
 import entity.Email; 
 
 public class EmailController {
-	private static final String myEmail = "ZerLeeG18@outlook.com"; // your email
+	private static final String myEmail = "ZerLeeG18_S@outlook.com"; // your email
 	private static final String password = "SemesterProject18"; // your email password
-	private static final String sender = "ZerLeeG18@outlook.com"; // Insert Your email again
+	private static final String sender = "ZerLeeG18_S@outlook.com"; // Insert Your email again
 
 	public static boolean sendEmail(Email email) {
 		if(email.getSubject()==null || email.getSubject().equals(""))
