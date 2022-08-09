@@ -5,8 +5,13 @@ A bouquet and flower store chain application built with Java as a full semester 
 Made by:
 
 Ward Zidani
+
 Amer Shalata
+
 Wael Othman
+
 Moayad Hamza
+
 Aziz Hamed
+
 Ahmad Bsese
